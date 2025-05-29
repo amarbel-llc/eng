@@ -1,5 +1,8 @@
 #! /bin/bash -xe
 
+# TODO migrate to site-linenisgreat and add support for historical objects
+exit 1
+
 ${EDITOR:-${VISUAL:-vi}} ./VERSION
 git add ./VERSION
 git diff --exit-code -s ./VERSION || (echo "version wasn't changed" && exit 1)
@@ -10,7 +13,7 @@ version="v$(cat ./VERSION)"
 
 make
 
-str_snake_case="$(tr "[:upper:]" "[:lower:]" <NAME | tr " " "_")"
+str_snake_cas="$(tr "[:upper:]" "[:lower:]" <NAME | tr " " "_")"
 file_out_base="build/${str_snake_case}_resume"
 
 git diff --exit-code -s || (echo "unstaged changes, refusing to release" && exit 1)

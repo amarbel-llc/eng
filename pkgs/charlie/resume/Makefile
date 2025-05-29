@@ -1,4 +1,6 @@
 
+# TODO migrate to justfile
+
 DIR_BUILD := build
 
 OPT_NAME := $(shell cat NAME)
