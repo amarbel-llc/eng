@@ -30,7 +30,7 @@ func (token *Token) Reset() {
 func (token Token) String() string {
 	switch token.Type {
 	case TokenTypeNumber:
-		return fmt.Sprintf("%.1f", token.ContentNumber)
+		return fmt.Sprintf("%.2f", token.ContentNumber)
 
 	case TokenTypeOp:
 		return string(token.ContentOperator)

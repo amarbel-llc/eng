@@ -91,6 +91,36 @@ func TestInfixSuccess(t *testing.T) {
 				ContentNumber: 216,
 			},
 		},
+		{
+			input: `( 32 * ( ( 1 + 2 ) * 2 ^ 3 ) ) * 3`,
+			expected: Token{
+				ContentNumber: 2304,
+			},
+		},
+		{
+			input: `2 / 3 ^ 4`,
+			expected: Token{
+				ContentNumber: 0.02,
+			},
+		},
+		{
+			input: `1 + 2 / 3 ^ 4`,
+			expected: Token{
+				ContentNumber: 1.02,
+			},
+		},
+		{
+			input: `1 + ( 2 / 3 ) ^ 4`,
+			expected: Token{
+				ContentNumber: 1.20,
+			},
+		},
+		{
+			input: `( 1 + ( 2 / 3 ) ) ^ 4`,
+			expected: Token{
+				ContentNumber: 7.72,
+			},
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -121,7 +151,7 @@ func TestInfixSuccess(t *testing.T) {
 
 				testCase.expected.Type = TokenTypeNumber
 
-				if testCase.expected != actual {
+				if testCase.expected.String() != actual.String() {
 					t.Errorf("expected %s but got %s", testCase.expected, actual)
 				}
 			},

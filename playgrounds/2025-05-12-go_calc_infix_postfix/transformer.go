@@ -63,8 +63,12 @@ func (transformer *Transformer) TransformToPostfix(
 		}
 	}
 
-	if operator, ok := operators.Pop(); ok {
-		transformed.Push(operator)
+	for {
+		if operator, ok := operators.Pop(); ok {
+			transformed.Push(operator)
+		} else {
+			break
+		}
 	}
 
 	*transformer = Transformer(transformed)
