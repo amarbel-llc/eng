@@ -1,6 +1,6 @@
 # vim: ft=sh
 
-export PATH="$HOME/.dotfiles/result/bin:$PATH"
+export PATH="$HOME/eng/result/bin:$PATH"
 export EDITOR="$HOME/.local/bin/vim"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh/gpg-agent.sock"
 export GIT_CONFIG_GLOBAL="$HOME/.config/git/config"

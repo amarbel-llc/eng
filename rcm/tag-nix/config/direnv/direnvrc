@@ -1,1 +1,1 @@
-source $HOME/.dotfiles/result/share/nix-direnv/direnvrc 
+source $HOME/eng/result/share/nix-direnv/direnvrc 

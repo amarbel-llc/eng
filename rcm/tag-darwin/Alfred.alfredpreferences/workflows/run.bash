@@ -1,6 +1,6 @@
 #! /bin/bash -e
 
-PATH="$HOME/eng/zit/go/zit/build:$HOME/.dotfiles/result/bin:$HOME/eng/chrest/go/build:$PATH"
+PATH="$HOME/eng/pkgs/zit/go/zit/build:$HOME/eng/result/bin:$HOME/eng/pkgs/chrest/go/build:$PATH"
 
 export EDITOR="$HOME/.local/bin/vim"
 

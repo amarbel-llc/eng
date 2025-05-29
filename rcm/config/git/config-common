@@ -3,7 +3,7 @@
 [core]
   whitespace = nowarn
   excludesfile = ~/.config/git/ignore
-  sshCommand = ~/.dotfiles/result/bin/ssh
+  sshCommand = ~/eng/result/bin/ssh
 [alias]
   aa = add --all --intent-to-add
   ap = add --patch
