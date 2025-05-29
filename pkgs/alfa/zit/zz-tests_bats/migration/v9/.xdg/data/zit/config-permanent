@@ -1,0 +1,12 @@
+---
+! toml-config-immutable-v1
+---
+
+private-key = 'zit-repo-private_key-v11hg7eljllke38m4rq45592dqhdyll8mf8wuara4lvcuy75zvtrxzs9tzgsh'
+store-version = 9
+repo-type = 'working-copy'
+id = 'test-repo-id'
+
+[blob-store]
+compression-type = 'zstd'
+lock-internal-files = false
