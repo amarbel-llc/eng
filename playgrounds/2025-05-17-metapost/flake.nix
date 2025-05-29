@@ -26,6 +26,12 @@
             inherit system;
           };
 
+        tex = pkgs.texlive.withPackages (ps: [
+          ps.metapost
+          ps.dvisvgm
+          ps.dvipng # for preview and export as html
+        ]);
+
       in
       {
         packages = {
@@ -33,7 +39,7 @@
             failOnMissing = true;
             name = "system-packages";
             paths = [
-              texlive.combined.scheme-full
+              tex
             ];
           };
         };

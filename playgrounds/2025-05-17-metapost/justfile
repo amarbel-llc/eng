@@ -1,0 +1,7 @@
+build target="subway.mp":
+  #! /usr/bin/env -S bash
+  mkdir -p build
+  cp {{target}} build/{{target}}
+  pushd build
+  mpost -interaction=nonstopmode {{target}}
+  mptopdf -interaction=nonstopmode {{target}}
