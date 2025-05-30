@@ -1,5 +1,5 @@
 build target="subway.mp":
-  #! /usr/bin/env -S bash
+  #! /usr/bin/env -S bash -e
   mkdir -p build
   cp {{target}} build/{{target}}
   pushd build
