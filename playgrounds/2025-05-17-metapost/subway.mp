@@ -1,4 +1,6 @@
 
+% TODO move macros to own file
+
 u = 1cm;
 defaultscale := u / 10;
 
