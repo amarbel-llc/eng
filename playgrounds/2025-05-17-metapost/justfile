@@ -2,6 +2,13 @@ build target="subway.mp":
   #! /usr/bin/env -S bash -e
   mkdir -p build
   cp {{target}} build/{{target}}
+  cp lib.mp build/lib.mp
   pushd build
-  mpost -interaction=nonstopmode {{target}}
-  mptopdf -interaction=nonstopmode {{target}}
+  mpost -file-line-error -interaction=nonstopmode {{target}}
+  mptopdf {{target}}
+
+export target: build
+  mv build/subway-0.pdf {{target}}/bathroom_wall_shower_wide.pdf
+  mv build/subway-1.pdf {{target}}/bathroom_wall_shower_narrow.pdf
+  mv build/subway-2.pdf {{target}}/bathroom_wall_toilet_vanity.pdf
+

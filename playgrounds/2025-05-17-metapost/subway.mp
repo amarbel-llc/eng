@@ -1,23 +1,39 @@
 
-u=1cm;
+u = 1cm;
+defaultscale := u / 10;
 
-grout=1/16;
-color grout_color;
-grout_color=blue;
-subway_width=6;
-subway_height=3;
+background := 0.7white;
+grout = 1/16;
 
-subway_narrow_width=6;
-subway_narrow_height=1.5;
+subway_width = 6;
+subway_height = 3;
 
-subway_narrow_half_width=3;
-subway_narrow_half_height=1.5;
+subway_narrow_width = 6;
+subway_narrow_height = 1.5;
 
-trim_width=3/8;
-trim_height=7+7/8;
+subway_narrow_half_width = 3;
+subway_narrow_half_height = 1.5;
+
+trim_width = 3/8;
+trim_height = 7+7/8;
+
+wall_height = 60;
+wall_width = 28;
 
 def pickup_tile_pen =
   pickup pencircle scaled 2pt;
+enddef;
+
+def label_dim(expr dimX, dimY)(text loc) = 
+  save c;
+  color c;
+  c = red;
+
+  label(decimal(dimX), loc) shifted (0, 1u) withcolor c;
+
+  label("x", loc) shifted (0, 0u) withcolor c;
+
+  label(decimal(dimX), loc) shifted (0, -1u) withcolor c;
 enddef;
 
 def make_rect(expr x, y, width, height) =
@@ -55,7 +71,7 @@ def draw_tiles_flex(expr x, y, width, tile_width, tile_height, grout, color) =
 
     % left cap
     draw_tiles(
-      x - grout, y,
+      x - grout*2, y,
       width_remainder / 2, tile_height,
       1,
       color
@@ -90,7 +106,7 @@ def draw_tiles_flex_v(expr x, y, height, tile_width, tile_height, grout, color) 
 
     % left cap
     draw_tiles_v(
-      x + grout, y,
+      x + grout, y - grout,
       height_remainder / 2, tile_height,
       1,
       color
@@ -193,196 +209,48 @@ def draw_subway_with_grout(expr xA, yA, h_tile_count, v_tile_count, evenFirst) =
   endgroup;
 enddef;
 
-% assumes the inner border is grout
-def draw_frame_corners_around(expr x, y, width, height, tile_w, tile_h, corner_w, corner_h, color) =
-  begingroup
-    save r, adj, hyp, w, h;
+def draw_wall(expr wall_width, wall_height) = 
+  save x, y, wall, main_mosaic_tiles_h_count, main_mosaic_tiles_v_count, width, height;
 
-    w = width + tile_h * 2;
-    h = height;
-
-    % bottom corners
-    path r;
-
-    hyp = grout;
-    sind(45) = adj / hyp;
-
-    % bottom left
-    r = make_quad(
-      x - tile_h + adj, y - tile_h,
-      (tile_h, tile_h),
-      (corner_w - tile_h - adj, 0),
-      (0, - tile_h)
-    );
-
-    fill r withcolor color;
-
-    % top left
-    r := make_quad(
-      x - tile_h + adj, y + height + tile_h,
-      (tile_h, -tile_h),
-      (corner_w - tile_h - adj, 0),
-      (0, tile_h)
-    );
-
-    fill r withcolor color;
-
-    % left bottom
-    r := make_quad(
-      x - tile_h, y - tile_h + adj,
-      (tile_h, tile_h),
-      (0, corner_w - tile_h - adj),
-      (-tile_h, 0)
-    );
-
-    fill r withcolor color;
-
-    % left top
-    r := make_quad(
-      x - tile_h, y + height + tile_h - adj,
-      (tile_h, -tile_h),
-      (0, -(corner_w - tile_h - adj)),
-      (-tile_h, 0)
-    );
-
-    fill r withcolor color;
-
-    % bottom right
-    r := make_quad(
-      x + w - adj - corner_w + grout - tile_h, y - tile_h,
-      (0, tile_h),
-      (corner_w - tile_h - adj, 0),
-      (tile_h, - tile_h)
-    );
-
-    fill r withcolor color;
-
-    % top right
-    r := make_quad(
-      x + w - adj - corner_w + grout - tile_h, y + height + tile_h,
-      (0, -tile_h),
-      (corner_w - tile_h - adj, 0),
-      (tile_h, tile_h)
-    );
-
-    fill r withcolor color;
-
-    % right bottom
-    r := make_quad(
-      x + w - tile_h, y - tile_h + adj,
-      (-tile_h, tile_h),
-      (0, corner_w - tile_h),
-      (tile_h, 0)
-    );
-
-    fill r withcolor color;
-
-    % right top
-    r := make_quad(
-      x + w - tile_h, y + h + tile_h - adj,
-      (-tile_h, - tile_h),
-      (0, - corner_w + tile_h),
-      (tile_h, 0)
-    );
-
-    fill r withcolor color;
-  endgroup;
-enddef;
-
-% TODO move corner dimension calculation out
-def draw_frame(expr x, y, width, height, tile_w, tile_h, corner_w, corner_h, color) =
-  begingroup
-    save padding, count_h, count_v, w, h, rem_w, rem_h;
-
-    w = width + (tile_h + grout) * 2;
-    h = height + (tile_h + grout) * 2;
-
-    path p;
-
-    p = make_quad(
-      x - tile_h - grout,
-      y,
-      (w, 0),
-      (0, - tile_h - grout),
-      (-w, 0)
-    );
-
-    % fill p withcolor green;
-
-    count_h = calc_tiles(w - corner_w, tile_w);
-    count_v = calc_tiles(h - corner_h, tile_w);
-
-    rem_w = (w - (count_h * (grout + tile_w) + grout)) / 2;
-    rem_h = (h - (count_v * (grout + tile_w) + grout)) / 2;
-
-    draw_frame_corners_around(
-      x, y,
-      width, height,
-      tile_w, tile_h,
-      corner_w - grout, corner_h - grout,
-      color
-    );
-
-    % bottom
-    draw_tiles(
-      x + rem_w - tile_h - grout, y - tile_h - grout,
-      tile_w, tile_h,
-      count_h,
-      color
-    );
-
-    % top
-    draw_tiles(
-      x + rem_w - tile_h - grout, y + h - (tile_h + grout) * 2 - grout,
-      tile_w, tile_h,
-      count_h,
-      color
-    );
-  endgroup;
-enddef;
-
-beginfig(1);
   x = 0;
   y = 0;
 
-  width = 0;
-  height = 0;
-
-  wall_height = 60;
-  wall_width = 50;
-
   path wall;
   wall = make_rect(0, 0, wall_width, wall_height);
-  fill wall withcolor red;
+  unfill wall;
 
   pickup_tile_pen;
 
   path main_mosaic;
 
-  frame_depth = trim_width + grout + subway_narrow_half_height;
-  frame_depth_with_teeth = frame_depth + grout + subway_width;
+  begingroup
+    save frame_depth, frame_depth_with_teeth;
 
-  main_mosaic_tiles_h_count = calc_tiles(
-    wall_width - frame_depth_with_teeth * 2,
-    subway_width
-  );
+    frame_depth = trim_width + grout + subway_narrow_half_height;
+    frame_depth_with_teeth = frame_depth + grout + subway_width;
 
-  main_mosaic_tiles_v_count = calc_tiles(
-    wall_height - frame_depth_with_teeth * 2,
-    subway_height
-  );
+    main_mosaic_tiles_h_count = calc_tiles(
+      wall_width - frame_depth_with_teeth * 2,
+      subway_width
+    );
+
+    main_mosaic_tiles_v_count = calc_tiles(
+      wall_height - frame_depth_with_teeth * 2,
+      subway_height
+    );
+  endgroup;
 
   main_mosaic_tiles_h_count := main_mosaic_tiles_h_count + 1;
 
   % main subway mosaic
-  width := grout + main_mosaic_tiles_h_count * (grout + subway_width);
-  height := grout + main_mosaic_tiles_v_count * (grout + subway_height);
+  width = grout + main_mosaic_tiles_h_count * (grout + subway_width);
+  height = grout + main_mosaic_tiles_v_count * (grout + subway_height);
 
   x := (wall_width - width) / 2;
-  main_mosaic_x = x;
+  main_mosaic_x := x;
 
   y := subway_width + grout + subway_narrow_half_height + grout + trim_width + grout;
-  main_mosaic_y = y;
+  main_mosaic_y := y;
 
   main_mosaic = make_rect(x, y, width, height);
 
@@ -395,463 +263,499 @@ beginfig(1);
     true
   );
 
-  hyp = grout;
-  sind(45) = adj / hyp;
-
-  % bottom
+  % frame
   begingroup
-    save c, o, d, old_p, offset;
-    picture old_p;
-    old_p = currentpicture;
-    currentpicture := image();
+    save hyp, adj;
 
-    pair o;
-    o = (x,y - adj)*u;
-    d = trim_width + grout + subway_narrow_half_height + grout + subway_width;
+    hyp = grout;
+    sind(45) = adj / hyp;
 
-    path c;
-    c = o
-      -- o + (width, 0)*u
-      -- o + (width, 0)*u + (d, -d)*u
-      -- o + (width, 0)*u + (d, -d)*u + (-width - d*2, 0)*u
-      -- cycle;
-
-    % black trim
+    % bottom
     begingroup
-      save width_total;
-      offset := grout + trim_width;
-      width_total = width + offset * 2;
+      save c, o, d, old_p, offset;
+      picture old_p;
+      old_p = currentpicture;
+      currentpicture := image();
 
-      draw_tiles_flex(
-        x - offset, y - offset,
-        width_total,
-        trim_height, trim_width,
-        grout,
-        black
-      );
+      pair o;
+      o = (x,y - adj)*u;
+      d = trim_width + grout + subway_narrow_half_height + grout + subway_width;
+
+      path c;
+      c = o
+        -- o + (width, 0)*u
+        -- o + (width, 0)*u + (d, -d)*u
+        -- o + (width, 0)*u + (d, -d)*u + (-width - d*2, 0)*u
+        -- cycle;
+
+      % black trim
+      begingroup
+        save width_total;
+        offset := grout + trim_width;
+        width_total = width + offset * 2;
+
+        draw_tiles_flex(
+          x - offset, y - offset,
+          width_total,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+      endgroup;
+
+      % white wide half height
+      begingroup
+        save width_total;
+        offset := offset + grout + subway_narrow_half_height;
+        width_total = width + offset * 2;
+
+        draw_tiles_flex(
+          x - offset, y - offset,
+          width_total,
+          subway_width, subway_narrow_half_height,
+          grout,
+          white
+        );
+      endgroup;
+
+      % white narrow full height
+      begingroup
+        save width_total;
+        offset := offset + grout + subway_width;
+        width_total = width + offset * 2;
+
+        draw_tiles_flex(
+          x - offset, y - offset,
+          width_total,
+          subway_height, subway_width,
+          grout / 2,
+          white
+        );
+      endgroup;
+
+      clip currentpicture to c;
+      addto old_p also currentpicture;
+      currentpicture := old_p;
     endgroup;
 
-    % white wide half height
+    % top
     begingroup
-      save width_total;
-      offset := offset + grout + subway_narrow_half_height;
-      width_total = width + offset * 2;
+      save c, o, d, old_p, offset;
+      picture old_p;
+      old_p = currentpicture;
+      currentpicture := image();
 
-      draw_tiles_flex(
-        x - offset, y - offset,
-        width_total,
-        subway_width, subway_narrow_half_height,
-        grout,
-        white
-      );
+      pair o;
+      o = (x,y + height + adj)*u;
+      d = trim_width + grout + subway_narrow_half_height + grout + subway_width;
+
+      path c;
+      c = o
+        -- o + (width, 0)*u
+        -- o + (width, 0)*u + (d, d)*u
+        -- o + (width, 0)*u + (d, d)*u + (-width - d*2, 0)*u
+        -- cycle;
+
+      % black trim
+      begingroup
+        save width_total, old_offset;
+        offset := grout + trim_width;
+        width_total = width + offset * 2;
+
+        draw_tiles_flex(
+          x - offset, y + height - grout,
+          width_total,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+      endgroup;
+
+      % white wide half height
+      begingroup
+        save width_total;
+        offset := offset + grout + subway_narrow_half_height;
+        width_total = width + offset * 2;
+
+        draw_tiles_flex(
+          x - offset, y + height + trim_width,
+          width_total,
+          subway_width, subway_narrow_half_height,
+          grout,
+          white
+        );
+      endgroup;
+
+      % white narrow full height
+      begingroup
+        save width_total;
+        offset := offset + grout + subway_width;
+        width_total = width + offset * 2;
+
+        draw_tiles_flex(
+          x - offset, y + height + grout + trim_width + grout + subway_narrow_half_height,
+          width_total,
+          subway_height, subway_width,
+          grout / 2,
+          white
+        );
+      endgroup;
+
+      clip currentpicture to c;
+      addto old_p also currentpicture;
+      currentpicture := old_p;
     endgroup;
 
-    % white narrow full height
+    % left
     begingroup
-      save width_total;
-      offset := offset + grout + subway_width;
-      width_total = width + offset * 2;
+      save c, o, d, old_p, offset;
+      picture old_p;
+      old_p = currentpicture;
+      currentpicture := image();
 
-      draw_tiles_flex(
-        x - offset, y - offset,
-        width_total,
-        subway_height, subway_width,
-        grout / 2,
-        white
-      );
+      pair o;
+      o = (x - adj,y + height)*u;
+      d = trim_width + grout + subway_narrow_half_height + grout + subway_width;
+
+      path c;
+      c = o
+        -- o + (-d, d)*u
+        -- o + (-d, d)*u + (0, - height - d * 2)*u
+        -- o + (-d, d)*u + (0, - height - d * 2)*u + (d, d)*u
+        -- cycle;
+
+      % black trim
+      begingroup
+        save width_total, old_offset;
+        offset := grout + trim_width;
+        width_total = height + offset * 2;
+
+        draw_tiles_flex_v(
+          x - offset, y - offset,
+          width_total,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+      endgroup;
+
+      % white wide half height
+      begingroup
+        save width_total;
+        offset := offset + grout + subway_narrow_half_height;
+        width_total = height + offset * 2;
+
+        draw_tiles_flex_v(
+          x - offset - grout, y - offset - grout,
+          width_total,
+          subway_width, subway_narrow_half_height,
+          grout * 2,
+          white
+        );
+      endgroup;
+
+      % white narrow full height
+      begingroup
+        save width_total;
+        offset := offset + grout + subway_width;
+        width_total = height + offset * 2;
+
+        draw_tiles_flex_v(
+          x - offset, y - offset,
+          width_total,
+          subway_height, subway_width,
+          grout,
+          white
+        );
+      endgroup;
+
+      clip currentpicture to c;
+      addto old_p also currentpicture;
+      currentpicture := old_p;
     endgroup;
 
-    clip currentpicture to c;
-    addto old_p also currentpicture;
-    currentpicture := old_p;
+    % right
+    begingroup
+      save c, o, d, old_p, offset;
+      picture old_p;
+      old_p = currentpicture;
+      currentpicture := image();
+
+      pair o;
+      o = (x + width + adj, y)*u;
+      d = trim_width + grout + subway_narrow_half_height + grout + subway_width;
+
+      path c;
+      c = o
+        -- o + (d, -d)*u
+        -- o + (d, -d)*u + (0, height + d * 2)*u
+        -- o + (d, -d)*u + (0, height + d * 2)*u + (-d, -d)*u
+        -- cycle;
+
+      % black trim
+      begingroup
+        save width_total, old_offset;
+        offset := grout + trim_width;
+        width_total = height + offset * 2;
+
+        draw_tiles_flex_v(
+          x + width + adj - grout, y - offset,
+          width_total,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+      endgroup;
+
+      % white wide half height
+      begingroup
+        save width_total;
+        offset := offset + grout + subway_narrow_half_height;
+        width_total = height + offset * 2;
+
+        draw_tiles_flex_v(
+          x + width + trim_width + adj - grout, y - offset - grout,
+          width_total,
+          subway_width, subway_narrow_half_height,
+          grout * 2,
+          white
+        );
+      endgroup;
+
+      % white narrow full height
+      begingroup
+        save width_total;
+        offset := offset + grout + subway_width;
+        width_total = height + offset * 2;
+
+        draw_tiles_flex_v(
+          x + width + trim_width + grout + subway_narrow_half_height + adj, y - offset,
+          width_total,
+          subway_height, subway_width,
+          grout,
+          white
+        );
+      endgroup;
+
+      clip currentpicture to c;
+      addto old_p also currentpicture;
+      currentpicture := old_p;
+    endgroup;
+
+    % trim overlaps
+    begingroup
+      save side, cutoutWidth;
+      side = subway_width + grout + subway_narrow_half_height + grout + trim_width + grout + subway_height;
+      cutoutWidth = trim_width + grout*2;
+
+      % trim overlap bottom left
+      begingroup
+        save c, northEast;
+
+        pair northEast;
+
+        northEast = (
+          x + subway_height - cutoutWidth + grout,
+          y + subway_height - cutoutWidth + grout*2
+        );
+
+        path c;
+
+        c = northEast*u 
+          -- northEast*u - (side, 0)*u
+          -- northEast*u - (side, -cutoutWidth)*u
+          -- northEast*u - (-cutoutWidth, -cutoutWidth)*u
+          -- northEast*u - (-cutoutWidth, side)*u
+          -- northEast*u - (0, side)*u
+          -- cycle;
+
+        unfill c;
+
+        draw_tiles_flex(
+          x + subway_height - side, y + subway_height - trim_width,
+          side,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+
+        draw_tiles_flex_v(
+          x + subway_height - trim_width - grout, y - side + subway_height - trim_width,
+          side,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+      endgroup;
+
+      % trim overlap bottom right
+      begingroup
+        save c, northWest;
+
+        pair northWest;
+
+        northWest = (
+          x + width - subway_height + cutoutWidth,
+          y + subway_height - cutoutWidth + grout*2
+        );
+
+        path c;
+
+        c = northWest*u 
+          -- northWest*u + (side, 0)*u
+          -- northWest*u + (side, cutoutWidth)*u
+          -- northWest*u + (-cutoutWidth, cutoutWidth)*u
+          -- northWest*u + (-cutoutWidth, -side)*u
+          -- northWest*u + (0, -side)*u
+          -- cycle;
+
+        unfill c;
+
+        draw_tiles_flex(
+          x + width - subway_height + grout*2, y + subway_height - trim_width,
+          side,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+
+        draw_tiles_flex_v(
+          x + width - subway_height, y - side + subway_height - trim_width,
+          side,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+      endgroup;
+
+      % trim overlap top right
+      begingroup
+        save c, southWest;
+
+        pair southWest;
+
+        southWest = (
+          x + width - subway_height + cutoutWidth - grout,
+          y + height - subway_height - grout + cutoutWidth
+        );
+
+        path c;
+
+        c = southWest*u 
+          -- southWest*u + (side, 0)*u
+          -- southWest*u + (side, -cutoutWidth)*u
+          -- southWest*u + (-cutoutWidth, -cutoutWidth)*u
+          -- southWest*u + (-cutoutWidth, side)*u
+          -- southWest*u + (0, side)*u
+          -- cycle;
+
+        unfill c;
+
+        draw_tiles_flex(
+          x + width - subway_height + grout, y + height - subway_height - grout,
+          side,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+
+        draw_tiles_flex_v(
+          x + width - subway_height - grout, y + height - subway_height - grout,
+          side,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+      endgroup;
+
+      % trim overlap top left
+      begingroup
+        save c, southEast;
+
+        pair southEast;
+
+        southEast = (
+          x + subway_height - cutoutWidth + grout,
+          y + height - subway_height + cutoutWidth - grout
+        );
+
+        path c;
+
+        c = southEast*u 
+          -- southEast*u + (-side, 0)*u
+          -- southEast*u + (-side, -cutoutWidth)*u
+          -- southEast*u + (cutoutWidth, -cutoutWidth)*u
+          -- southEast*u + (cutoutWidth, side)*u
+          -- southEast*u + (0, side)*u
+          -- cycle;
+
+        unfill c;
+
+        draw_tiles_flex(
+          x + subway_height - side, y + height - subway_height - grout,
+          side,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+
+        draw_tiles_flex_v(
+          x + subway_height - trim_width - grout, y + height - subway_height,
+          side,
+          trim_height, trim_width,
+          grout,
+          black
+        );
+      endgroup;
+
+      % dimensions
+      begingroup
+        label_dim(
+          subway_height, subway_height, 
+          (x + subway_height / 2, y + subway_height * 1.5)*u
+        );
+
+        label_dim(
+          subway_height - trim_width, subway_height - trim_width,
+          (x + (subway_height - trim_width) / 2, y + (subway_height - trim_width) / 2)*u
+        );
+      endgroup
+
+      % % alignment guides
+      % begingroup
+      %   save p;
+      %   path p;
+
+      %   pickup pencircle scaled 3pt;
+
+      %   % guides
+      %   p := (x + grout, y - side)*u -- (x + grout, y + height + side)*u;
+      %   draw p withcolor red dashed evenly scaled 4;
+
+      %   p := (x + width, y - side)*u -- (x + width, y + height + side)*u;
+      %   draw p withcolor red dashed evenly scaled 4;
+      % endgroup;
+    endgroup;
   endgroup;
-
-  % top
-  begingroup
-    save c, o, d, old_p, offset;
-    picture old_p;
-    old_p = currentpicture;
-    currentpicture := image();
-
-    pair o;
-    o = (x,y + height + adj)*u;
-    d = trim_width + grout + subway_narrow_half_height + grout + subway_width;
-
-    path c;
-    c = o
-      -- o + (width, 0)*u
-      -- o + (width, 0)*u + (d, d)*u
-      -- o + (width, 0)*u + (d, d)*u + (-width - d*2, 0)*u
-      -- cycle;
-
-    % black trim
-    begingroup
-      save width_total, old_offset;
-      offset := grout + trim_width;
-      width_total = width + offset * 2;
-
-      draw_tiles_flex(
-        x - offset, y + height - grout,
-        width_total,
-        trim_height, trim_width,
-        grout,
-        black
-      );
-    endgroup;
-
-    % white wide half height
-    begingroup
-      save width_total;
-      offset := offset + grout + subway_narrow_half_height;
-      width_total = width + offset * 2;
-
-      draw_tiles_flex(
-        x - offset, y + height + trim_width,
-        width_total,
-        subway_width, subway_narrow_half_height,
-        grout,
-        white
-      );
-    endgroup;
-
-    % white narrow full height
-    begingroup
-      save width_total;
-      offset := offset + grout + subway_width;
-      width_total = width + offset * 2;
-
-      draw_tiles_flex(
-        x - offset, y + height + grout + trim_width + grout + subway_narrow_half_height,
-        width_total,
-        subway_height, subway_width,
-        grout / 2,
-        white
-      );
-    endgroup;
-
-    clip currentpicture to c;
-    addto old_p also currentpicture;
-    currentpicture := old_p;
-  endgroup;
-
-  % left
-  begingroup
-    save c, o, d, old_p, offset;
-    picture old_p;
-    old_p = currentpicture;
-    currentpicture := image();
-
-    pair o;
-    o = (x - adj,y + height)*u;
-    d = trim_width + grout + subway_narrow_half_height + grout + subway_width;
-
-    path c;
-    c = o
-      -- o + (-d, d)*u
-      -- o + (-d, d)*u + (0, - height - d * 2)*u
-      -- o + (-d, d)*u + (0, - height - d * 2)*u + (d, d)*u
-      -- cycle;
-
-    % black trim
-    begingroup
-      save width_total, old_offset;
-      offset := grout + trim_width;
-      width_total = height + offset * 2;
-
-      draw_tiles_flex_v(
-        x - offset, y - offset,
-        width_total,
-        trim_height, trim_width,
-        grout,
-        black
-      );
-    endgroup;
-
-    % white wide half height
-    begingroup
-      save width_total;
-      offset := offset + grout + subway_narrow_half_height;
-      width_total = height + offset * 2;
-
-      draw_tiles_flex_v(
-        x - offset - grout, y - offset - grout,
-        width_total,
-        subway_width, subway_narrow_half_height,
-        grout * 2,
-        white
-      );
-    endgroup;
-
-    % white narrow full height
-    begingroup
-      save width_total;
-      offset := offset + grout + subway_width;
-      width_total = height + offset * 2;
-
-      draw_tiles_flex_v(
-        x - offset, y - offset,
-        width_total,
-        subway_height, subway_width,
-        grout,
-        white
-      );
-    endgroup;
-
-    clip currentpicture to c;
-    addto old_p also currentpicture;
-    currentpicture := old_p;
-  endgroup;
-
-  % right
-  begingroup
-    save c, o, d, old_p, offset;
-    picture old_p;
-    old_p = currentpicture;
-    currentpicture := image();
-
-    pair o;
-    o = (x + width + adj, y)*u;
-    d = trim_width + grout + subway_narrow_half_height + grout + subway_width;
-
-    path c;
-    c = o
-      -- o + (d, -d)*u
-      -- o + (d, -d)*u + (0, height + d * 2)*u
-      -- o + (d, -d)*u + (0, height + d * 2)*u + (-d, -d)*u
-      -- cycle;
-
-    % black trim
-    begingroup
-      save width_total, old_offset;
-      offset := grout + trim_width;
-      width_total = height + offset * 2;
-
-      draw_tiles_flex_v(
-        x + width + adj - grout, y - offset,
-        width_total,
-        trim_height, trim_width,
-        grout,
-        black
-      );
-    endgroup;
-
-    % white wide half height
-    begingroup
-      save width_total;
-      offset := offset + grout + subway_narrow_half_height;
-      width_total = height + offset * 2;
-
-      draw_tiles_flex_v(
-        x + width + trim_width + adj - grout, y - offset - grout,
-        width_total,
-        subway_width, subway_narrow_half_height,
-        grout * 2,
-        white
-      );
-    endgroup;
-
-    % white narrow full height
-    begingroup
-      save width_total;
-      offset := offset + grout + subway_width;
-      width_total = height + offset * 2;
-
-      draw_tiles_flex_v(
-        x + width + trim_width + grout + subway_narrow_half_height + adj, y - offset,
-        width_total,
-        subway_height, subway_width,
-        grout,
-        white
-      );
-    endgroup;
-
-    clip currentpicture to c;
-    addto old_p also currentpicture;
-    currentpicture := old_p;
-  endgroup;
-
-  % % black trim
-  % begingroup
-  %   save padding, count_h, count_v, w, h;
-  %   w = width + (trim_width + grout) * 2;
-  %   h = height + (trim_width + grout) * 2;
-
-  %   padding = trim_height - trim_width;
-
-  %   count_h = calc_tiles(w, trim_width);
-  %   count_v = calc_tiles(h - trim_height * 2, trim_height);
-  %   rem_v = (h - (count_v * (grout + trim_height) + grout)) / 2;
-
-  %   % h = grout + count_full_v * (trim_height + grout) + 2 * (tile_partial_w + grout);
-
-  %   w := width - padding;
-  %   h := height - padding;
-
-  %   draw_frame(
-  %     x, y,
-  %     width, height,
-  %     trim_height, trim_width,
-  %     % TODO adjust black trim corner accordingly
-  %     rem_v, rem_v,
-  %     black
-  %   );
-
-  %   % left
-  %   draw_tiles_v(
-  %     x - trim_width, y + trim_height + grout,
-  %     trim_height, trim_width,
-  %     count_v,
-  %     black
-  %   );
-
-  %   % right
-  %   draw_tiles_v(
-  %     x + width, y + trim_height + grout,
-  %     trim_height, trim_width,
-  %     count_v,
-  %     black
-  %   );
-  % endgroup;
-
-  % % white half trim
-  % begingroup
-  %   save corner, expansion;
-
-  %   expansion = (trim_width + grout) * 2;
-  %   corner = subway_height + grout + trim_width + grout + subway_narrow_half_height ;
-  %   x := x - (expansion / 2);
-  %   y := y - (expansion / 2);
-
-  %   draw_frame(
-  %     x, y,
-  %     width + expansion, height + expansion,
-  %     subway_width, subway_narrow_half_height,
-  %     corner, corner,
-  %     white
-  %   );
-
-  %   % TODO don't hardcode addition of half tile
-
-  %   % left
-  %   draw_tiles_v_grout(
-  %     x - subway_narrow_half_height, y - grout * 2 + trim_width + subway_height,
-  %     subway_width, subway_narrow_half_height,
-  %     grout * 2,
-  %     main_mosaic_tiles_v_count / 2 - 1,
-  %     white
-  %   );
-
-  %   % right
-  %   draw_tiles_v_grout(
-  %     x + width + trim_width * 2 + grout * 2, y - grout * 2 + trim_width + subway_height,
-  %     subway_width, subway_narrow_half_height,
-  %     grout * 2,
-  %     main_mosaic_tiles_v_count / 2 - 1,
-  %     white
-  %   );
-  % endgroup;
-
-  % % white full trim
-  % begingroup
-  %   frame_h = (wall_width - width) / 2;
-  %   frame_v = (wall_height - height) / 2;
-
-  %   begingroup
-  %     save xA, tile_path, clip_path;
-
-  %     xA = x + trim_width + grout;
-  %     path tile_path, clip_path;
-
-  %     picture p;
-  %     begingroup
-  %       save x, y, o, d;
-  %       pair o;
-
-  %       x = main_mosaic_x;
-  %       y = main_mosaic_y - grout;
-  %       o = (x, y)*u;
-  %       d = frame_depth + grout + subway_width;
-
-  %       clip_path = o --
-  %         o+(0, -d)*u --
-  %         o+(0, -d)*u+(-d, 0)*u --
-  %         cycle;
-
-  %     endgroup;
-
-  %     p = image();
-
-  %     for i=0 step 1 until 4:
-  %       % clip with function y = x + frame_v - frame_h;
-  %       tile_path := make_rect(
-  %         xA, 
-  %         y - subway_width - grout - subway_narrow_half_height - grout,
-  %         subway_height, 
-  %         subway_width
-  %       );
-
-  %       addto p contour tile_path withcolor white;
-  %       % clip currentpicture to clip_path;
-  %       % draw_tile(
-  %       %   xA,
-  %       %   subway_height,
-  %       %   subway_width,
-  %       %   white
-  %       % );
-
-  %       xA := xA - grout / 2 - subway_height;
-  %     endfor
-
-  %     clip p to clip_path;
-  %     addto currentpicture also p;
-  %   endgroup;
-
-  %   % bottom
-  %   draw_tiles_grout(
-  %     x + trim_width + grout, y - subway_width - grout - subway_narrow_half_height - grout,
-  %     subway_height, subway_width,
-  %     grout / 2,
-  %     main_mosaic_tiles_h_count * 2,
-  %     white
-  %   );
-
-  %   % top
-  %   draw_tiles_grout(
-  %     x + trim_width + grout, y + height + trim_width + frame_depth + grout * 2,
-  %     subway_height, subway_width,
-  %     grout / 2,
-  %     main_mosaic_tiles_h_count * 2,
-  %     white
-  %   );
-
-  %   % left
-  %   draw_tiles_v_grout(
-  %     x - subway_width - subway_narrow_half_height - grout, y + trim_width,
-  %     subway_height, subway_width,
-  %     grout,
-  %     main_mosaic_tiles_v_count,
-  %     white
-  %   );
-
-  %   % right
-  %   draw_tiles_v_grout(
-  %     x + width + grout + trim_width + frame_depth + grout,
-  %     y + trim_width,
-  %     subway_height, subway_width,
-  %     grout,
-  %     main_mosaic_tiles_v_count,
-  %     white
-  %   );
-  % endgroup;
 
   % excess
   begingroup
     save excess;
     path excess;
     clip currentpicture to wall;
-    % pickup pencircle scaled 3pt;
-    % draw wall withcolor red dashed evenly scaled 4;
   endgroup;
+enddef;
 
+beginfig(0)
+  draw_wall(58, 60);
 endfig;
+
+beginfig(1)
+  draw_wall(28, 60);
+endfig;
+
+beginfig(2)
+  draw_wall(50, 60);
+endfig;
+
 end;
