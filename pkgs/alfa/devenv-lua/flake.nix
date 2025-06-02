@@ -14,9 +14,10 @@
 
         in
 
-        rec {
+        {
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
+              lua
               lua-language-server
             ];
           };

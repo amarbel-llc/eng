@@ -6,7 +6,7 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     utils.url = "github:numtide/flake-utils";
     utils-pandoc.url  = "github:friedenberg/dev-flake-templates?dir=pandoc";
-    html-to-pdf.url = "path:../../alfa/html-to-pdf";
+    html-to-pdf.url = "github:friedenberg/eng?dir=pkgs/alfa/html-to-pdf";
   };
 
   outputs = { self, nixpkgs, nixpkgs-stable, utils, utils-pandoc, html-to-pdf }:

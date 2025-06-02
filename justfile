@@ -7,10 +7,7 @@ clean: clean-nix
 
 # TODO find all flake.nix's and run flake update for local flakes
 update-nix-local:
-  nix flake update \
-    system-packages-common \
-    system-packages-linux \
-    system-packages-darwin
+  nix flake update
 
 update-nix:
   nix flake update

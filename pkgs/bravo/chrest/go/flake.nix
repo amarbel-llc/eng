@@ -4,15 +4,8 @@
     nixpkgs-stable.url = "nixpkgs/release-24.11";
     utils.url = "github:numtide/flake-utils";
 
-    go = {
-      url = "github:friedenberg/dev-flake-templates?dir=go";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    shell = {
-      url = "github:friedenberg/dev-flake-templates?dir=shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    devenv-go.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-go";
+    devenv-shell.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-shell";
   };
 
   outputs = {
@@ -20,8 +13,8 @@
     nixpkgs,
     nixpkgs-stable,
     utils,
-    go,
-    shell,
+    devenv-go,
+    devenv-shell,
   }:
     (utils.lib.eachDefaultSystem
       (system:
@@ -30,7 +23,7 @@
             inherit system;
 
             overlays = [
-              go.overlays.default
+              devenv-go.overlays.default
             ];
           };
 
@@ -55,8 +48,8 @@
             ]);
 
             inputsFrom = [
-              go.devShells.${system}.default
-              shell.devShells.${system}.default
+              devenv-go.devShells.${system}.default
+              devenv-shell.devShells.${system}.default
             ];
           };
         })

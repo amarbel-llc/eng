@@ -3,8 +3,8 @@
     nixpkgs-stable.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2411.717296.tar.gz";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz";
 
-    devenv-go.url = "path:../../../../alfa/devenv-go";
-    devenv-shell.url = "path:../../../../alfa/devenv-shell";
+    devenv-go.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-go";
+    devenv-shell.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-shell";
   };
 
   outputs = {

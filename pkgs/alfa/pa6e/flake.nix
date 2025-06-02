@@ -6,7 +6,7 @@
     nixpkgs-stable.url = "nixpkgs/release-24.11";
     utils.url = "github:numtide/flake-utils";
 
-    html-to-pdf.url = "path:../../alfa/html-to-pdf";
+    html-to-pdf.url = "github:friedenberg/eng?dir=pkgs/alfa/html-to-pdf";
   };
 
   outputs = { self, nixpkgs, nixpkgs-stable, utils, html-to-pdf }:

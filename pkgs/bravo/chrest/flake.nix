@@ -3,8 +3,8 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     utils.url = "github:numtide/flake-utils";
 
-    devenv-go.url = "path:../../alfa/devenv-go";
-    devenv-js.url = "path:../../alfa/devenv-js";
+    devenv-go.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-go";
+    devenv-js.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-js";
   };
 
   outputs = { self, nixpkgs, nixpkgs-stable, utils, devenv-go, devenv-js }:
