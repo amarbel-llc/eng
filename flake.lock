@@ -7,14 +7,19 @@
         "utils": "utils"
       },
       "locked": {
-        "path": "./pkgs/alfa/bash",
-        "type": "path"
+        "dir": "pkgs/alfa/bash",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/bash",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/bash",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "brew": {
       "inputs": {
@@ -41,10 +46,10 @@
     "brew-api": {
       "flake": false,
       "locked": {
-        "lastModified": 1748872371,
+        "lastModified": 1748879429,
         "owner": "BatteredBunny",
         "repo": "brew-api",
-        "rev": "070b90186d39f8ecb440662fa3e2aed4ff65a29d",
+        "rev": "e20fa5e4478fa0f5b7db117d85dccef3d538d620",
         "type": "github"
       },
       "original": {
@@ -66,14 +71,19 @@
         "utils": "utils_2"
       },
       "locked": {
-        "path": "./pkgs/bravo/chrest",
-        "type": "path"
+        "dir": "pkgs/bravo/chrest",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/bravo/chrest",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/bravo/chrest",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "devenv-go": {
       "inputs": {
@@ -83,14 +93,19 @@
         "utils": "utils_3"
       },
       "locked": {
-        "path": "./pkgs/alfa/devenv-go",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-go",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/devenv-go",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-go",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "devenv-js": {
       "inputs": {
@@ -98,14 +113,19 @@
         "utils": "utils_4"
       },
       "locked": {
-        "path": "./pkgs/alfa/devenv-js",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-js",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/devenv-js",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-js",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "devenv-nix": {
       "inputs": {
@@ -115,14 +135,19 @@
         "utils": "utils_5"
       },
       "locked": {
-        "path": "./pkgs/alfa/devenv-nix",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-nix",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/devenv-nix",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-nix",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "devenv-shell": {
       "inputs": {
@@ -130,14 +155,19 @@
         "utils": "utils_6"
       },
       "locked": {
-        "path": "./pkgs/alfa/devenv-shell",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-shell",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/devenv-shell",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-shell",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "devenv-system-common": {
       "inputs": {
@@ -147,14 +177,19 @@
         "utils": "utils_7"
       },
       "locked": {
-        "path": "./pkgs/alfa/devenv-system-common",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-system-common",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/devenv-system-common",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-system-common",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "devenv-system-darwin": {
       "inputs": {
@@ -165,14 +200,19 @@
         "utils": "utils_8"
       },
       "locked": {
-        "path": "./pkgs/alfa/devenv-system-darwin",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-system-darwin",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/devenv-system-darwin",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-system-darwin",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "devenv-system-linux": {
       "inputs": {
@@ -182,14 +222,19 @@
         "utils": "utils_9"
       },
       "locked": {
-        "path": "./pkgs/alfa/devenv-system-linux",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-system-linux",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/devenv-system-linux",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-system-linux",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "fenix": {
       "inputs": {
@@ -320,14 +365,19 @@
         "utils": "utils_10"
       },
       "locked": {
-        "path": "./pkgs/alfa/html-to-pdf",
-        "type": "path"
+        "dir": "pkgs/alfa/html-to-pdf",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/html-to-pdf",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/html-to-pdf",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "kmonad": {
       "inputs": {
@@ -839,14 +889,19 @@
         "utils": "utils_11"
       },
       "locked": {
-        "path": "./pkgs/alfa/pa6e",
-        "type": "path"
+        "dir": "pkgs/alfa/pa6e",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/pa6e",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/pa6e",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "root": {
       "inputs": {
@@ -909,14 +964,19 @@
         "utils": "utils_12"
       },
       "locked": {
-        "path": "./pkgs/alfa/ssh",
-        "type": "path"
+        "dir": "pkgs/alfa/ssh",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/alfa/ssh",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/ssh",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "systems": {
       "locked": {
@@ -1400,14 +1460,19 @@
         "utils": "utils_14"
       },
       "locked": {
-        "path": "./pkgs/bravo/zit/go/zit",
-        "type": "path"
+        "dir": "pkgs/bravo/zit/go/zit",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "./pkgs/bravo/zit/go/zit",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/bravo/zit/go/zit",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     }
   },
   "root": "root",
