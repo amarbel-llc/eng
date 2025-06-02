@@ -1,0 +1,19 @@
+{
+  "permissions": [
+    "background",
+    "idle",
+    "history",
+    "bookmarks",
+    "tabs",
+    "nativeMessaging",
+    "management",
+    "storage",
+    "unlimitedStorage",
+    "notifications"
+  ],
+  "background": {
+    "service_worker": "main.js",
+    "type": "module"
+  },
+  "options_page": "options.html"
+}

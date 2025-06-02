@@ -1,0 +1,28 @@
+{
+  "permissions": [
+    "identity",
+    "idle",
+    "history",
+    "bookmarks",
+    "tabs",
+    "devtools",
+    "nativeMessaging",
+    "management",
+    "storage",
+    "unlimitedStorage",
+    "notifications"
+  ],
+  "background": {
+    "scripts": [
+      "main.js"
+    ]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "chrest@code.linenisgreat.com"
+    }
+  },
+  "options_ui": {
+    "page": "options.html"
+  }
+}

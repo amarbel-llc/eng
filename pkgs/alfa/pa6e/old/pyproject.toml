@@ -1,0 +1,16 @@
+[project]
+name = "pa6e-old"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "peripage>=1.2",
+    "pillow>=11.1.0",
+    "pybluez",
+    "qrcode>=8.0",
+    "tqdm>=4.67.1",
+]
+
+[tool.uv.sources]
+pybluez = { git = "https://github.com/pybluez/pybluez.git" }

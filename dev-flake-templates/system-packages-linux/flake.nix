@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs-stable.url = "nixpkgs/release-24.11";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-24.11";
     utils.url = "github:numtide/flake-utils";
 
     kmonad = {

@@ -1,5 +1,5 @@
 return {
-  { dir = "~/eng/pkgs/alfa/zit/zz-vim/", },
+  { dir = "~/eng/pkgs/bravo/zit/zz-vim/", },
   { "hashivim/vim-terraform" },
   { "mustache/vim-mustache-handlebars" },
   { "direnv/direnv.vim" },

@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "chrest",
+  "description": "Manage windows, tabs, bookmarks, and history via REST or a companion CLI client",
+  "version": "1.15.1",
+  "icons": {
+    "128": "chrest_icon_128.png"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}

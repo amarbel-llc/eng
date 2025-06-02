@@ -8,29 +8,27 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1745324299,
-        "narHash": "sha256-8YqKWfDPVZd848yCayqigVLmcIA3JDkY/NoS/OO7Rmo=",
+        "lastModified": 1746742173,
         "ref": "refs/heads/master",
-        "rev": "34f6e2b53edba6ce160e1084e667d2f456c49239",
-        "revCount": 975,
+        "rev": "e716fb08a734e68eac3dd6ace784d4d8dd1c017a",
+        "revCount": 983,
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kmonad/kmonad?dir=nix"
+        "url": "https://github.com/kmonad/kmonad"
       },
       "original": {
         "dir": "nix",
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kmonad/kmonad?dir=nix"
+        "url": "https://github.com/kmonad/kmonad"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1746397377,
-        "narHash": "sha256-5oLdRa3vWSRbuqPIFFmQBGGUqaYZBxX+GGtN9f/n4lU=",
+        "lastModified": 1748506378,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ed30f8aba41605e3ab46421e3dcb4510ec560ff8",
+        "rev": "3866ad91cfc172f08a6839def503d8fc2923c603",
         "type": "github"
       },
       "original": {
@@ -40,17 +38,17 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1745496781,
-        "narHash": "sha256-THhK01xd5uvHk5eagzRDSvb+tzXsB92Hmy9Qec4XiV4=",
+        "lastModified": 1748678077,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "48d97d2812b5e3ae7b4f9380a6028eb562a67cf0",
+        "rev": "1359b46f233c6efa20e143d2defd009eac2a1a99",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
+        "owner": "NixOS",
         "ref": "release-24.11",
-        "type": "indirect"
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "root": {
@@ -82,7 +80,6 @@
       },
       "locked": {
         "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",

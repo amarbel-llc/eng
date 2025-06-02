@@ -3,7 +3,6 @@
   render it as a PDF. Chromium is not from nix right now because of Darwin";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-stable.url = "nixpkgs/release-24.11";
     utils.url = "github:numtide/flake-utils";
   };
@@ -30,15 +29,13 @@
           buildCommand = "${old.buildCommand}\n patchShebangs $out";
         });
 
-      in rec {
-        packages.html-to-pdf = pkgs.symlinkJoin {
+      in {
+        packages.default = pkgs.symlinkJoin {
           name = name;
           paths = [ html-to-pdf ] ++ buildInputs;
           buildInputs = [ pkgs.makeWrapper ];
           postBuild = "wrapProgram $out/bin/${name} --prefix PATH : $out/bin";
         };
-
-        defaultPackage = packages.html-to-pdf;
 
         devShells.default = pkgs.mkShell {
           packages = (with pkgs; [

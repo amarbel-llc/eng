@@ -18,11 +18,11 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-      in rec {
+      in {
         devShells.default = pkgs.mkShell {
-          packages = (with pkgs; [
+          packages = [
             resume-builder.packages.${system}.resume-builder
-          ]);
+          ];
 
           inputsFrom = [];
         };
