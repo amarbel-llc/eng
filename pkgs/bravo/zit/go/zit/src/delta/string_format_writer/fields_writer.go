@@ -34,25 +34,25 @@ type Box struct {
 	IdFieldsSeparatedByLines bool
 }
 
-type fieldsWriter struct {
+type boxStringEncoder struct {
 	ColorOptions
 	truncate CliFormatTruncation
 	rightAligned
 }
 
-func MakeCliFormatFields(
+func MakeBoxStringEncoder(
 	truncate CliFormatTruncation,
 	co ColorOptions,
-) *fieldsWriter {
-	return &fieldsWriter{
+) *boxStringEncoder {
+	return &boxStringEncoder{
 		truncate:     truncate,
 		ColorOptions: co,
 	}
 }
 
-func (f *fieldsWriter) EncodeStringTo(
+func (encoder *boxStringEncoder) EncodeStringTo(
 	box Box,
-	w interfaces.WriterAndStringWriter,
+	writer interfaces.WriterAndStringWriter,
 ) (n int64, err error) {
 	var n1 int64
 	var n2 int
@@ -61,10 +61,10 @@ func (f *fieldsWriter) EncodeStringTo(
 	separatorNextLine := "\n" + StringIndentWithSpace
 
 	if box.Header.Value != "" {
-		headerWriter := w
+		headerWriter := writer
 
 		if box.Header.RightAligned {
-			headerWriter = rightAligned2{w}
+			headerWriter = rightAligned2{writer}
 		}
 
 		n2, err = headerWriter.WriteString(box.Header.Value)
@@ -76,8 +76,8 @@ func (f *fieldsWriter) EncodeStringTo(
 		}
 	}
 
-	n1, err = f.writeStringFormatField(
-		w,
+	n1, err = encoder.writeStringFormatField(
+		writer,
 		Field{
 			Value:     "[",
 			ColorType: ColorTypeNormal,
@@ -93,7 +93,7 @@ func (f *fieldsWriter) EncodeStringTo(
 	for i, field := range box.Contents {
 		if i > 0 {
 			if field.NeedsNewline {
-				n2, err = w.WriteString(separatorNextLine)
+				n2, err = writer.WriteString(separatorNextLine)
 				n += int64(n2)
 
 				if err != nil {
@@ -101,7 +101,7 @@ func (f *fieldsWriter) EncodeStringTo(
 					return
 				}
 			} else {
-				n2, err = fmt.Fprint(w, separatorSameLine)
+				n2, err = fmt.Fprint(writer, separatorSameLine)
 				n += int64(n2)
 
 				if err != nil {
@@ -111,7 +111,7 @@ func (f *fieldsWriter) EncodeStringTo(
 			}
 		}
 
-		n1, err = f.writeStringFormatField(w, field)
+		n1, err = encoder.writeStringFormatField(writer, field)
 		n += n1
 
 		if err != nil {
@@ -121,7 +121,7 @@ func (f *fieldsWriter) EncodeStringTo(
 	}
 
 	if separatorSameLine == "\n" {
-		n2, err = w.WriteString(separatorSameLine)
+		n2, err = writer.WriteString(separatorSameLine)
 		n += int64(n2)
 
 		if err != nil {
@@ -136,8 +136,8 @@ func (f *fieldsWriter) EncodeStringTo(
 		closingBracket = "\n" + StringIndent + " ]"
 	}
 
-	n1, err = f.writeStringFormatField(
-		w,
+	n1, err = encoder.writeStringFormatField(
+		writer,
 		Field{
 			Value:     closingBracket,
 			ColorType: ColorTypeNormal,
@@ -151,7 +151,7 @@ func (f *fieldsWriter) EncodeStringTo(
 	}
 
 	for _, field := range box.Trailer {
-		n2, err = fmt.Fprint(w, separatorSameLine)
+		n2, err = fmt.Fprint(writer, separatorSameLine)
 		n += int64(n2)
 
 		if err != nil {
@@ -159,7 +159,7 @@ func (f *fieldsWriter) EncodeStringTo(
 			return
 		}
 
-		n1, err = f.writeStringFormatField(w, field)
+		n1, err = encoder.writeStringFormatField(writer, field)
 		n += n1
 
 		if err != nil {
@@ -171,7 +171,7 @@ func (f *fieldsWriter) EncodeStringTo(
 	return
 }
 
-func (f *fieldsWriter) writeStringFormatField(
+func (f *boxStringEncoder) writeStringFormatField(
 	w interfaces.WriterAndStringWriter,
 	field Field,
 ) (n int64, err error) {

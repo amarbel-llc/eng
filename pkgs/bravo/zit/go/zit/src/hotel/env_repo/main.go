@@ -7,8 +7,8 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/file_lock"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
 	"code.linenisgreat.com/zit/go/zit/src/golf/config_immutable_io"
 	"code.linenisgreat.com/zit/go/zit/src/golf/env_ui"
@@ -187,7 +187,7 @@ func (h Env) DataFileStoreVersion() string {
 
 func (h Env) GetStoreVersion() interfaces.StoreVersion {
 	if h.config.ImmutableConfig == nil {
-		return config_immutable.StoreVersionCurrent
+		return store_version.VCurrent
 	} else {
 		return h.config.ImmutableConfig.GetStoreVersion()
 	}

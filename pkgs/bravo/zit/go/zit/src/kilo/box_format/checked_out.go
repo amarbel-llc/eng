@@ -20,7 +20,7 @@ import (
 func MakeBoxCheckedOut(
 	co string_format_writer.ColorOptions,
 	options options_print.V0,
-	fieldsFormatWriter interfaces.StringEncoderTo[string_format_writer.Box],
+	boxWriter interfaces.StringEncoderTo[string_format_writer.Box],
 	abbr ids.Abbr,
 	fsItemReadWriter sku.FSItemReadWriter,
 	relativePath env_dir.RelativePath,
@@ -31,7 +31,7 @@ func MakeBoxCheckedOut(
 		BoxTransacted: BoxTransacted{
 			optionsColor:     co,
 			optionsPrint:     options,
-			box:              fieldsFormatWriter,
+			boxStringEncoder:              boxWriter,
 			abbr:             abbr,
 			fsItemReadWriter: fsItemReadWriter,
 			relativePath:     relativePath,
@@ -98,7 +98,7 @@ func (f *BoxCheckedOut) EncodeStringTo(
 		)
 	}
 
-	if n, err = f.box.EncodeStringTo(box, sw); err != nil {
+	if n, err = f.boxStringEncoder.EncodeStringTo(box, sw); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

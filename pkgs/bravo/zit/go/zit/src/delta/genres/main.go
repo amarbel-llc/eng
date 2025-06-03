@@ -132,7 +132,7 @@ func (g Genre) GetGenreString() string {
 }
 
 func (g Genre) GetGenreStringVersioned(sv interfaces.StoreVersion) string {
-	if store_version.StoreVersionLessOrEqual(sv, store_version.StoreVersionV6) {
+	if store_version.LessOrEqual(sv, store_version.V6) {
 		return g.stringOld()
 	} else {
 		return g.String()
@@ -140,7 +140,7 @@ func (g Genre) GetGenreStringVersioned(sv interfaces.StoreVersion) string {
 }
 
 func (g Genre) GetGenreStringPlural(sv interfaces.StoreVersion) string {
-	if store_version.StoreVersionLessOrEqual(sv, store_version.StoreVersionV6) {
+	if store_version.LessOrEqual(sv, store_version.V6) {
 		return g.getGenreStringPluralOld()
 	} else {
 		return g.getGenreStringPluralNew()

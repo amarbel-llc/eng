@@ -3,7 +3,7 @@ package commands
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/golf/command"
 	"code.linenisgreat.com/zit/go/zit/src/papa/command_components"
 )
@@ -26,7 +26,7 @@ func (cmd *Init) Run(req command.Request) {
 	repoId := req.PopArg("repo-id")
 
 	if cmd.next {
-		cmd.Config.StoreVersion = config_immutable.StoreVersionNext
+		cmd.Config.StoreVersion = store_version.VNext
 	}
 
 	req.AssertNoMoreArgs()

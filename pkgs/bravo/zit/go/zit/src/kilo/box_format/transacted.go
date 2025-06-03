@@ -44,7 +44,7 @@ func MakeBoxTransactedArchive(
 func MakeBoxTransacted(
 	co string_format_writer.ColorOptions,
 	options options_print.V0,
-	fieldsFormatWriter interfaces.StringEncoderTo[string_format_writer.Box],
+	boxStringEncoder interfaces.StringEncoderTo[string_format_writer.Box],
 	abbr ids.Abbr,
 	fsItemReadWriter sku.FSItemReadWriter,
 	relativePath env_dir.RelativePath,
@@ -53,7 +53,7 @@ func MakeBoxTransacted(
 	return &BoxTransacted{
 		optionsColor:     co,
 		optionsPrint:     options,
-		box:              fieldsFormatWriter,
+		boxStringEncoder: boxStringEncoder,
 		abbr:             abbr,
 		fsItemReadWriter: fsItemReadWriter,
 		relativePath:     relativePath,
@@ -65,8 +65,8 @@ type BoxTransacted struct {
 	optionsColor string_format_writer.ColorOptions
 	optionsPrint options_print.V0
 
-	box          interfaces.StringEncoderTo[string_format_writer.Box]
-	headerWriter string_format_writer.HeaderWriter[*sku.Transacted]
+	boxStringEncoder interfaces.StringEncoderTo[string_format_writer.Box]
+	headerWriter     string_format_writer.HeaderWriter[*sku.Transacted]
 
 	abbr             ids.Abbr
 	fsItemReadWriter sku.FSItemReadWriter
@@ -126,7 +126,9 @@ func (format *BoxTransacted) EncodeStringTo(
 		)
 	}
 
-	if n, err = format.box.EncodeStringTo(box, writer); err != nil {
+	// TODO calculate signature and add as trailer
+
+	if n, err = format.boxStringEncoder.EncodeStringTo(box, writer); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

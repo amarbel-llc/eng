@@ -6,9 +6,9 @@ import (
 	"io"
 	"net/http"
 
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
 	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
 	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
@@ -79,7 +79,7 @@ func (server *Server) writeInventoryListLocalWorkingCopy(
 	}
 
 	listFormat := server.Repo.GetInventoryListStore().FormatForVersion(
-		config_immutable.StoreVersionCurrent,
+		store_version.VCurrent,
 	)
 
 	listMissingSkus := sku.MakeList()

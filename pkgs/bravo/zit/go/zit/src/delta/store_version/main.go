@@ -11,25 +11,20 @@ import (
 const currentVersion = 9
 
 var (
-	// TODO search for references
-	StoreVersionV1      = StoreVersion(values.Int(1))
-	StoreVersionV3      = StoreVersion(values.Int(3))
-	StoreVersionV4      = StoreVersion(values.Int(4))
-	StoreVersionV6      = StoreVersion(values.Int(6))
-	StoreVersionV7      = StoreVersion(values.Int(7))
-	StoreVersionV8      = StoreVersion(values.Int(8))
-	StoreVersionV9      = StoreVersion(values.Int(9))
-	StoreVersionCurrent = StoreVersionV9
-	StoreVersionNext    = StoreVersion(values.Int(currentVersion + 1))
+	V1       = Version(values.Int(1))
+	V3       = Version(values.Int(3))
+	V4       = Version(values.Int(4))
+	V6       = Version(values.Int(6))
+	V7       = Version(values.Int(7))
+	V8       = Version(values.Int(8))
+	V9       = Version(values.Int(9))
+	VCurrent = V9
+	VNext    = Version(values.Int(currentVersion + 1))
 )
 
-func MakeStoreVersion(sv interfaces.StoreVersion) StoreVersion {
-	return StoreVersion(values.Int(sv.GetInt()))
-}
+type Version values.Int
 
-type StoreVersion values.Int
-
-func StoreVersionEquals(
+func Equals(
 	a interfaces.StoreVersion,
 	others ...interfaces.StoreVersion,
 ) bool {
@@ -42,39 +37,39 @@ func StoreVersionEquals(
 	return false
 }
 
-func StoreVersionLess(a, b interfaces.StoreVersion) bool {
+func Less(a, b interfaces.StoreVersion) bool {
 	return a.GetInt() < b.GetInt()
 }
 
-func StoreVersionLessOrEqual(a, b interfaces.StoreVersion) bool {
+func LessOrEqual(a, b interfaces.StoreVersion) bool {
 	return a.GetInt() <= b.GetInt()
 }
 
-func StoreVersionGreater(a, b interfaces.StoreVersion) bool {
+func Greater(a, b interfaces.StoreVersion) bool {
 	return a.GetInt() > b.GetInt()
 }
 
-func StoreVersionGreaterOrEqual(a, b interfaces.StoreVersion) bool {
+func GreaterOrEqual(a, b interfaces.StoreVersion) bool {
 	return a.GetInt() >= b.GetInt()
 }
 
-func (a StoreVersion) Less(b interfaces.StoreVersion) bool {
-	return StoreVersionLess(a, b)
+func (a Version) Less(b interfaces.StoreVersion) bool {
+	return Less(a, b)
 }
 
-func (a StoreVersion) LessOrEqual(b interfaces.StoreVersion) bool {
-	return StoreVersionLessOrEqual(a, b)
+func (a Version) LessOrEqual(b interfaces.StoreVersion) bool {
+	return LessOrEqual(a, b)
 }
 
-func (a StoreVersion) String() string {
+func (a Version) String() string {
 	return values.Int(a).String()
 }
 
-func (a StoreVersion) GetInt() int {
+func (a Version) GetInt() int {
 	return values.Int(a).Int()
 }
 
-func (v *StoreVersion) Set(p string) (err error) {
+func (v *Version) Set(p string) (err error) {
 	var i uint64
 
 	if i, err = strconv.ParseUint(p, 10, 16); err != nil {
@@ -82,9 +77,9 @@ func (v *StoreVersion) Set(p string) (err error) {
 		return
 	}
 
-	*v = StoreVersion(i)
+	*v = Version(i)
 
-	if StoreVersionCurrent.Less(v) {
+	if VCurrent.Less(v) {
 		err = errors.Wrap(ErrFutureStoreVersion{StoreVersion: v})
 		return
 	}

@@ -9,7 +9,6 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/file_lock"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
@@ -78,18 +77,18 @@ func (s *Store) Initialize(
 
 	var blobType ids.Type
 
-	if store_version.StoreVersionLessOrEqual(
+	if store_version.LessOrEqual(
 		s.storeVersion,
-		config_immutable.StoreVersionV6,
+		store_version.V6,
 	) {
 		blobType = ids.MustType(builtin_types.InventoryListTypeV0)
 	} else {
 		blobType = ids.MustType(builtin_types.InventoryListTypeV1)
 	}
 
-	if store_version.StoreVersionLessOrEqual(
+	if store_version.LessOrEqual(
 		s.storeVersion,
-		config_immutable.StoreVersionV8,
+		store_version.V8,
 	) {
 		s.objectBlobStore = &objectBlobStoreV0{
 			blobType: blobType,
@@ -150,9 +149,9 @@ func (s *Store) Flush() (err error) {
 }
 
 func (s *Store) FormatForVersion(sv interfaces.StoreVersion) sku.ListFormat {
-	if store_version.StoreVersionLessOrEqual(
+	if store_version.LessOrEqual(
 		sv,
-		config_immutable.StoreVersionV6,
+		store_version.V6,
 	) {
 		return inventory_list_blobs.MakeV0(
 			s.object_format,

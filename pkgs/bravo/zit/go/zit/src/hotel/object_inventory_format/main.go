@@ -5,7 +5,6 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/golf/object_metadata"
@@ -49,10 +48,10 @@ func Default() Format {
 }
 
 func FormatForVersion(sv interfaces.StoreVersion) Format {
-	if store_version.StoreVersionEquals(
+	if store_version.Equals(
 		sv,
-		config_immutable.StoreVersionV3,
-		config_immutable.StoreVersionV4,
+		store_version.V3,
+		store_version.V4,
 	) {
 		return v4{}
 	} else {

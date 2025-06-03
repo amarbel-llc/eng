@@ -5,6 +5,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/repo_type"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/age"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 )
 
@@ -46,7 +47,7 @@ type BlobStoreConfig interface {
 }
 
 func Default() *TomlV1Private {
-	return DefaultWithVersion(StoreVersionCurrent)
+	return DefaultWithVersion(store_version.VCurrent)
 }
 
 func DefaultWithVersion(storeVersion StoreVersion) *TomlV1Private {

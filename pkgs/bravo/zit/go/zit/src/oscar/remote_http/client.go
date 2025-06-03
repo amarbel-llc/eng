@@ -11,8 +11,8 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/todo"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
 	"code.linenisgreat.com/zit/go/zit/src/golf/config_immutable_io"
@@ -240,7 +240,7 @@ func (client *client) pullQueryGroupFromWorkingCopy(
 	// TODO local / remote version negotiation
 
 	listFormat := client.GetInventoryListStore().FormatForVersion(
-		config_immutable.StoreVersionCurrent,
+		store_version.VCurrent,
 	)
 
 	buffer := bytes.NewBuffer(nil)
