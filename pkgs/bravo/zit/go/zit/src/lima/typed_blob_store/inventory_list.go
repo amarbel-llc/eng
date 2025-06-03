@@ -60,6 +60,9 @@ func MakeInventoryStore(
 			builtin_types.InventoryListTypeV1: inventory_list_blobs.V1ObjectCoder{
 				V1: s.v1,
 			},
+			builtin_types.InventoryListTypeV2: inventory_list_blobs.V2ObjectCoder{
+				V2: s.v2,
+			},
 		},
 	)
 
@@ -140,6 +143,16 @@ func (a InventoryList) GetTransactedWithBlobFromReader(
 			err = errors.Wrap(err)
 			return
 		}
+
+	case builtin_types.InventoryListTypeV2:
+		if err = inventory_list_blobs.ReadInventoryListBlob(
+			a.v2,
+			reader,
+			twb.Blob,
+		); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
 	}
 
 	return
@@ -176,6 +189,15 @@ func (store InventoryList) WriteBlobToWriter(
 
 	case builtin_types.InventoryListTypeV1:
 		if n, err = store.v1.WriteInventoryListBlob(
+			list,
+			writer,
+		); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+
+	case builtin_types.InventoryListTypeV2:
+		if n, err = store.v2.WriteInventoryListBlob(
 			list,
 			writer,
 		); err != nil {
@@ -356,6 +378,24 @@ func (a InventoryList) ReadInventoryListObject(
 			err = errors.Wrap(err)
 			return
 		}
+
+	case builtin_types.InventoryListTypeV2:
+		if err = a.v2.StreamInventoryListBlobSkus(
+			reader,
+			func(sk *sku.Transacted) (err error) {
+				if out == nil {
+					out = sk.CloneTransacted()
+				} else {
+					err = errors.ErrorWithStackf("expected only one sku.Transacted, but read more than one")
+					return
+				}
+
+				return
+			},
+		); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
 	}
 
 	return
@@ -375,6 +415,9 @@ func (a InventoryList) ReadInventoryListBlob(
 
 	case builtin_types.InventoryListTypeV1:
 		listFormat = a.v1
+
+	case builtin_types.InventoryListTypeV2:
+		listFormat = a.v2
 	}
 
 	if err = listFormat.StreamInventoryListBlobSkus(

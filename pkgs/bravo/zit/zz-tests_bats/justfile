@@ -7,7 +7,7 @@ dir_git_root := shell("git rev-parse --show-toplevel")
 clean-fixtures:
   #! /bin/bash -ex
 
-  pushd "{{dir_git_root}}/zz-tests_bats" || exit
+  pushd "{{dir_git_root}}/pkgs/bravo/zit/zz-tests_bats" || exit
 
   git reset HEAD migration/v*/
   ./../bin/chflags.bash -R nouchg migration/v*/
