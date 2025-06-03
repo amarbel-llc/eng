@@ -14,7 +14,7 @@ fi
 d="${2:-$dir_base/v$v}"
 
 if [[ -d $d ]]; then
-  "$dir_git_root/pkgs/zit/bin/chflags.bash" -R nouchg "$d"
+  "$dir_git_root/pkgs/bravo/zit/bin/chflags.bash" -R nouchg "$d"
   rm -rf "$d"
 fi
 

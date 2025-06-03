@@ -11,7 +11,14 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
 )
 
-var CurrentStoreVersion = StoreVersion(values.Int(9))
+const currentVersion = 9
+
+var (
+	// TODO search for references
+	StoreVersionV9      = StoreVersion(values.Int(9))
+	StoreVersionCurrent = StoreVersionV9
+	StoreVersionNext    = StoreVersion(values.Int(currentVersion + 1))
+)
 
 func MakeStoreVersion(sv interfaces.StoreVersion) StoreVersion {
 	return StoreVersion(values.Int(sv.GetInt()))
@@ -41,7 +48,7 @@ func (v *StoreVersion) Set(p string) (err error) {
 
 	*v = StoreVersion(i)
 
-	if CurrentStoreVersion.Less(v) {
+	if StoreVersionCurrent.Less(v) {
 		err = errors.Wrap(ErrFutureStoreVersion{StoreVersion: v})
 		return
 	}
@@ -52,7 +59,7 @@ func (v *StoreVersion) Set(p string) (err error) {
 func (v *StoreVersion) ReadFromFile(
 	p string,
 ) (err error) {
-	if err = v.ReadFromFileOrVersion(p, CurrentStoreVersion); err != nil {
+	if err = v.ReadFromFileOrVersion(p, StoreVersionCurrent); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

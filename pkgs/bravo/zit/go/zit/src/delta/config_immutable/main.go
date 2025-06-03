@@ -48,7 +48,7 @@ type BlobStoreConfig interface {
 func Default() *TomlV1Private {
 	return &TomlV1Private{
 		TomlV1Common: TomlV1Common{
-			StoreVersion: CurrentStoreVersion,
+			StoreVersion: StoreVersionCurrent,
 			RepoType:     repo_type.TypeWorkingCopy,
 			BlobStore: BlobStoreTomlV1{
 				CompressionType:   CompressionTypeDefault,

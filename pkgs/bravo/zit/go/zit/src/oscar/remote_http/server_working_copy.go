@@ -79,7 +79,7 @@ func (server *Server) writeInventoryListLocalWorkingCopy(
 	}
 
 	listFormat := server.Repo.GetInventoryListStore().FormatForVersion(
-		config_immutable.CurrentStoreVersion,
+		config_immutable.StoreVersionCurrent,
 	)
 
 	listMissingSkus := sku.MakeList()

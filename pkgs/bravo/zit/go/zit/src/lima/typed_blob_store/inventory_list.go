@@ -22,6 +22,7 @@ type InventoryList struct {
 	boxFormat    *box_format.BoxTransacted
 	v0           inventory_list_blobs.V0
 	v1           inventory_list_blobs.V1
+	v2           inventory_list_blobs.V2
 
 	objectCoders   triple_hyphen_io.CoderTypeMapWithoutType[*sku.Transacted]
 	streamDecoders map[string]interfaces.DecoderFrom[func(*sku.Transacted) bool]
@@ -45,6 +46,9 @@ func MakeInventoryStore(
 		v1: inventory_list_blobs.V1{
 			Box: boxFormat,
 		},
+		v2: inventory_list_blobs.V2{
+			Box: boxFormat,
+		},
 	}
 
 	s.objectCoders = triple_hyphen_io.CoderTypeMapWithoutType[*sku.Transacted](
@@ -64,6 +68,9 @@ func MakeInventoryStore(
 		},
 		builtin_types.InventoryListTypeV1: inventory_list_blobs.V1IterDecoder{
 			V1: s.v1,
+		},
+		builtin_types.InventoryListTypeV2: inventory_list_blobs.V2IterDecoder{
+			V2: s.v2,
 		},
 	}
 
@@ -151,25 +158,25 @@ func (a InventoryList) WriteObjectToWriter(
 	)
 }
 
-func (a InventoryList) WriteBlobToWriter(
+func (store InventoryList) WriteBlobToWriter(
 	tipe ids.Type,
 	list sku.Collection,
-	w io.Writer,
+	writer io.Writer,
 ) (n int64, err error) {
 	switch tipe.String() {
 	case "", builtin_types.InventoryListTypeV0:
-		if n, err = a.v0.WriteInventoryListBlob(
+		if n, err = store.v0.WriteInventoryListBlob(
 			list,
-			w,
+			writer,
 		); err != nil {
 			err = errors.Wrap(err)
 			return
 		}
 
 	case builtin_types.InventoryListTypeV1:
-		if n, err = a.v1.WriteInventoryListBlob(
+		if n, err = store.v1.WriteInventoryListBlob(
 			list,
-			w,
+			writer,
 		); err != nil {
 			err = errors.Wrap(err)
 			return

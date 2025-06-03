@@ -18,7 +18,7 @@ func init() {
 	command.Register(
 		"import",
 		&Import{
-			StoreVersion: config_immutable.CurrentStoreVersion,
+			StoreVersion: config_immutable.StoreVersionCurrent,
 		},
 	)
 }

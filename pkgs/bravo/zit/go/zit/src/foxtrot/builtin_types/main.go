@@ -21,6 +21,7 @@ const (
 
 	InventoryListTypeV0 = "!inventory_list-v0"
 	InventoryListTypeV1 = "!inventory_list-v1"
+	InventoryListTypeV2 = "!inventory_list-v2"
 
 	RepoTypeXDGDotenvV0 = "!toml-repo-dotenv_xdg-v0"
 	RepoTypeLocalPath   = "!toml-repo-local_path-v0"
@@ -62,6 +63,8 @@ func init() {
 
 	register(InventoryListTypeV0, genres.InventoryList, false)
 	register(InventoryListTypeV1, genres.InventoryList, true)
+	// TODO StoreVersionV10
+	register(InventoryListTypeV2, genres.InventoryList, false)
 
 	register(RepoTypeUri, genres.Repo, true)
 	register(RepoTypeXDGDotenvV0, genres.Repo, false)
@@ -74,6 +77,7 @@ func init() {
 	register(WorkspaceConfigTypeTomlV0, genres.None, false)
 }
 
+// TODO switch to isDefault being a StoreVersion
 func register(tipeString string, g genres.Genre, isDefault bool) {
 	registerBuiltinType(
 		BuiltinType{

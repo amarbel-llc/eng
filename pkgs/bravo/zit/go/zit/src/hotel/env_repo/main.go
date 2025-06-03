@@ -187,7 +187,7 @@ func (h Env) DataFileStoreVersion() string {
 
 func (h Env) GetStoreVersion() interfaces.StoreVersion {
 	if h.config.ImmutableConfig == nil {
-		return config_immutable.CurrentStoreVersion
+		return config_immutable.StoreVersionCurrent
 	} else {
 		return h.config.ImmutableConfig.GetStoreVersion()
 	}

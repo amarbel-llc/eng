@@ -240,7 +240,7 @@ func (client *client) pullQueryGroupFromWorkingCopy(
 	// TODO local / remote version negotiation
 
 	listFormat := client.GetInventoryListStore().FormatForVersion(
-		config_immutable.CurrentStoreVersion,
+		config_immutable.StoreVersionCurrent,
 	)
 
 	buffer := bytes.NewBuffer(nil)
