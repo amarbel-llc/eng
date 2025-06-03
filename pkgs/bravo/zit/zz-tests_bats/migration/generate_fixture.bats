@@ -17,7 +17,13 @@ cmd_def=(
 )
 
 function generate { # @test
-	which zit
+	run_zit info store-version
+	assert_success
+	assert_output --regexp '[0-9]+'
+
+	# shellcheck disable=SC2034
+	storeVersionCurrent="$output"
+
 	run_zit_init_disable_age
 
 	run_zit show :b
@@ -30,7 +36,7 @@ function generate { # @test
 
 	run_zit info store-version
 	assert_success
-	assert_output 9
+	assert_output "$storeVersionCurrent"
 
 	run_zit show "${cmd_def[@]}" !md:t :konfig
 	assert_success
