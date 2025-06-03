@@ -3,6 +3,8 @@ package log_remote_inventory_lists
 import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
 	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
 )
@@ -38,14 +40,12 @@ type Log interface {
 func Make(ctx errors.Context, envRepo env_repo.Env) (log Log) {
 	sv := envRepo.GetConfigPrivate().ImmutableConfig.GetStoreVersion()
 
-	switch sv := sv.GetInt(); {
-	case sv < 8:
+	if store_version.StoreVersionLess(sv, config_immutable.StoreVersionV8) {
 		ctx.CancelWithErrorf("unsupported store version: %s")
 		return nil
-
-	default:
-		log = &v0{}
 	}
+
+	log = &v0{}
 
 	log.initialize(ctx, envRepo)
 	ctx.After(log.Flush)

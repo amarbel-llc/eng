@@ -73,9 +73,9 @@ type BoxTransacted struct {
 	relativePath     env_dir.RelativePath
 }
 
-func (f *BoxTransacted) EncodeStringTo(
-	sk *sku.Transacted,
-	sw interfaces.WriterAndStringWriter,
+func (format *BoxTransacted) EncodeStringTo(
+	object *sku.Transacted,
+	writer interfaces.WriterAndStringWriter,
 ) (n int64, err error) {
 	var box string_format_writer.Box
 
@@ -86,8 +86,8 @@ func (f *BoxTransacted) EncodeStringTo(
 	// 	box.Header.Value = t.Format(string_format_writer.StringFormatDateTime)
 	// }
 
-	if f.headerWriter != nil {
-		if err = f.headerWriter.WriteBoxHeader(&box.Header, sk); err != nil {
+	if format.headerWriter != nil {
+		if err = format.headerWriter.WriteBoxHeader(&box.Header, object); err != nil {
 			err = errors.Wrap(err)
 			return
 		}
@@ -95,27 +95,27 @@ func (f *BoxTransacted) EncodeStringTo(
 
 	box.Contents = slices.Grow(box.Contents, 10)
 
-	if err = f.addFieldsObjectIds(
-		sk,
+	if err = format.addFieldsObjectIds(
+		object,
 		&box,
 	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	if err = f.addFieldsMetadata(
-		f.optionsPrint,
-		sk,
-		f.optionsPrint.DescriptionInBox,
+	if err = format.addFieldsMetadata(
+		format.optionsPrint,
+		object,
+		format.optionsPrint.DescriptionInBox,
 		&box,
 	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	b := &sk.Metadata.Description
+	b := &object.Metadata.Description
 
-	if !f.optionsPrint.DescriptionInBox && !b.IsEmpty() {
+	if !format.optionsPrint.DescriptionInBox && !b.IsEmpty() {
 		box.Trailer = append(
 			box.Trailer,
 			string_format_writer.Field{
@@ -126,7 +126,7 @@ func (f *BoxTransacted) EncodeStringTo(
 		)
 	}
 
-	if n, err = f.box.EncodeStringTo(box, sw); err != nil {
+	if n, err = format.box.EncodeStringTo(box, writer); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

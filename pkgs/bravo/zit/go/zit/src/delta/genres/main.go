@@ -10,6 +10,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 )
 
 type Genre byte
@@ -131,25 +132,17 @@ func (g Genre) GetGenreString() string {
 }
 
 func (g Genre) GetGenreStringVersioned(sv interfaces.StoreVersion) string {
-	v := sv.GetInt()
-
-	switch {
-	case v <= 6:
+	if store_version.StoreVersionLessOrEqual(sv, store_version.StoreVersionV6) {
 		return g.stringOld()
-
-	default:
+	} else {
 		return g.String()
 	}
 }
 
 func (g Genre) GetGenreStringPlural(sv interfaces.StoreVersion) string {
-	v := sv.GetInt()
-
-	switch {
-	case v <= 6:
+	if store_version.StoreVersionLessOrEqual(sv, store_version.StoreVersionV6) {
 		return g.getGenreStringPluralOld()
-
-	default:
+	} else {
 		return g.getGenreStringPluralNew()
 	}
 }
@@ -301,7 +294,7 @@ func (g *Genre) Set(v string) (err error) {
 		*g = Config
 
 	case hasPrefixOrEquals("inventorylist", v):
-    fallthrough
+		fallthrough
 	case hasPrefixOrEquals("inventory_list", v):
 		fallthrough
 	case hasPrefixOrEquals("inventory-list", v):

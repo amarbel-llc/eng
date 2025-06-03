@@ -9,8 +9,10 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
+	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/file_lock"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
@@ -74,20 +76,21 @@ func (s *Store) Initialize(
 		options: op,
 	}
 
-	v := s.storeVersion.GetInt()
-
 	var blobType ids.Type
 
-	switch {
-	case v <= 6:
+	if store_version.StoreVersionLessOrEqual(
+		s.storeVersion,
+		config_immutable.StoreVersionV6,
+	) {
 		blobType = ids.MustType(builtin_types.InventoryListTypeV0)
-
-	default:
+	} else {
 		blobType = ids.MustType(builtin_types.InventoryListTypeV1)
 	}
 
-	switch {
-	case v <= 8:
+	if store_version.StoreVersionLessOrEqual(
+		s.storeVersion,
+		config_immutable.StoreVersionV8,
+	) {
 		s.objectBlobStore = &objectBlobStoreV0{
 			blobType: blobType,
 			blobStore: blob_store.MakeShardedFilesStore(
@@ -99,8 +102,7 @@ func (s *Store) Initialize(
 			),
 			typedBlobStore: typedBlobStore,
 		}
-
-	default:
+	} else {
 		s.objectBlobStore = &objectBlobStoreV1{
 			pathLog:  envRepo.FileInventoryListLog(),
 			blobType: blobType,
@@ -148,16 +150,15 @@ func (s *Store) Flush() (err error) {
 }
 
 func (s *Store) FormatForVersion(sv interfaces.StoreVersion) sku.ListFormat {
-	v := sv.GetInt()
-
-	switch {
-	case v <= 6:
+	if store_version.StoreVersionLessOrEqual(
+		sv,
+		config_immutable.StoreVersionV6,
+	) {
 		return inventory_list_blobs.MakeV0(
 			s.object_format,
 			s.options,
 		)
-
-	default:
+	} else {
 		return inventory_list_blobs.V1{
 			Box: s.box,
 		}

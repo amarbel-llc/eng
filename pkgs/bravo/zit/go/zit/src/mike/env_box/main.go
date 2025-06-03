@@ -3,6 +3,8 @@ package env_box
 import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
+	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
@@ -60,16 +62,15 @@ type env struct {
 }
 
 func (s env) FormatForVersion(sv interfaces.StoreVersion) sku.ListFormat {
-	v := sv.GetInt()
-
-	switch {
-	case v <= 6:
+	if store_version.StoreVersionLessOrEqual(
+		sv,
+		config_immutable.StoreVersionV6,
+	) {
 		return inventory_list_blobs.MakeV0(
 			s.object_format,
 			s.options,
 		)
-
-	default:
+	} else {
 		return inventory_list_blobs.V1{
 			Box: box_format.MakeBoxTransactedArchive(
 				s,

@@ -3,63 +3,35 @@ package config_immutable
 import (
 	"io"
 	"os"
-	"strconv"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
+	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
 )
+
+type StoreVersion = store_version.StoreVersion
 
 const currentVersion = 9
 
 var (
 	// TODO search for references
+	StoreVersionV1      = StoreVersion(values.Int(1))
+	StoreVersionV3      = StoreVersion(values.Int(3))
+	StoreVersionV4      = StoreVersion(values.Int(4))
+	StoreVersionV6      = StoreVersion(values.Int(6))
+	StoreVersionV7      = StoreVersion(values.Int(7))
+	StoreVersionV8      = StoreVersion(values.Int(8))
 	StoreVersionV9      = StoreVersion(values.Int(9))
 	StoreVersionCurrent = StoreVersionV9
 	StoreVersionNext    = StoreVersion(values.Int(currentVersion + 1))
 )
 
-func MakeStoreVersion(sv interfaces.StoreVersion) StoreVersion {
-	return StoreVersion(values.Int(sv.GetInt()))
-}
-
-type StoreVersion values.Int
-
-func (a StoreVersion) Less(b interfaces.StoreVersion) bool {
-	return a.String() < b.String()
-}
-
-func (a StoreVersion) String() string {
-	return values.Int(a).String()
-}
-
-func (a StoreVersion) GetInt() int {
-	return values.Int(a).Int()
-}
-
-func (v *StoreVersion) Set(p string) (err error) {
-	var i uint64
-
-	if i, err = strconv.ParseUint(p, 10, 16); err != nil {
-		err = errors.Wrap(err)
-		return
-	}
-
-	*v = StoreVersion(i)
-
-	if StoreVersionCurrent.Less(v) {
-		err = errors.Wrap(ErrFutureStoreVersion{StoreVersion: v})
-		return
-	}
-
-	return
-}
-
-func (v *StoreVersion) ReadFromFile(
+func ReadFromFile(
+	v *StoreVersion,
 	p string,
 ) (err error) {
-	if err = v.ReadFromFileOrVersion(p, StoreVersionCurrent); err != nil {
+	if err = ReadFromFileOrVersion(v, p, StoreVersionCurrent); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -67,7 +39,8 @@ func (v *StoreVersion) ReadFromFile(
 	return
 }
 
-func (v *StoreVersion) ReadFromFileOrVersion(
+func ReadFromFileOrVersion(
+	v *StoreVersion,
 	p string,
 	alternative StoreVersion,
 ) (err error) {
