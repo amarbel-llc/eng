@@ -82,8 +82,13 @@ func (s *Store) Initialize(
 		store_version.V6,
 	) {
 		blobType = ids.MustType(builtin_types.InventoryListTypeV0)
-	} else {
+	} else if store_version.LessOrEqual(
+		s.storeVersion,
+		store_version.V9,
+	) {
 		blobType = ids.MustType(builtin_types.InventoryListTypeV1)
+	} else {
+		blobType = ids.MustType(builtin_types.InventoryListTypeV2)
 	}
 
 	if store_version.LessOrEqual(
