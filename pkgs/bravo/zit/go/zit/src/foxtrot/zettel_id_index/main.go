@@ -4,7 +4,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	hinweis_index_v0 "code.linenisgreat.com/zit/go/zit/src/foxtrot/zettel_id_index/v0"
 	hinweis_index_v1 "code.linenisgreat.com/zit/go/zit/src/foxtrot/zettel_id_index/v1"

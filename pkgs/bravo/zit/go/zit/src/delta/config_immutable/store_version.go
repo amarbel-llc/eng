@@ -6,7 +6,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
-	"code.linenisgreat.com/zit/go/zit/src/delta/store_version"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 )
 
 type StoreVersion = store_version.Version

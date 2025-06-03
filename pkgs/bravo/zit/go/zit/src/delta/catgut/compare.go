@@ -9,9 +9,9 @@ type Comparer[Self any] interface {
 }
 
 func CompareUTF8Bytes[A Comparer[A], B Comparer[B]](
-  a A,
-  b B,
-  partial bool,
+	a A,
+	b B,
+	partial bool,
 ) int {
 	lenA, lenB := a.Len(), b.Len()
 

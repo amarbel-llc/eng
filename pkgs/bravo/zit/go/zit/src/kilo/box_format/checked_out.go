@@ -31,7 +31,7 @@ func MakeBoxCheckedOut(
 		BoxTransacted: BoxTransacted{
 			optionsColor:     co,
 			optionsPrint:     options,
-			boxStringEncoder:              boxWriter,
+			boxStringEncoder: boxWriter,
 			abbr:             abbr,
 			fsItemReadWriter: fsItemReadWriter,
 			relativePath:     relativePath,

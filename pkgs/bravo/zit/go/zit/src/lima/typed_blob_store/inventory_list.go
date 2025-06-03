@@ -47,7 +47,8 @@ func MakeInventoryStore(
 			Box: boxFormat,
 		},
 		v2: inventory_list_blobs.V2{
-			Box: boxFormat,
+			Box:                    boxFormat,
+			ImmutableConfigPrivate: dirLayout.GetConfigPrivate().ImmutableConfig,
 		},
 	}
 
