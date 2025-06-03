@@ -7,6 +7,8 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
@@ -15,7 +17,8 @@ import (
 )
 
 type V2 struct {
-	Box *box_format.BoxTransacted
+	Box                    *box_format.BoxTransacted
+	ImmutableConfigPrivate config_immutable.ConfigPrivate
 }
 
 func (v V2) GetListFormat() sku.ListFormat {
@@ -65,7 +68,9 @@ func (format V2) writeObjectListItemToWriter(
 
 	var n1 int64
 
-	n1, err = format.Box.EncodeStringTo(object, writer)
+	shaWriter := sha.MakeWriter(writer)
+
+	n1, err = format.Box.EncodeStringTo(object, shaWriter)
 	n += n1
 
 	if err != nil {
@@ -73,10 +78,22 @@ func (format V2) writeObjectListItemToWriter(
 		return
 	}
 
-	// TODO write signature
+	sh := sha.Make(shaWriter.GetShaLike())
+	defer sha.GetPool().Put(sh)
+
+	key := format.ImmutableConfigPrivate.GetPrivateKey()
+
+	var sig string
+
+	if sig, err = repo_signing.SignBase64(key, sh.GetShaBytes()); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	object.Signature = sig
 
 	var n2 int
-	n2, err = fmt.Fprintf(writer, "\n")
+	n2, err = fmt.Fprintf(writer, ":%s\n", sig)
 	n += int64(n2)
 
 	if err != nil {
