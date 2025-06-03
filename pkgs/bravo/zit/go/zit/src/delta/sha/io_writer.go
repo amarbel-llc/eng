@@ -48,6 +48,14 @@ func (w *writer) Write(p []byte) (n int, err error) {
 	return w.w.Write(p)
 }
 
+func (w *writer) WriteString(v string) (n int, err error) {
+	if stringWriter, ok := w.w.(io.StringWriter); ok {
+		return stringWriter.WriteString(v)
+	} else {
+		return io.WriteString(w.w, v)
+	}
+}
+
 func (w *writer) Close() (err error) {
 	w.closed = true
 	w.setShaLikeIfNecessary()

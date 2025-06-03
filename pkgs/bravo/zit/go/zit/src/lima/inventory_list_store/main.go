@@ -200,6 +200,8 @@ func (store *Store) AddObjectToOpenList(
 	openList *sku.OpenList,
 	object *sku.Transacted,
 ) (err error) {
+	// TODO sign object
+
 	format := store.FormatForVersion(store.storeVersion)
 
 	if _, err = format.WriteObjectToOpenList(object, openList); err != nil {

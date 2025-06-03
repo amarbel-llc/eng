@@ -7,6 +7,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
 	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
@@ -55,7 +56,7 @@ func (format V2) WriteObjectToOpenList(
 
 func (format V2) writeObjectListItemToWriter(
 	object *sku.Transacted,
-	writer interfaces.WriterAndStringWriter,
+	writer interfaces.ShaWriter,
 ) (n int64, err error) {
 	if object.Metadata.Sha().IsNull() {
 		err = errors.ErrorWithStackf("empty sha: %q", sku.String(object))
@@ -72,6 +73,8 @@ func (format V2) writeObjectListItemToWriter(
 		return
 	}
 
+	// TODO write signature
+
 	var n2 int
 	n2, err = fmt.Fprintf(writer, "\n")
 	n += int64(n2)
@@ -85,16 +88,18 @@ func (format V2) writeObjectListItemToWriter(
 }
 
 func (s V2) WriteInventoryListBlob(
-	o sku.Collection,
-	w1 io.Writer,
+	skus sku.Collection,
+	writer io.Writer,
 ) (n int64, err error) {
-	bw := bufio.NewWriter(w1)
-	defer errors.DeferredFlusher(&err, bw)
+	bufferedWriter := bufio.NewWriter(writer)
+	defer errors.DeferredFlusher(&err, bufferedWriter)
+
+	shaWriter := sha.MakeWriter(bufferedWriter)
 
 	var n1 int64
 
-	for sk := range o.All() {
-		n1, err = s.writeObjectListItemToWriter(sk, bw)
+	for sk := range skus.All() {
+		n1, err = s.writeObjectListItemToWriter(sk, shaWriter)
 		n += n1
 
 		if err != nil {

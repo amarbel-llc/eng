@@ -13,6 +13,7 @@ import (
 
 type Writer interface {
 	sha.WriteCloser
+	interfaces.ShaGetter
 }
 
 type writer struct {

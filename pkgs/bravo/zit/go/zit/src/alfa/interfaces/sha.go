@@ -36,6 +36,11 @@ type (
 		io.WriteCloser
 		GetShaLike() Sha
 	}
+
+	ShaWriter interface {
+		WriterAndStringWriter
+		ShaGetter
+	}
 )
 
 type (
