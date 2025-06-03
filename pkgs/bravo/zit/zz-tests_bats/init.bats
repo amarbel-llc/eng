@@ -189,3 +189,19 @@ function init_and_init { # @test
 		[one/uno @9e2ec912af5dff2a72300863864fc4da04e81999339d9fac5c7590ba8a3f4e11 !md "wow" tag]
 	EOM
 }
+
+function init_next { # @test
+	run_zit info store-version-next
+	assert_success
+	assert_output --regexp '[0-9]+'
+
+	# shellcheck disable=SC2034
+	storeVersionNext="$output"
+
+	run_zit_init -next -override-xdg-with-cwd test-repo-id
+	assert_success
+
+	run_zit info-repo store-version
+	assert_success
+	assert_output "$storeVersionNext"
+}

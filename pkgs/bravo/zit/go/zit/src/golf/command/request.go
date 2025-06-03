@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/foxtrot/config_mutable_cli"
 )
 
@@ -69,6 +70,21 @@ func (req *Args) PopArgs() []string {
 
 func (req *Args) RemainingArgCount() int {
 	return len(req.args[req.argi:])
+}
+
+// TODO use pools?
+func PopRequestArg[
+	T interfaces.Stringer,
+	Ptr interfaces.StringerSetterPtr[T],
+](req *Args, name string) Ptr {
+	arg := req.PopArg(name)
+	var argValue T
+
+	if err := (Ptr(&argValue)).Set(arg); err != nil {
+		req.CancelWithBadRequestError(err)
+	}
+
+	return &argValue
 }
 
 func (req *Args) PopArg(name string) string {

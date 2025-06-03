@@ -11,16 +11,12 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/golf/env_ui"
 )
 
-type Info struct {
-	config_immutable.ConfigPrivate
-}
+type Info struct{}
 
 func init() {
 	command.Register(
 		"info",
-		&Info{
-			ConfigPrivate: config_immutable.Default(),
-		},
+		&Info{},
 	)
 }
 
@@ -44,16 +40,21 @@ func (c Info) Run(req command.Request) {
 		args = []string{"store-version"}
 	}
 
+	defaultConfig := config_immutable.Default()
+
 	for _, arg := range args {
 		switch strings.ToLower(arg) {
 		case "store-version":
-			ui.GetUI().Print(c.ConfigPrivate.GetStoreVersion())
+			ui.GetUI().Print(defaultConfig.GetStoreVersion())
+
+		case "store-version-next":
+			ui.GetUI().Print(config_immutable.StoreVersionNext)
 
 		case "compression-type":
-			ui.GetUI().Print(c.ConfigPrivate.GetBlobStoreConfigImmutable().GetBlobCompression())
+			ui.GetUI().Print(defaultConfig.GetBlobStoreConfigImmutable().GetBlobCompression())
 
 		case "age-encryption":
-			ui.GetUI().Print(c.ConfigPrivate.GetBlobStoreConfigImmutable().GetBlobEncryption())
+			ui.GetUI().Print(defaultConfig.GetBlobStoreConfigImmutable().GetBlobEncryption())
 
 		case "xdg":
 			ecksDeeGee := dir.GetXDG()
