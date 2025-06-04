@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"syscall"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
@@ -13,13 +14,20 @@ func main() {
 
 	for {
 		ctx := errors.MakeContextDefault()
-		ctx.SetCancelOnSIGINT()
+
+		ctx.SetCancelOnSignals(
+			syscall.SIGTERM,
+			syscall.SIGINT,
+			syscall.SIGHUP,
+		)
 
 		if err := ctx.Run(
 			func(ctx errors.Context) {
 				commands.Run(ctx, os.Args...)
 			},
 		); err != nil {
+			exitStatus = 1
+
 			var helpful errors.Helpful
 
 			if errors.As(err, &helpful) {
@@ -28,12 +36,11 @@ func main() {
 			}
 
 			var normalError errors.StackTracer
-			exitStatus = 1
 
 			if errors.As(err, &normalError) && !normalError.ShouldShowStackTrace() {
-				ui.Err().Printf("%s", normalError.Error())
+				ui.Err().Printf("\n\nzit failed with error:\n%s", normalError.Error())
 			} else {
-				ui.Err().Print(err)
+				ui.Err().Printf("\n\nzit failed with error:\n%s", err)
 			}
 		}
 

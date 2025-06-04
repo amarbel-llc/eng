@@ -10,5 +10,5 @@ type Signal struct {
 }
 
 func (err Signal) Error() string {
-	return fmt.Sprintf("signal: %q", err.Signal)
+	return fmt.Sprintf("received signal: %q", err.Signal)
 }

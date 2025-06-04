@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 )
 
@@ -29,7 +28,6 @@ func SetVerbose(on bool) {
 }
 
 func SetTesting() {
-	errors.SetTesting()
 	SetVerbose(true)
 }
 

@@ -17,6 +17,32 @@ clean-fixtures:
 [group("clean")]
 clean: clean-fixtures
 
+zit_current_version := "v" + shell("zit info store-version")
+
+[group("debug")]
+debug-env store_version=zit_current_version:
+  #! /bin/bash -ex
+  dir="$(mktemp -d)"
+  trap "rm -rf '$dir'" EXIT
+
+  cp -r migration/{{store_version}}/.xdg "$dir/.xdg"
+
+  echo 'source_env "{{invocation_dir()}}/.envrc"' >> "$dir/.envrc"
+  echo 'dotenv ./.env' >> "$dir/.envrc"
+  direnv allow "$dir/.envrc"
+  trap "direnv disallow \"$dir/.envrc\"" EXIT
+
+  cat - > "$dir/.env" <<-EOM
+    export XDG_DATA_HOME="$dir/.xdg/data"
+    export XDG_CONFIG_HOME="$dir/.xdg/config"
+    export XDG_STATE_HOME="$dir/.xdg/state"
+    export XDG_CACHE_HOME="$dir/.xdg/cache"
+    export XDG_RUNTIME_HOME="$dir/.xdg/runtime"
+  EOM
+
+  pushd "$dir"
+  direnv exec . "$SHELL"
+
 #   _   _           _       _
 #  | | | |_ __   __| | __ _| |_ ___
 #  | | | | '_ \ / _` |/ _` | __/ _ \
@@ -59,7 +85,7 @@ test-generate_fixtures store_version:
   which zit
   ./migration/generate_fixture.bash {{store_version}}
 
-bats_timeout := "10"
+bats_timeout := "5"
 
 # runs specific bats test files, or a default of all in the `zz-tests_bats` dir.
 [group("test")]

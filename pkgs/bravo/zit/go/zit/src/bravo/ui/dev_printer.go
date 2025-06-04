@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
 )
 
 type devPrinter struct {
@@ -24,7 +24,7 @@ func (p devPrinter) Print(a ...any) (err error) {
 	}
 
 	if p.includesStack {
-		si, _ := errors.MakeStackFrame(1)
+		si, _ := stack_frame.MakeFrame(1)
 		a = append([]any{si.StringNoFunctionName()}, a...)
 	}
 
@@ -42,7 +42,7 @@ func (p devPrinter) Printf(f string, a ...any) (err error) {
 	}
 
 	if p.includesStack {
-		si, _ := errors.MakeStackFrame(1)
+		si, _ := stack_frame.MakeFrame(1)
 		f = "%s " + f
 		a = append([]any{si.StringNoFunctionName()}, a...)
 	}
@@ -55,7 +55,7 @@ func (p devPrinter) Caller(i int, vs ...any) {
 		return
 	}
 
-	st, _ := errors.MakeStackFrame(i + 1)
+	st, _ := stack_frame.MakeFrame(i + 1)
 
 	vs = append([]any{st}, vs...)
 	// TODO-P4 strip trailing newline and add back
@@ -73,8 +73,8 @@ func (p devPrinter) FunctionName(skip int) {
 		return
 	}
 
-	st, _ := errors.MakeStackFrame(skip + 1)
-	io.WriteString(p.f, fmt.Sprintf("%s%s\n", st, st.Function))
+	st, _ := stack_frame.MakeFrame(skip + 1)
+	io.WriteString(p.f, fmt.Sprintf("%s %s\n", st, st.Function))
 }
 
 //go:noinline
@@ -83,7 +83,7 @@ func (p devPrinter) Stack(skip, count int) {
 		return
 	}
 
-	frames := errors.MakeStackFrames(skip+1, count)
+	frames := stack_frame.MakeFrames(skip+1, count)
 
 	io.WriteString(
 		p.f,

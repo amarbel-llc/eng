@@ -195,9 +195,12 @@ function import_conflict { # @test
 
 	run_zit import -print-copies=false -inventory-list "$list" -blobs "$blobs" -compression-type zstd
 	assert_failure
-	assert_output - <<-EOM
+	assert_output --partial - <<-EOM
 		       conflicted [one/uno]
 		       conflicted [one/uno]
+	EOM
+
+	assert_output --partial - <<-EOM
 		needs merge
 	EOM
 }

@@ -23,7 +23,7 @@ function deinit_force() { # @test
 
 	run_zit status
 	assert_failure
-	assert_output - <<-EOM
+	assert_output --partial - <<-EOM
 		not in a zit directory
 	EOM
 

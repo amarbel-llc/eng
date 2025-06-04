@@ -19,15 +19,22 @@ teardown() {
 
 # bats test_tags=user_story:config-immutable
 function info_config_immutable { # @test
+	run_zit info store-version
+	assert_success
+	assert_output --regexp '[0-9]+'
+
+	# shellcheck disable=SC2034
+	storeVersionCurrent="$output"
+
 	run_zit info-repo config-immutable
 	assert_success
-	assert_output --regexp - <<-'EOM'
+	assert_output --regexp - <<-EOM
 		---
 		! toml-config-immutable-v1
 		---
 
 		public-key = 'zit-repo-public_key-v0.*'
-		store-version = 9
+		store-version = $storeVersionCurrent
 		repo-type = 'working-copy'
 		id = 'test-repo-id'
 

@@ -5,12 +5,13 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
 )
 
 func MakeLineReaderIterateStrict(
 	rffs ...interfaces.FuncSetString,
 ) interfaces.FuncSetString {
-	si, _ := errors.MakeStackFrame(1)
+	si, _ := stack_frame.MakeFrame(1)
 	var i int64
 
 	return func(v string) (err error) {
@@ -37,7 +38,7 @@ func MakeLineReaderIterateStrict(
 func MakeLineReaderIterate(
 	rffs ...interfaces.FuncSetString,
 ) interfaces.FuncSetString {
-	si, _ := errors.MakeStackFrame(1)
+	si, _ := stack_frame.MakeFrame(1)
 	var i int64
 
 	return func(v string) (err error) {
@@ -65,7 +66,7 @@ func MakeLineReaderIterate(
 func MakeLineReaderKeyValues(
 	dict map[string]interfaces.FuncSetString,
 ) interfaces.FuncSetString {
-	si, _ := errors.MakeStackFrame(1)
+	si, _ := stack_frame.MakeFrame(1)
 
 	return func(line string) (err error) {
 		loc := strings.Index(line, " ")

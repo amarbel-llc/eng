@@ -46,7 +46,6 @@ function mergetool_conflict_base {
 		not another one, conflict time
 	EOM
 
-	# run_zit organize -mode commit-directly one/dos.zettel <<-EOM
 	run_zit organize -mode commit-directly one/dos <<-EOM
 		---
 		! txt2

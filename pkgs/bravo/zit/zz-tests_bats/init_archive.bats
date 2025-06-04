@@ -12,6 +12,13 @@ teardown() {
 }
 
 function init_archive { # @test
+	run_zit info store-version
+	assert_success
+	assert_output --regexp '[0-9]+'
+
+	# shellcheck disable=SC2034
+	storeVersionCurrent="$output"
+
 	run_zit init-archive \
 		-age-identity none \
 		-lock-internal-files=false
@@ -20,13 +27,13 @@ function init_archive { # @test
 	EOM
 
 	function output_immutable_config() {
-		cat - <<-'EOM'
+		cat - <<-EOM
 			---
 			! toml-config-immutable-v1
 			---
 
 			public-key = 'zit-repo-public_key-v0.*'
-			store-version = 9
+			store-version = $storeVersionCurrent
 			repo-type = 'archive'
 			id = ''
 

@@ -27,6 +27,10 @@ func IsAny(err error, ises ...FuncIs) bool {
 }
 
 func Is(err, target error) bool {
+	if err == target {
+		return true
+	}
+
 	if errors.Is(err, target) {
 		return true
 	}

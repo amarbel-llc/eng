@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
 )
 
 var todo todoPrinter
@@ -87,7 +87,7 @@ func (p todoPrinter) printf(
 	}
 
 	if p.includesStack {
-		si, _ := errors.MakeStackFrame(1 + skip)
+		si, _ := stack_frame.MakeFrame(1 + skip)
 		f = "%s %s" + f
 		a = append([]interface{}{pr, si}, a...)
 	}

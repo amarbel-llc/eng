@@ -12,16 +12,23 @@ teardown() {
 }
 
 function init_compression { # @test
+	run_zit info store-version
+	assert_success
+	assert_output --regexp '[0-9]+'
+
+	# shellcheck disable=SC2034
+	storeVersionCurrent="$output"
+
 	run_zit_init_disable_age
 
 	function output_immutable_config() {
-		cat - <<-'EOM'
+		cat - <<-EOM
 			---
 			! toml-config-immutable-v1
 			---
 
 			public-key = 'zit-repo-public_key-v0.*'
-			store-version = 9
+			store-version = $storeVersionCurrent
 			repo-type = 'working-copy'
 			id = 'test-repo-id'
 
@@ -142,7 +149,7 @@ function non_repo_failure { # @test
 	set_xdg "$BATS_TEST_TMPDIR"
 	run_zit show +konfig,t
 	assert_failure
-	assert_output 'not in a zit directory'
+	assert_output --partial 'not in a zit directory'
 }
 
 function init_and_init { # @test

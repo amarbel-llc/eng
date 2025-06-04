@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"testing"
 
+	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
 )
 
 func TestMain(m *testing.M) {
+	errors.SetTesting()
 	ui.SetTesting()
 	m.Run()
 }

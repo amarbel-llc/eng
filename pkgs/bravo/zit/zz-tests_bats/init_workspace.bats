@@ -19,7 +19,7 @@ teardown() {
 function init_workspace_empty { # @test
 	run_zit info-workspace
 	assert_failure
-	assert_output - <<-EOM
+	assert_output --partial - <<-EOM
 		not creating a workspace. aborting.
 	EOM
 
@@ -29,7 +29,7 @@ function init_workspace_empty { # @test
 
 	run_zit init-workspace
 	assert_failure
-	assert_output 'workspace already exists'
+	assert_output --partial 'workspace already exists'
 
 	run_zit info-workspace defaults.type
 	assert_success
@@ -47,7 +47,7 @@ function init_workspace_empty { # @test
 function init_workspace { # @test
 	run_zit info-workspace
 	assert_failure
-	assert_output - <<-EOM
+	assert_output --partial - <<-EOM
 		not creating a workspace. aborting.
 	EOM
 
@@ -57,7 +57,7 @@ function init_workspace { # @test
 
 	run_zit init-workspace
 	assert_failure
-	assert_output 'workspace already exists'
+	assert_output --partial 'workspace already exists'
 
 	run_zit info-workspace defaults.type
 	assert_success
