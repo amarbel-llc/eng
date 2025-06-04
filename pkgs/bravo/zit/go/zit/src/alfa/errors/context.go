@@ -46,6 +46,7 @@ type Context interface {
 	Cause() error
 	Continue() bool
 	ContinueOrPanicOnDone()
+	SetCancelOnSIGTERM()
 	SetCancelOnSIGINT()
 	SetCancelOnSIGHUP()
 	SetCancelOnSignals(signals ...os.Signal)
@@ -137,6 +138,10 @@ func (c *context) ContinueOrPanicOnDone() {
 	}
 }
 
+func (c *context) SetCancelOnSIGTERM() {
+	c.SetCancelOnSignals(syscall.SIGTERM)
+}
+
 func (c *context) SetCancelOnSIGINT() {
 	c.SetCancelOnSignals(syscall.SIGINT)
 }
@@ -166,46 +171,47 @@ func (ctx *context) Run(funcRun func(Context)) error {
 		select {
 		case <-ctx.Done():
 		case sig := <-ctx.signals:
-			ctx.cancel(errContextCancelledExpected{Signal{Signal: sig}})
+			fmt.Fprintf(os.Stderr, "signal received: %s\n", sig)
+			ctx.cancel(Signal{Signal: sig})
 		}
 	}()
 
-	retry := true
-
-	for retry {
-		retry = false
-
-		func() {
-			defer func() {
-				if r := recover(); r != nil {
-					if r == errContextRetry {
-						retry = true
-						return
-					}
-
-					// TODO capture panic stack trace and add to custom error objects
-					switch err := r.(type) {
-					default:
-						fmt.Printf("%s", debug.Stack())
-						panic(r)
-
-					case runtime.Error:
-						fmt.Printf("%s", debug.Stack())
-						panic(r)
-
-					case error:
-						ctx.cancel(err)
-					}
-				}
-			}()
-
-			ctx.funcRun(ctx)
-		}()
+	for ctx.runRetry() {
 	}
 
-	ctx.cancel(errContextCancelled)
-
 	return ctx.Cause()
+}
+
+func (ctx *context) runRetry() (shouldRetry bool) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Fprintf(os.Stderr, "panicked\n")
+			if r == errContextRetry {
+				shouldRetry = true
+				return
+			}
+
+			// TODO capture panic stack trace and add to custom error objects
+			switch err := r.(type) {
+			default:
+				fmt.Printf("%s", debug.Stack())
+				panic(r)
+
+			case runtime.Error:
+				fmt.Printf("%s", debug.Stack())
+				panic(r)
+
+			case error:
+				fmt.Fprintf(os.Stderr, "panicked with error: %s\n", err)
+				ctx.cancel(err)
+			}
+		}
+	}()
+
+	ctx.funcRun(ctx)
+	ctx.cancel(errContextCancelledExpected{})
+
+	return
 }
 
 func (ctx *context) runAfter() {

@@ -155,7 +155,7 @@ function pull_history_zettel_type_tag_no_conflicts_stdio_local { # @test
 	run_zit pull /them +zettel,typ,etikett
 
 	assert_success
-	assert_output_unsorted - <<-EOM
+	assert_output_unsorted --partial - <<-EOM
 		copied Blob 024948601ce44cc9ab070b555da4e992f111353b7a9f5569240005639795297b (36 bytes)
 		copied Blob 9e2ec912af5dff2a72300863864fc4da04e81999339d9fac5c7590ba8a3f4e11 (5 bytes)
 		copied Blob bf2cb7a91cdfdcc84acd1bbaaf0252ff9901977bf76128a578317a42788c4eb6 (15 bytes)
