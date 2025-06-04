@@ -8,14 +8,19 @@
         "utils": "utils"
       },
       "locked": {
-        "path": "../../../alfa/devenv-go",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-go",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "../../../alfa/devenv-go",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-go",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "devenv-shell": {
       "inputs": {
@@ -23,14 +28,19 @@
         "utils": "utils_2"
       },
       "locked": {
-        "path": "../../../alfa/devenv-shell",
-        "type": "path"
+        "dir": "pkgs/alfa/devenv-shell",
+        "lastModified": 1748881301,
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "872225bc007f956300dceb19e0974ec375e2f9cf",
+        "type": "github"
       },
       "original": {
-        "path": "../../../alfa/devenv-shell",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/devenv-shell",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "flake-utils": {
       "inputs": {
