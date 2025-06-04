@@ -14,26 +14,11 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var errContextCancelled errContextCancelledExpected
-
-type errContextCancelledExpected struct {
-	error
-}
-
-func (err errContextCancelledExpected) Error() string {
-	if err.error == nil {
-		return "context cancelled"
-	} else {
-		return fmt.Sprintf("context cancelled: %s", err.error)
-	}
-}
-
-func (err errContextCancelledExpected) Is(target error) bool {
-	_, ok := target.(errContextCancelledExpected)
-	return ok
-}
-
-var errContextRetry = New("context retry")
+var (
+	errContextComplete  = New("context complete")
+	errContextCancelled = New("context cancelled")
+	errContextRetry     = New("context retry")
+)
 
 type ContextWithEnv[T any] struct {
 	Context
@@ -112,9 +97,15 @@ func MakeContext(in ConTeXT.Context) *context {
 
 func (c *context) Cause() error {
 	if err := ConTeXT.Cause(c.Context); err != nil {
-		if Is(err, errContextCancelled) {
+		switch err {
+		case errContextComplete, errContextCancelled:
 			return nil
-		} else {
+
+		default:
+			if Is(err, Signal{}) {
+				return nil
+			}
+
 			return err
 		}
 	}
@@ -171,7 +162,6 @@ func (ctx *context) Run(funcRun func(Context)) error {
 		select {
 		case <-ctx.Done():
 		case sig := <-ctx.signals:
-			fmt.Fprintf(os.Stderr, "signal received: %s\n", sig)
 			ctx.cancel(Signal{Signal: sig})
 		}
 	}()
@@ -185,7 +175,6 @@ func (ctx *context) Run(funcRun func(Context)) error {
 func (ctx *context) runRetry() (shouldRetry bool) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Fprintf(os.Stderr, "panicked\n")
 			if r == errContextRetry {
 				shouldRetry = true
 				return
@@ -202,14 +191,13 @@ func (ctx *context) runRetry() (shouldRetry bool) {
 				panic(r)
 
 			case error:
-				fmt.Fprintf(os.Stderr, "panicked with error: %s\n", err)
 				ctx.cancel(err)
 			}
 		}
 	}()
 
 	ctx.funcRun(ctx)
-	ctx.cancel(errContextCancelledExpected{})
+	ctx.cancel(errContextComplete)
 
 	return
 }
