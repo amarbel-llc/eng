@@ -84,7 +84,7 @@ function run_zit {
   cmd="$1"
   shift
   #shellcheck disable=SC2068
-  run zit "$cmd" ${cmd_zit_def[@]} "$@"
+  run timeout --preserve-status "2s" zit "$cmd" ${cmd_zit_def[@]} "$@"
 }
 
 function run_zit_stderr_unified {
