@@ -26,6 +26,13 @@ func main() {
 				commands.Run(ctx, os.Args...)
 			},
 		); err != nil {
+			var signal errors.Signal
+
+			if errors.As(err, &signal) {
+				ui.Err().Print(err)
+				break
+			}
+
 			exitStatus = 1
 
 			var helpful errors.Helpful

@@ -102,10 +102,6 @@ func (c *context) Cause() error {
 			return nil
 
 		default:
-			if Is(err, Signal{}) {
-				return nil
-			}
-
 			return err
 		}
 	}

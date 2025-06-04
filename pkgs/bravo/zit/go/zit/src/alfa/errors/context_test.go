@@ -118,12 +118,12 @@ func TestContextSignal(t *testing.T) {
 						<-ctx.Done()
 						cont <- struct{}{}
 					},
-				); err != nil {
-					t.Errorf("expected no signal error but got %s", err)
+				); err == nil {
+					t.Errorf("expected signal error but got none")
 				}
 			},
-		); err != nil {
-			t.Errorf("expected no signal error but got %s", err)
+		); err == nil {
+			t.Errorf("expected signal error but got none")
 		}
 	}()
 
