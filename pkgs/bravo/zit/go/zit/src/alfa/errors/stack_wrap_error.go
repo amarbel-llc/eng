@@ -2,48 +2,10 @@ package errors
 
 import (
 	"fmt"
-	"runtime"
 	"strings"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
 )
-
-//go:noinline
-func MustStackFrame(skip int) stack_frame.Frame {
-	frame, ok := stack_frame.MakeFrame(skip + 1)
-
-	if !ok {
-		panic("stack unavailable")
-	}
-
-	return frame
-}
-
-//go:noinline
-func MakeStackFrames(skip, count int) (frames []stack_frame.Frame) {
-	programCounters := make([]uintptr, count)
-	writtenCounters := runtime.Callers(skip+1, programCounters) // 0 is self
-	if writtenCounters == 0 {
-		return
-	}
-
-	programCounters = programCounters[:writtenCounters]
-
-	rawFrames := runtime.CallersFrames(programCounters)
-
-	frames = make([]stack_frame.Frame, 0, len(programCounters))
-
-	for {
-		frame, more := rawFrames.Next()
-		frames = append(frames, stack_frame.MakeFrameFromRuntimeFrame(frame))
-
-		if !more {
-			break
-		}
-	}
-
-	return
-}
 
 type stackWrapError struct {
 	ExtraData string

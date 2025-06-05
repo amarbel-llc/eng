@@ -110,7 +110,7 @@ func Wrapf(in error, f string, values ...any) error {
 	}
 
 	return &stackWrapError{
-		Frame: MustStackFrame(thisSkip),
+		Frame: stack_frame.MustFrame(thisSkip),
 		error: fmt.Errorf(f, values...),
 		next:  WrapSkip(thisSkip, in),
 	}
