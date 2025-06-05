@@ -3,11 +3,11 @@ package test_logz
 import (
 	"runtime"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
 )
 
 type (
-	StackInfo = errors.StackFrame
+	StackInfo = stack_frame.Frame
 )
 
 func MakeStackInfo(t *T, skip int) (si StackInfo) {
@@ -22,7 +22,7 @@ func MakeStackInfo(t *T, skip int) (si StackInfo) {
 	frames := runtime.CallersFrames([]uintptr{pc})
 
 	frame, _ := frames.Next()
-	si = errors.MakeStackFrameFromFrame(frame)
+	si = stack_frame.MakeFrameFromRuntimeFrame(frame)
 
 	return
 }
