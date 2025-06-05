@@ -57,7 +57,7 @@ func WrapSkip(
 	var si stack_frame.Frame
 	var ok bool
 
-	if si, ok = MakeStackFrame(skip + 1); !ok {
+	if si, ok = stack_frame.MakeFrame(skip + 1); !ok {
 		panic("failed to get stack info")
 	}
 

@@ -10,7 +10,7 @@ import (
 
 //go:noinline
 func MustStackFrame(skip int) stack_frame.Frame {
-	frame, ok := MakeStackFrame(skip + 1)
+	frame, ok := stack_frame.MakeFrame(skip + 1)
 
 	if !ok {
 		panic("stack unavailable")
@@ -40,28 +40,6 @@ func MakeStackFrames(skip, count int) (frames []stack_frame.Frame) {
 		if !more {
 			break
 		}
-	}
-
-	return
-}
-
-//go:noinline
-func MakeStackFrame(skip int) (si stack_frame.Frame, ok bool) {
-	var programCounter uintptr
-	programCounter, _, _, ok = runtime.Caller(skip + 1) // 0 is self
-
-	if !ok {
-		return
-	}
-
-	frames := runtime.CallersFrames([]uintptr{programCounter})
-
-	frame, _ := frames.Next()
-	si = stack_frame.MakeFrameFromRuntimeFrame(frame)
-
-	// TODO remove this ugly hack
-	if si.Function == "Wrap" {
-		panic(fmt.Sprintf("Parent Wrap included in stack. Skip: %d", skip))
 	}
 
 	return
