@@ -4,13 +4,14 @@ import (
 	"runtime"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 type (
 	StackInfo = stack_frame.Frame
 )
 
-func MakeStackInfo(t *T, skip int) (si StackInfo) {
+func MakeStackInfo(t *ui.T, skip int) (si StackInfo) {
 	var pc uintptr
 	ok := false
 	pc, _, _, ok = runtime.Caller(skip + 1)

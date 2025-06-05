@@ -10,7 +10,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/collections_ptr"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/echo/descriptions"
@@ -28,7 +28,7 @@ func (t inlineTypChecker) IsInlineTyp(k ids.Type) bool {
 	return t.answer
 }
 
-func makeTagSet(t test_logz.T, vs ...string) (es ids.TagSet) {
+func makeTagSet(t ui.T, vs ...string) (es ids.TagSet) {
 	var err error
 
 	if es, err = collections_ptr.MakeValueSetString[ids.Tag, *ids.Tag](nil, vs...); err != nil {
@@ -38,7 +38,7 @@ func makeTagSet(t test_logz.T, vs ...string) (es ids.TagSet) {
 	return
 }
 
-func makeBlobExt(t test_logz.T, v string) (es ids.Type) {
+func makeBlobExt(t ui.T, v string) (es ids.Type) {
 	if err := es.Set(v); err != nil {
 		t.Fatalf("%s", err)
 	}
@@ -47,7 +47,7 @@ func makeBlobExt(t test_logz.T, v string) (es ids.Type) {
 }
 
 func readFormat(
-	t1 test_logz.T,
+	t1 ui.T,
 	f object_metadata.TextFormat,
 	contents string,
 ) (z *object_metadata.Metadata) {
@@ -73,7 +73,7 @@ func readFormat(
 }
 
 func TestMakeTags(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	vs := []string{
 		"tag1",
@@ -136,7 +136,7 @@ func TestMakeTags(t1 *testing.T) {
 }
 
 func TestEqualitySelf(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	text := &object_metadata.Metadata{
 		Description: descriptions.Make("the title"),
@@ -155,7 +155,7 @@ func TestEqualitySelf(t1 *testing.T) {
 }
 
 func TestEqualityNotSelf(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	text := object_metadata.Metadata{
 		Description: descriptions.Make("the title"),
@@ -197,7 +197,7 @@ func makeTestTextFormat(
 }
 
 func TestReadWithoutBlob(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	af := test_object_metadata_io.Make(&t, nil)
 
 	actual := readFormat(
@@ -234,7 +234,7 @@ func TestReadWithoutBlob(t1 *testing.T) {
 }
 
 func TestReadWithoutBlobWithMultilineDescription(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	af := test_object_metadata_io.Make(&t, nil)
 
@@ -273,7 +273,7 @@ func TestReadWithoutBlobWithMultilineDescription(t1 *testing.T) {
 }
 
 func TestReadWithBlob(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	af := test_object_metadata_io.Make(&t, nil)
 
@@ -320,7 +320,7 @@ func (c noopCloser) Close() error {
 }
 
 type blobReaderFactory struct {
-	t     test_logz.T
+	t     ui.T
 	blobs map[string]string
 }
 
@@ -338,7 +338,7 @@ func (arf blobReaderFactory) BlobReader(s sha.Sha) (r sha.ReadCloser, err error)
 }
 
 func writeFormat(
-	t test_logz.T,
+	t ui.T,
 	m *object_metadata.Metadata,
 	f object_metadata.TextFormatter,
 	includeBlob bool,
@@ -380,7 +380,7 @@ func writeFormat(
 }
 
 func TestWriteWithoutBlob(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	z := &object_metadata.Metadata{
 		Description: descriptions.Make("the title"),
@@ -423,7 +423,7 @@ func TestWriteWithoutBlob(t1 *testing.T) {
 }
 
 func TestWriteWithInlineBlob(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	z := &object_metadata.Metadata{
 		Description: descriptions.Make("the title"),

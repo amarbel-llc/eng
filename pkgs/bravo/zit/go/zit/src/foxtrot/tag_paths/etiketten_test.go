@@ -3,12 +3,12 @@ package tag_paths
 import (
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
 )
 
 func TestAddPaths(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	var es Tags
 
@@ -40,7 +40,7 @@ func TestAddPaths(t1 *testing.T) {
 }
 
 func TestRealWorld(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	var es Tags
 

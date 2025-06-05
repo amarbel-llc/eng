@@ -3,11 +3,11 @@ package catgut
 import (
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func TestMultiRuneReader(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	input := []string{
 		"wow",

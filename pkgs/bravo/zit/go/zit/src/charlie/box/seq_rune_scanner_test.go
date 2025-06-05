@@ -3,12 +3,12 @@ package box
 import (
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"github.com/google/go-cmp/cmp"
 )
 
 func TestSeqRuneScanner(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	seq := makeTestSeq(
 		TokenTypeIdentifier, "uno",
@@ -18,7 +18,7 @@ func TestSeqRuneScanner(t1 *testing.T) {
 
 	sut := &SeqRuneScanner{Seq: makeSeqFromTestSeq(seq)}
 
-	readOne := func(t *test_logz.T, s *SeqRuneScanner, c rune) {
+	readOne := func(t *ui.T, s *SeqRuneScanner, c rune) {
 		r, n, err := s.ReadRune()
 
 		if r != c {
@@ -34,14 +34,14 @@ func TestSeqRuneScanner(t1 *testing.T) {
 		}
 	}
 
-	unreadOne := func(t *test_logz.T, s *SeqRuneScanner) {
+	unreadOne := func(t *ui.T, s *SeqRuneScanner) {
 		err := s.UnreadRune()
 		if err != nil {
 			t.Errorf("%s", err)
 		}
 	}
 
-	readMany := func(t *test_logz.T, s *SeqRuneScanner, cs ...rune) {
+	readMany := func(t *ui.T, s *SeqRuneScanner, cs ...rune) {
 		for _, c := range cs {
 			readOne(t.Skip(1), s, c)
 		}

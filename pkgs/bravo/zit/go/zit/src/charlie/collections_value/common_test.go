@@ -6,7 +6,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
 )
 
@@ -21,7 +21,7 @@ func makeStringValues(vs ...string) (out []values.String) {
 }
 
 func assertSet(
-	t test_logz.T,
+	t ui.T,
 	sut interfaces.SetLike[values.String],
 	vals []values.String,
 ) {

@@ -4,12 +4,12 @@ import (
 	"reflect"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
 )
 
 func TestReset(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	els := []*values.Int{
 		values.MakeInt(1),
@@ -38,7 +38,7 @@ func TestReset(t1 *testing.T) {
 }
 
 func TestSaveAndRestore(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	els := []*values.Int{
 		values.MakeInt(1),
@@ -99,7 +99,7 @@ func TestSaveAndRestore(t1 *testing.T) {
 }
 
 func Test3Sorted(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	els := []*values.Int{
 		values.MakeInt(1),
@@ -134,7 +134,7 @@ func Test3Sorted(t1 *testing.T) {
 }
 
 func TestDupes(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	t.SkipTest()
 
 	els := []*values.Int{
@@ -171,7 +171,7 @@ func TestDupes(t1 *testing.T) {
 }
 
 func TestMerge(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	eql := values.IntEqualer{}
 	llr := values.IntLessor{}

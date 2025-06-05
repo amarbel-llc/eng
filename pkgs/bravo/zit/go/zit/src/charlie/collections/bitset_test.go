@@ -5,11 +5,11 @@ import (
 	"encoding/gob"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func TestBitset0CapGreaterAdd(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := MakeBitset(20)
 	sut.Add(19)
@@ -20,7 +20,7 @@ func TestBitset0CapGreaterAdd(t1 *testing.T) {
 }
 
 func TestBitset1CapLessAdd(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := MakeBitset(20)
 	toAdd := int(21)
@@ -32,7 +32,7 @@ func TestBitset1CapLessAdd(t1 *testing.T) {
 }
 
 func TestBitset2CapLessAddRemove(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := MakeBitset(20)
 	toAdd := int(256)
@@ -50,7 +50,7 @@ func TestBitset2CapLessAddRemove(t1 *testing.T) {
 }
 
 func TestBitset3WouldGrowTooLarge(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	defer func() {
 		e := recover()
@@ -66,7 +66,7 @@ func TestBitset3WouldGrowTooLarge(t1 *testing.T) {
 }
 
 func TestBitset4Gob(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := MakeBitset(20)
 	toAdd := 12
@@ -92,7 +92,7 @@ func TestBitset4Gob(t1 *testing.T) {
 }
 
 func TestBitset5Equals(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := MakeBitset(20)
 	toAdd := 12
@@ -107,7 +107,7 @@ func TestBitset5Equals(t1 *testing.T) {
 }
 
 func TestBitset6MakeOn(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := MakeBitsetOn(20)
 
@@ -123,7 +123,7 @@ func TestBitset6MakeOn(t1 *testing.T) {
 }
 
 func TestBitset7Each(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	m := 200
 	sut := MakeBitsetOn(m)

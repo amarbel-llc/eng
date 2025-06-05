@@ -206,7 +206,7 @@ func (frame Frame) Wrap(in error) (err error) {
 	if frame.nonZero {
 		return &stackWrapError{
 			Frame: frame,
-			error:      in,
+			error: in,
 		}
 	} else {
 		return in
@@ -215,11 +215,11 @@ func (frame Frame) Wrap(in error) (err error) {
 
 func (si Frame) Wrapf(in error, f string, values ...any) (err error) {
 	return &stackWrapError{
-		Frame: si,
-		ExtraData:  fmt.Sprintf(f, values...),
+		Frame:     si,
+		ExtraData: fmt.Sprintf(f, values...),
 		next: &stackWrapError{
 			Frame: si,
-			error:      in,
+			error: in,
 		},
 	}
 }
@@ -227,7 +227,7 @@ func (si Frame) Wrapf(in error, f string, values ...any) (err error) {
 func (si Frame) Errorf(f string, values ...any) (err error) {
 	return &stackWrapError{
 		Frame: si,
-		error:      fmt.Errorf(f, values...),
+		error: fmt.Errorf(f, values...),
 	}
 }
 

@@ -5,12 +5,12 @@ import (
 	"encoding/gob"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
 )
 
 func TestGob(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	ta := sku.GetTransactedPool().Get()
 

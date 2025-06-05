@@ -3,7 +3,7 @@ package ids
 import (
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func assertSetRemovesPrefixes(
@@ -12,7 +12,7 @@ func assertSetRemovesPrefixes(
 	ex TagSet,
 	prefix string,
 ) {
-	t := &test_logz.T{T: t1}
+	t := &ui.T{T: t1}
 	t = t.Skip(1)
 
 	ac := ac1.CloneMutableSetPtrLike()

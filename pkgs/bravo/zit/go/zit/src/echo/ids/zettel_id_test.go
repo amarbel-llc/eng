@@ -5,11 +5,11 @@ import (
 	"encoding/gob"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func TestMake(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	in := "ceroplastes/midtown"
 	var sut ZettelId
 
@@ -26,7 +26,7 @@ func TestMake(t1 *testing.T) {
 }
 
 func TestMakeHeadAndTail(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	k := "ceroplastes"
 	s := "midtown"
 
@@ -46,7 +46,7 @@ func TestMakeHeadAndTail(t1 *testing.T) {
 }
 
 func TestGob(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	k := "ceroplastes"
 	s := "midtown"
 

@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/echo/triple_hyphen_io"
 )
 
 func Test1(t1 *testing.T) {
-	t := test_logz.T{
+	t := ui.T{
 		T: t1,
 	}
 
@@ -59,7 +59,7 @@ body
 }
 
 func Test2(t1 *testing.T) {
-	t := test_logz.T{
+	t := ui.T{
 		T: t1,
 	}
 

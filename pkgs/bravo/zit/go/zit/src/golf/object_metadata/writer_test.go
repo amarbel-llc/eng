@@ -4,12 +4,12 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/echo/triple_hyphen_io"
 )
 
 func TestWriter1(t1 *testing.T) {
-	t := test_logz.T{
+	t := ui.T{
 		T: t1,
 	}
 
@@ -35,7 +35,7 @@ blob
 }
 
 func TestWriter2(t1 *testing.T) {
-	t := test_logz.T{
+	t := ui.T{
 		T: t1,
 	}
 
@@ -58,7 +58,7 @@ metadatei
 }
 
 func TestWriter3(t1 *testing.T) {
-	t := test_logz.T{
+	t := ui.T{
 		T: t1,
 	}
 

@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func TestSigilContains(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := SigilAll
 
@@ -52,7 +52,7 @@ func TestSigilContains(t1 *testing.T) {
 }
 
 func TestSigilReadWrite(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := SigilAll
 	b := bytes.NewBuffer(nil)

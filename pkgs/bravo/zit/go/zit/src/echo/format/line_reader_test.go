@@ -5,13 +5,13 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 )
 
 func TestLineReaderOneReaderHappy(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	input := "test string\n"
 	test_value := values.MakeString("test string")
@@ -32,7 +32,7 @@ func TestLineReaderOneReaderHappy(t1 *testing.T) {
 }
 
 func TestLineReaderOneReaderSad(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	input := "test string sad\n"
 	test_value := values.MakeString("test string")
@@ -53,7 +53,7 @@ func TestLineReaderOneReaderSad(t1 *testing.T) {
 }
 
 func TestLineReaderTwoReaders(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	test_value_one := values.MakeString("test string")
 	test_value_two := values.MakeString("test string two")
@@ -80,7 +80,7 @@ func TestLineReaderTwoReaders(t1 *testing.T) {
 }
 
 func TestLineReaderTwoReadersSad(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	test_value_one := values.MakeString("test string")
 	test_value_two := values.MakeString("test string two")

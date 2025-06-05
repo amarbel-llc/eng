@@ -8,6 +8,11 @@ import (
 
 // TODO combine all of the below errors into a more useful grouping
 
+type StackTracer interface {
+	error
+	ShouldShowStackTrace() bool
+}
+
 type ErrBadRequest interface {
 	IsBadRequest()
 }

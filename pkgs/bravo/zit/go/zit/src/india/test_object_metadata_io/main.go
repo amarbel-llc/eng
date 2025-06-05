@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/delta/debug"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
@@ -15,7 +15,7 @@ import (
 )
 
 func Make(
-	t *test_logz.T,
+	t *ui.T,
 	contents map[string]string,
 ) (f env_repo.Env) {
 	t = t.Skip(1)

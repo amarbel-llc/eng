@@ -4,19 +4,19 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"github.com/google/go-cmp/cmp"
 )
 
 func TestRingBufferRuneScanner(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	input := `- [six/wow] seis`
 
 	rb := MakeRingBuffer(strings.NewReader(input), 0)
 	sut1 := MakeRingBufferRuneScanner(rb)
 	sut2 := MakeRingBufferRuneScanner(rb)
 
-	readOne := func(t *test_logz.T, s *RingBufferRuneScanner, c rune) {
+	readOne := func(t *ui.T, s *RingBufferRuneScanner, c rune) {
 		r, n, err := s.ReadRune()
 
 		if r != c {
@@ -32,14 +32,14 @@ func TestRingBufferRuneScanner(t1 *testing.T) {
 		}
 	}
 
-	unreadOne := func(t *test_logz.T, s *RingBufferRuneScanner) {
+	unreadOne := func(t *ui.T, s *RingBufferRuneScanner) {
 		err := s.UnreadRune()
 		if err != nil {
 			t.Errorf("%s", err)
 		}
 	}
 
-	readMany := func(t *test_logz.T, s *RingBufferRuneScanner, cs ...rune) {
+	readMany := func(t *ui.T, s *RingBufferRuneScanner, cs ...rune) {
 		for _, c := range cs {
 			readOne(t.Skip(1), s, c)
 		}

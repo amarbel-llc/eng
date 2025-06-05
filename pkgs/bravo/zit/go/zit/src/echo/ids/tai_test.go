@@ -5,12 +5,12 @@ import (
 	"testing"
 	tyme "time"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/delta/thyme"
 )
 
 func TestTaiSet(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	inSec := int64(2052235243)
 	inASec := int64(336092000000000000)
@@ -38,7 +38,7 @@ func TestTaiSet(t1 *testing.T) {
 }
 
 func TestTaiSet2(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	inSec := int64(2052235243)
 	inASec := int64(336092)
@@ -67,7 +67,7 @@ func TestTaiSet2(t1 *testing.T) {
 }
 
 func TestTaiWithIndex(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	u := int64(1673549470)
 

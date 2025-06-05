@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func idWriteToReadFromData() []string {
@@ -19,7 +19,7 @@ func idWriteToReadFromData() []string {
 }
 
 func TestIdWriteToReadFrom(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	for _, v := range idWriteToReadFromData() {
 		var k ObjectId
 		t.AssertNoError(k.Set(v))

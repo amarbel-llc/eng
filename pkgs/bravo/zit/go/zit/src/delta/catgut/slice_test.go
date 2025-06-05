@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 type testCaseOverlap struct {
@@ -75,7 +75,7 @@ func getTestCasesOverlap() []testCaseOverlap {
 }
 
 func TestSliceOverlap(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	for _, tc := range getTestCasesOverlap() {
 		sut := tc.Slice
@@ -177,7 +177,7 @@ func getTestCasesSlice() []testCaseSlice {
 }
 
 func TestSliceSlice(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	for _, tc := range getTestCasesSlice() {
 		sut := tc.Slice

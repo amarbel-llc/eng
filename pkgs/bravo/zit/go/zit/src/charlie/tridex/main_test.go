@@ -9,7 +9,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 type testStringer string
@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-type t test_logz.T
+type t ui.T
 
 func (t t) assertLen(sut interfaces.Tridex, d int) {
 	if sut.Len() != d {
@@ -53,7 +53,7 @@ func (t t) assertNotContainsExpansion(sut interfaces.Tridex, v string) {
 }
 
 func TestContains(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := Make(
 		"123456",
@@ -97,7 +97,7 @@ func TestContains(t1 *testing.T) {
 }
 
 func TestLen(t1 *testing.T) {
-	t := t(test_logz.T{T: t1})
+	t := t(ui.T{T: t1})
 
 	sut := Make("one")
 	t.assertLen(sut, 1)
@@ -179,7 +179,7 @@ func TestLen(t1 *testing.T) {
 }
 
 func TestAbbreviateOrphan(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := Make(
 		"one",
@@ -197,7 +197,7 @@ func TestAbbreviateOrphan(t1 *testing.T) {
 }
 
 func TestAbbreviateDegenerate(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := Make(
 		"mewtwo",
@@ -211,14 +211,14 @@ func TestAbbreviateDegenerate(t1 *testing.T) {
 
 	for e, c := range expectedContains {
 		if ca := sut.Abbreviate(e); ca != c {
-			test_logz.Printf("%#v", sut)
+			ui.Log().Printf("%#v", sut)
 			t.Errorf("%q: expected shorted length %q but got %q", e, c, ca)
 		}
 	}
 }
 
 func TestExpandDegenerate(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := Make(
 		"mewtwo",
@@ -232,14 +232,14 @@ func TestExpandDegenerate(t1 *testing.T) {
 
 	for e, c := range expectedContains {
 		if ca := sut.Expand(e); ca != c {
-			test_logz.Printf("%#v", sut)
+			ui.Log().Printf("%#v", sut)
 			t.Errorf("%q: expected expanded %q but got %q", e, c, ca)
 		}
 	}
 }
 
 func TestAbbreviate(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := Make(
 		"12",
@@ -267,14 +267,14 @@ func TestAbbreviate(t1 *testing.T) {
 
 	for e, c := range expectedContains {
 		if ca := sut.Abbreviate(e); ca != c {
-			test_logz.Print(t, "%#v", sut)
+			ui.Log().Print(t, "%#v", sut)
 			t.Errorf("%q: expected shorted length %q but got %q", e, c, ca)
 		}
 	}
 }
 
 func TestExpandOrphan(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := Make(
 		"654321",
@@ -293,7 +293,7 @@ func TestExpandOrphan(t1 *testing.T) {
 }
 
 func TestExpand(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	sut := Make(
 		"12",
@@ -320,7 +320,7 @@ func TestExpand(t1 *testing.T) {
 }
 
 func TestDoesNotContainPrefix(t1 *testing.T) {
-	t := t(test_logz.T{T: t1})
+	t := t(ui.T{T: t1})
 	makeSut := func() interfaces.MutableTridex {
 		return Make(
 			"121",
@@ -339,7 +339,7 @@ func TestDoesNotContainPrefix(t1 *testing.T) {
 }
 
 func TestRemove(t1 *testing.T) {
-	t := t(test_logz.T{T: t1})
+	t := t(ui.T{T: t1})
 
 	makeSut := func() interfaces.MutableTridex {
 		return Make(
@@ -408,7 +408,7 @@ func TestEachString(t1 *testing.T) {
 		t1.Run(
 			fmt.Sprintf("test # %d", i),
 			func(t1 *testing.T) {
-				t := t(test_logz.T{T: t1})
+				t := t(ui.T{T: t1})
 
 				expected := tc
 

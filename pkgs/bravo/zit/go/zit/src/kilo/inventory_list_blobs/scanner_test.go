@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/hotel/object_inventory_format"
@@ -16,7 +16,7 @@ import (
 )
 
 func TestOne(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	b := new(bytes.Buffer)
 	f := object_inventory_format.Default()
@@ -91,7 +91,7 @@ func TestOne(t1 *testing.T) {
 }
 
 func TestBigMac(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	dataRaw := getRawData()
 
@@ -134,7 +134,7 @@ func TestBigMac(t1 *testing.T) {
 }
 
 func TestOffsets(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	dataRaw := getRawData()
 

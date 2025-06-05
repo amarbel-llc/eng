@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/toml"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func TestToml(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	strToml := `
 description = "wow"

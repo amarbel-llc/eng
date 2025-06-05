@@ -4,7 +4,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func testSliceRuneScannerDataValid() []Slice {
@@ -41,7 +41,7 @@ func TestSliceRuneScannerValid(t1 *testing.T) {
 		t1.Run(
 			expected.String(),
 			func(t2 *testing.T) {
-				t := test_logz.T{T: t2}
+				t := ui.T{T: t2}
 
 				sut := MakeSliceRuneScanner(expected)
 
@@ -88,7 +88,7 @@ func TestSliceRuneScannerInvalid(t1 *testing.T) {
 		t1.Run(
 			expected.String(),
 			func(t2 *testing.T) {
-				t := test_logz.T{T: t2}
+				t := ui.T{T: t2}
 
 				sut := MakeSliceRuneScanner(expected)
 

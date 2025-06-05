@@ -5,7 +5,7 @@ import (
 	"encoding/gob"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 type BobTest interface {
@@ -33,7 +33,7 @@ func (s *bobTest) UnmarshalBinary(bs []byte) (err error) {
 }
 
 func TestBob(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	bs := bytes.NewBuffer(nil)
 	enc := gob.NewEncoder(bs)

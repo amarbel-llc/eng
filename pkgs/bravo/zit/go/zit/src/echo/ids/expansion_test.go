@@ -6,7 +6,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/bravo/expansion"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 func stringSliceEquals(a, b []string) bool {
@@ -24,7 +24,7 @@ func stringSliceEquals(a, b []string) bool {
 }
 
 func TestStringSliceUnequal(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	expected := []string{
 		"this",
@@ -45,7 +45,7 @@ func TestStringSliceUnequal(t1 *testing.T) {
 }
 
 func TestStringSliceEquals(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	expected := []string{
 		"this",
@@ -67,7 +67,7 @@ func TestStringSliceEquals(t1 *testing.T) {
 }
 
 func TestExpansionAll(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	e := MustTag("this-is-a-tag")
 	ex := MakeMutableTagSet()
 
@@ -102,7 +102,7 @@ func TestExpansionAll(t1 *testing.T) {
 }
 
 func TestExpansionRight(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	e := MustTag("this-is-a-tag")
 	ex := MakeMutableTagSet()
@@ -133,7 +133,7 @@ func TestExpansionRight(t1 *testing.T) {
 }
 
 func TestExpansionRightTypeNone(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	e := MustType("md")
 
 	actual := ExpandOneSlice(

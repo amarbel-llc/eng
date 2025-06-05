@@ -5,7 +5,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/bravo/expansion"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/delta/collections_delta"
 )
 
@@ -57,7 +57,7 @@ func TestNormalize(t *testing.T) {
 		t.Run(
 			d,
 			func(t1 *testing.T) {
-				t := test_logz.T{T: t1}
+				t := ui.T{T: t1}
 				ac := WithRemovedCommonPrefixes(te.ac)
 
 				if !TagSetEquals(ac, te.ex) {

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
 	"code.linenisgreat.com/zit/go/zit/src/echo/descriptions"
@@ -76,7 +76,7 @@ func makeAssignmentLineReader() reader {
 	}
 }
 
-func assertEqualObjects(t *test_logz.T, expected, actual Objects) {
+func assertEqualObjects(t *ui.T, expected, actual Objects) {
 	t = t.Skip(1)
 
 	actual.Sort()
@@ -98,7 +98,7 @@ func assertEqualObjects(t *test_logz.T, expected, actual Objects) {
 }
 
 func TestAssignmentLineReaderOneHeadingNoZettels(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 	input := `# wow
     `
 
@@ -132,7 +132,7 @@ func TestAssignmentLineReaderOneHeadingNoZettels(t1 *testing.T) {
 }
 
 func TestAssignmentLineReader2Heading2Zettels(t *testing.T) {
-	t1 := test_logz.T{T: t}
+	t1 := ui.T{T: t}
 
 	input := `# wow
 - [one/wow] uno
@@ -175,7 +175,7 @@ func TestAssignmentLineReader2Heading2Zettels(t *testing.T) {
 	}
 
 	if false {
-		t := test_logz.T{T: t}
+		t := ui.T{T: t}
 		var actualOut strings.Builder
 		sut := Text{
 			Options:    sub.options,
@@ -190,7 +190,7 @@ func TestAssignmentLineReader2Heading2Zettels(t *testing.T) {
 }
 
 func TestAssignmentLineReader1_1Heading2_2Zettels(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	input := `# wow
 ## sub-wow
@@ -258,7 +258,7 @@ func TestAssignmentLineReader1_1Heading2_2Zettels(t1 *testing.T) {
 }
 
 func TestAssignmentLineReader2_1Heading2_2_2Zettels(t *testing.T) {
-	t1 := test_logz.T{T: t}
+	t1 := ui.T{T: t}
 
 	input := `# wow
 
@@ -353,7 +353,7 @@ func TestAssignmentLineReader2_1Heading2_2_2Zettels(t *testing.T) {
 }
 
 func TestAssignmentLineReader2_1Heading2_2_2ZettelsOffset(t *testing.T) {
-	t1 := test_logz.T{T: t}
+	t1 := ui.T{T: t}
 
 	input := `
 - [one/wow] uno
@@ -430,7 +430,7 @@ func TestAssignmentLineReader2_1Heading2_2_2ZettelsOffset(t *testing.T) {
 }
 
 func TestAssignmentLineReaderBigCheese(t *testing.T) {
-	t1 := test_logz.T{T: t}
+	t1 := ui.T{T: t}
 
 	input := `# task
 - [one/wow] uno

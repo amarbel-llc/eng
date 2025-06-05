@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
@@ -45,7 +44,7 @@ func TestCompare(t1 *testing.T) {
 		t1.Run(
 			fmt.Sprintf("%#v", tc),
 			func(t1 *testing.T) {
-				t := test_logz.T{T: t1}
+				t := ui.T{T: t1}
 
 				a := MakeFromString(tc.a)
 				b := MakeFromString(tc.b)
@@ -90,7 +89,7 @@ func TestComparePartial(t1 *testing.T) {
 		t1.Run(
 			fmt.Sprintf("%#v", tc),
 			func(t1 *testing.T) {
-				t := test_logz.T{T: t1}
+				t := ui.T{T: t1}
 
 				a := MakeFromString(tc.a)
 				b := MakeFromString(tc.b)

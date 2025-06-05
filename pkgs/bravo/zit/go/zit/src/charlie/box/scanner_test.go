@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
 
 type scannerTestCase struct {
@@ -138,7 +138,7 @@ func getScannerTestCases() []scannerTestCase {
 }
 
 func TestTokenScanner(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	var scanner Scanner
 

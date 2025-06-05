@@ -9,22 +9,6 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
 )
 
-// TODO refactor / remove?
-type StackTracer interface {
-	error
-	ShouldShowStackTrace() bool
-}
-
-type StackFrame struct {
-	Package     string
-	Function    string
-	Filename    string
-	RelFilename string
-	Line        int
-
-	nonZero bool
-}
-
 //go:noinline
 func MustStackFrame(skip int) stack_frame.Frame {
 	frame, ok := MakeStackFrame(skip + 1)

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/test_logz"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
 )
@@ -17,7 +16,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestReadWrite(t1 *testing.T) {
-	t := test_logz.T{T: t1}
+	t := ui.T{T: t1}
 
 	b := new(bytes.Buffer)
 	var sut Path
