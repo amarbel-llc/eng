@@ -12,6 +12,8 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
+var testStackFramePrefix = "    "
+
 type T struct {
 	*testing.T
 	skip int
@@ -30,6 +32,7 @@ func (t *T) MakeStackInfo(skip int) (stackFrame stack_frame.Frame) {
 
 	frame, _ := frames.Next()
 	stackFrame = stack_frame.MakeFrameFromRuntimeFrame(frame)
+	stackFrame.Prefix = testStackFramePrefix
 
 	return
 }

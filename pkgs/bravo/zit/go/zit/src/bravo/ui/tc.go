@@ -13,42 +13,42 @@ type TC struct {
 	stack_frame.Frame
 }
 
-func (t *TC) ui(args ...interface{}) {
+func (t *TC) ui(args ...any) {
 	errors.SetTesting()
-	args = append([]interface{}{t.Frame}, args...)
+	args = append([]any{t.Frame}, args...)
 	fmt.Fprintln(os.Stderr, args...)
 }
 
-func (t *TC) logf(format string, args ...interface{}) {
+func (t *TC) logf(format string, args ...any) {
 	errors.SetTesting()
-	args = append([]interface{}{t.Frame}, args...)
+	args = append([]any{t.Frame}, args...)
 	fmt.Fprintf(os.Stderr, "%s"+format+"\n", args...)
 }
 
-func (t *TC) errorf(format string, args ...interface{}) {
+func (t *TC) errorf(format string, args ...any) {
 	t.logf(format, args...)
 	t.Fail()
 }
 
-func (t *TC) fatalf(format string, args ...interface{}) {
+func (t *TC) fatalf(format string, args ...any) {
 	t.logf(format, args...)
 	t.FailNow()
 }
 
-func (t *TC) Log(args ...interface{}) {
+func (t *TC) Log(args ...any) {
 	t.ui(args...)
 }
 
-func (t *TC) Logf(format string, args ...interface{}) {
+func (t *TC) Logf(format string, args ...any) {
 	t.logf(format, args...)
 }
 
-func (t *TC) Errorf(format string, args ...interface{}) {
+func (t *TC) Errorf(format string, args ...any) {
 	t.Helper()
 	t.errorf(format, args...)
 }
 
-func (t *TC) Fatalf(format string, args ...interface{}) {
+func (t *TC) Fatalf(format string, args ...any) {
 	t.Helper()
 	t.fatalf(format, args...)
 }

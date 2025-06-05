@@ -11,7 +11,6 @@ import (
 
 var (
 	cwd          string
-	isTest       bool
 	maxCallDepth int
 )
 
@@ -23,16 +22,14 @@ func init() {
 	}
 }
 
-func SetTesting() {
-	isTest = true
-}
-
 type Frame struct {
 	Package     string
 	Function    string
 	Filename    string
 	RelFilename string
 	Line        int
+
+	Prefix string
 
 	nonZero bool
 }
@@ -141,12 +138,6 @@ func (si Frame) FileNameLine() string {
 }
 
 func (frame Frame) String() string {
-	testPrefix := ""
-
-	if isTest {
-		testPrefix = "    "
-	}
-
 	filename := frame.Filename
 
 	if frame.RelFilename != "" {
@@ -157,19 +148,13 @@ func (frame Frame) String() string {
 	return fmt.Sprintf(
 		"# %s\n%s%s:%d",
 		frame.Function,
-		testPrefix,
+		frame.Prefix,
 		filename,
 		frame.Line,
 	)
 }
 
 func (frame Frame) StringLogLine() string {
-	testPrefix := ""
-
-	if isTest {
-		testPrefix = "    "
-	}
-
 	filename := frame.Filename
 
 	if frame.RelFilename != "" {
@@ -179,7 +164,7 @@ func (frame Frame) StringLogLine() string {
 	// TODO-P3 determine if si.line is ever not valid
 	return fmt.Sprintf(
 		"%s%s:%d: %s",
-		testPrefix,
+		frame.Prefix,
 		filename,
 		frame.Line,
 		frame.Function,
