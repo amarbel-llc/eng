@@ -11,6 +11,7 @@ import (
 	"sync"
 	"syscall"
 
+	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
 	"golang.org/x/xerrors"
 )
 
@@ -230,13 +231,13 @@ func (c *context) after(skip int, f func() error) {
 	c.lockConc.Lock()
 	defer c.lockConc.Unlock()
 
-	frame, _ := MakeStackFrame(skip + 1)
+	frame, _ := stack_frame.MakeFrame(skip + 1)
 
 	c.doAfter = append(
 		c.doAfter,
 		FuncWithStackInfo{
-			Func:       f,
-			StackFrame: frame,
+			Func:  f,
+			Frame: frame,
 		},
 	)
 }

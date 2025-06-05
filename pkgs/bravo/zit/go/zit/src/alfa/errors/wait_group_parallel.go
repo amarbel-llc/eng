@@ -1,6 +1,10 @@
 package errors
 
-import "sync"
+import (
+	"sync"
+
+	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
+)
 
 func MakeWaitGroupParallel() WaitGroup {
 	wg := &waitGroupParallel{
@@ -56,10 +60,10 @@ func (wg *waitGroupParallel) Do(f Func) (d bool) {
 
 	wg.inner.Add(1)
 
-	var si StackFrame
+	var si stack_frame.Frame
 
 	if wg.addStackInfo {
-		si, _ = MakeStackFrame(1)
+		si, _ = stack_frame.MakeFrame(1)
 	}
 
 	go func() {
@@ -75,18 +79,18 @@ func (wg *waitGroupParallel) DoAfter(f Func) {
 	wg.lock.Lock()
 	defer wg.lock.Unlock()
 
-	frame, _ := MakeStackFrame(1)
+	frame, _ := stack_frame.MakeFrame(1)
 
 	wg.doAfter = append(
 		wg.doAfter,
 		FuncWithStackInfo{
-			Func:       f,
-			StackFrame: frame,
+			Func:  f,
+			Frame: frame,
 		},
 	)
 }
 
-func (wg *waitGroupParallel) doneWith(frame *StackFrame, err error) {
+func (wg *waitGroupParallel) doneWith(frame *stack_frame.Frame, err error) {
 	wg.inner.Done()
 
 	if err != nil {

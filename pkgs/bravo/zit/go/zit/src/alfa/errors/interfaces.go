@@ -1,5 +1,7 @@
 package errors
 
+import "code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
+
 type Flusher interface {
 	Flush() error
 }
@@ -10,12 +12,12 @@ type (
 
 type FuncWithStackInfo struct {
 	Func
-	StackFrame
+	stack_frame.Frame
 }
 
 type WithStackInfo[T any] struct {
 	Contents T
-	StackFrame
+	stack_frame.Frame
 }
 
 type WaitGroup interface {
