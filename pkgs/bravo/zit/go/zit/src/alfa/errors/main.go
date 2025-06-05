@@ -47,9 +47,9 @@ func PanicIfError(err interface{}) {
 //go:noinline
 func WrapSkip(
 	skip int,
-	in error,
-) (err *stackWrapError) {
-	if in == nil {
+	err error,
+) (errWrapped *stackWrapError) {
+	if err == nil {
 		return
 	}
 
@@ -60,29 +60,49 @@ func WrapSkip(
 		panic("failed to get stack info")
 	}
 
-	err = &stackWrapError{
+	errWrapped = &stackWrapError{
 		StackFrame: si,
 	}
 
-	if swe, ok := in.(*stackWrapError); ok {
-		err.next = swe
+	if next, ok := err.(*stackWrapError); ok {
+		errWrapped.next = next
 	} else {
-		err.error = in
+		errWrapped.error = err
 	}
 
+	errWrapped.checkCycle()
+
 	return
+}
+
+func (err *stackWrapError) checkCycle() {
+	slow := err
+	fast := err
+
+	for fast != nil {
+		if slow == fast && slow != err {
+			panic("cycle detected!")
+		}
+
+		slow = slow.next
+		fast = fast.next
+
+		if fast != nil {
+			fast = fast.next
+		}
+	}
 }
 
 const thisSkip = 1
 
 //go:noinline
-func Errorf(f string, values ...interface{}) (err error) {
+func Errorf(f string, values ...any) (err error) {
 	err = fmt.Errorf(f, values...)
 	return
 }
 
 //go:noinline
-func ErrorWithStackf(f string, values ...interface{}) (err error) {
+func ErrorWithStackf(f string, values ...any) (err error) {
 	err = WrapSkip(thisSkip, fmt.Errorf(f, values...))
 	return
 }

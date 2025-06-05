@@ -6,6 +6,8 @@ import (
 	"golang.org/x/xerrors"
 )
 
+// TODO combine all of the below errors into a more useful grouping
+
 type ErrBadRequest interface {
 	IsBadRequest()
 }
