@@ -21,10 +21,10 @@ func (f *BoxTransacted) ReadStringFormat(
 	ts.Reset(rs)
 
 	if err = f.readStringFormatBox(&ts, el); err != nil {
-		if errors.Is(err, errNotABox) {
+		if err == ErrNotABox {
 			err = nil
 		} else {
-			err = errors.WrapExcept(err, io.EOF)
+			err = errors.WrapExcept(err, io.EOF, ErrBoxReadSeq{})
 			return
 		}
 	}
@@ -52,8 +52,6 @@ func (f *BoxTransacted) ReadStringFormat(
 	return
 }
 
-var errNotABox = errors.New("not a box")
-
 func (f *BoxTransacted) openBox(scanner *box.Scanner) (err error) {
 	if !scanner.ScanSkipSpace() {
 		if scanner.Error() != nil {
@@ -68,8 +66,9 @@ func (f *BoxTransacted) openBox(scanner *box.Scanner) (err error) {
 	seq := scanner.GetSeq()
 
 	if !seq.MatchAll(box.TokenMatcherOp(box.OpGroupOpen)) {
-		err = errNotABox
+		err = ErrNotABox
 		scanner.Unscan()
+
 		return
 	}
 
@@ -86,6 +85,7 @@ func (f *BoxTransacted) openBox(scanner *box.Scanner) (err error) {
 	return
 }
 
+// TODO switch to returning ErrBoxParse
 func (f *BoxTransacted) readStringFormatBox(
 	scanner *box.Scanner,
 	el sku.ExternalLike,
@@ -93,7 +93,7 @@ func (f *BoxTransacted) readStringFormatBox(
 	o := el.GetSku()
 
 	if err = f.openBox(scanner); err != nil {
-		err = errors.WrapExcept(err, io.EOF)
+		err = errors.WrapExcept(err, io.EOF, ErrNotABox)
 		return
 	}
 
