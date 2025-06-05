@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"iter"
 
+	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
 	"golang.org/x/xerrors"
 )
 
@@ -53,7 +54,7 @@ func WrapSkip(
 		return
 	}
 
-	var si StackFrame
+	var si stack_frame.Frame
 	var ok bool
 
 	if si, ok = MakeStackFrame(skip + 1); !ok {
@@ -61,7 +62,7 @@ func WrapSkip(
 	}
 
 	errWrapped = &stackWrapError{
-		StackFrame: si,
+		Frame: si,
 	}
 
 	if next, ok := err.(*stackWrapError); ok {
@@ -125,9 +126,9 @@ func Wrapf(in error, f string, values ...any) error {
 	}
 
 	return &stackWrapError{
-		StackFrame: MustStackFrame(thisSkip),
-		error:      fmt.Errorf(f, values...),
-		next:       WrapSkip(thisSkip, in),
+		Frame: MustStackFrame(thisSkip),
+		error: fmt.Errorf(f, values...),
+		next:  WrapSkip(thisSkip, in),
 	}
 }
 

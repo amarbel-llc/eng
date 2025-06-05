@@ -303,9 +303,9 @@ func (c *context) CancelWithErrorAndFormat(err error, f string, values ...any) {
 	defer c.ContinueOrPanicOnDone()
 	c.cancel(
 		&stackWrapError{
-			StackFrame: MustStackFrame(1),
-			error:      fmt.Errorf(f, values...),
-			next:       WrapSkip(1, err),
+			Frame: MustStackFrame(1),
+			error: fmt.Errorf(f, values...),
+			next:  WrapSkip(1, err),
 		},
 	)
 }
