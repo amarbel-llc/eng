@@ -2,7 +2,6 @@ package errors
 
 import (
 	"fmt"
-	"path/filepath"
 	"runtime"
 	"strings"
 
@@ -68,30 +67,30 @@ func MakeStackFrame(skip int) (si stack_frame.Frame, ok bool) {
 	return
 }
 
-func getPackageAndFunctionName(v string) (p string, f string) {
-	p, f = filepath.Split(v)
-
-	idx := strings.Index(f, ".")
-
-	if idx == -1 {
-		return
-	}
-
-	p += f[:idx]
-
-	if len(f) > idx+1 {
-		f = f[idx+1:]
-	}
-
-	return
-}
-
 type stackWrapError struct {
 	ExtraData string
 	stack_frame.Frame
 	error
 
 	next *stackWrapError
+}
+
+func (err *stackWrapError) checkCycle() {
+	slow := err
+	fast := err
+
+	for fast != nil {
+		if slow == fast && slow != err {
+			panic("cycle detected!")
+		}
+
+		slow = slow.next
+		fast = fast.next
+
+		if fast != nil {
+			fast = fast.next
+		}
+	}
 }
 
 func (se *stackWrapError) Unwrap() error {

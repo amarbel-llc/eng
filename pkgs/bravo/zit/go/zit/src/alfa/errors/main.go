@@ -71,27 +71,11 @@ func WrapSkip(
 		errWrapped.error = err
 	}
 
-	errWrapped.checkCycle()
+	if debugBuild {
+		errWrapped.checkCycle()
+	}
 
 	return
-}
-
-func (err *stackWrapError) checkCycle() {
-	slow := err
-	fast := err
-
-	for fast != nil {
-		if slow == fast && slow != err {
-			panic("cycle detected!")
-		}
-
-		slow = slow.next
-		fast = fast.next
-
-		if fast != nil {
-			fast = fast.next
-		}
-	}
 }
 
 const thisSkip = 1
