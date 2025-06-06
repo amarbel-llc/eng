@@ -71,10 +71,12 @@ func (s env) FormatForVersion(sv interfaces.StoreVersion) sku.ListFormat {
 		)
 	} else {
 		return inventory_list_blobs.V1{
-			Box: box_format.MakeBoxTransactedArchive(
-				s,
-				options_print.V0{}.WithPrintTai(true),
-			),
+			V1ObjectCoder: inventory_list_blobs.V1ObjectCoder{
+				Box: box_format.MakeBoxTransactedArchive(
+					s,
+					options_print.V0{}.WithPrintTai(true),
+				),
+			},
 		}
 	}
 }

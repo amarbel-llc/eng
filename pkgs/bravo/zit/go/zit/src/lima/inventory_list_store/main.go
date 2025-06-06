@@ -164,7 +164,9 @@ func (s *Store) FormatForVersion(sv interfaces.StoreVersion) sku.ListFormat {
 		)
 	} else {
 		return inventory_list_blobs.V1{
-			Box: s.box,
+			V1ObjectCoder: inventory_list_blobs.V1ObjectCoder{
+				Box: s.box,
+			},
 		}
 	}
 }

@@ -44,7 +44,9 @@ func MakeInventoryStore(
 			objectOptions,
 		),
 		v1: inventory_list_blobs.V1{
-			Box: boxFormat,
+			V1ObjectCoder: inventory_list_blobs.V1ObjectCoder{
+				Box: boxFormat,
+			},
 		},
 		v2: inventory_list_blobs.V2{
 			Box:                    boxFormat,
@@ -57,9 +59,7 @@ func MakeInventoryStore(
 			"": inventory_list_blobs.V0ObjectCoder{
 				V0: s.v0,
 			},
-			builtin_types.InventoryListTypeV1: inventory_list_blobs.V1ObjectCoder{
-				V1: s.v1,
-			},
+			builtin_types.InventoryListTypeV1: s.v1.V1ObjectCoder,
 			builtin_types.InventoryListTypeV2: inventory_list_blobs.V2ObjectCoder{
 				V2: s.v2,
 			},

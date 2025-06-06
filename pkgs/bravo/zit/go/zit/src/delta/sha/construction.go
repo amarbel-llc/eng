@@ -28,7 +28,7 @@ func Make(getter interfaces.ShaGetter) *Sha {
 }
 
 func Must(v string) (s *Sha) {
-	s = shaPool.Get()
+	s = poolSha.Get()
 
 	errors.PanicIfError(s.Set(v))
 
@@ -36,7 +36,7 @@ func Must(v string) (s *Sha) {
 }
 
 func MakeSha(v string) (s *Sha, err error) {
-	s = shaPool.Get()
+	s = poolSha.Get()
 
 	if err = s.Set(v); err != nil {
 		err = errors.Wrap(err)
@@ -76,8 +76,8 @@ func FromFormatString(f string, vs ...interface{}) *Sha {
 }
 
 func FromStringContent(s string) *Sha {
-	hash := hash256Pool.Get()
-	defer hash256Pool.Put(hash)
+	hash := poolHash256.Get()
+	defer poolHash256.Put(hash)
 
 	sr := strings.NewReader(s)
 
@@ -93,7 +93,7 @@ func FromStringer(v interfaces.Stringer) *Sha {
 }
 
 func FromHash(h hash.Hash) (s *Sha) {
-	s = shaPool.Get()
+	s = poolSha.Get()
 	s.Reset()
 
 	h.Sum(s.data[:0])

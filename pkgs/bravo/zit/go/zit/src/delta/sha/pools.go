@@ -10,12 +10,13 @@ import (
 )
 
 var (
-	hash256Pool interfaces.PoolValue[hash.Hash]
-	shaPool     interfaces.Pool[Sha, *Sha]
+	poolHash256 interfaces.PoolValue[hash.Hash]
+	poolSha     interfaces.Pool[Sha, *Sha]
+	poolWriter  interfaces.Pool[writer, *writer]
 )
 
 func init() {
-	hash256Pool = pool.MakeValue[hash.Hash](
+	poolHash256 = pool.MakeValue(
 		func() hash.Hash {
 			return sha256.New()
 		},
@@ -23,16 +24,28 @@ func init() {
 			h.Reset()
 		},
 	)
-	shaPool = pool.MakePool[Sha, *Sha](
+
+	poolSha = pool.MakePool(
 		nil,
 		func(sh *Sha) {
 			sh.Reset()
 		},
 	)
+
+	poolWriter = pool.MakePool(
+		nil,
+		func(writer *writer) {
+			writer.Reset(nil)
+		},
+	)
 }
 
 func GetPool() interfaces.Pool[Sha, *Sha] {
-	return shaPool
+	return poolSha
+}
+
+func GetPoolWriter() interfaces.Pool[writer, *writer] {
+	return poolWriter
 }
 
 var Resetter resetter

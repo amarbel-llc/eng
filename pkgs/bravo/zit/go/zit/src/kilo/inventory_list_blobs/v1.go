@@ -14,7 +14,7 @@ import (
 )
 
 type V1 struct {
-	Box *box_format.BoxTransacted
+	V1ObjectCoder
 }
 
 func (v V1) GetListFormat() sku.ListFormat {
@@ -62,21 +62,7 @@ func (format V1) writeObjectListItemToWriter(
 		return
 	}
 
-	var n1 int64
-
-	n1, err = format.Box.EncodeStringTo(object, writer)
-	n += n1
-
-	if err != nil {
-		err = errors.Wrap(err)
-		return
-	}
-
-	var n2 int
-	n2, err = fmt.Fprintf(writer, "\n")
-	n += int64(n2)
-
-	if err != nil {
+	if n, err = format.EncodeTo(object, writer); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -135,14 +121,12 @@ func (s V1) WriteInventoryListObject(
 	return
 }
 
-func (s V1) ReadInventoryListObject(
-	r1 io.Reader,
-) (n int64, o *sku.Transacted, err error) {
-	o = sku.GetTransactedPool().Get()
+func (format V1) ReadInventoryListObject(
+	reader io.Reader,
+) (n int64, object *sku.Transacted, err error) {
+	object = sku.GetTransactedPool().Get()
 
-	r := bufio.NewReader(r1)
-
-	if n, err = s.Box.ReadStringFormat(o, r); err != nil {
+	if n, err = format.DecodeFrom(object, reader); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -256,20 +240,20 @@ func (s V1) StreamInventoryListBlobSkus(
 }
 
 type V1ObjectCoder struct {
-	V1
+	Box *box_format.BoxTransacted
 }
 
-func (s V1ObjectCoder) EncodeTo(
-	o *sku.Transacted,
-	w1 io.Writer,
+func (coder V1ObjectCoder) EncodeTo(
+	object *sku.Transacted,
+	writer io.Writer,
 ) (n int64, err error) {
-	bw := bufio.NewWriter(w1)
-	defer errors.DeferredFlusher(&err, bw)
+	bufferedWriter := bufio.NewWriter(writer)
+	defer errors.DeferredFlusher(&err, bufferedWriter)
 
 	var n1 int64
 	var n2 int
 
-	n1, err = s.Box.EncodeStringTo(o, bw)
+	n1, err = coder.Box.EncodeStringTo(object, bufferedWriter)
 	n += n1
 
 	if err != nil {
@@ -277,7 +261,7 @@ func (s V1ObjectCoder) EncodeTo(
 		return
 	}
 
-	n2, err = fmt.Fprintf(bw, "\n")
+	n2, err = fmt.Fprintf(bufferedWriter, "\n")
 	n += int64(n2)
 
 	if err != nil {
@@ -288,13 +272,13 @@ func (s V1ObjectCoder) EncodeTo(
 	return
 }
 
-func (s V1ObjectCoder) DecodeFrom(
-	o *sku.Transacted,
-	r1 io.Reader,
+func (coder V1ObjectCoder) DecodeFrom(
+	object *sku.Transacted,
+	reader io.Reader,
 ) (n int64, err error) {
-	r := bufio.NewReader(r1)
+	bufferedReader := bufio.NewReader(reader)
 
-	if n, err = s.Box.ReadStringFormat(o, r); err != nil {
+	if n, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

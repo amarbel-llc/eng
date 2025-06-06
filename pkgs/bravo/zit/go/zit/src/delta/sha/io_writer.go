@@ -10,27 +10,16 @@ import (
 
 type writer struct {
 	closed bool
+	in     io.Writer
 	c      io.Closer
 	w      io.Writer
 	h      hash.Hash
 	sh     Sha
 }
 
-func MakeWriter(in io.Writer) (out *writer) {
-	h := hash256Pool.Get()
-
-	if in == nil {
-		in = io.Discard
-	}
-
-	out = &writer{
-		w: io.MultiWriter(h, in),
-		h: h,
-	}
-
-	if c, ok := in.(io.Closer); ok {
-		out.c = c
-	}
+func MakeWriter(in io.Writer) (writer *writer) {
+	writer = GetPoolWriter().Get()
+	writer.Reset(in)
 
 	return
 }
@@ -76,7 +65,7 @@ func (w *writer) setShaLikeIfNecessary() {
 	if w.h != nil {
 		errors.PanicIfError(w.sh.SetFromHash(w.h))
 
-		hash256Pool.Put(w.h)
+		poolHash256.Put(w.h)
 		w.h = nil
 	}
 }
@@ -86,4 +75,24 @@ func (w *writer) GetShaLike() (s interfaces.Sha) {
 	s = &w.sh
 
 	return
+}
+
+func (writer *writer) Reset(in io.Writer) {
+	if in == nil {
+		in = io.Discard
+	}
+
+	writer.in = in
+
+	if c, ok := in.(io.Closer); ok {
+		writer.c = c
+	}
+
+	if writer.h == nil {
+		writer.h = poolHash256.Get()
+	} else {
+		writer.h.Reset()
+	}
+
+	writer.w = io.MultiWriter(writer.h, writer.in)
 }

@@ -3,6 +3,7 @@ package pool
 import (
 	"bufio"
 
+	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 )
 
@@ -12,7 +13,7 @@ var (
 )
 
 func init() {
-	bufioReader = MakePool[bufio.Reader, *bufio.Reader](nil, nil)
+	bufioReader = MakePool[bufio.Reader](nil, nil)
 	bufioWriter = MakePool[bufio.Writer](nil, nil)
 }
 
@@ -22,4 +23,9 @@ func GetBufioReader() interfaces.Pool[bufio.Reader, *bufio.Reader] {
 
 func GetBufioWriter() interfaces.Pool[bufio.Writer, *bufio.Writer] {
 	return bufioWriter
+}
+
+func FlushBufioWriterAndPut(err *error, writer *bufio.Writer) {
+	errors.DeferredFlusher(err, writer)
+	GetBufioWriter().Put(writer)
 }
