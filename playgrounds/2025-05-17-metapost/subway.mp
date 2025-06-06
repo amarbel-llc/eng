@@ -26,16 +26,42 @@ def pickup_tile_pen =
   pickup pencircle scaled 2pt;
 enddef;
 
+def roundto(expr x, places) = 
+  (round(x * (10**places))) / (10**places)
+enddef;
+
 def label_dim(expr dimX, dimY)(text loc) = 
   save c;
   color c;
   c = red;
 
-  label(decimal(dimX), loc) shifted (0, 1u) withcolor c;
+  label(decimal(roundto(dimX, 2)), loc) shifted (0, 1u) withcolor c;
 
   label("x", loc) shifted (0, 0u) withcolor c;
 
-  label(decimal(dimX), loc) shifted (0, -1u) withcolor c;
+  label(decimal(roundto(dimY, 2)), loc) shifted (0, -1u) withcolor c;
+enddef;
+
+def label_width(expr x, y, width, arrowLength, lineWidth) = 
+  save c;
+  color c;
+  c = red;
+
+  ahlength := arrowLength;
+  drawdblarrow((x, y)*u .. (x+width, y)*u) withcolor red withpen pencircle scaled lineWidth;
+
+  label(decimal(roundto(width, 2)), (width / 2 + x, y)*u) shifted (0, 1u) withcolor c;
+enddef;
+
+def label_height(expr x, y, height, arrowLength, lineWidth) = 
+  save c;
+  color c;
+  c = red;
+
+  ahlength := arrowLength;
+  drawdblarrow((x, y)*u .. (x, y+height)*u) withcolor red withpen pencircle scaled lineWidth;
+
+  label(decimal(roundto(height, 2)), (x, height / 2 + y)*u) shifted (1u, 0) withcolor c;
 enddef;
 
 def make_rect(expr x, y, width, height) =
@@ -225,9 +251,9 @@ def draw_wall(expr wall_width, wall_height) =
 
   path main_mosaic;
 
-  begingroup
-    save frame_depth, frame_depth_with_teeth;
+  numeric frame_depth, frame_depth_with_teeth;
 
+  begingroup
     frame_depth = trim_width + grout + subway_narrow_half_height;
     frame_depth_with_teeth = frame_depth + grout + subway_width;
 
@@ -255,8 +281,6 @@ def draw_wall(expr wall_width, wall_height) =
   main_mosaic_y := y;
 
   main_mosaic = make_rect(x, y, width, height);
-
-  % fill main_mosaic withcolor grout_color;
 
   % main subway
   draw_subway_with_grout(
@@ -710,7 +734,52 @@ def draw_wall(expr wall_width, wall_height) =
         );
       endgroup;
 
-      % dimensions
+      pair ll, ur;
+      numeric canvas_width, canvas_height;
+
+      % background
+      begingroup
+        save current_picture_copy, canvas;
+
+        picture current_picture_copy;
+        current_picture_copy = currentpicture;
+
+        ll := llcorner current_picture_copy;
+        ur := urcorner current_picture_copy;
+
+        canvas_width := xpart(ur - ll);
+        canvas_height := ypart(ur - ll);
+
+        path canvas;
+        canvas = make_rect(xpart(ll)/u, ypart(ll)/u, canvas_width/u, canvas_height/u);
+
+        fill canvas withcolor background;
+        addto currentpicture also current_picture_copy;
+      endgroup;
+
+      % dimensions 1
+      begingroup
+        save w, h, leftmost;
+        w = wall_width;
+        h = wall_height / 2;
+        leftmost = main_mosaic_x - frame_depth_with_teeth;
+
+        show leftmost;
+
+        % total wall
+        label_width(0, h-1subway_height, w, u/2, 3pt);
+        label_height(wall_width / 2 + 1subway_width, 0, wall_height, u/2, 3pt);
+
+        % subway wall
+        label_width(main_mosaic_x, h+subway_height, width, u/2, 3pt);
+        label_height(wall_width / 2 + 2subway_width, main_mosaic_y, height, u/2, 3pt);
+
+        % subway tile and frame cutoff
+        label_width(leftmost, h+subway_height*1, subway_width, u/2, 3pt);
+        label_width(0, h+subway_height*2, subway_width+leftmost, u/2, 3pt);
+      endgroup;
+
+      % dimensions 2
       begingroup
         label_dim(
           subway_height, subway_height, 
@@ -744,20 +813,21 @@ def draw_wall(expr wall_width, wall_height) =
   begingroup
     save excess;
     path excess;
-    clip currentpicture to wall;
+    draw wall withcolor red dashed evenly scaled 4;
+    % clip currentpicture to wall;
   endgroup;
 enddef;
 
 beginfig(0)
-  draw_wall(58, 60);
+  draw_wall(58, 97);
 endfig;
 
 beginfig(1)
-  draw_wall(28, 60);
+  draw_wall(28, 97);
 endfig;
 
 beginfig(2)
-  draw_wall(50, 60);
+  draw_wall(50, 97);
 endfig;
 
 end;
