@@ -1,6 +1,7 @@
 package catgut
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 
@@ -76,6 +77,44 @@ func (rb *RingBuffer) Reset(r io.Reader) {
 
 func (rb *RingBuffer) ReadLength() int64 {
 	return rb.readLength
+}
+
+func (ringBuffer *RingBuffer) Peek(n int) (bytes []byte, err error) {
+	if n < 0 {
+		err = bufio.ErrNegativeCount
+		return
+	}
+
+	var filled int64
+	var isEOF bool
+
+	if ringBuffer.Len() < n {
+		if filled, err = ringBuffer.Fill(); err != nil {
+			if err == io.EOF {
+				isEOF = true
+				err = nil
+			} else {
+				err = errors.Wrap(err)
+				return
+			}
+		}
+	}
+
+	readable := ringBuffer.PeekReadable()
+
+	if readable.Len() < n {
+		if filled == 0 && isEOF {
+			err = io.EOF
+		} else {
+			err = bufio.ErrBufferFull
+		}
+
+		return
+	}
+
+	bytes = readable.Bytes()[:n]
+
+	return
 }
 
 func (rb *RingBuffer) PeekWriteable() (rs Slice) {
