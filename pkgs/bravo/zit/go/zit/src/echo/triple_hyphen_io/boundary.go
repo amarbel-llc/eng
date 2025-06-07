@@ -24,6 +24,24 @@ type Peeker interface {
 	Peek(n int) (bytes []byte, err error)
 }
 
+func ReadBoundaryFromPeeker(peeker Peeker) (err error) {
+	if err = PeekBoundaryFromPeeker(peeker); err != nil {
+		err = errors.WrapExcept(err, io.EOF)
+		return
+	}
+
+	if _, err = io.CopyN(
+		io.Discard,
+		peeker,
+		int64(BoundaryStringValue.Len()+1),
+	); err != nil {
+		err = errors.WrapExcept(err, io.EOF)
+		return
+	}
+
+	return
+}
+
 func PeekBoundaryFromPeeker(peeker Peeker) (err error) {
 	var peeked []byte
 
@@ -50,7 +68,7 @@ func PeekBoundaryFromPeeker(peeker Peeker) (err error) {
 
 func ReadBoundaryFromRingBuffer(
 	ringBuffer *catgut.RingBuffer,
-) (n int, err error) {
+) (err error) {
 	var readable catgut.Slice
 
 	readable, err = ringBuffer.PeekUpto('\n')
@@ -84,7 +102,7 @@ func ReadBoundaryFromRingBuffer(
 	}
 
 	// boundary and newline
-	n = BoundaryStringValue.Len() + 1
+	n := BoundaryStringValue.Len() + 1
 	ringBuffer.AdvanceRead(n)
 
 	if err == io.EOF {
