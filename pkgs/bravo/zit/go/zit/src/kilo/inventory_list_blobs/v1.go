@@ -278,7 +278,8 @@ func (coder V1ObjectCoder) DecodeFrom(
 	object *sku.Transacted,
 	reader io.Reader,
 ) (n int64, err error) {
-	bufferedReader := bufio.NewReader(reader)
+	bufferedReader := ohio.BufferedReader(reader)
+	defer pool.GetBufioReader().Put(bufferedReader)
 
 	if n, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 		err = errors.Wrap(err)
