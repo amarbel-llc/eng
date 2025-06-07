@@ -15,9 +15,12 @@ type Decoder[O any] struct {
 	Metadata, Blob  interfaces.DecoderFromReader[O]
 }
 
-func (mr *Decoder[O]) DecodeFrom(object O, r io.Reader) (n int64, err error) {
+func (mr *Decoder[O]) DecodeFrom(
+	object O,
+	bufferedReader *bufio.Reader,
+) (n int64, err error) {
 	var n1 int64
-	n1, err = mr.readMetadataFrom(object, &r)
+	n1, err = mr.readMetadataFrom(object, bufferedReader)
 	n += n1
 
 	if err != nil {
@@ -25,7 +28,7 @@ func (mr *Decoder[O]) DecodeFrom(object O, r io.Reader) (n int64, err error) {
 		return
 	}
 
-	n1, err = mr.Blob.DecodeFrom(object, bufio.NewReader(r))
+	n1, err = mr.Blob.DecodeFrom(object, bufferedReader)
 	n += n1
 
 	if err != nil {
@@ -36,65 +39,75 @@ func (mr *Decoder[O]) DecodeFrom(object O, r io.Reader) (n int64, err error) {
 	return
 }
 
-func (mr *Decoder[O]) readMetadataFrom(
+func (decoder *Decoder[O]) readMetadataFrom(
 	object O,
-	r *io.Reader,
+	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
 	var state readerState
-	br := bufio.NewReader(*r)
 
-	if mr.RequireMetadata && mr.Metadata == nil {
+	if decoder.RequireMetadata && decoder.Metadata == nil {
 		err = errors.ErrorWithStackf("metadata reader is nil")
 		return
 	}
 
-	if mr.Blob == nil {
+	if decoder.Blob == nil {
 		err = errors.ErrorWithStackf("blob reader is nil")
 		return
 	}
 
 	var metadataPipe ohio.PipedReader
 
-	isEOF := false
+	{
+		var isBoundary bool
+
+		if err = ReadBoundaryFromPeeker(bufferedReader); err != nil {
+			if err == errBoundaryInvalid {
+				err = nil
+			} else {
+				err = errors.Wrap(err)
+				return
+			}
+		} else {
+			isBoundary = true
+		}
+
+		switch {
+		case decoder.RequireMetadata && !isBoundary:
+			// TODO add context
+			err = errors.Wrap(errBoundaryInvalid)
+			return
+
+		case !isBoundary:
+			state = readerStateSecondBoundary
+
+		default:
+			state = readerStateFirstBoundary
+			metadataPipe = ohio.MakePipedDecoder(object, decoder.Metadata)
+		}
+	}
+
+	var isEOF bool
 
 LINE_READ_LOOP:
 	for !isEOF {
 		var rawLine, line string
 
-		rawLine, err = br.ReadString('\n')
+		rawLine, err = bufferedReader.ReadString('\n')
 		n += int64(len(rawLine))
 
-		if err != nil && err != io.EOF {
-			err = errors.Wrap(err)
-			return
-		}
-
-		if errors.IsEOF(err) {
+		if err == io.EOF {
 			err = nil
 			isEOF = true
+		} else if err != nil {
+			err = errors.Wrap(err)
+			return
 		}
 
 		line = strings.TrimSuffix(rawLine, "\n")
 
 		switch state {
 		case readerStateEmpty:
-			switch {
-			case mr.RequireMetadata && line != Boundary:
-				err = errors.ErrorWithStackf("expected %q but got %q", Boundary, line)
-				return
-
-			case line != Boundary:
-				*r = io.MultiReader(
-					strings.NewReader(rawLine),
-					br,
-				)
-
-				break LINE_READ_LOOP
-			}
-
-			state += 1
-
-			metadataPipe = ohio.MakePipedDecoder(object, mr.Metadata)
+			// nop, processing done above
 
 		case readerStateFirstBoundary:
 			if line == Boundary {
@@ -113,7 +126,6 @@ LINE_READ_LOOP:
 			}
 
 		case readerStateSecondBoundary:
-			*r = br
 			break LINE_READ_LOOP
 
 		default:

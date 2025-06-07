@@ -26,7 +26,7 @@ type Peeker interface {
 
 func ReadBoundaryFromPeeker(peeker Peeker) (err error) {
 	if err = PeekBoundaryFromPeeker(peeker); err != nil {
-		err = errors.WrapExcept(err, io.EOF)
+		err = errors.WrapExcept(err, io.EOF, errBoundaryInvalid)
 		return
 	}
 
