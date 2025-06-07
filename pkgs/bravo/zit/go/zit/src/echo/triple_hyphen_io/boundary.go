@@ -19,10 +19,41 @@ func init() {
 
 var errBoundaryInvalid = errors.New("boundary invalid")
 
-func ReadBoundary(r *catgut.RingBuffer) (n int, err error) {
+type Peeker interface {
+	io.Reader
+	Peek(n int) (bytes []byte, err error)
+}
+
+func PeekBoundaryFromPeeker(peeker Peeker) (err error) {
+	var peeked []byte
+
+	if peeked, err = peeker.Peek(BoundaryStringValue.Len() + 1); err != nil {
+		err = errors.WrapExcept(err, io.EOF)
+		return
+	}
+
+	boundaryOnly := peeked[:BoundaryStringValue.Len()]
+	newline := peeked[BoundaryStringValue.Len()]
+
+	if !BoundaryStringValue.EqualsBytes(boundaryOnly) {
+		err = errBoundaryInvalid
+		return
+	}
+
+	if newline != '\n' {
+		err = errBoundaryInvalid
+		return
+	}
+
+	return
+}
+
+func ReadBoundaryFromRingBuffer(
+	ringBuffer *catgut.RingBuffer,
+) (n int, err error) {
 	var readable catgut.Slice
 
-	readable, err = r.PeekUpto('\n')
+	readable, err = ringBuffer.PeekUpto('\n')
 
 	if errors.IsNotNilAndNotEOF(err) {
 		return
@@ -54,7 +85,7 @@ func ReadBoundary(r *catgut.RingBuffer) (n int, err error) {
 
 	// boundary and newline
 	n = BoundaryStringValue.Len() + 1
-	r.AdvanceRead(n)
+	ringBuffer.AdvanceRead(n)
 
 	if err == io.EOF {
 		err = nil

@@ -75,7 +75,7 @@ func (scanner *scanner) Scan() (ok bool) {
 	scanner.lastSku = nil
 
 	if !scanner.afterFirst {
-		_, scanner.err = triple_hyphen_io.ReadBoundary(scanner.ringBuffer)
+		_, scanner.err = triple_hyphen_io.ReadBoundaryFromRingBuffer(scanner.ringBuffer)
 
 		if errors.IsEOF(scanner.err) {
 			return
@@ -110,7 +110,7 @@ func (scanner *scanner) Scan() (ok bool) {
 
 	oldErr := scanner.err
 
-	_, scanner.err = triple_hyphen_io.ReadBoundary(scanner.ringBuffer)
+	_, scanner.err = triple_hyphen_io.ReadBoundaryFromRingBuffer(scanner.ringBuffer)
 
 	if errors.IsNotNilAndNotEOF(scanner.err) {
 		scanner.err = errors.Wrap(errors.MakeMulti(scanner.err, oldErr))
