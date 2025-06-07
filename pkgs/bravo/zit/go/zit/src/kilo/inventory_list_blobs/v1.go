@@ -7,6 +7,8 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
 	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
@@ -247,8 +249,8 @@ func (coder V1ObjectCoder) EncodeTo(
 	object *sku.Transacted,
 	writer io.Writer,
 ) (n int64, err error) {
-	bufferedWriter := bufio.NewWriter(writer)
-	defer errors.DeferredFlusher(&err, bufferedWriter)
+	bufferedWriter := ohio.BufferedWriter(writer)
+	defer pool.FlushBufioWriterAndPut(&err, bufferedWriter)
 
 	var n1 int64
 	var n2 int
@@ -279,6 +281,11 @@ func (coder V1ObjectCoder) DecodeFrom(
 	bufferedReader := bufio.NewReader(reader)
 
 	if n, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	if err = object.CalculateObjectShas(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
