@@ -5,6 +5,8 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 )
 
@@ -77,7 +79,13 @@ func (c DecoderTypeMapWithoutType[S]) DecodeFrom(
 		return
 	}
 
-	if n, err = coder.DecodeFrom(subject.Struct, reader); err != nil {
+	bufferedReader := ohio.BufferedReader(reader)
+	defer pool.GetBufioReader().Put(bufferedReader)
+
+	if n, err = coder.DecodeFrom(
+		subject.Struct,
+		bufferedReader,
+	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

@@ -3,6 +3,8 @@ package typed_blob_store
 import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/echo/repo_blobs"
 	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
@@ -37,7 +39,13 @@ func (a RepoStore) ReadTypedBlob(
 		Type: &tipe,
 	}
 
-	if n, err = repo_blobs.Coder.DecodeFrom(&blob, reader); err != nil {
+	bufferedReader := ohio.BufferedReader(reader)
+	defer pool.GetBufioReader().Put(bufferedReader)
+
+	if n, err = repo_blobs.Coder.DecodeFrom(
+		&blob,
+		bufferedReader,
+	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -60,13 +68,21 @@ func (store RepoStore) WriteTypedBlob(
 
 	defer errors.DeferredCloser(&err, writer)
 
+	bufferedWriter := ohio.BufferedWriter(writer)
+	defer pool.GetBufioWriter().Put(bufferedWriter)
+
 	if n, err = repo_blobs.Coder.EncodeTo(
 		&repo_blobs.TypeWithBlob{
 			Type:   &tipe,
 			Struct: &blob,
 		},
-		writer,
+		bufferedWriter,
 	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	if err = bufferedWriter.Flush(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

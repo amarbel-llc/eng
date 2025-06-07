@@ -9,8 +9,10 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/todo"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
@@ -245,16 +247,27 @@ func (client *client) pullQueryGroupFromWorkingCopy(
 
 	buffer := bytes.NewBuffer(nil)
 
+	bufferedWriter := ohio.BufferedWriter(buffer)
+	defer pool.GetBufioWriter().Put(bufferedWriter)
+
 	for {
 		client.envUI.ContinueOrPanicOnDone()
 
 		// TODO make a reader version of inventory lists to avoid allocation
-		if _, err = listFormat.WriteInventoryListBlob(list, buffer); err != nil {
+		if _, err = listFormat.WriteInventoryListBlob(
+			list,
+			bufferedWriter,
+		); err != nil {
 			err = errors.Wrap(err)
 			return
 		}
 
 		var response *http.Response
+
+		if err = bufferedWriter.Flush(); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
 
 		{
 			var request *http.Request
@@ -327,9 +340,8 @@ func (client *client) pullQueryGroupFromWorkingCopy(
 		}
 
 		buffer.Reset()
+		bufferedWriter.Reset(buffer)
 	}
-
-	return
 }
 
 func (client *client) ReadObjectHistory(

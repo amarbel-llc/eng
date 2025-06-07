@@ -41,10 +41,18 @@ func (format V1) WriteObjectToOpenList(
 		return
 	}
 
+	bufferedWriter := ohio.BufferedWriter(list.Mover)
+	defer pool.GetBufioWriter().Put(bufferedWriter)
+
 	if n, err = format.writeObjectListItemToWriter(
 		object,
-		list.Mover,
+		bufferedWriter,
 	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	if err = bufferedWriter.Flush(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

@@ -20,7 +20,9 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
@@ -806,9 +808,12 @@ func (server *Server) handlePostInventoryList(
 		{
 			var err error
 
+			bufferedReader := ohio.BufferedReader(strings.NewReader(boxString))
+			defer pool.GetBufioReader().Put(bufferedReader)
+
 			if sk, err = typedInventoryListStore.ReadInventoryListObject(
 				ids.MustType(builtin_types.InventoryListTypeV1),
-				strings.NewReader(boxString),
+				bufferedReader,
 			); err != nil {
 				response.Error(
 					errors.ErrorWithStackf(

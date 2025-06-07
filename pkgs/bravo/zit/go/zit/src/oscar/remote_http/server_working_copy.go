@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
@@ -120,7 +122,18 @@ func (server *Server) writeInventoryListLocalWorkingCopy(
 		}
 	}
 
-	if _, err := listFormat.WriteInventoryListBlob(listMissingSkus, responseBuffer); err != nil {
+	bufferedWriter := ohio.BufferedWriter(responseBuffer)
+	defer pool.GetBufioWriter().Put(bufferedWriter)
+
+	if _, err := listFormat.WriteInventoryListBlob(
+		listMissingSkus,
+		bufferedWriter,
+	); err != nil {
+		response.Error(err)
+		return
+	}
+
+	if err := bufferedWriter.Flush(); err != nil {
 		response.Error(err)
 		return
 	}

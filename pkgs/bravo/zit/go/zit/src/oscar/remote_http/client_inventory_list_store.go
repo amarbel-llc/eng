@@ -11,9 +11,11 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/todo"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/collections"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
@@ -76,21 +78,44 @@ func (client client) ImportInventoryList(
 
 	ui.Log().Printf("collected list (%d): %s", list.Len(), sku.String(listSku))
 
-	// TODO make a reader version of inventory lists to avoid allocation
-	if _, err = listFormat.WriteInventoryListBlob(list, buffer); err != nil {
-		err = errors.Wrap(err)
-		return
+	{
+		bufferedWriter := ohio.BufferedWriter(buffer)
+		defer pool.GetBufioWriter().Put(bufferedWriter)
+
+		// TODO make a reader version of inventory lists to avoid allocation
+		if _, err = listFormat.WriteInventoryListBlob(
+			list,
+			bufferedWriter,
+		); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+
+		if err = bufferedWriter.Flush(); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
 	}
 
 	var sbListSkuBox strings.Builder
 
-	if _, err = client.typedBlobStore.WriteObjectToWriter(
-		listSku.GetType(),
-		listSku,
-		&sbListSkuBox,
-	); err != nil {
-		err = errors.Wrap(err)
-		return
+	{
+		bufferedWriter := ohio.BufferedWriter(&sbListSkuBox)
+		defer pool.GetBufioWriter().Put(bufferedWriter)
+
+		if _, err = client.typedBlobStore.WriteObjectToWriter(
+			listSku.GetType(),
+			listSku,
+			bufferedWriter,
+		); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+
+		if err = bufferedWriter.Flush(); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
 	}
 
 	var request *http.Request

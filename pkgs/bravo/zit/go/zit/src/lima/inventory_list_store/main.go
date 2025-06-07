@@ -7,7 +7,9 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/file_lock"
@@ -302,11 +304,19 @@ func (store *Store) WriteInventoryListBlob(
 
 	defer errors.DeferredCloser(&err, writeCloser)
 
+	bufferedWriter := ohio.BufferedWriter(writeCloser)
+	defer pool.GetBufioWriter().Put(bufferedWriter)
+
 	if _, err = store.getTypedBlobStore().WriteBlobToWriter(
 		object.GetType(),
 		list,
-		writeCloser,
+		bufferedWriter,
 	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	if err = bufferedWriter.Flush(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -361,11 +371,14 @@ func (store *Store) ImportInventoryList(
 		return
 	}
 
+	bufferedReader := ohio.BufferedReader(blobReader)
+	defer pool.GetBufioReader().Put(bufferedReader)
+
 	list := sku.MakeList()
 
 	if err = inventory_list_blobs.ReadInventoryListBlob(
 		store.FormatForVersion(store.storeVersion),
-		blobReader,
+		bufferedReader,
 		list,
 	); err != nil {
 		err = errors.Wrap(err)

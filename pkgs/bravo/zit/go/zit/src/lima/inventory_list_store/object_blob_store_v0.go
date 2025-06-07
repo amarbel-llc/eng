@@ -6,7 +6,9 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/hotel/object_inventory_format"
@@ -48,9 +50,12 @@ func (store *objectBlobStoreV0) ReadOneSha(
 
 	defer errors.DeferredCloser(&err, readCloser)
 
+	bufferedReader := ohio.BufferedReader(readCloser)
+	defer pool.GetBufioReader().Put(bufferedReader)
+
 	if object, err = store.typedBlobStore.ReadInventoryListObject(
 		store.blobType,
-		readCloser,
+		bufferedReader,
 	); err != nil {
 		err = errors.Wrap(err)
 		return
@@ -76,11 +81,19 @@ func (store *objectBlobStoreV0) WriteInventoryListObject(
 
 	object.Metadata.Type = store.blobType
 
+	bufferedWriter := ohio.BufferedWriter(blobStoreWriteCloser)
+	defer pool.GetBufioWriter().Put(bufferedWriter)
+
 	if _, err = store.typedBlobStore.WriteObjectToWriter(
 		store.blobType,
 		object,
-		blobStoreWriteCloser,
+		bufferedWriter,
 	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	if err = bufferedWriter.Flush(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

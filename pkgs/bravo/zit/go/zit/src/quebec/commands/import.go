@@ -5,6 +5,8 @@ import (
 	"io"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
@@ -53,7 +55,7 @@ func (cmd Import) Run(dep command.Request) {
 
 	bf := localWorkingCopy.GetStore().GetInventoryListStore().FormatForVersion(cmd.StoreVersion)
 
-	var rc io.ReadCloser
+	var readCloser io.ReadCloser
 
 	// setup inventory list reader
 	{
@@ -68,19 +70,22 @@ func (cmd Import) Run(dep command.Request) {
 
 		var err error
 
-		if rc, err = env_dir.NewFileReader(o); err != nil {
+		if readCloser, err = env_dir.NewFileReader(o); err != nil {
 			localWorkingCopy.CancelWithError(err)
 		}
 
-		defer localWorkingCopy.MustClose(rc)
+		defer localWorkingCopy.MustClose(readCloser)
 	}
+
+	bufferedReader := ohio.BufferedReader(readCloser)
+	defer pool.GetBufioReader().Put(bufferedReader)
 
 	list := sku.MakeList()
 
 	// TODO determine why this is not erroring for invalid input
 	if err := inventory_list_blobs.ReadInventoryListBlob(
 		bf,
-		rc,
+		bufferedReader,
 		list,
 	); err != nil {
 		localWorkingCopy.CancelWithError(err)

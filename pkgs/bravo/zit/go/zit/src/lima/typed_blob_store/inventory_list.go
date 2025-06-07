@@ -6,6 +6,8 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/echo/triple_hyphen_io"
 	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
@@ -99,16 +101,22 @@ func (a InventoryList) GetTransactedWithBlob(
 	twb.Transacted = tg.GetSku()
 	blobSha := twb.GetBlobSha()
 
-	var rc interfaces.ShaReadCloser
+	var readCloser interfaces.ShaReadCloser
 
-	if rc, err = a.envRepo.BlobReader(blobSha); err != nil {
+	if readCloser, err = a.envRepo.BlobReader(blobSha); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	defer errors.DeferredCloser(&err, rc)
+	defer errors.DeferredCloser(&err, readCloser)
 
-	if n, err = a.GetTransactedWithBlobFromReader(&twb, rc); err != nil {
+	bufferedReader := ohio.BufferedReader(readCloser)
+	defer pool.GetBufioReader().Put(bufferedReader)
+
+	if n, err = a.GetTransactedWithBlobFromReader(
+		&twb,
+		bufferedReader,
+	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -271,6 +279,9 @@ func (a InventoryList) AllDecodedObjectsFromStream(
 			),
 		}
 
+		bufferedReader := ohio.BufferedReader(reader)
+		defer pool.GetBufioReader().Put(bufferedReader)
+
 		if _, err := decoder.DecodeFrom(
 			&triple_hyphen_io.TypedStruct[iterSku]{
 				Type: &ids.Type{},
@@ -278,7 +289,7 @@ func (a InventoryList) AllDecodedObjectsFromStream(
 					return yield(sk, nil)
 				},
 			},
-			reader,
+			bufferedReader,
 		); err != nil {
 			yield(nil, err)
 			return
@@ -309,6 +320,9 @@ func (a InventoryList) IterInventoryListBlobSkusFromBlobStore(
 			a.streamDecoders,
 		)
 
+		bufferedReader := ohio.BufferedReader(readCloser)
+		defer pool.GetBufioReader().Put(bufferedReader)
+
 		if _, err := decoder.DecodeFrom(
 			&triple_hyphen_io.TypedStruct[iterSku]{
 				Type: &tipe,
@@ -316,7 +330,7 @@ func (a InventoryList) IterInventoryListBlobSkusFromBlobStore(
 					return yield(sk, nil)
 				},
 			},
-			readCloser,
+			bufferedReader,
 		); err != nil {
 			yield(nil, errors.Wrap(err))
 			return
@@ -333,6 +347,9 @@ func (a InventoryList) IterInventoryListBlobSkusFromReader(
 			a.streamDecoders,
 		)
 
+		bufferedReader := ohio.BufferedReader(reader)
+		defer pool.GetBufioReader().Put(bufferedReader)
+
 		if _, err := decoder.DecodeFrom(
 			&triple_hyphen_io.TypedStruct[iterSku]{
 				Type: &tipe,
@@ -340,7 +357,7 @@ func (a InventoryList) IterInventoryListBlobSkusFromReader(
 					return yield(sk, nil)
 				},
 			},
-			reader,
+			bufferedReader,
 		); err != nil {
 			yield(nil, errors.Wrap(err))
 			return

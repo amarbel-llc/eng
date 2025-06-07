@@ -5,6 +5,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
 )
 
 type PipedReader interface {
@@ -75,7 +76,13 @@ func MakePipedDecoder[O any](
 	go func() {
 		var msg readFromDone
 
-		if msg.n, msg.err = decoder.DecodeFrom(object, pr); msg.err != nil {
+		bufferedReader := BufferedReader(pr)
+		defer pool.GetBufioReader().Put(bufferedReader)
+
+		if msg.n, msg.err = decoder.DecodeFrom(
+			object,
+			bufferedReader,
+		); msg.err != nil {
 			if !errors.IsEOF(msg.err) {
 				pr.CloseWithError(msg.err)
 			}
