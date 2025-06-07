@@ -282,8 +282,16 @@ func (coder V1ObjectCoder) DecodeFrom(
 	defer pool.GetBufioReader().Put(bufferedReader)
 
 	if n, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
-		err = errors.Wrap(err)
-		return
+		if err == io.EOF {
+			err = nil
+
+			if n == 0 {
+				return
+			}
+		} else {
+			err = errors.Wrap(err)
+			return
+		}
 	}
 
 	if err = object.CalculateObjectShas(); err != nil {
