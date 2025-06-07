@@ -7,7 +7,7 @@ import (
 type (
 	Format[T any, TPtr interfaces.Ptr[T]] interface {
 		interfaces.SavedBlobFormatter
-		interfaces.Coder[TPtr]
+		interfaces.CoderReadWriter[TPtr]
 	}
 )
 

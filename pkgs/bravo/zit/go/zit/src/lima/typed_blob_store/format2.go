@@ -7,21 +7,21 @@ import (
 type format2[
 	O any,
 ] struct {
-	interfaces.DecoderFrom[O]
+	interfaces.DecoderFromReader[O]
 	interfaces.SavedBlobFormatter
-	interfaces.EncoderTo[O]
+	interfaces.EncoderToWriter[O]
 }
 
 func MakeBlobFormat2[
 	O any,
 ](
-	decoder interfaces.DecoderFrom[O],
-	encoder interfaces.EncoderTo[O],
+	decoder interfaces.DecoderFromReader[O],
+	encoder interfaces.EncoderToWriter[O],
 	blobReader interfaces.BlobReader,
 ) interfaces.Format[O] {
 	return format2[O]{
-		DecoderFrom:        decoder,
-		EncoderTo:          encoder,
+		DecoderFromReader:        decoder,
+		EncoderToWriter:          encoder,
 		SavedBlobFormatter: MakeSavedBlobFormatter(blobReader),
 	}
 }

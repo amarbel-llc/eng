@@ -15,7 +15,7 @@ import (
 
 type typeWithConfigLoadedPrivate = *triple_hyphen_io.TypedStruct[*ConfigLoadedPrivate]
 
-var typedCodersPrivate = map[string]interfaces.Coder[typeWithConfigLoadedPrivate]{
+var typedCodersPrivate = map[string]interfaces.CoderReadWriter[typeWithConfigLoadedPrivate]{
 	builtin_types.ImmutableConfigV1: blobV1CoderPrivate{},
 	"":                              blobV0CoderPrivate{},
 }

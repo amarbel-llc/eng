@@ -11,22 +11,22 @@ type format[
 	O any,
 	OPtr interfaces.Ptr[O],
 ] struct {
-	interfaces.DecoderFrom[OPtr]
+	interfaces.DecoderFromReader[OPtr]
 	interfaces.SavedBlobFormatter
-	interfaces.EncoderTo[OPtr]
+	interfaces.EncoderToWriter[OPtr]
 }
 
 func MakeBlobFormat[
 	O any,
 	OPtr interfaces.Ptr[O],
 ](
-	decoder interfaces.DecoderFrom[OPtr],
-	encoder interfaces.EncoderTo[OPtr],
+	decoder interfaces.DecoderFromReader[OPtr],
+	encoder interfaces.EncoderToWriter[OPtr],
 	blobReader interfaces.BlobReader,
 ) Format[O, OPtr] {
 	return format[O, OPtr]{
-		DecoderFrom:        decoder,
-		EncoderTo:          encoder,
+		DecoderFromReader:        decoder,
+		EncoderToWriter:          encoder,
 		SavedBlobFormatter: MakeSavedBlobFormatter(blobReader),
 	}
 }
@@ -35,10 +35,10 @@ func (af format[O, OPtr]) EncodeTo(
 	object OPtr,
 	writer io.Writer,
 ) (n int64, err error) {
-	if af.EncoderTo == nil {
+	if af.EncoderToWriter == nil {
 		err = errors.ErrorWithStackf("no ParsedBlobFormatter")
 	} else {
-		n, err = af.EncoderTo.EncodeTo(object, writer)
+		n, err = af.EncoderToWriter.EncodeTo(object, writer)
 	}
 
 	return

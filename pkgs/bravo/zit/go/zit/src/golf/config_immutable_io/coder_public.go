@@ -15,7 +15,7 @@ import (
 
 type typeWithConfigLoadedPublic = *triple_hyphen_io.TypedStruct[*ConfigLoadedPublic]
 
-var typedCoders = map[string]interfaces.Coder[typeWithConfigLoadedPublic]{
+var typedCoders = map[string]interfaces.CoderReadWriter[typeWithConfigLoadedPublic]{
 	builtin_types.ImmutableConfigV1: blobV1CoderPublic{},
 	"":                              blobV0CoderPublic{},
 }

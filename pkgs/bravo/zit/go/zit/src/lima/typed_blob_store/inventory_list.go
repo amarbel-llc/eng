@@ -25,7 +25,7 @@ type InventoryList struct {
 	v2           inventory_list_blobs.V2
 
 	objectCoders   triple_hyphen_io.CoderTypeMapWithoutType[*sku.Transacted]
-	streamDecoders map[string]interfaces.DecoderFrom[func(*sku.Transacted) bool]
+	streamDecoders map[string]interfaces.DecoderFromReader[func(*sku.Transacted) bool]
 }
 
 func MakeInventoryStore(
@@ -55,7 +55,7 @@ func MakeInventoryStore(
 	}
 
 	s.objectCoders = triple_hyphen_io.CoderTypeMapWithoutType[*sku.Transacted](
-		map[string]interfaces.Coder[*sku.Transacted]{
+		map[string]interfaces.CoderReadWriter[*sku.Transacted]{
 			"": inventory_list_blobs.V0ObjectCoder{
 				V0: s.v0,
 			},
@@ -66,7 +66,7 @@ func MakeInventoryStore(
 		},
 	)
 
-	s.streamDecoders = map[string]interfaces.DecoderFrom[func(*sku.Transacted) bool]{
+	s.streamDecoders = map[string]interfaces.DecoderFromReader[func(*sku.Transacted) bool]{
 		"": inventory_list_blobs.V0IterDecoder{
 			V0: s.v0,
 		},

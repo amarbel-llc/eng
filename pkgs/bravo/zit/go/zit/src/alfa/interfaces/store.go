@@ -9,7 +9,7 @@ type (
 
 	Format[T any] interface {
 		SavedBlobFormatter
-		Coder[T]
+		CoderReadWriter[T]
 	}
 
 	TypedBlobStore[T any] interface {

@@ -21,7 +21,7 @@ func (typedStruct *TypedStruct[S]) GetType() *ids.Type {
 	return typedStruct.Type
 }
 
-type CoderTypeMap[S any] map[string]interfaces.Coder[*TypedStruct[S]]
+type CoderTypeMap[S any] map[string]interfaces.CoderReadWriter[*TypedStruct[S]]
 
 func (c CoderTypeMap[S]) DecodeFrom(
 	subject *TypedStruct[S],
@@ -63,7 +63,7 @@ func (c CoderTypeMap[S]) EncodeTo(
 	return
 }
 
-type DecoderTypeMapWithoutType[S any] map[string]interfaces.DecoderFrom[S]
+type DecoderTypeMapWithoutType[S any] map[string]interfaces.DecoderFromReader[S]
 
 func (c DecoderTypeMapWithoutType[S]) DecodeFrom(
 	subject *TypedStruct[S],
@@ -85,7 +85,7 @@ func (c DecoderTypeMapWithoutType[S]) DecodeFrom(
 	return
 }
 
-type CoderTypeMapWithoutType[S any] map[string]interfaces.Coder[S]
+type CoderTypeMapWithoutType[S any] map[string]interfaces.CoderReadWriter[S]
 
 func (c CoderTypeMapWithoutType[S]) DecodeFrom(
 	subject *TypedStruct[S],

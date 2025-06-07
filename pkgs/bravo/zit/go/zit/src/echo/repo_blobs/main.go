@@ -26,14 +26,14 @@ type BlobMutable interface {
 
 type TypeWithBlob = triple_hyphen_io.TypedStruct[*Blob]
 
-var typedCoders = map[string]interfaces.Coder[*TypeWithBlob]{
+var typedCoders = map[string]interfaces.CoderReadWriter[*TypeWithBlob]{
 	builtin_types.RepoTypeLocalPath:   coderToml[TomlLocalPathV0]{},
 	builtin_types.RepoTypeXDGDotenvV0: coderToml[TomlXDGV0]{},
 	builtin_types.RepoTypeUri:         coderToml[TomlUriV0]{},
 	"":                                coderToml[TomlUriV0]{},
 }
 
-var Coder = interfaces.Coder[*TypeWithBlob](triple_hyphen_io.CoderTypeMap[*Blob](typedCoders))
+var Coder = interfaces.CoderReadWriter[*TypeWithBlob](triple_hyphen_io.CoderTypeMap[*Blob](typedCoders))
 
 type coderToml[T Blob] struct {
 	Blob T
