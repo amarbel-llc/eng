@@ -3,7 +3,6 @@ package triple_hyphen_io
 import (
 	"bufio"
 	"fmt"
-	"io"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
@@ -15,7 +14,7 @@ type TypedMetadataCoder[O any] struct{}
 
 func (TypedMetadataCoder[O]) DecodeFrom(
 	subject *TypedStruct[O],
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	bufferedReader := bufio.NewReader(reader)
 
@@ -39,7 +38,7 @@ func (TypedMetadataCoder[O]) DecodeFrom(
 
 func (TypedMetadataCoder[O]) EncodeTo(
 	subject *TypedStruct[O],
-	writer io.Writer,
+	writer *bufio.Writer,
 ) (n int64, err error) {
 	var n1 int
 	n1, err = fmt.Fprintf(writer, "! %s\n", subject.Type.StringSansOp())

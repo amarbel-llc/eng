@@ -1,6 +1,7 @@
 package config_immutable_io
 
 import (
+	"bufio"
 	"encoding/gob"
 	"io"
 
@@ -13,7 +14,7 @@ type blobV1CoderPublic struct{}
 
 func (blobV1CoderPublic) DecodeFrom(
 	subject typeWithConfigLoadedPublic,
-	r io.Reader,
+	r *bufio.Reader,
 ) (n int64, err error) {
 	subject.Struct.ImmutableConfig = &config_immutable.TomlV1Public{}
 	td := toml.NewDecoder(r)
@@ -32,7 +33,7 @@ func (blobV1CoderPublic) DecodeFrom(
 
 func (blobV1CoderPublic) EncodeTo(
 	subject typeWithConfigLoadedPublic,
-	w io.Writer,
+	w *bufio.Writer,
 ) (n int64, err error) {
 	te := toml.NewEncoder(w)
 
@@ -52,7 +53,7 @@ type blobV0CoderPublic struct{}
 
 func (blobV0CoderPublic) DecodeFrom(
 	subject typeWithConfigLoadedPublic,
-	r io.Reader,
+	r *bufio.Reader,
 ) (n int64, err error) {
 	subject.Struct.ImmutableConfig = &config_immutable.V0Public{}
 
@@ -72,7 +73,7 @@ func (blobV0CoderPublic) DecodeFrom(
 
 func (blobV0CoderPublic) EncodeTo(
 	subject typeWithConfigLoadedPublic,
-	w io.Writer,
+	w *bufio.Writer,
 ) (n int64, err error) {
 	dec := gob.NewEncoder(w)
 

@@ -12,7 +12,7 @@ import (
 
 type Coder[O any] struct {
 	RequireMetadata bool
-	Metadata, Blob  interfaces.CoderReadWriter[O]
+	Metadata, Blob  interfaces.CoderBufferedReadWriter[O]
 }
 
 func (mr *Coder[O]) DecodeFrom(object O, r io.Reader) (n int64, err error) {

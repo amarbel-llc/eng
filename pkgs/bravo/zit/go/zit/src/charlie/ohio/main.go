@@ -65,7 +65,7 @@ type pipedDecoderFrom struct {
 
 func MakePipedDecoder[O any](
 	object O,
-	decoder interfaces.DecoderFromReader[O],
+	decoder interfaces.DecoderFromBufferedReader[O],
 ) PipedReader {
 	var p pipedDecoderFrom
 

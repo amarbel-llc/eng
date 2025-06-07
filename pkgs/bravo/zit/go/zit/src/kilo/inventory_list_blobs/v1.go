@@ -65,7 +65,7 @@ func (format V1) WriteObjectToOpenList(
 
 func (format V1) writeObjectListItemToWriter(
 	object *sku.Transacted,
-	writer interfaces.WriterAndStringWriter,
+	writer *bufio.Writer,
 ) (n int64, err error) {
 	if object.Metadata.Sha().IsNull() {
 		err = errors.ErrorWithStackf("empty sha: %q", sku.String(object))
@@ -82,7 +82,7 @@ func (format V1) writeObjectListItemToWriter(
 
 func (s V1) WriteInventoryListBlob(
 	o sku.Collection,
-	w1 io.Writer,
+	w1 *bufio.Writer,
 ) (n int64, err error) {
 	bw := bufio.NewWriter(w1)
 	defer errors.DeferredFlusher(&err, bw)
@@ -104,7 +104,7 @@ func (s V1) WriteInventoryListBlob(
 
 func (s V1) WriteInventoryListObject(
 	o *sku.Transacted,
-	w1 io.Writer,
+	w1 *bufio.Writer,
 ) (n int64, err error) {
 	bw := bufio.NewWriter(w1)
 	defer errors.DeferredFlusher(&err, bw)
@@ -132,7 +132,7 @@ func (s V1) WriteInventoryListObject(
 }
 
 func (format V1) ReadInventoryListObject(
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, object *sku.Transacted, err error) {
 	object = sku.GetTransactedPool().Get()
 
@@ -150,7 +150,7 @@ type V1StreamCoder struct {
 
 func (coder V1StreamCoder) DecodeFrom(
 	output interfaces.FuncIter[*sku.Transacted],
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	bufferedReader := bufio.NewReader(reader)
 
@@ -182,7 +182,7 @@ func (coder V1StreamCoder) DecodeFrom(
 }
 
 func (s V1) AllInventoryListBlobSkus(
-	reader io.Reader,
+	reader *bufio.Reader,
 ) interfaces.SeqError[*sku.Transacted] {
 	return interfaces.MakeSeqErrorWithError[*sku.Transacted](errors.ErrNotImplemented)
 	// return func(yield func(*sku.Transacted, error) bool) {
@@ -217,7 +217,7 @@ func (s V1) AllInventoryListBlobSkus(
 }
 
 func (s V1) StreamInventoryListBlobSkus(
-	reader io.Reader,
+	reader *bufio.Reader,
 	output interfaces.FuncIter[*sku.Transacted],
 ) (err error) {
 	bufferedReader := bufio.NewReader(reader)
@@ -255,7 +255,7 @@ type V1ObjectCoder struct {
 
 func (coder V1ObjectCoder) EncodeTo(
 	object *sku.Transacted,
-	writer io.Writer,
+	writer *bufio.Writer,
 ) (n int64, err error) {
 	bufferedWriter := ohio.BufferedWriter(writer)
 	defer pool.FlushBufioWriterAndPut(&err, bufferedWriter)
@@ -284,7 +284,7 @@ func (coder V1ObjectCoder) EncodeTo(
 
 func (coder V1ObjectCoder) DecodeFrom(
 	object *sku.Transacted,
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	bufferedReader := ohio.BufferedReader(reader)
 	defer pool.GetBufioReader().Put(bufferedReader)
@@ -316,7 +316,7 @@ type V1IterDecoder struct {
 
 func (coder V1IterDecoder) DecodeFrom(
 	yield func(*sku.Transacted) bool,
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	bufferedReader := bufio.NewReader(reader)
 

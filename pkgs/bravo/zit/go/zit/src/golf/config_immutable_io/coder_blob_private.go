@@ -1,6 +1,7 @@
 package config_immutable_io
 
 import (
+	"bufio"
 	"encoding/gob"
 	"io"
 
@@ -13,7 +14,7 @@ type blobV1CoderPrivate struct{}
 
 func (blobV1CoderPrivate) DecodeFrom(
 	subject typeWithConfigLoadedPrivate,
-	r io.Reader,
+	r *bufio.Reader,
 ) (n int64, err error) {
 	subject.Struct.ImmutableConfig = &config_immutable.TomlV1Private{}
 	td := toml.NewDecoder(r)
@@ -32,7 +33,7 @@ func (blobV1CoderPrivate) DecodeFrom(
 
 func (blobV1CoderPrivate) EncodeTo(
 	subject typeWithConfigLoadedPrivate,
-	w io.Writer,
+	w *bufio.Writer,
 ) (n int64, err error) {
 	te := toml.NewEncoder(w)
 
@@ -52,7 +53,7 @@ type blobV0CoderPrivate struct{}
 
 func (blobV0CoderPrivate) DecodeFrom(
 	subject typeWithConfigLoadedPrivate,
-	r io.Reader,
+	r *bufio.Reader,
 ) (n int64, err error) {
 	subject.Struct.ImmutableConfig = &config_immutable.V0Private{}
 
@@ -72,7 +73,7 @@ func (blobV0CoderPrivate) DecodeFrom(
 
 func (blobV0CoderPrivate) EncodeTo(
 	subject typeWithConfigLoadedPrivate,
-	w io.Writer,
+	w *bufio.Writer,
 ) (n int64, err error) {
 	dec := gob.NewEncoder(w)
 

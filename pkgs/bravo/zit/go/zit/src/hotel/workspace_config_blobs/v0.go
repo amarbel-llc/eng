@@ -1,6 +1,7 @@
 package workspace_config_blobs
 
 import (
+	"bufio"
 	"io"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
@@ -33,7 +34,7 @@ type blobV0Coder struct{}
 
 func (blobV0Coder) DecodeFrom(
 	subject TypeWithBlob,
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	blob := Blob(&V0{})
 	subject.Struct = &blob
@@ -54,7 +55,7 @@ func (blobV0Coder) DecodeFrom(
 
 func (blobV0Coder) EncodeTo(
 	subject TypeWithBlob,
-	writer io.Writer,
+	writer *bufio.Writer,
 ) (n int64, err error) {
 	dec := toml.NewEncoder(writer)
 

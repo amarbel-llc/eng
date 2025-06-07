@@ -1,7 +1,7 @@
 package inventory_list_blobs
 
 import (
-	"io"
+	"bufio"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
@@ -9,7 +9,7 @@ import (
 
 func ReadInventoryListBlob(
 	listFormat sku.ListFormat,
-	reader io.Reader,
+	reader *bufio.Reader,
 	list *sku.List,
 ) (err error) {
 	if err = listFormat.StreamInventoryListBlobSkus(

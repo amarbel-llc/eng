@@ -1,7 +1,7 @@
 package triple_hyphen_io
 
 import (
-	"io"
+	"bufio"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
@@ -23,11 +23,11 @@ func (typedStruct *TypedStruct[S]) GetType() *ids.Type {
 	return typedStruct.Type
 }
 
-type CoderTypeMap[S any] map[string]interfaces.CoderReadWriter[*TypedStruct[S]]
+type CoderTypeMap[S any] map[string]interfaces.CoderBufferedReadWriter[*TypedStruct[S]]
 
 func (c CoderTypeMap[S]) DecodeFrom(
 	subject *TypedStruct[S],
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	t := subject.GetType()
 	coder, ok := c[t.String()]
@@ -47,7 +47,7 @@ func (c CoderTypeMap[S]) DecodeFrom(
 
 func (c CoderTypeMap[S]) EncodeTo(
 	subject *TypedStruct[S],
-	writer io.Writer,
+	writer *bufio.Writer,
 ) (n int64, err error) {
 	t := subject.GetType()
 	coder, ok := c[t.String()]
@@ -65,11 +65,11 @@ func (c CoderTypeMap[S]) EncodeTo(
 	return
 }
 
-type DecoderTypeMapWithoutType[S any] map[string]interfaces.DecoderFromReader[S]
+type DecoderTypeMapWithoutType[S any] map[string]interfaces.DecoderFromBufferedReader[S]
 
 func (c DecoderTypeMapWithoutType[S]) DecodeFrom(
 	subject *TypedStruct[S],
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	t := subject.GetType()
 	coder, ok := c[t.String()]
@@ -93,11 +93,11 @@ func (c DecoderTypeMapWithoutType[S]) DecodeFrom(
 	return
 }
 
-type CoderTypeMapWithoutType[S any] map[string]interfaces.CoderReadWriter[S]
+type CoderTypeMapWithoutType[S any] map[string]interfaces.CoderBufferedReadWriter[S]
 
 func (c CoderTypeMapWithoutType[S]) DecodeFrom(
 	subject *TypedStruct[S],
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	t := subject.GetType()
 	coder, ok := c[t.String()]
@@ -117,7 +117,7 @@ func (c CoderTypeMapWithoutType[S]) DecodeFrom(
 
 func (c CoderTypeMapWithoutType[S]) EncodeTo(
 	subject *TypedStruct[S],
-	writer io.Writer,
+	writer *bufio.Writer,
 ) (n int64, err error) {
 	t := subject.Type
 	coder, ok := c[t.String()]

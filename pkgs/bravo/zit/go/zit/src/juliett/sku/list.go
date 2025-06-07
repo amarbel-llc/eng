@@ -1,7 +1,7 @@
 package sku
 
 import (
-	"io"
+	"bufio"
 	"iter"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
@@ -41,14 +41,14 @@ type ListFormat interface {
 	GetType() ids.Type
 	GetListFormat() ListFormat
 	WriteObjectToOpenList(*Transacted, *OpenList) (int64, error)
-	WriteInventoryListBlob(Collection, io.Writer) (int64, error)
-	WriteInventoryListObject(*Transacted, io.Writer) (int64, error)
-	ReadInventoryListObject(io.Reader) (int64, *Transacted, error)
+	WriteInventoryListBlob(Collection, *bufio.Writer) (int64, error)
+	WriteInventoryListObject(*Transacted, *bufio.Writer) (int64, error)
+	ReadInventoryListObject(*bufio.Reader) (int64, *Transacted, error)
 	StreamInventoryListBlobSkus(
-		rf io.Reader,
+		rf *bufio.Reader,
 		f interfaces.FuncIter[*Transacted],
 	) error
-	AllInventoryListBlobSkus(io.Reader) interfaces.SeqError[*Transacted]
+	AllInventoryListBlobSkus(*bufio.Reader) interfaces.SeqError[*Transacted]
 }
 
 // TODO rename to ListTransacted

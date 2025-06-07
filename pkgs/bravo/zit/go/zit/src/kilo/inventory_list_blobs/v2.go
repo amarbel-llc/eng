@@ -3,7 +3,6 @@ package inventory_list_blobs
 import (
 	"bufio"
 	"fmt"
-	"io"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
@@ -106,7 +105,7 @@ func (format V2) writeObjectListItemToWriter(
 
 func (s V2) WriteInventoryListBlob(
 	skus sku.Collection,
-	writer io.Writer,
+	writer *bufio.Writer,
 ) (n int64, err error) {
 	bufferedWriter := bufio.NewWriter(writer)
 	defer errors.DeferredFlusher(&err, bufferedWriter)
@@ -130,7 +129,7 @@ func (s V2) WriteInventoryListBlob(
 
 func (s V2) WriteInventoryListObject(
 	o *sku.Transacted,
-	w1 io.Writer,
+	w1 *bufio.Writer,
 ) (n int64, err error) {
 	bw := bufio.NewWriter(w1)
 	defer errors.DeferredFlusher(&err, bw)
@@ -158,7 +157,7 @@ func (s V2) WriteInventoryListObject(
 }
 
 func (s V2) ReadInventoryListObject(
-	r1 io.Reader,
+	r1 *bufio.Reader,
 ) (n int64, o *sku.Transacted, err error) {
 	o = sku.GetTransactedPool().Get()
 
@@ -178,7 +177,7 @@ type V2StreamCoder struct {
 
 func (coder V2StreamCoder) DecodeFrom(
 	output interfaces.FuncIter[*sku.Transacted],
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	bufferedReader := bufio.NewReader(reader)
 
@@ -210,7 +209,7 @@ func (coder V2StreamCoder) DecodeFrom(
 }
 
 func (s V2) AllInventoryListBlobSkus(
-	reader io.Reader,
+	reader *bufio.Reader,
 ) interfaces.SeqError[*sku.Transacted] {
 	return interfaces.MakeSeqErrorWithError[*sku.Transacted](errors.ErrNotImplemented)
 	// return func(yield func(*sku.Transacted, error) bool) {
@@ -245,7 +244,7 @@ func (s V2) AllInventoryListBlobSkus(
 }
 
 func (s V2) StreamInventoryListBlobSkus(
-	reader io.Reader,
+	reader *bufio.Reader,
 	output interfaces.FuncIter[*sku.Transacted],
 ) (err error) {
 	bufferedReader := bufio.NewReader(reader)
@@ -283,7 +282,7 @@ type V2ObjectCoder struct {
 
 func (s V2ObjectCoder) EncodeTo(
 	o *sku.Transacted,
-	w1 io.Writer,
+	w1 *bufio.Writer,
 ) (n int64, err error) {
 	bw := bufio.NewWriter(w1)
 	defer errors.DeferredFlusher(&err, bw)
@@ -312,7 +311,7 @@ func (s V2ObjectCoder) EncodeTo(
 
 func (s V2ObjectCoder) DecodeFrom(
 	o *sku.Transacted,
-	r1 io.Reader,
+	r1 *bufio.Reader,
 ) (n int64, err error) {
 	r := bufio.NewReader(r1)
 
@@ -330,7 +329,7 @@ type V2IterDecoder struct {
 
 func (coder V2IterDecoder) DecodeFrom(
 	yield func(*sku.Transacted) bool,
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	bufferedReader := bufio.NewReader(reader)
 

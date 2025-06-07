@@ -1,7 +1,7 @@
 package inventory_list_blobs
 
 import (
-	"io"
+	"bufio"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
@@ -45,7 +45,7 @@ func (format V0) WriteObjectToOpenList(
 
 func (s V0) WriteInventoryListObject(
 	o *sku.Transacted,
-	w io.Writer,
+	w *bufio.Writer,
 ) (n int64, err error) {
 	if n, err = s.Format.FormatPersistentMetadata(
 		w,
@@ -61,7 +61,7 @@ func (s V0) WriteInventoryListObject(
 
 func (s V0) WriteInventoryListBlob(
 	o sku.Collection,
-	w io.Writer,
+	w *bufio.Writer,
 ) (n int64, err error) {
 	var n1 int64
 
@@ -90,7 +90,7 @@ func (s V0) WriteInventoryListBlob(
 }
 
 func (s V0) ReadInventoryListObject(
-	r io.Reader,
+	r *bufio.Reader,
 ) (n int64, o *sku.Transacted, err error) {
 	o = sku.GetTransactedPool().Get()
 
@@ -116,7 +116,7 @@ type V0StreamCoder struct {
 
 func (coder V0StreamCoder) DecodeFrom(
 	output interfaces.FuncIter[*sku.Transacted],
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	dec := makeScanner(
 		reader,
@@ -142,13 +142,13 @@ func (coder V0StreamCoder) DecodeFrom(
 }
 
 func (s V0) AllInventoryListBlobSkus(
-	reader io.Reader,
+	reader *bufio.Reader,
 ) interfaces.SeqError[*sku.Transacted] {
 	return interfaces.MakeSeqErrorWithError[*sku.Transacted](errors.ErrNotSupported)
 }
 
 func (s V0) StreamInventoryListBlobSkus(
-	r1 io.Reader,
+	r1 *bufio.Reader,
 	f interfaces.FuncIter[*sku.Transacted],
 ) (err error) {
 	dec := makeScanner(
@@ -180,7 +180,7 @@ type V0ObjectCoder struct {
 
 func (s V0ObjectCoder) EncodeTo(
 	o *sku.Transacted,
-	w io.Writer,
+	w *bufio.Writer,
 ) (n int64, err error) {
 	if n, err = s.Format.FormatPersistentMetadata(
 		w,
@@ -196,7 +196,7 @@ func (s V0ObjectCoder) EncodeTo(
 
 func (s V0ObjectCoder) DecodeFrom(
 	o *sku.Transacted,
-	r io.Reader,
+	r *bufio.Reader,
 ) (n int64, err error) {
 	if n, err = s.Format.ParsePersistentMetadata(
 		catgut.MakeRingBuffer(r, 0),
@@ -220,7 +220,7 @@ type V0IterDecoder struct {
 
 func (coder V0IterDecoder) DecodeFrom(
 	yield func(*sku.Transacted) bool,
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	dec := makeScanner(
 		reader,

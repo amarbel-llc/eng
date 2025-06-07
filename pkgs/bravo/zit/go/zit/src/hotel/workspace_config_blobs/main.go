@@ -24,7 +24,7 @@ type (
 
 type TypeWithBlob = *triple_hyphen_io.TypedStruct[*Blob]
 
-var typedCoders = map[string]interfaces.CoderReadWriter[TypeWithBlob]{
+var typedCoders = map[string]interfaces.CoderBufferedReadWriter[TypeWithBlob]{
 	TypeV0: blobV0Coder{},
 }
 

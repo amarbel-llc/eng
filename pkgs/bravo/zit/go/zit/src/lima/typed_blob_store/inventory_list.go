@@ -1,6 +1,7 @@
 package typed_blob_store
 
 import (
+	"bufio"
 	"io"
 	"iter"
 
@@ -27,7 +28,7 @@ type InventoryList struct {
 	v2           inventory_list_blobs.V2
 
 	objectCoders   triple_hyphen_io.CoderTypeMapWithoutType[*sku.Transacted]
-	streamDecoders map[string]interfaces.DecoderFromReader[func(*sku.Transacted) bool]
+	streamDecoders map[string]interfaces.DecoderFromBufferedReader[func(*sku.Transacted) bool]
 }
 
 func MakeInventoryStore(
@@ -57,7 +58,7 @@ func MakeInventoryStore(
 	}
 
 	s.objectCoders = triple_hyphen_io.CoderTypeMapWithoutType[*sku.Transacted](
-		map[string]interfaces.CoderReadWriter[*sku.Transacted]{
+		map[string]interfaces.CoderBufferedReadWriter[*sku.Transacted]{
 			"": inventory_list_blobs.V0ObjectCoder{
 				V0: s.v0,
 			},
@@ -68,7 +69,7 @@ func MakeInventoryStore(
 		},
 	)
 
-	s.streamDecoders = map[string]interfaces.DecoderFromReader[func(*sku.Transacted) bool]{
+	s.streamDecoders = map[string]interfaces.DecoderFromBufferedReader[func(*sku.Transacted) bool]{
 		"": inventory_list_blobs.V0IterDecoder{
 			V0: s.v0,
 		},
@@ -126,7 +127,7 @@ func (a InventoryList) GetTransactedWithBlob(
 
 func (a InventoryList) GetTransactedWithBlobFromReader(
 	twb *sku.TransactedWithBlob[*sku.List],
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (n int64, err error) {
 	tipe := twb.GetType()
 	twb.Blob = sku.MakeList()
@@ -169,7 +170,7 @@ func (a InventoryList) GetTransactedWithBlobFromReader(
 func (a InventoryList) WriteObjectToWriter(
 	tipe ids.Type,
 	sk *sku.Transacted,
-	w io.Writer,
+	w *bufio.Writer,
 ) (n int64, err error) {
 	return a.objectCoders.EncodeTo(
 		&triple_hyphen_io.TypedStruct[*sku.Transacted]{
@@ -183,7 +184,7 @@ func (a InventoryList) WriteObjectToWriter(
 func (store InventoryList) WriteBlobToWriter(
 	tipe ids.Type,
 	list sku.Collection,
-	writer io.Writer,
+	writer *bufio.Writer,
 ) (n int64, err error) {
 	switch tipe.String() {
 	case "", builtin_types.InventoryListTypeV0:
@@ -367,7 +368,7 @@ func (a InventoryList) IterInventoryListBlobSkusFromReader(
 
 func (a InventoryList) ReadInventoryListObject(
 	tipe ids.Type,
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (out *sku.Transacted, err error) {
 	switch tipe.String() {
 	case "", builtin_types.InventoryListTypeV0:
@@ -420,7 +421,7 @@ func (a InventoryList) ReadInventoryListObject(
 
 func (a InventoryList) ReadInventoryListBlob(
 	tipe ids.Type,
-	reader io.Reader,
+	reader *bufio.Reader,
 ) (list *sku.List, err error) {
 	list = sku.MakeList()
 
