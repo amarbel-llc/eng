@@ -63,29 +63,14 @@ func (format V1) WriteObjectToOpenList(
 	return
 }
 
-func (format V1) writeObjectListItemToWriter(
-	object *sku.Transacted,
-	writer *bufio.Writer,
+func (format V1) WriteInventoryListBlob(
+	skus sku.Collection,
+	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
-	if n, err = format.EncodeTo(object, writer); err != nil {
-		err = errors.Wrap(err)
-		return
-	}
-
-	return
-}
-
-func (s V1) WriteInventoryListBlob(
-	o sku.Collection,
-	w1 *bufio.Writer,
-) (n int64, err error) {
-	bw := bufio.NewWriter(w1)
-	defer errors.DeferredFlusher(&err, bw)
-
 	var n1 int64
 
-	for sk := range o.All() {
-		n1, err = s.EncodeTo(sk, bw)
+	for sk := range skus.All() {
+		n1, err = format.EncodeTo(sk, bufferedWriter)
 		n += n1
 
 		if err != nil {
@@ -98,16 +83,13 @@ func (s V1) WriteInventoryListBlob(
 }
 
 func (s V1) WriteInventoryListObject(
-	o *sku.Transacted,
-	w1 *bufio.Writer,
+	object *sku.Transacted,
+	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
-	bw := bufio.NewWriter(w1)
-	defer errors.DeferredFlusher(&err, bw)
-
 	var n1 int64
 	var n2 int
 
-	n1, err = s.Box.EncodeStringTo(o, bw)
+	n1, err = s.Box.EncodeStringTo(object, bufferedWriter)
 	n += n1
 
 	if err != nil {
@@ -115,7 +97,7 @@ func (s V1) WriteInventoryListObject(
 		return
 	}
 
-	n2, err = fmt.Fprintf(bw, "\n")
+	n2, err = fmt.Fprintf(bufferedWriter, "\n")
 	n += int64(n2)
 
 	if err != nil {
@@ -145,14 +127,13 @@ type V1StreamCoder struct {
 
 func (coder V1StreamCoder) DecodeFrom(
 	output interfaces.FuncIter[*sku.Transacted],
-	reader *bufio.Reader,
+	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
-	bufferedReader := bufio.NewReader(reader)
-
 	for {
-		o := sku.GetTransactedPool().Get()
+		// TODO pool
+		object := sku.GetTransactedPool().Get()
 
-		if _, err = coder.Box.ReadStringFormat(o, bufferedReader); err != nil {
+		if _, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 			if errors.IsEOF(err) {
 				err = nil
 				break
@@ -162,13 +143,13 @@ func (coder V1StreamCoder) DecodeFrom(
 			}
 		}
 
-		if err = o.CalculateObjectShas(); err != nil {
+		if err = object.CalculateObjectShas(); err != nil {
 			err = errors.Wrap(err)
 			return
 		}
 
-		if err = output(o); err != nil {
-			err = errors.Wrapf(err, "Object: %s", sku.String(o))
+		if err = output(object); err != nil {
+			err = errors.Wrapf(err, "Object: %s", sku.String(object))
 			return
 		}
 	}
@@ -179,7 +160,9 @@ func (coder V1StreamCoder) DecodeFrom(
 func (s V1) AllInventoryListBlobSkus(
 	reader *bufio.Reader,
 ) interfaces.SeqError[*sku.Transacted] {
-	return interfaces.MakeSeqErrorWithError[*sku.Transacted](errors.ErrNotImplemented)
+	return interfaces.MakeSeqErrorWithError[*sku.Transacted](
+		errors.ErrNotImplemented,
+	)
 	// return func(yield func(*sku.Transacted, error) bool) {
 	// 	bufferedReader := bufio.NewReader(reader)
 
@@ -211,16 +194,17 @@ func (s V1) AllInventoryListBlobSkus(
 	// }
 }
 
-func (s V1) StreamInventoryListBlobSkus(
-	reader *bufio.Reader,
+func (format V1) StreamInventoryListBlobSkus(
+	bufferedReader *bufio.Reader,
 	output interfaces.FuncIter[*sku.Transacted],
 ) (err error) {
-	bufferedReader := bufio.NewReader(reader)
-
 	for {
 		object := sku.GetTransactedPool().Get()
 
-		if _, err = s.Box.ReadStringFormat(object, bufferedReader); err != nil {
+		if _, err = format.Box.ReadStringFormat(
+			object,
+			bufferedReader,
+		); err != nil {
 			if errors.IsEOF(err) {
 				err = nil
 				break
@@ -284,11 +268,8 @@ func (coder V1ObjectCoder) EncodeTo(
 
 func (coder V1ObjectCoder) DecodeFrom(
 	object *sku.Transacted,
-	reader *bufio.Reader,
+	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
-	bufferedReader := ohio.BufferedReader(reader)
-	defer pool.GetBufioReader().Put(bufferedReader)
-
 	if n, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 		if err == io.EOF {
 			err = nil
@@ -316,10 +297,8 @@ type V1IterDecoder struct {
 
 func (coder V1IterDecoder) DecodeFrom(
 	yield func(*sku.Transacted) bool,
-	reader *bufio.Reader,
+	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
-	bufferedReader := bufio.NewReader(reader)
-
 	for {
 		object := sku.GetTransactedPool().Get()
 
