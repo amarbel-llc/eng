@@ -130,8 +130,8 @@ func (coder V1StreamCoder) DecodeFrom(
 	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
 	for {
-		// TODO pool
 		object := sku.GetTransactedPool().Get()
+		defer sku.GetTransactedPool().Put(object)
 
 		if _, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 			if errors.IsEOF(err) {
