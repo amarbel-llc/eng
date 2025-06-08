@@ -44,7 +44,7 @@ func (format V1) WriteObjectToOpenList(
 	bufferedWriter := ohio.BufferedWriter(list.Mover)
 	defer pool.GetBufioWriter().Put(bufferedWriter)
 
-	if n, err = format.writeObjectListItemToWriter(
+	if n, err = format.EncodeTo(
 		object,
 		bufferedWriter,
 	); err != nil {
@@ -67,11 +67,6 @@ func (format V1) writeObjectListItemToWriter(
 	object *sku.Transacted,
 	writer *bufio.Writer,
 ) (n int64, err error) {
-	if object.Metadata.Sha().IsNull() {
-		err = errors.ErrorWithStackf("empty sha: %q", sku.String(object))
-		return
-	}
-
 	if n, err = format.EncodeTo(object, writer); err != nil {
 		err = errors.Wrap(err)
 		return
@@ -90,7 +85,7 @@ func (s V1) WriteInventoryListBlob(
 	var n1 int64
 
 	for sk := range o.All() {
-		n1, err = s.writeObjectListItemToWriter(sk, bw)
+		n1, err = s.EncodeTo(sk, bw)
 		n += n1
 
 		if err != nil {
@@ -257,6 +252,11 @@ func (coder V1ObjectCoder) EncodeTo(
 	object *sku.Transacted,
 	writer *bufio.Writer,
 ) (n int64, err error) {
+	if object.Metadata.Sha().IsNull() {
+		err = errors.ErrorWithStackf("empty sha: %q", sku.String(object))
+		return
+	}
+
 	bufferedWriter := ohio.BufferedWriter(writer)
 	defer pool.FlushBufioWriterAndPut(&err, bufferedWriter)
 
