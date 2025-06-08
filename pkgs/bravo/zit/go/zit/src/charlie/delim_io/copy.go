@@ -17,27 +17,28 @@ import (
 // shows `remote: <line>` for all remote stderr output.
 // TODO extract into an io.Writer-like object
 func CopyWithPrefixOnDelim(
-	delim byte,
+	delimiter byte,
 	prefix string,
-	dst ui.Printer,
-	src io.Reader,
-	includeLineNo bool,
+	destination ui.Printer,
+	source io.Reader,
+	includeLineNumbers bool,
 ) (n int64, err error) {
-	br := pool.GetBufioReader().Get()
-	defer pool.GetBufioReader().Put(br)
-	br.Reset(src)
+	bufferedReader := pool.GetBufioReader().Get()
+	defer pool.GetBufioReader().Put(bufferedReader)
+
+	bufferedReader.Reset(source)
 
 	var (
-		eof    bool
-		lineNo int
+		isEOF    bool
+		lineNumber int
 	)
 
-	var sb strings.Builder
+	var stringBuilder strings.Builder
 
-	for !eof {
+	for !isEOF {
 		var rawLine string
 
-		rawLine, err = br.ReadString(delim)
+		rawLine, err = bufferedReader.ReadString(delimiter)
 		n1 := len(rawLine)
 		n += int64(n1)
 
@@ -47,7 +48,7 @@ func CopyWithPrefixOnDelim(
 		}
 
 		if errors.IsEOF(err) {
-			eof = true
+			isEOF = true
 			err = nil
 
 			if n1 == 0 {
@@ -55,22 +56,24 @@ func CopyWithPrefixOnDelim(
 			}
 		}
 
-		sb.WriteString(prefix)
-		fmt.Fprint(&sb, ":")
+		stringBuilder.WriteString(prefix)
+		fmt.Fprint(&stringBuilder, ":")
 
-		if includeLineNo {
-			fmt.Fprintf(&sb, "%d:", lineNo)
+		if includeLineNumbers {
+			fmt.Fprintf(&stringBuilder, "%d:", lineNumber)
 		}
 
-		fmt.Fprint(&sb, " ")
+		fmt.Fprint(&stringBuilder, " ")
 		// fmt.Fprint(bw, "\t")
 
-		sb.WriteString(strings.TrimSuffix(rawLine, string([]byte{delim})))
+		stringBuilder.WriteString(
+			strings.TrimSuffix(rawLine, string([]byte{delimiter})),
+		)
 
-		dst.Print(sb.String())
-		sb.Reset()
+		destination.Print(stringBuilder.String())
+		stringBuilder.Reset()
 
-		lineNo++
+		lineNumber++
 	}
 
 	return

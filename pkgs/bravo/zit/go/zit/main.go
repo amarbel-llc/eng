@@ -29,7 +29,10 @@ func main() {
 			var signal errors.Signal
 
 			if errors.As(err, &signal) {
-				ui.Err().Print(err)
+				if signal.Signal != syscall.SIGHUP {
+					ui.Err().Print("aborting due to signal: %s", signal.Signal)
+				}
+
 				break
 			}
 

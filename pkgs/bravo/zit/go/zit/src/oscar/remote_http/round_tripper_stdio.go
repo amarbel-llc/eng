@@ -90,7 +90,11 @@ func (roundTripper *RoundTripperStdio) initialize(
 		return
 	}
 
-	go func() {
+	remotePrinterDone := make(chan struct{})
+
+	go func() (err error) {
+		defer close(remotePrinterDone)
+
 		if _, err = delim_io.CopyWithPrefixOnDelim(
 			'\n',
 			"remote",
@@ -101,6 +105,8 @@ func (roundTripper *RoundTripperStdio) initialize(
 			err = errors.Wrap(err)
 			return
 		}
+
+		return
 	}()
 
 	if roundTripper.WriteCloser, err = roundTripper.StdinPipe(); err != nil {
@@ -122,12 +128,22 @@ func (roundTripper *RoundTripperStdio) initialize(
 		return
 	}
 
-	envUI.After(roundTripper.cancel)
+	envUI.After(roundTripper.makeCancel(remotePrinterDone))
 
 	return
 }
 
-func (roundTripper *RoundTripperStdio) cancel() (err error) {
+func (roundTripper *RoundTripperStdio) makeCancel(
+	readsDone <-chan struct{},
+) errors.Func {
+	return func() error {
+		return roundTripper.cancel(readsDone)
+	}
+}
+
+func (roundTripper *RoundTripperStdio) cancel(
+	readsDone <-chan struct{},
+) (err error) {
 	if roundTripper.Process != nil {
 		if err = roundTripper.WriteCloser.Close(); err != nil {
 			err = errors.Wrap(err)
@@ -139,6 +155,8 @@ func (roundTripper *RoundTripperStdio) cancel() (err error) {
 			return
 		}
 	}
+
+	<-readsDone
 
 	if err = roundTripper.Wait(); err != nil {
 		if errors.Is(err, os.ErrProcessDone) {

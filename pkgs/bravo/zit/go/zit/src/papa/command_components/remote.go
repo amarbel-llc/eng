@@ -296,7 +296,7 @@ func (cmd *Remote) MakeRemoteStdioLocal(
 		}
 	}
 
-	httpRoundTripper.Dir = dir
+	httpRoundTripper.Cmd.Dir = dir
 
 	if err := httpRoundTripper.InitializeWithLocal(
 		envRepo,
