@@ -234,15 +234,12 @@ type V1ObjectCoder struct {
 
 func (coder V1ObjectCoder) EncodeTo(
 	object *sku.Transacted,
-	writer *bufio.Writer,
+	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
 	if object.Metadata.Sha().IsNull() {
 		err = errors.ErrorWithStackf("empty sha: %q", sku.String(object))
 		return
 	}
-
-	bufferedWriter := ohio.BufferedWriter(writer)
-	defer pool.FlushBufioWriterAndPut(&err, bufferedWriter)
 
 	var n1 int64
 	var n2 int
