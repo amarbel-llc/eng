@@ -42,6 +42,8 @@ func (f *BoxTransacted) ReadStringFormat(
 		return
 	}
 
+	// TODO extract into dedicated parser and make incompatible with
+	// BoxTransactedWithSignature
 	if err = o.Metadata.Description.ReadFromBoxScanner(&ts); err != nil {
 		err = errors.Wrap(err)
 		return

@@ -325,6 +325,33 @@ func (coder V2ObjectCoder) DecodeFrom(
 	// 	err = errors.Wrap(err)
 	// 	return
 	// }
+	// sh := sha.Make(shaWriter.GetShaLike())
+
+	// if object.Signature, err = bufferedReader.ReadString('\n'); err != nil {
+	// 	err = errors.Wrap(err)
+	// 	return
+	// }
+
+	// object.Signature = strings.TrimPrefix(
+	// 	strings.TrimSuffix(object.Signature, "\n"),
+	// 	":",
+	// )
+
+	// ui.Debug().Print(sh, object.Signature)
+
+	// if len(object.Signature) == 0 {
+	// 	err = errors.Errorf("signature missing for %s", sku.String(object))
+	// 	return
+	// }
+
+	// if err = repo_signing.VerifyBase64Signature(
+	// 	coder.ImmutableConfigPrivate.GetPublicKey(),
+	// 	sh.GetShaBytes(),
+	// 	object.Signature,
+	// ); err != nil {
+	// 	err = errors.Wrap(err)
+	// 	return
+	// }
 
 	if err = object.CalculateObjectShas(); err != nil {
 		err = errors.Wrap(err)
