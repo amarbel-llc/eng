@@ -200,6 +200,8 @@ func (format V1) StreamInventoryListBlobSkus(
 ) (err error) {
 	for {
 		object := sku.GetTransactedPool().Get()
+		// TODO Fix upstream issues with repooling
+		// defer sku.GetTransactedPool().Put(object)
 
 		if _, err = format.Box.ReadStringFormat(
 			object,
@@ -298,6 +300,8 @@ func (coder V1IterDecoder) DecodeFrom(
 ) (n int64, err error) {
 	for {
 		object := sku.GetTransactedPool().Get()
+		// TODO Fix upstream issues with repooling
+		// defer sku.GetTransactedPool().Put(object)
 
 		if _, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 			if errors.IsEOF(err) {
