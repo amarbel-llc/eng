@@ -52,8 +52,10 @@ func MakeInventoryStore(
 			},
 		},
 		v2: inventory_list_blobs.V2{
-			Box:                    boxFormat,
-			ImmutableConfigPrivate: dirLayout.GetConfigPrivate().ImmutableConfig,
+			V2ObjectCoder: inventory_list_blobs.V2ObjectCoder{
+				Box:                    boxFormat,
+				ImmutableConfigPrivate: dirLayout.GetConfigPrivate().ImmutableConfig,
+			},
 		},
 	}
 
@@ -63,9 +65,7 @@ func MakeInventoryStore(
 				V0: s.v0,
 			},
 			builtin_types.InventoryListTypeV1: s.v1.V1ObjectCoder,
-			builtin_types.InventoryListTypeV2: inventory_list_blobs.V2ObjectCoder{
-				V2: s.v2,
-			},
+			builtin_types.InventoryListTypeV2: s.v2.V2ObjectCoder,
 		},
 	)
 

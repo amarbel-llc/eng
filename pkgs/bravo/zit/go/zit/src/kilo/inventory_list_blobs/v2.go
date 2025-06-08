@@ -3,9 +3,12 @@ package inventory_list_blobs
 import (
 	"bufio"
 	"fmt"
+	"io"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
@@ -16,8 +19,7 @@ import (
 )
 
 type V2 struct {
-	Box                    *box_format.BoxTransacted
-	ImmutableConfigPrivate config_immutable.ConfigPrivate
+	V2ObjectCoder
 }
 
 func (v V2) GetListFormat() sku.ListFormat {
@@ -42,10 +44,18 @@ func (format V2) WriteObjectToOpenList(
 		return
 	}
 
-	if n, err = format.writeObjectListItemToWriter(
+	bufferedWriter := ohio.BufferedWriter(list.Mover)
+	defer pool.GetBufioWriter().Put(bufferedWriter)
+
+	if n, err = format.EncodeTo(
 		object,
-		list.Mover,
+		bufferedWriter,
 	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	if err = bufferedWriter.Flush(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -56,66 +66,14 @@ func (format V2) WriteObjectToOpenList(
 	return
 }
 
-func (format V2) writeObjectListItemToWriter(
-	object *sku.Transacted,
-	writer interfaces.ShaWriter,
-) (n int64, err error) {
-	if object.Metadata.Sha().IsNull() {
-		err = errors.ErrorWithStackf("empty sha: %q", sku.String(object))
-		return
-	}
-
-	var n1 int64
-
-	shaWriter := sha.MakeWriter(writer)
-
-	n1, err = format.Box.EncodeStringTo(object, shaWriter)
-	n += n1
-
-	if err != nil {
-		err = errors.Wrap(err)
-		return
-	}
-
-	sh := sha.Make(shaWriter.GetShaLike())
-	defer sha.GetPool().Put(sh)
-
-	key := format.ImmutableConfigPrivate.GetPrivateKey()
-
-	var sig string
-
-	if sig, err = repo_signing.SignBase64(key, sh.GetShaBytes()); err != nil {
-		err = errors.Wrap(err)
-		return
-	}
-
-	object.Signature = sig
-
-	var n2 int
-	n2, err = fmt.Fprintf(writer, ":%s\n", sig)
-	n += int64(n2)
-
-	if err != nil {
-		err = errors.Wrap(err)
-		return
-	}
-
-	return
-}
-
-func (s V2) WriteInventoryListBlob(
+func (format V2) WriteInventoryListBlob(
 	skus sku.Collection,
-	writer *bufio.Writer,
+	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
-	bufferedWriter := bufio.NewWriter(writer)
-	defer errors.DeferredFlusher(&err, bufferedWriter)
-
-	shaWriter := sha.MakeWriter(bufferedWriter)
-
 	var n1 int64
 
 	for sk := range skus.All() {
-		n1, err = s.writeObjectListItemToWriter(sk, shaWriter)
+		n1, err = format.EncodeTo(sk, bufferedWriter)
 		n += n1
 
 		if err != nil {
@@ -128,16 +86,13 @@ func (s V2) WriteInventoryListBlob(
 }
 
 func (s V2) WriteInventoryListObject(
-	o *sku.Transacted,
-	w1 *bufio.Writer,
+	object *sku.Transacted,
+	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
-	bw := bufio.NewWriter(w1)
-	defer errors.DeferredFlusher(&err, bw)
-
 	var n1 int64
 	var n2 int
 
-	n1, err = s.Box.EncodeStringTo(o, bw)
+	n1, err = s.Box.EncodeStringTo(object, bufferedWriter)
 	n += n1
 
 	if err != nil {
@@ -145,7 +100,7 @@ func (s V2) WriteInventoryListObject(
 		return
 	}
 
-	n2, err = fmt.Fprintf(bw, "\n")
+	n2, err = fmt.Fprintf(bufferedWriter, "\n")
 	n += int64(n2)
 
 	if err != nil {
@@ -156,14 +111,12 @@ func (s V2) WriteInventoryListObject(
 	return
 }
 
-func (s V2) ReadInventoryListObject(
-	r1 *bufio.Reader,
-) (n int64, o *sku.Transacted, err error) {
-	o = sku.GetTransactedPool().Get()
+func (format V2) ReadInventoryListObject(
+	reader *bufio.Reader,
+) (n int64, object *sku.Transacted, err error) {
+	object = sku.GetTransactedPool().Get()
 
-	r := bufio.NewReader(r1)
-
-	if n, err = s.Box.ReadStringFormat(o, r); err != nil {
+	if n, err = format.DecodeFrom(object, reader); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -177,14 +130,13 @@ type V2StreamCoder struct {
 
 func (coder V2StreamCoder) DecodeFrom(
 	output interfaces.FuncIter[*sku.Transacted],
-	reader *bufio.Reader,
+	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
-	bufferedReader := bufio.NewReader(reader)
-
 	for {
-		o := sku.GetTransactedPool().Get()
+		object := sku.GetTransactedPool().Get()
+		defer sku.GetTransactedPool().Put(object)
 
-		if _, err = coder.Box.ReadStringFormat(o, bufferedReader); err != nil {
+		if _, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 			if errors.IsEOF(err) {
 				err = nil
 				break
@@ -194,13 +146,13 @@ func (coder V2StreamCoder) DecodeFrom(
 			}
 		}
 
-		if err = o.CalculateObjectShas(); err != nil {
+		if err = object.CalculateObjectShas(); err != nil {
 			err = errors.Wrap(err)
 			return
 		}
 
-		if err = output(o); err != nil {
-			err = errors.Wrapf(err, "Object: %s", sku.String(o))
+		if err = output(object); err != nil {
+			err = errors.Wrapf(err, "Object: %s", sku.String(object))
 			return
 		}
 	}
@@ -211,7 +163,9 @@ func (coder V2StreamCoder) DecodeFrom(
 func (s V2) AllInventoryListBlobSkus(
 	reader *bufio.Reader,
 ) interfaces.SeqError[*sku.Transacted] {
-	return interfaces.MakeSeqErrorWithError[*sku.Transacted](errors.ErrNotImplemented)
+	return interfaces.MakeSeqErrorWithError[*sku.Transacted](
+		errors.ErrNotImplemented,
+	)
 	// return func(yield func(*sku.Transacted, error) bool) {
 	// 	bufferedReader := bufio.NewReader(reader)
 
@@ -243,16 +197,19 @@ func (s V2) AllInventoryListBlobSkus(
 	// }
 }
 
-func (s V2) StreamInventoryListBlobSkus(
-	reader *bufio.Reader,
+func (format V2) StreamInventoryListBlobSkus(
+	bufferedReader *bufio.Reader,
 	output interfaces.FuncIter[*sku.Transacted],
 ) (err error) {
-	bufferedReader := bufio.NewReader(reader)
-
 	for {
 		object := sku.GetTransactedPool().Get()
+		// TODO Fix upstream issues with repooling
+		// defer sku.GetTransactedPool().Put(object)
 
-		if _, err = s.Box.ReadStringFormat(object, bufferedReader); err != nil {
+		if _, err = format.Box.ReadStringFormat(
+			object,
+			bufferedReader,
+		); err != nil {
 			if errors.IsEOF(err) {
 				err = nil
 				break
@@ -277,20 +234,25 @@ func (s V2) StreamInventoryListBlobSkus(
 }
 
 type V2ObjectCoder struct {
-	V2
+	Box                    *box_format.BoxTransacted
+	ImmutableConfigPrivate config_immutable.ConfigPrivate
 }
 
-func (s V2ObjectCoder) EncodeTo(
-	o *sku.Transacted,
-	w1 *bufio.Writer,
+func (coder V2ObjectCoder) EncodeTo(
+	object *sku.Transacted,
+	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
-	bw := bufio.NewWriter(w1)
-	defer errors.DeferredFlusher(&err, bw)
+	if object.Metadata.Sha().IsNull() {
+		err = errors.ErrorWithStackf("empty sha: %q", sku.String(object))
+		return
+	}
+
+	shaWriter := sha.MakeWriter(bufferedWriter)
 
 	var n1 int64
 	var n2 int
 
-	n1, err = s.Box.EncodeStringTo(o, bw)
+	n1, err = coder.Box.EncodeStringTo(object, shaWriter)
 	n += n1
 
 	if err != nil {
@@ -298,7 +260,32 @@ func (s V2ObjectCoder) EncodeTo(
 		return
 	}
 
-	n2, err = fmt.Fprintf(bw, "\n")
+	// write signature box
+	{
+		sh := sha.Make(shaWriter.GetShaLike())
+		defer sha.GetPool().Put(sh)
+
+		key := coder.ImmutableConfigPrivate.GetPrivateKey()
+
+		var sig string
+
+		if sig, err = repo_signing.SignBase64(key, sh.GetShaBytes()); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+
+		object.Signature = sig
+
+		n2, err = fmt.Fprintf(bufferedWriter, ":%s\n", sig)
+		n += int64(n2)
+
+		if err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+	}
+
+	n2, err = fmt.Fprintf(bufferedWriter, "\n")
 	n += int64(n2)
 
 	if err != nil {
@@ -309,13 +296,37 @@ func (s V2ObjectCoder) EncodeTo(
 	return
 }
 
-func (s V2ObjectCoder) DecodeFrom(
-	o *sku.Transacted,
-	r1 *bufio.Reader,
+func (coder V2ObjectCoder) DecodeFrom(
+	object *sku.Transacted,
+	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
-	r := bufio.NewReader(r1)
+	shaWriter := sha.MakeWriter(nil)
+	teeReader := ohio.TeeRuneScanner(bufferedReader, shaWriter)
 
-	if n, err = s.Box.ReadStringFormat(o, r); err != nil {
+	if n, err = coder.Box.ReadStringFormat(object, teeReader); err != nil {
+		if err == io.EOF {
+			err = nil
+
+			if n == 0 {
+				return
+			}
+		} else {
+			err = errors.Wrap(err)
+			return
+		}
+	}
+
+	// TODO read signature box
+	// if err = repo_signing.VerifyBase64Signature(
+	// 	roundTripper.PublicKey,
+	// 	nonceBytes,
+	// 	response.Header.Get(headerChallengeResponse),
+	// ); err != nil {
+	// 	err = errors.Wrap(err)
+	// 	return
+	// }
+
+	if err = object.CalculateObjectShas(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -329,12 +340,12 @@ type V2IterDecoder struct {
 
 func (coder V2IterDecoder) DecodeFrom(
 	yield func(*sku.Transacted) bool,
-	reader *bufio.Reader,
+	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
-	bufferedReader := bufio.NewReader(reader)
-
 	for {
 		object := sku.GetTransactedPool().Get()
+		// TODO Fix upstream issues with repooling
+		// defer sku.GetTransactedPool().Put(object)
 
 		if _, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 			if errors.IsEOF(err) {
