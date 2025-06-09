@@ -48,7 +48,6 @@ type ListFormat interface {
 		rf *bufio.Reader,
 		f interfaces.FuncIter[*Transacted],
 	) error
-	AllInventoryListBlobSkus(*bufio.Reader) interfaces.SeqError[*Transacted]
 }
 
 // TODO rename to ListTransacted

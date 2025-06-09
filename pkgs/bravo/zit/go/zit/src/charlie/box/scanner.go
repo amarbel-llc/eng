@@ -24,6 +24,12 @@ type Scanner struct {
 	lastRune rune
 }
 
+func MakeScanner(runeScanner io.RuneScanner) *Scanner {
+	var scanner Scanner
+	scanner.Reset(runeScanner)
+	return &scanner
+}
+
 func (ts *Scanner) Reset(r io.RuneScanner) {
 	ts.RuneScanner = r
 	ts.scanned.Reset()

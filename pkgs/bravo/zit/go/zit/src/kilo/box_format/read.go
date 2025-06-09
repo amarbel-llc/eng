@@ -13,14 +13,13 @@ import (
 )
 
 // TODO make this error for invalid input
-func (f *BoxTransacted) ReadStringFormat(
-	el *sku.Transacted,
-	rs io.RuneScanner,
+func (format *BoxTransacted) ReadStringFormat(
+	object *sku.Transacted,
+	runeScanner io.RuneScanner,
 ) (n int64, err error) {
-	var ts box.Scanner
-	ts.Reset(rs)
+	scanner := box.MakeScanner(runeScanner)
 
-	if err = f.readStringFormatBox(&ts, el); err != nil {
+	if err = format.readStringFormatBox(scanner, object); err != nil {
 		if err == ErrNotABox {
 			err = nil
 		} else {
@@ -29,32 +28,32 @@ func (f *BoxTransacted) ReadStringFormat(
 		}
 	}
 
-	if ts.Error() != nil {
-		err = errors.Wrap(ts.Error())
+	if scanner.Error() != nil {
+		err = errors.Wrap(scanner.Error())
 		return
 	}
 
-	n = ts.N()
+	n = scanner.N()
 
-	o := el.GetSku()
-
-	if f.optionsPrint.DescriptionInBox {
+	if format.optionsPrint.DescriptionInBox {
 		return
 	}
 
 	// TODO extract into dedicated parser and make incompatible with
 	// BoxTransactedWithSignature
-	if err = o.Metadata.Description.ReadFromBoxScanner(&ts); err != nil {
+	if err = object.Metadata.Description.ReadFromBoxScanner(scanner); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	n = ts.N()
+	n = scanner.N()
 
 	return
 }
 
-func (f *BoxTransacted) openBox(scanner *box.Scanner) (err error) {
+func (format *BoxTransacted) openBox(
+	scanner *box.Scanner,
+) (err error) {
 	if !scanner.ScanSkipSpace() {
 		if scanner.Error() != nil {
 			err = errors.Wrap(scanner.Error())
@@ -88,13 +87,11 @@ func (f *BoxTransacted) openBox(scanner *box.Scanner) (err error) {
 }
 
 // TODO switch to returning ErrBoxParse
-func (f *BoxTransacted) readStringFormatBox(
+func (format *BoxTransacted) readStringFormatBox(
 	scanner *box.Scanner,
-	el sku.ExternalLike,
+	object *sku.Transacted,
 ) (err error) {
-	o := el.GetSku()
-
-	if err = f.openBox(scanner); err != nil {
+	if err = format.openBox(scanner); err != nil {
 		err = errors.WrapExcept(err, io.EOF, ErrNotABox)
 		return
 	}
@@ -112,19 +109,19 @@ func (f *BoxTransacted) readStringFormatBox(
 
 		seq := scanner.GetSeq()
 
-		if err = o.ObjectId.ReadFromSeq(seq); err != nil {
+		if err = object.ObjectId.ReadFromSeq(seq); err != nil {
 			err = nil
-			o.ObjectId.Reset()
+			object.ObjectId.Reset()
 
 			if seq.MatchAll(box.TokenTypeLiteral) {
-				if err = o.ExternalObjectId.Set(seq.String()); err != nil {
+				if err = object.ExternalObjectId.Set(seq.String()); err != nil {
 					err = errors.Wrap(err)
 					return
 				}
 			} else if ok, left, _, _ := seq.PartitionFavoringLeft(
 				box.TokenMatcherOp(box.OpPathSeparator),
 			); ok && left.Len() == 0 {
-				if err = o.ExternalObjectId.Set(seq.String()); err != nil {
+				if err = object.ExternalObjectId.Set(seq.String()); err != nil {
 					err = errors.Wrap(err)
 					return
 				}
@@ -138,14 +135,14 @@ func (f *BoxTransacted) readStringFormatBox(
 				if err = g.Set(right.At(1).String()); err != nil {
 					err = nil
 				} else {
-					if err = o.ObjectId.SetWithGenre(left.String(), g); err != nil {
-						o.ObjectId.Reset()
+					if err = object.ObjectId.SetWithGenre(left.String(), g); err != nil {
+						object.ObjectId.Reset()
 						err = errors.Wrap(err)
 						return
 					}
 				}
 
-				if err = o.ExternalObjectId.Set(seq.String()); err != nil {
+				if err = object.ExternalObjectId.Set(seq.String()); err != nil {
 					err = errors.Wrap(err)
 					return
 				}
@@ -156,8 +153,8 @@ func (f *BoxTransacted) readStringFormatBox(
 			}
 		}
 
-		if o.ObjectId.GetGenre() == genres.InventoryList {
-			if err = o.Metadata.Tai.Set(o.ObjectId.String()); err != nil {
+		if object.ObjectId.GetGenre() == genres.InventoryList {
+			if err = object.Metadata.Tai.Set(object.ObjectId.String()); err != nil {
 				err = errors.Wrap(err)
 				return
 			}
@@ -185,7 +182,7 @@ LOOP_AFTER_OID:
 
 			// "value"
 		case seq.MatchAll(box.TokenTypeLiteral):
-			if err = o.Metadata.Description.Set(
+			if err = object.Metadata.Description.Set(
 				seq.String(),
 			); err != nil {
 				err = errors.Wrap(err)
@@ -196,7 +193,7 @@ LOOP_AFTER_OID:
 
 			// @abcd
 		case seq.MatchAll(box.TokenMatcherOp('@'), box.TokenTypeIdentifier):
-			if err = o.Metadata.Blob.Set(
+			if err = object.Metadata.Blob.Set(
 				string(seq.At(1).Contents),
 			); err != nil {
 				err = errors.Wrap(err)
@@ -209,7 +206,7 @@ LOOP_AFTER_OID:
 		case seq.MatchAll(
 			box.TokenTypeLiteral,
 		):
-			if err = o.Metadata.Description.Set(seq.String()); err != nil {
+			if err = object.Metadata.Description.Set(seq.String()); err != nil {
 				err = errors.Wrap(err)
 				return
 			}
@@ -234,7 +231,7 @@ LOOP_AFTER_OID:
 			}
 
 			field.ColorType = string_format_writer.ColorTypeUserData
-			o.Metadata.Fields = append(o.Metadata.Fields, field)
+			object.Metadata.Fields = append(object.Metadata.Fields, field)
 			continue
 		}
 
@@ -249,13 +246,13 @@ LOOP_AFTER_OID:
 		switch g {
 		case genres.InventoryList:
 			// TODO make more performant
-			if err = o.Metadata.Tai.Set(k.String()); err != nil {
+			if err = object.Metadata.Tai.Set(k.String()); err != nil {
 				err = errors.Wrap(err)
 				return
 			}
 
 		case genres.Type:
-			if err = o.Metadata.Type.TodoSetFromObjectId(&k); err != nil {
+			if err = object.Metadata.Type.TodoSetFromObjectId(&k); err != nil {
 				err = errors.Wrap(err)
 				return
 			}
@@ -268,7 +265,7 @@ LOOP_AFTER_OID:
 				return
 			}
 
-			if err = o.AddTagPtr(&e); err != nil {
+			if err = object.AddTagPtr(&e); err != nil {
 				err = errors.Wrap(err)
 				return
 			}

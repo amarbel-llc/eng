@@ -152,43 +152,6 @@ func (coder V1StreamCoder) DecodeFrom(
 	return
 }
 
-func (s V1) AllInventoryListBlobSkus(
-	reader *bufio.Reader,
-) interfaces.SeqError[*sku.Transacted] {
-	return interfaces.MakeSeqErrorWithError[*sku.Transacted](
-		errors.ErrNotImplemented,
-	)
-	// return func(yield func(*sku.Transacted, error) bool) {
-	// 	bufferedReader := bufio.NewReader(reader)
-
-	// 	for {
-	// 		object := sku.GetTransactedPool().Get()
-
-	// 		if _, err = s.Box.ReadStringFormat(object, bufferedReader); err != nil {
-	// 			if errors.IsEOF(err) {
-	// 				err = nil
-	// 				break
-	// 			} else {
-	// 				err = errors.Wrap(err)
-	// 				return
-	// 			}
-	// 		}
-
-	// 		if err = object.CalculateObjectShas(); err != nil {
-	// 			err = errors.Wrap(err)
-	// 			return
-	// 		}
-
-	// 		if err = output(object); err != nil {
-	// 			err = errors.Wrapf(err, "Object: %s", sku.String(object))
-	// 			return
-	// 		}
-	// 	}
-
-	// 	return
-	// }
-}
-
 func (format V1) StreamInventoryListBlobSkus(
 	bufferedReader *bufio.Reader,
 	output interfaces.FuncIter[*sku.Transacted],
