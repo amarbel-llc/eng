@@ -30,6 +30,41 @@ def roundto(expr x, places) =
   (round(x * (10**places))) / (10**places)
 enddef;
 
+def get_canvas = 
+  begingroup
+    save ll, ur, canvas_width, canvas_height;
+
+    pair ll, ur;
+    numeric canvas_width, canvas_height;
+
+    picture current_picture_copy;
+    current_picture_copy := currentpicture;
+
+    ll := llcorner current_picture_copy;
+    ur := urcorner current_picture_copy;
+
+    canvas_width := xpart(ur - ll);
+    canvas_height := ypart(ur - ll);
+
+    make_rect(xpart(ll)/u, ypart(ll)/u, canvas_width/u, canvas_height/u)
+  endgroup
+enddef;
+
+def fillbackground(expr c) = 
+  begingroup
+    save current_picture_copy, canvas;
+
+    picture current_picture_copy;
+    current_picture_copy := currentpicture;
+
+    path canvas;
+    canvas := get_canvas;
+
+    fill canvas withcolor background;
+    addto currentpicture also current_picture_copy;
+  endgroup;
+enddef;
+
 def label_dim(expr dimX, dimY)(text loc) = 
   save c;
   color c;
@@ -65,7 +100,7 @@ def label_height(expr x, y, height, arrowLength, lineWidth) =
 enddef;
 
 def make_rect(expr x, y, width, height) =
-  make_quad(x, y, (width, 0), (0, height), (-width, 0));
+  make_quad(x, y, (width, 0), (0, height), (-width, 0))
 enddef;
 
 def make_quad(expr x, y, a, b, c) =
@@ -77,6 +112,17 @@ def make_quad(expr x, y, a, b, c) =
 
     o -- o+a*u -- o+a*u+b*u -- o+a*u+b*u+c*u -- cycle
   endgroup
+enddef;
+
+def clipoutside(expr p) =
+  begingroup
+    save boundary;
+    path boundary;
+
+    boundary := make_rect(0, 0, 100, 100);
+
+    clip boundary -- reverse p -- cycle;
+  endgroup;
 enddef;
 
 def draw_tile(expr x, y, width, height, color) =
@@ -209,10 +255,9 @@ enddef;
 
 def draw_subway_with_grout(expr xA, yA, h_tile_count, v_tile_count, evenFirst) =
   begingroup
-    save x, y;
+    save x, y, isEven, stepSize;
     x = 0;
     y = 0;
-    path bg;
 
     stepSize := subway_height + grout;
     boolean isEven;
@@ -238,7 +283,7 @@ def draw_subway_with_grout(expr xA, yA, h_tile_count, v_tile_count, evenFirst) =
 enddef;
 
 def draw_wall(expr wall_width, wall_height) = 
-  save x, y, wall, main_mosaic_tiles_h_count, main_mosaic_tiles_v_count, width, height;
+  save x, y, wall, main_mosaic_tiles_h_count, main_mosaic_tiles_v_count;
 
   x = 0;
   y = 0;
@@ -271,8 +316,8 @@ def draw_wall(expr wall_width, wall_height) =
   main_mosaic_tiles_h_count := main_mosaic_tiles_h_count + 1;
 
   % main subway mosaic
-  width = grout + main_mosaic_tiles_h_count * (grout + subway_width);
-  height = grout + main_mosaic_tiles_v_count * (grout + subway_height);
+  width := grout + main_mosaic_tiles_h_count * (grout + subway_width);
+  height := grout + main_mosaic_tiles_v_count * (grout + subway_height);
 
   x := (wall_width - width) / 2;
   main_mosaic_x := x;
@@ -281,6 +326,7 @@ def draw_wall(expr wall_width, wall_height) =
   main_mosaic_y := y;
 
   main_mosaic = make_rect(x, y, width, height);
+
 
   % main subway
   draw_subway_with_grout(
@@ -568,10 +614,11 @@ def draw_wall(expr wall_width, wall_height) =
       currentpicture := old_p;
     endgroup;
 
+    side := subway_width + grout + subway_narrow_half_height + grout + trim_width + grout + subway_height;
+
     % trim overlaps
     begingroup
-      save side, cutoutWidth;
-      side = subway_width + grout + subway_narrow_half_height + grout + trim_width + grout + subway_height;
+      save cutoutWidth;
       cutoutWidth = trim_width + grout*2;
 
       % trim overlap bottom left
@@ -734,100 +781,134 @@ def draw_wall(expr wall_width, wall_height) =
         );
       endgroup;
 
-      pair ll, ur;
-      numeric canvas_width, canvas_height;
-
       % background
-      begingroup
-        save current_picture_copy, canvas;
+      fillbackground(background);
 
-        picture current_picture_copy;
-        current_picture_copy = currentpicture;
-
-        ll := llcorner current_picture_copy;
-        ur := urcorner current_picture_copy;
-
-        canvas_width := xpart(ur - ll);
-        canvas_height := ypart(ur - ll);
-
-        path canvas;
-        canvas = make_rect(xpart(ll)/u, ypart(ll)/u, canvas_width/u, canvas_height/u);
-
-        fill canvas withcolor background;
-        addto currentpicture also current_picture_copy;
-      endgroup;
-
-      % dimensions 1
-      begingroup
-        save w, h, leftmost;
-        w = wall_width;
-        h = wall_height / 2;
-        leftmost = main_mosaic_x - frame_depth_with_teeth;
-
-        show leftmost;
-
-        % total wall
-        label_width(0, h-1subway_height, w, u/2, 3pt);
-        label_height(wall_width / 2 + 1subway_width, 0, wall_height, u/2, 3pt);
-
-        % subway wall
-        label_width(main_mosaic_x, h+subway_height, width, u/2, 3pt);
-        label_height(wall_width / 2 + 2subway_width, main_mosaic_y, height, u/2, 3pt);
-
-        % subway tile and frame cutoff
-        label_width(leftmost, h+subway_height*1, subway_width, u/2, 3pt);
-        label_width(0, h+subway_height*2, subway_width+leftmost, u/2, 3pt);
-      endgroup;
-
-      % dimensions 2
-      begingroup
-        label_dim(
-          subway_height, subway_height, 
-          (x + subway_height / 2, y + subway_height * 1.5)*u
-        );
-
-        label_dim(
-          subway_height - trim_width, subway_height - trim_width,
-          (x + (subway_height - trim_width) / 2, y + (subway_height - trim_width) / 2)*u
-        );
-      endgroup
-
-      % % alignment guides
-      % begingroup
-      %   save p;
-      %   path p;
-
-      %   pickup pencircle scaled 3pt;
-
-      %   % guides
-      %   p := (x + grout, y - side)*u -- (x + grout, y + height + side)*u;
-      %   draw p withcolor red dashed evenly scaled 4;
-
-      %   p := (x + width, y - side)*u -- (x + width, y + height + side)*u;
-      %   draw p withcolor red dashed evenly scaled 4;
-      % endgroup;
     endgroup;
-  endgroup;
-
-  % excess
-  begingroup
-    save excess;
-    path excess;
-    draw wall withcolor red dashed evenly scaled 4;
-    % clip currentpicture to wall;
   endgroup;
 enddef;
 
+def draw_dimensions = 
+  % dimensions 1
+  begingroup
+    save w, h, leftmost;
+    w = wall_width;
+    h = wall_height / 2;
+    leftmost = main_mosaic_x - frame_depth_with_teeth;
+
+    % total wall
+    label_width(0, h-1subway_height, w, u/2, 3pt);
+    label_height(wall_width / 2 + 1subway_width, 0, wall_height, u/2, 3pt);
+
+    % subway wall
+    label_width(main_mosaic_x, h+subway_height, width, u/2, 3pt);
+    label_height(wall_width / 2 + 2subway_width, main_mosaic_y, height, u/2, 3pt);
+
+    % subway tile and frame cutoff
+    label_width(0, h+subway_height*2, subway_width+leftmost, u/2, 3pt);
+  endgroup;
+
+  % dimensions 2
+  begingroup
+    label_dim(
+      subway_height, subway_height, 
+      (x + subway_height / 2, y + subway_height * 1.5)*u
+    );
+
+    label_dim(
+      subway_height - trim_width, subway_height - trim_width,
+      (x + (subway_height - trim_width) / 2, y + (subway_height - trim_width) / 2)*u
+    );
+  endgroup;
+
+  % alignment guides
+  begingroup
+    save p;
+    path p;
+
+    pickup pencircle scaled 3pt;
+
+    % guides
+    p := (x + grout, 0)*u -- (x + grout, y + height)*u;
+    draw p withcolor red dashed evenly scaled 4;
+
+    p := (x + width, 0)*u -- (x + width, y + height)*u;
+    draw p withcolor red dashed evenly scaled 4;
+  endgroup;
+enddef;
+
+tile_surface_height = 97;
+
 beginfig(0)
-  draw_wall(58, 97);
+  draw_wall(58, tile_surface_height);
 endfig;
 
 beginfig(1)
-  draw_wall(28, 97);
+  draw_wall(28, tile_surface_height);
 endfig;
 
 beginfig(2)
-  draw_wall(50, 97);
+  draw_wall(50, tile_surface_height);
+endfig;
+
+beginfig(3)
+  numeric wall_width, vanity_depth;
+  wall_width := 58;
+  vanity_depth = 24.75;
+
+  numeric door_height, door_width;
+  door_height = tile_surface_height - (14+5/8); 
+  door_width = wall_width - vanity_depth;
+
+  draw_wall(wall_width, tile_surface_height);
+
+  % picture vanity_picture;
+  % vanity_picture = currentpicture;
+  % currentpicture := nullpicture;
+
+  % draw_wall(door_width, tile_surface_height);
+
+  % picture door_picture;
+  % door_picture = currentpicture;
+  % currentpicture := nullpicture;
+
+  % addto currentpicture also vanity_picture;
+  % addto currentpicture also door_picture shifted (vanity_depth*u, 0);
+
+  path vanity_wall;
+  vanity_wall = make_rect(0, 0, vanity_depth, tile_surface_height);
+
+  % clip currentpicture to vanity_wall;
+
+  path wall;
+  wall = make_rect(0, 0, wall_width, tile_surface_height);
+
+  % % background
+  % fill wall withcolor background;
+
+  % % draw_wall(59.25, tile_surface_height);
+  main_mosaic_tiles_h_count := calc_tiles(wall_width, subway_width);
+  main_mosaic_tiles_v_count := calc_tiles(tile_surface_height, subway_height);
+
+  % % main subway
+  % draw_subway_with_grout(
+  %   0, 0,
+  %   main_mosaic_tiles_h_count, main_mosaic_tiles_v_count,
+  %   true
+  % );
+
+  path door;
+  door = make_rect(24.75, 0, door_width, door_height);
+
+  path wall_with_hole;
+  wall_with_hole = wall -- reverse door -- cycle;
+
+  clip currentpicture to wall_with_hole;
+  % draw_dimensions;
+  fill door withcolor blue;
+  draw_dimensions;
+
+  % draw (0, frame_depth_with_teeth)*u -- (wall_width, frame_depth_with_teeth)*u withcolor red dashed evenly scaled 4;
 endfig;
 
 end;
