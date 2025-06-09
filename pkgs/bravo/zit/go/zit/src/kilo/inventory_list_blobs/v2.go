@@ -374,7 +374,10 @@ func (coder V2IterDecoder) DecodeFrom(
 		// TODO Fix upstream issues with repooling
 		// defer sku.GetTransactedPool().Put(object)
 
-		if _, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
+		if _, err = coder.Box.ReadStringFormat(
+			object,
+			bufferedReader,
+		); err != nil {
 			if errors.IsEOF(err) {
 				err = nil
 				break

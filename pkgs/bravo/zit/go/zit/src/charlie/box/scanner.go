@@ -10,7 +10,7 @@ import (
 )
 
 type Scanner struct {
-	io.RuneScanner
+	RuneScanner io.RuneScanner
 
 	tokenTypeProbably TokenType
 
@@ -56,11 +56,10 @@ func (ts *Scanner) ReadRune() (r rune, n int, err error) {
 	return ts.lastRune, n, err
 }
 
-// TODO add support for unscan
+// TODO remove unread entirely
 func (ts *Scanner) UnreadRune() (err error) {
 	if ts.unscan != nil {
-		err = ts.unscan.UnreadRune()
-		if err != nil {
+		if err = ts.unscan.UnreadRune(); err != nil {
 			err = errors.Wrap(err)
 			return
 		}
