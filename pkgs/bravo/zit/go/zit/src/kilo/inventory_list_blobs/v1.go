@@ -198,7 +198,7 @@ func (format V1) StreamInventoryListBlobSkus(
 		// TODO Fix upstream issues with repooling
 		// defer sku.GetTransactedPool().Put(object)
 
-		if _, err = format.Box.ReadStringFormat(
+		if _, err = format.V1ObjectCoder.DecodeFrom(
 			object,
 			bufferedReader,
 		); err != nil {
@@ -209,11 +209,6 @@ func (format V1) StreamInventoryListBlobSkus(
 				err = errors.Wrap(err)
 				return
 			}
-		}
-
-		if err = object.CalculateObjectShas(); err != nil {
-			err = errors.Wrap(err)
-			return
 		}
 
 		if err = output(object); err != nil {
