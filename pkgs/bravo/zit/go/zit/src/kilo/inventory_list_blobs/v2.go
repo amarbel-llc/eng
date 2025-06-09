@@ -4,10 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"strings"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
@@ -136,7 +138,7 @@ func (coder V2StreamCoder) DecodeFrom(
 		object := sku.GetTransactedPool().Get()
 		defer sku.GetTransactedPool().Put(object)
 
-		if _, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
+		if _, err = coder.V2ObjectCoder.DecodeFrom(object, bufferedReader); err != nil {
 			if errors.IsEOF(err) {
 				err = nil
 				break
@@ -144,11 +146,6 @@ func (coder V2StreamCoder) DecodeFrom(
 				err = errors.Wrap(err)
 				return
 			}
-		}
-
-		if err = object.CalculateObjectShas(); err != nil {
-			err = errors.Wrap(err)
-			return
 		}
 
 		if err = output(object); err != nil {
@@ -160,43 +157,6 @@ func (coder V2StreamCoder) DecodeFrom(
 	return
 }
 
-func (s V2) AllInventoryListBlobSkus(
-	reader *bufio.Reader,
-) interfaces.SeqError[*sku.Transacted] {
-	return interfaces.MakeSeqErrorWithError[*sku.Transacted](
-		errors.ErrNotImplemented,
-	)
-	// return func(yield func(*sku.Transacted, error) bool) {
-	// 	bufferedReader := bufio.NewReader(reader)
-
-	// 	for {
-	// 		object := sku.GetTransactedPool().Get()
-
-	// 		if _, err = s.Box.ReadStringFormat(object, bufferedReader); err != nil {
-	// 			if errors.IsEOF(err) {
-	// 				err = nil
-	// 				break
-	// 			} else {
-	// 				err = errors.Wrap(err)
-	// 				return
-	// 			}
-	// 		}
-
-	// 		if err = object.CalculateObjectShas(); err != nil {
-	// 			err = errors.Wrap(err)
-	// 			return
-	// 		}
-
-	// 		if err = output(object); err != nil {
-	// 			err = errors.Wrapf(err, "Object: %s", sku.String(object))
-	// 			return
-	// 		}
-	// 	}
-
-	// 	return
-	// }
-}
-
 func (format V2) StreamInventoryListBlobSkus(
 	bufferedReader *bufio.Reader,
 	output interfaces.FuncIter[*sku.Transacted],
@@ -206,7 +166,7 @@ func (format V2) StreamInventoryListBlobSkus(
 		// TODO Fix upstream issues with repooling
 		// defer sku.GetTransactedPool().Put(object)
 
-		if _, err = format.Box.ReadStringFormat(
+		if _, err = format.V2ObjectCoder.DecodeFrom(
 			object,
 			bufferedReader,
 		); err != nil {
@@ -217,11 +177,6 @@ func (format V2) StreamInventoryListBlobSkus(
 				err = errors.Wrap(err)
 				return
 			}
-		}
-
-		if err = object.CalculateObjectShas(); err != nil {
-			err = errors.Wrap(err)
-			return
 		}
 
 		if err = output(object); err != nil {
@@ -247,12 +202,10 @@ func (coder V2ObjectCoder) EncodeTo(
 		return
 	}
 
-	shaWriter := sha.MakeWriter(bufferedWriter)
-
 	var n1 int64
 	var n2 int
 
-	n1, err = coder.Box.EncodeStringTo(object, shaWriter)
+	n1, err = coder.Box.EncodeStringTo(object, bufferedWriter)
 	n += n1
 
 	if err != nil {
@@ -262,7 +215,7 @@ func (coder V2ObjectCoder) EncodeTo(
 
 	// write signature box
 	{
-		sh := sha.Make(shaWriter.GetShaLike())
+		sh := sha.Make(object.GetTai().GetShaLike())
 		defer sha.GetPool().Put(sh)
 
 		key := coder.ImmutableConfigPrivate.GetPrivateKey()
@@ -300,12 +253,11 @@ func (coder V2ObjectCoder) DecodeFrom(
 	object *sku.Transacted,
 	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
-	shaWriter := sha.MakeWriter(nil)
-	teeReader := ohio.TeeRuneScanner(bufferedReader, shaWriter)
+	var isEOF bool
 
-	if n, err = coder.Box.ReadStringFormat(object, teeReader); err != nil {
+	if n, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 		if err == io.EOF {
-			err = nil
+			isEOF = true
 
 			if n == 0 {
 				return
@@ -316,46 +268,42 @@ func (coder V2ObjectCoder) DecodeFrom(
 		}
 	}
 
-	// TODO read signature box
-	// if err = repo_signing.VerifyBase64Signature(
-	// 	roundTripper.PublicKey,
-	// 	nonceBytes,
-	// 	response.Header.Get(headerChallengeResponse),
-	// ); err != nil {
-	// 	err = errors.Wrap(err)
-	// 	return
-	// }
-	// sh := sha.Make(shaWriter.GetShaLike())
+	sh := sha.Make(object.GetTai().GetShaLike())
+	defer sha.GetPool().Put(sh)
 
-	// if object.Signature, err = bufferedReader.ReadString('\n'); err != nil {
-	// 	err = errors.Wrap(err)
-	// 	return
-	// }
+	if object.Signature, err = bufferedReader.ReadString('\n'); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
 
-	// object.Signature = strings.TrimPrefix(
-	// 	strings.TrimSuffix(object.Signature, "\n"),
-	// 	":",
-	// )
+	object.Signature = strings.TrimPrefix(
+		strings.TrimSuffix(object.Signature, "\n"),
+		":",
+	)
 
-	// ui.Debug().Print(sh, object.Signature)
+	ui.Debug().Print(sh, object.Signature)
 
-	// if len(object.Signature) == 0 {
-	// 	err = errors.Errorf("signature missing for %s", sku.String(object))
-	// 	return
-	// }
+	if len(object.Signature) == 0 {
+		err = errors.Errorf("signature missing for %s", sku.String(object))
+		return
+	}
 
-	// if err = repo_signing.VerifyBase64Signature(
-	// 	coder.ImmutableConfigPrivate.GetPublicKey(),
-	// 	sh.GetShaBytes(),
-	// 	object.Signature,
-	// ); err != nil {
-	// 	err = errors.Wrap(err)
-	// 	return
-	// }
+	if err = repo_signing.VerifyBase64Signature(
+		coder.ImmutableConfigPrivate.GetPublicKey(),
+		sh.GetShaBytes(),
+		object.Signature,
+	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
 
 	if err = object.CalculateObjectShas(); err != nil {
 		err = errors.Wrap(err)
 		return
+	}
+
+	if isEOF {
+		err = io.EOF
 	}
 
 	return
@@ -374,10 +322,7 @@ func (coder V2IterDecoder) DecodeFrom(
 		// TODO Fix upstream issues with repooling
 		// defer sku.GetTransactedPool().Put(object)
 
-		if _, err = coder.Box.ReadStringFormat(
-			object,
-			bufferedReader,
-		); err != nil {
+		if _, err = coder.V2ObjectCoder.DecodeFrom(object, bufferedReader); err != nil {
 			if errors.IsEOF(err) {
 				err = nil
 				break
@@ -385,11 +330,6 @@ func (coder V2IterDecoder) DecodeFrom(
 				err = errors.Wrap(err)
 				return
 			}
-		}
-
-		if err = object.CalculateObjectShas(); err != nil {
-			err = errors.Wrap(err)
-			return
 		}
 
 		if !yield(object) {

@@ -18,6 +18,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/charlie/delim_io"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
+	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
 	"code.linenisgreat.com/zit/go/zit/src/delta/thyme"
 	chai "github.com/brandondube/tai"
@@ -197,16 +198,9 @@ func (t *Tai) Set(v string) (err error) {
 	}
 }
 
-// func (t Tai) Sha() sha.Sha {
-// 	hash := sha256.New()
-// 	sr := strings.NewReader(t.String())
-
-// 	if _, err := io.Copy(hash, sr); err != nil {
-// 		errors.PanicIfError(err)
-// 	}
-
-// 	return sha.FromHash(hash)
-// }
+func (t Tai) GetShaLike() interfaces.Sha {
+	return sha.FromStringContent(t.String())
+}
 
 func (t Tai) IsZero() (ok bool) {
 	ok = (t.Sec == 0 && t.Asec == 0) || !t.wasSet
