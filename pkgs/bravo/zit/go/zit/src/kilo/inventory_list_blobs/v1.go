@@ -264,9 +264,11 @@ func (coder V1ObjectCoder) DecodeFrom(
 	object *sku.Transacted,
 	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
+	var isEOF bool
+
 	if n, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
 		if err == io.EOF {
-			err = nil
+			isEOF = true
 
 			if n == 0 {
 				return
@@ -280,6 +282,10 @@ func (coder V1ObjectCoder) DecodeFrom(
 	if err = object.CalculateObjectShas(); err != nil {
 		err = errors.Wrap(err)
 		return
+	}
+
+	if isEOF {
+		err = io.EOF
 	}
 
 	return
@@ -298,7 +304,7 @@ func (coder V1IterDecoder) DecodeFrom(
 		// TODO Fix upstream issues with repooling
 		// defer sku.GetTransactedPool().Put(object)
 
-		if _, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
+		if _, err = coder.V1ObjectCoder.DecodeFrom(object, bufferedReader); err != nil {
 			if errors.IsEOF(err) {
 				err = nil
 				break
@@ -306,11 +312,6 @@ func (coder V1IterDecoder) DecodeFrom(
 				err = errors.Wrap(err)
 				return
 			}
-		}
-
-		if err = object.CalculateObjectShas(); err != nil {
-			err = errors.Wrap(err)
-			return
 		}
 
 		if !yield(object) {
