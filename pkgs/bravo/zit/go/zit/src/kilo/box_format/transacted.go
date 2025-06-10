@@ -27,7 +27,7 @@ func MakeBoxTransactedArchive(
 	co := env.FormatColorOptionsOut()
 	co.OffEntirely = true
 
-	return MakeBoxTransacted(
+	format := MakeBoxTransacted(
 		co,
 		po,
 		env.StringFormatWriterFields(
@@ -39,6 +39,10 @@ func MakeBoxTransactedArchive(
 		nil,
 		nil,
 	)
+
+	format.isArchive = true
+
+	return format
 }
 
 func MakeBoxTransacted(
@@ -71,6 +75,8 @@ type BoxTransacted struct {
 	abbr             ids.Abbr
 	fsItemReadWriter sku.FSItemReadWriter
 	relativePath     env_dir.RelativePath
+
+	isArchive bool
 }
 
 func (format *BoxTransacted) EncodeStringTo(
@@ -222,13 +228,13 @@ func (f *BoxTransacted) addFieldsObjectIds(
 	return
 }
 
-func (f *BoxTransacted) addFieldsMetadata(
+func (format *BoxTransacted) addFieldsMetadata(
 	options options_print.V0,
-	sk *sku.Transacted,
+	object *sku.Transacted,
 	includeDescriptionInBox bool,
 	box *string_format_writer.Box,
 ) (err error) {
-	m := sk.GetMetadata()
+	m := object.GetMetadata()
 
 	if options.PrintShas &&
 		(options.PrintEmptyShas || !m.Blob.IsNull()) {
@@ -236,7 +242,7 @@ func (f *BoxTransacted) addFieldsMetadata(
 
 		if shaString, err = object_metadata_fmt.MetadataShaString(
 			m,
-			f.abbr.Sha.Abbreviate,
+			format.abbr.Sha.Abbreviate,
 		); err != nil {
 			err = errors.Wrap(err)
 			return
@@ -248,7 +254,7 @@ func (f *BoxTransacted) addFieldsMetadata(
 		)
 	}
 
-	if options.PrintTai && sk.GetGenre() != genres.InventoryList {
+	if options.PrintTai && object.GetGenre() != genres.InventoryList {
 		box.Contents = append(
 			box.Contents,
 			object_metadata_fmt.MetadataFieldTai(m),

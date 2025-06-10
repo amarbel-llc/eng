@@ -17,6 +17,8 @@ var binaryFieldOrder = []keys.Binary{
 	keys.Sigil,
 	keys.ObjectId,
 	keys.Blob,
+	keys.RepoPubKey,
+	keys.RepoSig,
 	keys.Description,
 	keys.Tag,
 	keys.Tai,

@@ -22,7 +22,6 @@ type Transacted struct {
 
 	// TODO add support for querying the below
 	RepoId           ids.RepoId
-	Signature        string
 	State            external_state.State
 	ExternalObjectId ids.ExternalObjectId
 }

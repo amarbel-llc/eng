@@ -3,14 +3,12 @@ package env_box
 import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
 	"code.linenisgreat.com/zit/go/zit/src/hotel/object_inventory_format"
 	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
 	"code.linenisgreat.com/zit/go/zit/src/kilo/box_format"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/inventory_list_blobs"
 	"code.linenisgreat.com/zit/go/zit/src/lima/store_fs"
 )
 
@@ -45,11 +43,18 @@ func Make(
 	storeFS *store_fs.Store,
 	abbr sku.AbbrStore,
 ) Env {
-	return &env{
+	env := &env{
 		Env:     envRepo,
 		storeFS: storeFS,
 		abbr:    abbr,
 	}
+
+	env.box = box_format.MakeBoxTransactedArchive(
+		env,
+		options_print.V0{}.WithPrintTai(true),
+	)
+
+	return env
 }
 
 type env struct {
@@ -58,27 +63,8 @@ type env struct {
 	abbr          sku.AbbrStore
 	object_format object_inventory_format.Format
 	options       object_inventory_format.Options
-}
 
-func (s env) FormatForVersion(sv interfaces.StoreVersion) sku.ListFormat {
-	if store_version.LessOrEqual(
-		sv,
-		store_version.V6,
-	) {
-		return inventory_list_blobs.MakeV0(
-			s.object_format,
-			s.options,
-		)
-	} else {
-		return inventory_list_blobs.V1{
-			V1ObjectCoder: inventory_list_blobs.V1ObjectCoder{
-				Box: box_format.MakeBoxTransactedArchive(
-					s,
-					options_print.V0{}.WithPrintTai(true),
-				),
-			},
-		}
-	}
+	box *box_format.BoxTransacted
 }
 
 func (env *env) GetAbbr() (abbr ids.Abbr) {
