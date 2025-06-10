@@ -263,6 +263,12 @@ func (bf *binaryDecoder) readFieldKey(
 			return
 		}
 
+	case keys.RepoPubKey:
+		sk.Metadata.RepoPubKey.SetBytes(bf.Content.Bytes())
+
+	case keys.RepoSig:
+		sk.Metadata.RepoSig.SetBytes(bf.Content.Bytes())
+
 	case keys.Description:
 		if err = sk.Metadata.Description.Set(bf.Content.String()); err != nil {
 			err = errors.Wrap(err)

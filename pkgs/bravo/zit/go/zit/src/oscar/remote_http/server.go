@@ -707,30 +707,27 @@ func (server *Server) handleGetQuery(request Request) (response Response) {
 		}
 
 		// TODO make this more performant by returning a proper reader
-		b := bytes.NewBuffer(nil)
+		buffer := bytes.NewBuffer(nil)
 
-		// TODO
-		printer := repo.MakePrinterBoxArchive(b, true)
+		listFormat := repo.GetStore().GetInventoryListStore().FormatForVersion(
+			repo.GetConfig().GetStoreVersion(),
+		)
 
-		var sk *sku.Transacted
-		var hasMore bool
+		bufferedWriter := ohio.BufferedWriter(buffer)
+		defer pool.GetBufioWriter().Put(bufferedWriter)
 
-		for {
-			server.Repo.GetEnv().ContinueOrPanicOnDone()
-
-			sk, hasMore = list.Pop()
-
-			if !hasMore {
-				break
-			}
-
-			if err := printer(sk); err != nil {
-				response.Error(err)
-				return
-			}
+		if _, err := listFormat.WriteInventoryListBlob(
+			list,
+			bufferedWriter,
+		); err != nil {
+			server.EnvLocal.CancelWithError(err)
 		}
 
-		response.Body = io.NopCloser(b)
+		if err  := bufferedWriter.Flush(); err != nil {
+			server.EnvLocal.CancelWithError(err)
+		}
+
+		response.Body = io.NopCloser(buffer)
 	} else {
 		response.StatusCode = http.StatusNotImplemented
 	}

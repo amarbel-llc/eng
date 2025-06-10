@@ -11,10 +11,13 @@ import (
 type Binary byte
 
 const (
+	// TODO make this less fragile by guaranteeing unique values
 	Unknown       = Binary(iota)
 	ContentLength = 'C'
 	Sigil         = 'S'
 	Blob          = 'A'
+	RepoPubKey    = 'P'
+	RepoSig       = 'q'
 	Description   = 'B'
 	Tag           = 'E'
 	Genre         = 'G'

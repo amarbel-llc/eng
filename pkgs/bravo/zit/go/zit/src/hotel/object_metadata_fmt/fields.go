@@ -4,6 +4,7 @@ import (
 	"sort"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
@@ -86,6 +87,34 @@ func MetadataFieldTai(
 	return string_format_writer.Field{
 		Value:     m.Tai.String(),
 		ColorType: string_format_writer.ColorTypeHash,
+	}
+}
+
+func MetadataFieldRepoPubKey(
+	m *object_metadata.Metadata,
+) string_format_writer.Field {
+	return string_format_writer.Field{
+		Key: "repo-pubkey",
+		Value: bech32.Value{
+			HRP:  "zit-repo-pubkey-v1",
+			Data: m.RepoPubKey,
+		}.String(),
+		NoTruncate: true,
+		ColorType:  string_format_writer.ColorTypeHash,
+	}
+}
+
+func MetadataFieldRepoSig(
+	m *object_metadata.Metadata,
+) string_format_writer.Field {
+	return string_format_writer.Field{
+		Key: "repo-sig",
+		Value: bech32.Value{
+			HRP:  "zit-repo-sig-v1",
+			Data: m.RepoSig,
+		}.String(),
+		NoTruncate: true,
+		ColorType:  string_format_writer.ColorTypeHash,
 	}
 }
 

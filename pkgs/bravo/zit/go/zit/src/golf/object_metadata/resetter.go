@@ -10,15 +10,17 @@ var Resetter resetter
 
 type resetter struct{}
 
-func (resetter) Reset(z *Metadata) {
-	z.Description.Reset()
-	z.Comments = z.Comments[:0]
-	z.ResetTags()
-	ResetterCache.Reset(&z.Cache)
-	z.Type = ids.Type{}
-	z.Tai.Reset()
-	z.Shas.Reset()
-	z.Fields = z.Fields[:0]
+func (resetter) Reset(metadata *Metadata) {
+	metadata.Description.Reset()
+	metadata.Comments = metadata.Comments[:0]
+	metadata.RepoSig = nil
+	metadata.RepoPubKey = nil
+	metadata.ResetTags()
+	ResetterCache.Reset(&metadata.Cache)
+	metadata.Type = ids.Type{}
+	metadata.Tai.Reset()
+	metadata.Shas.Reset()
+	metadata.Fields = metadata.Fields[:0]
 }
 
 func (resetter) ResetWithExceptFields(dst *Metadata, src *Metadata) {
@@ -29,6 +31,9 @@ func (resetter) ResetWithExceptFields(dst *Metadata, src *Metadata) {
 	dst.SetTags(src.Tags)
 
 	ResetterCache.ResetWith(&dst.Cache, &src.Cache)
+
+	dst.RepoSig.ResetWith(src.RepoSig)
+	dst.RepoPubKey.ResetWith(src.RepoPubKey)
 
 	dst.Type = src.Type
 	dst.Tai = src.Tai

@@ -11,6 +11,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/file_lock"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
@@ -110,6 +111,7 @@ func (s *Store) Initialize(
 		}
 	} else {
 		s.objectBlobStore = &objectBlobStoreV1{
+			envRepo:  envRepo,
 			pathLog:  envRepo.FileInventoryListLog(),
 			blobType: blobType,
 			blobStore: blob_store.MakeShardedFilesStore(
@@ -155,19 +157,29 @@ func (s *Store) Flush() (err error) {
 	return wg.GetError()
 }
 
-func (s *Store) FormatForVersion(sv interfaces.StoreVersion) sku.ListFormat {
+func (store *Store) FormatForVersion(sv interfaces.StoreVersion) sku.ListFormat {
 	if store_version.LessOrEqual(
 		sv,
 		store_version.V6,
 	) {
 		return inventory_list_blobs.MakeV0(
-			s.object_format,
-			s.options,
+			store.object_format,
+			store.options,
 		)
-	} else {
+	} else if store_version.LessOrEqual(
+		sv,
+		store_version.V9,
+	) {
 		return inventory_list_blobs.V1{
 			V1ObjectCoder: inventory_list_blobs.V1ObjectCoder{
-				Box: s.box,
+				Box: store.box,
+			},
+		}
+	} else {
+		return inventory_list_blobs.V2{
+			V2ObjectCoder: inventory_list_blobs.V2ObjectCoder{
+				Box:                    store.box,
+				ImmutableConfigPrivate: store.envRepo.GetConfigPrivate().ImmutableConfig,
 			},
 		}
 	}
@@ -194,10 +206,28 @@ func (s *Store) GetInventoryListStore() sku.InventoryListStore {
 }
 
 func (store *Store) MakeOpenList() (openList *sku.OpenList, err error) {
-	// TODO type
 	openList = &sku.OpenList{}
 
 	if openList.Mover, err = store.blobStore.Mover(); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	return
+}
+
+func (store *Store) signObject(
+	object *sku.Transacted,
+) (err error) {
+	object.Metadata.RepoPubKey = store.envRepo.GetConfigPublic().ImmutableConfig.GetPublicKey()
+
+	sh := sha.Make(object.GetTai().GetShaLike())
+	defer sha.GetPool().Put(sh)
+
+	if object.Metadata.RepoSig, err = repo_signing.Sign(
+		store.envRepo.GetConfigPrivate().ImmutableConfig.GetPrivateKey(),
+		sh.GetShaBytes(),
+	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -209,12 +239,15 @@ func (store *Store) AddObjectToOpenList(
 	openList *sku.OpenList,
 	object *sku.Transacted,
 ) (err error) {
-	// TODO sign object
+	if err = store.signObject(object); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
 
 	format := store.FormatForVersion(store.storeVersion)
 
 	if _, err = format.WriteObjectToOpenList(object, openList); err != nil {
-		err = errors.Wrap(err)
+		err = errors.Wrapf(err, "%#v", object.Metadata.Fields)
 		return
 	}
 

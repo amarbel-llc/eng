@@ -286,16 +286,16 @@ func (s *Store) fetchParentIfNecessary(
 }
 
 // TODO add results for which stores had which change types
-func (s *Store) commitTransacted(
+func (store *Store) commitTransacted(
 	object *sku.Transacted,
 	parent *sku.Transacted,
 ) (err error) {
-	if !s.inventoryList.LastTai.Less(object.GetTai()) {
-		object.Metadata.Tai = s.GetTai()
+	if !store.inventoryList.LastTai.Less(object.GetTai()) {
+		object.Metadata.Tai = store.GetTai()
 	}
 
-	if err = s.inventoryListStore.AddObjectToOpenList(
-		s.inventoryList,
+	if err = store.inventoryListStore.AddObjectToOpenList(
+		store.inventoryList,
 		object,
 	); err != nil {
 		err = errors.Wrap(err)

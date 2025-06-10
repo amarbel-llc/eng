@@ -4,12 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"strings"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
@@ -54,6 +52,16 @@ func (format V2) WriteObjectToOpenList(
 		bufferedWriter,
 	); err != nil {
 		err = errors.Wrap(err)
+		return
+	}
+
+	if object.Metadata.RepoSig.IsEmpty() {
+		err = errors.Errorf("repo sig empty")
+		return
+	}
+
+	if len(object.Metadata.RepoPubKey) == 0 {
+		err = errors.Errorf("repo pubkey empty")
 		return
 	}
 
@@ -202,6 +210,11 @@ func (coder V2ObjectCoder) EncodeTo(
 		return
 	}
 
+	if object.Metadata.RepoSig.IsEmpty() {
+		err = errors.ErrorWithStackf("no repo signature")
+		return
+	}
+
 	var n1 int64
 	var n2 int
 
@@ -211,31 +224,6 @@ func (coder V2ObjectCoder) EncodeTo(
 	if err != nil {
 		err = errors.Wrap(err)
 		return
-	}
-
-	// write signature box
-	{
-		sh := sha.Make(object.GetTai().GetShaLike())
-		defer sha.GetPool().Put(sh)
-
-		key := coder.ImmutableConfigPrivate.GetPrivateKey()
-
-		var sig string
-
-		if sig, err = repo_signing.SignBase64(key, sh.GetShaBytes()); err != nil {
-			err = errors.Wrap(err)
-			return
-		}
-
-		object.Signature = sig
-
-		n2, err = fmt.Fprintf(bufferedWriter, ":%s\n", sig)
-		n += int64(n2)
-
-		if err != nil {
-			err = errors.Wrap(err)
-			return
-		}
 	}
 
 	n2, err = fmt.Fprintf(bufferedWriter, "\n")
@@ -271,27 +259,28 @@ func (coder V2ObjectCoder) DecodeFrom(
 	sh := sha.Make(object.GetTai().GetShaLike())
 	defer sha.GetPool().Put(sh)
 
-	if object.Signature, err = bufferedReader.ReadString('\n'); err != nil {
-		err = errors.Wrap(err)
+	if len(object.Metadata.RepoPubKey) == 0 {
+		err = errors.Errorf(
+			"RepoPubkey missing for %s. Fields: %#v",
+			sku.String(object),
+			object.Metadata.Fields,
+		)
 		return
 	}
 
-	object.Signature = strings.TrimPrefix(
-		strings.TrimSuffix(object.Signature, "\n"),
-		":",
-	)
-
-	ui.Debug().Print(sh, object.Signature)
-
-	if len(object.Signature) == 0 {
-		err = errors.Errorf("signature missing for %s", sku.String(object))
+	if object.Metadata.RepoSig.IsEmpty() {
+		err = errors.Errorf(
+			"signature missing for %s. Fields: %#v",
+			sku.String(object),
+			object.Metadata.Fields,
+		)
 		return
 	}
 
-	if err = repo_signing.VerifyBase64Signature(
-		coder.ImmutableConfigPrivate.GetPublicKey(),
+	if err = repo_signing.VerifySignature(
+		object.Metadata.RepoPubKey,
 		sh.GetShaBytes(),
-		object.Signature,
+		object.Metadata.RepoSig,
 	); err != nil {
 		err = errors.Wrap(err)
 		return

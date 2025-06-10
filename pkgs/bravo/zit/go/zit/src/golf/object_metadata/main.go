@@ -8,6 +8,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/flag_policy"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/expansion"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/flag"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
@@ -19,7 +20,8 @@ type Field = string_format_writer.Field
 
 type Metadata struct {
 	// Domain
-	// RepoId
+	RepoPubKey repo_signing.PublicKey
+	RepoSig    repo_signing.Data
 	// InventoryListTai
 
 	Description descriptions.Description

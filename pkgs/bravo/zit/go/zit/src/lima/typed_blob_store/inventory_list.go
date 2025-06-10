@@ -97,10 +97,10 @@ func (a InventoryList) GetBoxFormat() *box_format.BoxTransacted {
 }
 
 func (a InventoryList) GetTransactedWithBlob(
-	tg sku.TransactedGetter,
-) (twb sku.TransactedWithBlob[*sku.List], n int64, err error) {
-	twb.Transacted = tg.GetSku()
-	blobSha := twb.GetBlobSha()
+	inventoryList sku.TransactedGetter,
+) (objectAndBlob sku.TransactedWithBlob[*sku.List], n int64, err error) {
+	objectAndBlob.Transacted = inventoryList.GetSku()
+	blobSha := objectAndBlob.GetBlobSha()
 
 	var readCloser interfaces.ShaReadCloser
 
@@ -115,7 +115,7 @@ func (a InventoryList) GetTransactedWithBlob(
 	defer pool.GetBufioReader().Put(bufferedReader)
 
 	if n, err = a.GetTransactedWithBlobFromReader(
-		&twb,
+		&objectAndBlob,
 		bufferedReader,
 	); err != nil {
 		err = errors.Wrap(err)
@@ -169,28 +169,28 @@ func (a InventoryList) GetTransactedWithBlobFromReader(
 
 func (a InventoryList) WriteObjectToWriter(
 	tipe ids.Type,
-	sk *sku.Transacted,
-	w *bufio.Writer,
+	object *sku.Transacted,
+	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
 	return a.objectCoders.EncodeTo(
 		&triple_hyphen_io.TypedStruct[*sku.Transacted]{
 			Type:   &tipe,
-			Struct: sk,
+			Struct: object,
 		},
-		w,
+		bufferedWriter,
 	)
 }
 
 func (store InventoryList) WriteBlobToWriter(
 	tipe ids.Type,
 	list sku.Collection,
-	writer *bufio.Writer,
+	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
 	switch tipe.String() {
 	case "", builtin_types.InventoryListTypeV0:
 		if n, err = store.v0.WriteInventoryListBlob(
 			list,
-			writer,
+			bufferedWriter,
 		); err != nil {
 			err = errors.Wrap(err)
 			return
@@ -199,7 +199,7 @@ func (store InventoryList) WriteBlobToWriter(
 	case builtin_types.InventoryListTypeV1:
 		if n, err = store.v1.WriteInventoryListBlob(
 			list,
-			writer,
+			bufferedWriter,
 		); err != nil {
 			err = errors.Wrap(err)
 			return
@@ -208,7 +208,7 @@ func (store InventoryList) WriteBlobToWriter(
 	case builtin_types.InventoryListTypeV2:
 		if n, err = store.v2.WriteInventoryListBlob(
 			list,
-			writer,
+			bufferedWriter,
 		); err != nil {
 			err = errors.Wrap(err)
 			return

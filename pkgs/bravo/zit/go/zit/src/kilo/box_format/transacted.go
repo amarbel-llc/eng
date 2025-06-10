@@ -126,8 +126,6 @@ func (format *BoxTransacted) EncodeStringTo(
 		)
 	}
 
-	// TODO calculate signature and add as trailer
-
 	if n, err = format.boxStringEncoder.EncodeStringTo(box, writer); err != nil {
 		err = errors.Wrap(err)
 		return

@@ -111,6 +111,22 @@ func (bf *binaryEncoder) writeFieldKey(
 			return
 		}
 
+	case keys.RepoPubKey:
+		if n, err = bf.writeFieldBinaryMarshaler(
+			&sk.Metadata.RepoPubKey,
+		); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+
+	case keys.RepoSig:
+		if n, err = bf.writeFieldBinaryMarshaler(
+			&sk.Metadata.RepoSig,
+		); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+
 	case keys.Description:
 		if sk.Metadata.Description.IsEmpty() {
 			return

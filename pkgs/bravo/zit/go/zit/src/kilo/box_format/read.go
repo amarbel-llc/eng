@@ -5,6 +5,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/unicorn"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/box"
 	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
@@ -161,7 +162,7 @@ func (format *BoxTransacted) readStringFormatBox(
 		}
 	}
 
-	var k ids.ObjectId
+	var objectId ids.ObjectId
 
 LOOP_AFTER_OID:
 	for scanner.ScanDotAllowedInIdentifiers() {
@@ -230,29 +231,53 @@ LOOP_AFTER_OID:
 				Value: value.String(),
 			}
 
-			field.ColorType = string_format_writer.ColorTypeUserData
-			object.Metadata.Fields = append(object.Metadata.Fields, field)
+			switch field.Key {
+			case "repo-pubkey":
+				var pubKey bech32.Value
+
+				if err = pubKey.Set(field.Value); err != nil {
+					err = errors.Wrap(err)
+					return
+				}
+
+				object.Metadata.RepoPubKey = pubKey.Data
+
+			case "repo-sig":
+				var repoSig bech32.Value
+
+				if err = repoSig.Set(field.Value); err != nil {
+					err = errors.Wrap(err)
+					return
+				}
+
+				object.Metadata.RepoSig.SetBytes(repoSig.Data)
+
+			default:
+				field.ColorType = string_format_writer.ColorTypeUserData
+				object.Metadata.Fields = append(object.Metadata.Fields, field)
+			}
+
 			continue
 		}
 
-		if err = k.ReadFromSeq(seq); err != nil {
+		if err = objectId.ReadFromSeq(seq); err != nil {
 			err = nil
 			scanner.Unscan()
 			return
 		}
 
-		g := k.GetGenre()
+		g := objectId.GetGenre()
 
 		switch g {
 		case genres.InventoryList:
 			// TODO make more performant
-			if err = object.Metadata.Tai.Set(k.String()); err != nil {
+			if err = object.Metadata.Tai.Set(objectId.String()); err != nil {
 				err = errors.Wrap(err)
 				return
 			}
 
 		case genres.Type:
-			if err = object.Metadata.Type.TodoSetFromObjectId(&k); err != nil {
+			if err = object.Metadata.Type.TodoSetFromObjectId(&objectId); err != nil {
 				err = errors.Wrap(err)
 				return
 			}
@@ -260,7 +285,7 @@ LOOP_AFTER_OID:
 		case genres.Tag:
 			var e ids.Tag
 
-			if err = e.TodoSetFromObjectId(&k); err != nil {
+			if err = e.TodoSetFromObjectId(&objectId); err != nil {
 				err = errors.Wrap(err)
 				return
 			}
@@ -271,12 +296,12 @@ LOOP_AFTER_OID:
 			}
 
 		default:
-			err = genres.MakeErrUnsupportedGenre(k.GetGenre())
+			err = genres.MakeErrUnsupportedGenre(objectId.GetGenre())
 			err = errors.Wrapf(err, "Seq: %q", seq)
 			return
 		}
 
-		k.Reset()
+		objectId.Reset()
 	}
 
 	if scanner.Error() != nil {
