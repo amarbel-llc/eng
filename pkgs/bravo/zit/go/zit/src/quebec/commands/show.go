@@ -204,6 +204,7 @@ func (cmd Show) runWithArchive(
 	env env_ui.Env,
 	archive repo.Repo,
 ) {
+	// TODO replace with sku.ListFormat
 	boxFormat := box_format.MakeBoxTransactedArchive(
 		env,
 		env.GetCLIConfig().PrintOptions,

@@ -1,6 +1,7 @@
 package config_immutable
 
 import (
+	"crypto/ed25519"
 	"flag"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
@@ -51,7 +52,7 @@ func (k *TomlV1Private) GetPrivateKey() repo_signing.PrivateKey {
 }
 
 func (k *TomlV1Private) GetPublicKey() repo_signing.PublicKey {
-	return k.GetPrivateKey().Public().(repo_signing.PublicKey)
+	return repo_signing.PublicKey(k.GetPrivateKey().Public().(ed25519.PublicKey))
 }
 
 func (k *TomlV1Public) GetImmutableConfigPublic() ConfigPublic {

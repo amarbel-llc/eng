@@ -4,6 +4,7 @@ load "$BATS_CWD/test_helper/bats-support/load"
 load "$BATS_CWD/test_helper/bats-assert/load"
 load "$BATS_CWD/test_helper/bats-assert-additions/load"
 
+# TODO remove this in favor of `-override-xdg-with-cwd`
 set_xdg() {
   loc="$(realpath "$1" 2>/dev/null)"
   export XDG_DATA_HOME="$loc/.xdg/data"

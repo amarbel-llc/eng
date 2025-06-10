@@ -746,6 +746,7 @@ func (server *Server) handleGetInventoryList(
 	// TODO make this more performant by returning a proper reader
 	b := bytes.NewBuffer(nil)
 
+	// TODO replace with sku.ListFormat
 	boxFormat := box_format.MakeBoxTransactedArchive(
 		server.Repo.GetEnv(),
 		server.Repo.GetEnv().GetCLIConfig().PrintOptions.WithPrintTai(true),

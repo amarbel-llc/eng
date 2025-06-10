@@ -42,8 +42,10 @@ type ListFormat interface {
 	GetListFormat() ListFormat
 	WriteObjectToOpenList(*Transacted, *OpenList) (int64, error)
 	WriteInventoryListBlob(Collection, *bufio.Writer) (int64, error)
+	// TODO add context and ContinueOrPanicOnDone
 	WriteInventoryListObject(*Transacted, *bufio.Writer) (int64, error)
 	ReadInventoryListObject(*bufio.Reader) (int64, *Transacted, error)
+	// TODO add context and ContinueOrPanicOnDone
 	StreamInventoryListBlobSkus(
 		rf *bufio.Reader,
 		f interfaces.FuncIter[*Transacted],

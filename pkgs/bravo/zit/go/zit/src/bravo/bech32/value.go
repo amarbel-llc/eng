@@ -18,6 +18,19 @@ func (value Value) String() string {
 	return string(text)
 }
 
+func (value *Value) Set(text string) (err error) {
+	if len(text) == 0 {
+		return
+	}
+
+	if value.HRP, value.Data, err = Decode(text); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	return
+}
+
 func (value Value) MarshalText() (text []byte, err error) {
 	if len(value.Data) == 0 {
 		return

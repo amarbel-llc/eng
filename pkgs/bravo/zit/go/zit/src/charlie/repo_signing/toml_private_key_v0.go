@@ -8,6 +8,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
 )
 
+// TODO hide inner fields
 type TomlPrivateKeyV0 struct {
 	PrivateKey bech32.Value `toml:"private-key,omitempty"`
 }
@@ -20,7 +21,7 @@ func (b *TomlPrivateKeyV0) GeneratePrivateKey() (err error) {
 
 	var privateKey PrivateKey
 
-	if _, privateKey, err = ed25519.GenerateKey(nil); err != nil {
+	if err = privateKey.Generate(nil); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -43,7 +44,7 @@ func (b *TomlPrivateKeyV0) SetPrivateKey(key crypto.PrivateKey) {
 func (b *TomlPrivateKeyV0) GetPublicKey() TomlPublicKeyV0 {
 	pub := bech32.Value{
 		HRP:  "zit-repo-public_key-v0",
-		Data: b.GetPrivateKey().Public().(PublicKey),
+		Data: b.GetPrivateKey().Public().(ed25519.PublicKey),
 	}
 
 	return TomlPublicKeyV0{PublicKey: pub}

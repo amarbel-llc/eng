@@ -78,6 +78,7 @@ func (c Last) runArchive(repoLayout env_repo.Env, archive repo.Repo) {
 		repoLayout.CancelWithErrorf("cannot organize, edit, or specify format for Archive repos")
 	}
 
+	// TODO replace with sku.ListFormat
 	boxFormat := box_format.MakeBoxTransactedArchive(
 		repoLayout,
 		options_print.V0{}.WithPrintTai(true),

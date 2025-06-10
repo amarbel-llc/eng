@@ -1,13 +1,13 @@
 package command_components
 
 import (
-	"crypto/ed25519"
 	"flag"
 	"fmt"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/xdg"
 	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
 	"code.linenisgreat.com/zit/go/zit/src/echo/repo_blobs"
@@ -208,7 +208,7 @@ func (cmd *Remote) MakeRemoteHTTPFromXDGDotenvPath(
 	xdgDotenvPath string,
 	options env_ui.Options,
 	localRepo repo.LocalRepo,
-	pubkey ed25519.PublicKey,
+	pubkey repo_signing.PublicKey,
 ) (remoteHTTP repo.WorkingCopy) {
 	envLocal := cmd.MakeEnvWithXDGLayoutAndOptions(
 		req,
@@ -282,7 +282,7 @@ func (cmd *Remote) MakeRemoteStdioLocal(
 	env env_local.Env,
 	dir string,
 	localRepo repo.LocalRepo,
-	pubkey ed25519.PublicKey,
+	pubkey repo_signing.PublicKey,
 ) (remoteHTTP repo.WorkingCopy) {
 	envRepo := cmd.MakeEnvRepo(req, false)
 

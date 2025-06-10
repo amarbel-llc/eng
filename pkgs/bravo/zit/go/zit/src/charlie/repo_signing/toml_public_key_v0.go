@@ -6,6 +6,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
 )
 
+// TODO hide inner fields
 type TomlPublicKeyV0 struct {
 	PublicKey bech32.Value `toml:"public-key,omitempty"`
 }

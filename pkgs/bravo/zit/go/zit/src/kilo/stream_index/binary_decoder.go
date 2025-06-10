@@ -369,7 +369,8 @@ func (bf *binaryDecoder) readFieldKey(
 		sk.Metadata.Cache.TagPaths.AddPath(&e)
 
 	default:
-		// panic(fmt.Sprintf("unsupported key: %s", key))
+		err = errors.ErrorWithStackf("unsupported key: %s", bf.Binary)
+		return
 	}
 
 	return
