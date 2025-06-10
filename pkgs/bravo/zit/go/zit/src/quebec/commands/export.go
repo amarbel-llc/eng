@@ -1,10 +1,11 @@
 package commands
 
 import (
-	"bufio"
 	"flag"
 	"io"
 
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/delta/age"
 	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
@@ -91,25 +92,18 @@ func (cmd Export) Run(dep command.Request) {
 
 	defer localWorkingCopy.MustClose(wc)
 
-	bw := bufio.NewWriter(wc)
-	defer localWorkingCopy.MustFlush(bw)
+	bufferedWriter := ohio.BufferedWriter(wc)
+	defer pool.GetBufioWriter().Put(bufferedWriter)
+	defer localWorkingCopy.MustFlush(bufferedWriter)
 
-	printer := localWorkingCopy.MakePrinterBoxArchive(bw, localWorkingCopy.GetConfig().GetCLIConfig().PrintOptions.PrintTime)
+	listFormat := localWorkingCopy.GetStore().GetInventoryListStore().FormatForVersion(
+		localWorkingCopy.GetConfig().GetStoreVersion(),
+	)
 
-	var sk *sku.Transacted
-	var hasMore bool
-
-	for {
-		localWorkingCopy.ContinueOrPanicOnDone()
-
-		sk, hasMore = list.Pop()
-
-		if !hasMore {
-			break
-		}
-
-		if err := printer(sk); err != nil {
-			localWorkingCopy.CancelWithError(err)
-		}
+	if _, err := listFormat.WriteInventoryListBlob(
+		list,
+		bufferedWriter,
+	); err != nil {
+		localWorkingCopy.CancelWithError(err)
 	}
 }
