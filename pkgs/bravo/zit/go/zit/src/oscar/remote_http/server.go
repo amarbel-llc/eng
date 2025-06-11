@@ -321,69 +321,11 @@ func (server *Server) Serve(listener net.Listener) (err error) {
 }
 
 func (server *Server) ServeStdio() {
-	if err := server.init(); err != nil {
+	listener := MakeStdioListener()
+
+	if err := server.Serve(listener); err != nil {
 		server.EnvLocal.CancelWithError(err)
 		return
-	}
-
-	// shuts down the server when the main context is complete (on SIGHUP / SIGINT).
-	server.Repo.GetEnv().After(server.Repo.GetEnv().GetIn().GetFile().Close)
-	server.Repo.GetEnv().After(server.Repo.GetEnv().GetOut().GetFile().Close)
-
-	bufferedReader := bufio.NewReader(server.Repo.GetEnv().GetIn().GetFile())
-	bufferedWriter := bufio.NewWriter(server.Repo.GetEnv().GetOut().GetFile())
-
-	var responseWriter BufferedResponseWriter
-
-	handler := server.makeRouter(
-		func(handler funcHandler) http.HandlerFunc {
-			return server.makeHandlerUsingBufferedWriter(handler, bufferedWriter)
-		},
-	)
-
-	for {
-		server.Repo.GetEnv().ContinueOrPanicOnDone()
-		responseWriter.Reset()
-
-		var request *http.Request
-
-		{
-			var err error
-
-			if request, err = http.ReadRequest(bufferedReader); err != nil {
-				if errors.IsEOF(err) {
-					err = nil
-				} else {
-					server.EnvLocal.CancelWithError(err)
-				}
-
-				return
-			}
-		}
-
-		handler.ServeHTTP(&responseWriter, request)
-
-		if err := request.Body.Close(); err != nil {
-			server.EnvLocal.CancelWithError(err)
-			return
-		}
-
-		if responseWriter.Dirty {
-			if err := responseWriter.WriteResponse(bufferedWriter); err != nil {
-				server.EnvLocal.CancelWithError(err)
-				return
-			}
-		}
-
-		if err := bufferedWriter.Flush(); err != nil {
-			if errors.IsEOF(err) {
-				err = nil
-			} else {
-				server.EnvLocal.CancelWithError(err)
-			}
-
-			return
-		}
 	}
 }
 
