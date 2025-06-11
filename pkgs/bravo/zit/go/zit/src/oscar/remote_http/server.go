@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"context"
 	"crypto/tls"
-	"encoding/base64"
 	"fmt"
 	"io"
 	"net"
@@ -20,6 +19,7 @@ import (
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
@@ -204,36 +204,34 @@ func (server *Server) makeRouter(
 func (server *Server) sigMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(responseWriter http.ResponseWriter, request *http.Request) {
-			nonceStringBase64 := request.Header.Get(headerChallengeNonce)
+			nonceString := request.Header.Get(headerChallengeNonce)
 
-			var nonce []byte
+			var nonce bech32.Value
 
 			{
 				var err error
 
-				if nonce, err = base64.URLEncoding.DecodeString(
-					nonceStringBase64,
-				); err != nil {
+				if err = nonce.Set(nonceString); err != nil {
 					http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 					return
 				}
 			}
 
-			if len(nonce) > 0 {
-				key := server.Repo.GetImmutableConfigPrivate().ImmutableConfig.GetPrivateKey()
+			key := server.Repo.GetImmutableConfigPrivate().ImmutableConfig.GetPrivateKey()
 
-				var sig string
-
-				{
-					var err error
-
-					if sig, err = repo_signing.SignBase64(key, nonce); err != nil {
-						server.EnvLocal.CancelWithError(err)
-					}
-				}
-
-				responseWriter.Header().Set(headerChallengeResponse, sig)
+			sig := bech32.Value{
+				HRP: "zit-request_sig-v1",
 			}
+
+			{
+				var err error
+
+				if sig.Data, err = repo_signing.Sign(key, nonce.Data); err != nil {
+					server.EnvLocal.CancelWithError(err)
+				}
+			}
+
+			responseWriter.Header().Set(headerChallengeResponse, sig.String())
 
 			next.ServeHTTP(responseWriter, request)
 		},
@@ -723,7 +721,7 @@ func (server *Server) handleGetQuery(request Request) (response Response) {
 			server.EnvLocal.CancelWithError(err)
 		}
 
-		if err  := bufferedWriter.Flush(); err != nil {
+		if err := bufferedWriter.Flush(); err != nil {
 			server.EnvLocal.CancelWithError(err)
 		}
 

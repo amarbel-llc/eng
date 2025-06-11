@@ -2,10 +2,10 @@ package remote_http
 
 import (
 	"crypto/rand"
-	"encoding/base64"
 	"net/http"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 )
 
@@ -32,10 +32,13 @@ func (roundTripper *RoundTripperBufioWrappedSigner) RoundTrip(
 		return
 	}
 
-	nonceString := base64.URLEncoding.EncodeToString(nonceBytes)
+	nonce := bech32.Value{
+		HRP:  "zit-nonce-v1",
+		Data: nonceBytes,
+	}
 
-	if len(roundTripper.PublicKey) > 0 {
-		request.Header.Add(headerChallengeNonce, nonceString)
+	if !roundTripper.PublicKey.IsEmpty() {
+		request.Header.Add(headerChallengeNonce, nonce.String())
 	}
 
 	if response, err = roundTripper.roundTripperBufio.RoundTrip(
@@ -45,11 +48,20 @@ func (roundTripper *RoundTripperBufioWrappedSigner) RoundTrip(
 		return
 	}
 
-	if len(roundTripper.PublicKey) > 0 {
-		if err = repo_signing.VerifyBase64Signature(
+	sigString := response.Header.Get(headerChallengeResponse)
+
+	if !roundTripper.PublicKey.IsEmpty() {
+		var sig bech32.Value
+
+		if err = sig.Set(sigString); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+
+		if err = repo_signing.VerifySignature(
 			roundTripper.PublicKey,
 			nonceBytes,
-			response.Header.Get(headerChallengeResponse),
+			sig.Data,
 		); err != nil {
 			err = errors.Wrap(err)
 			return
