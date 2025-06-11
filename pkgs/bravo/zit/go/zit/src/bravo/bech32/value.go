@@ -7,6 +7,20 @@ type Value struct {
 	Data []byte
 }
 
+func MakeValue(expectedHRP string, input string) (value Value, err error) {
+	if err = value.Set(input); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	if value.HRP != expectedHRP {
+		err = errors.Errorf("expected HRP %q but got %q", expectedHRP, value.HRP)
+		return
+	}
+
+	return
+}
+
 func (value Value) String() string {
 	var text []byte
 	var err error

@@ -260,7 +260,7 @@ func (coder V2ObjectCoder) DecodeFrom(
 	defer sha.GetPool().Put(sh)
 
 	if len(object.Metadata.RepoPubKey) == 0 {
-		err = errors.Errorf(
+		err = errors.ErrorWithStackf(
 			"RepoPubkey missing for %s. Fields: %#v",
 			sku.String(object),
 			object.Metadata.Fields,
@@ -269,7 +269,7 @@ func (coder V2ObjectCoder) DecodeFrom(
 	}
 
 	if object.Metadata.RepoSig.IsEmpty() {
-		err = errors.Errorf(
+		err = errors.ErrorWithStackf(
 			"signature missing for %s. Fields: %#v",
 			sku.String(object),
 			object.Metadata.Fields,

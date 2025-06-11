@@ -162,7 +162,7 @@ func (store *objectBlobStoreV1) IterAllInventoryLists() iter.Seq2[*sku.Transacte
 			var err error
 
 			if file, err = files.OpenReadOnly(store.pathLog); err != nil {
-				yield(nil, err)
+				yield(nil, errors.Wrap(err))
 				return
 			}
 		}
@@ -173,7 +173,7 @@ func (store *objectBlobStoreV1) IterAllInventoryLists() iter.Seq2[*sku.Transacte
 
 		for sk, err := range seq {
 			if err != nil {
-				if !yield(nil, err) {
+				if !yield(nil, errors.Wrap(err)) {
 					return
 				}
 			}
@@ -184,7 +184,7 @@ func (store *objectBlobStoreV1) IterAllInventoryLists() iter.Seq2[*sku.Transacte
 		}
 
 		if err := file.Close(); err != nil {
-			yield(nil, err)
+			yield(nil, errors.Wrap(err))
 			return
 		}
 	}

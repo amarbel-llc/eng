@@ -1,12 +1,10 @@
 package repo_signing
 
-import "slices"
-
 type Data []byte
 
 func (data *Data) SetBytes(bs []byte) {
-	*data = slices.Grow(*data, len(bs))
-	copy(*data, bs)
+	data.Reset()
+	*data = append(*data, bs...)
 }
 
 func (data *Data) GetBytes() []byte {
