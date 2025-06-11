@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
@@ -17,7 +16,6 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	errors.SetTesting()
 	code := m.Run()
 	os.Exit(code)
 }

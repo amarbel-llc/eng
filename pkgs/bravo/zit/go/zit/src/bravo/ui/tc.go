@@ -14,13 +14,11 @@ type TC struct {
 }
 
 func (t *TC) ui(args ...any) {
-	errors.SetTesting()
 	args = append([]any{t.Frame}, args...)
 	fmt.Fprintln(os.Stderr, args...)
 }
 
 func (t *TC) logf(format string, args ...any) {
-	errors.SetTesting()
 	args = append([]any{t.Frame}, args...)
 	fmt.Fprintf(os.Stderr, "%s"+format+"\n", args...)
 }

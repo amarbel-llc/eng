@@ -7,7 +7,6 @@ import (
 	"sort"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 )
@@ -15,7 +14,6 @@ import (
 type testStringer string
 
 func TestMain(m *testing.M) {
-	errors.SetTesting()
 	code := m.Run()
 	os.Exit(code)
 }

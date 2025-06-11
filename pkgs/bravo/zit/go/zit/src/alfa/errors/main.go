@@ -8,7 +8,10 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var New = xerrors.New
+
+func New(text string) error {
+	return xerrors.New(text)
+}
 
 func Join(es ...error) error {
 	switch {
@@ -32,7 +35,7 @@ func Join(es ...error) error {
 	}
 }
 
-func PanicIfError(err interface{}) {
+func PanicIfError(err any) {
 	if err == nil {
 		return
 	}
@@ -40,6 +43,7 @@ func PanicIfError(err interface{}) {
 	switch t := err.(type) {
 	case func() error:
 		PanicIfError(t())
+
 	case error:
 		panic(t)
 	}
