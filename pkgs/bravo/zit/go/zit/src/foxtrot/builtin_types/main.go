@@ -62,9 +62,9 @@ func init() {
 	register(ConfigTypeTomlV1, genres.Config, true)
 
 	register(InventoryListTypeV0, genres.InventoryList, false)
-	register(InventoryListTypeV1, genres.InventoryList, true)
+	register(InventoryListTypeV1, genres.InventoryList, false)
 	// TODO StoreVersionV10
-	register(InventoryListTypeV2, genres.InventoryList, false)
+	register(InventoryListTypeV2, genres.InventoryList, true)
 
 	register(RepoTypeUri, genres.Repo, true)
 	register(RepoTypeXDGDotenvV0, genres.Repo, false)

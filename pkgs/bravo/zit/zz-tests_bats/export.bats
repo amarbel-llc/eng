@@ -23,7 +23,7 @@ function basic { # @test
 		\\[tag .*]
 		\\[tag-1 .*]
 		\\[tag-2 .*]
-		\\[one/uno @3aa85276929951b03184a038ca0ad67cba78ae626f2e3510426b5a17a56df955 .* !md "wow ok" tag-1 tag-2]
+		\\[one/uno .* !md "wow ok" tag-1 tag-2]
 		\\[tag-3 .*]
 		\\[tag-4 .*]
 		\\[one/dos @2d36c504bb5f4c6cc804c63c983174a36303e1e15a3a2120481545eec6cc5f24 .* !md "wow ok again" tag-3 tag-4]

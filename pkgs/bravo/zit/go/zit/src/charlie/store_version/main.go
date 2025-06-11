@@ -20,7 +20,7 @@ var (
 	V9  = Version(values.Int(9))
 	V10 = Version(values.Int(10))
 
-	VCurrent = V9
+	VCurrent = V10
 	VNext    = V10
 )
 

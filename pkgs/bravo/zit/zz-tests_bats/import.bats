@@ -71,7 +71,7 @@ function import_one_tai_same { # @test
 	run_zit show -format tai one/uno
 	tai="$output"
 
-	run_zit show -format inventory-list one/uno [tag ^tag-1 ^tag-2]:e
+	run_zit export -print-time=true one/uno [tag ^tag-1 ^tag-2]:e
 	assert_success
 	echo "$output" | zstd >list
 
@@ -168,7 +168,7 @@ function import_conflict { # @test
 		run_zit_init
 	)
 
-	run_zit show -format inventory-list one/uno+
+	run_zit export -print-time=true one/uno+
 	assert_success
 	echo "$output" | zstd >list
 

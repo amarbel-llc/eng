@@ -1,16 +1,17 @@
 package store_fs
 
 import (
-	"bufio"
 	"os"
 	"os/exec"
 
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/checkout_mode"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/id"
+	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/checkout_options"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
 	"code.linenisgreat.com/zit/go/zit/src/echo/checked_out_state"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
@@ -303,56 +304,67 @@ func (s *Store) checkoutOneForMerge(
 	return
 }
 
-func (s *Store) GenerateConflictMarker(
+func (store *Store) GenerateConflictMarker(
 	conflicted sku.Conflicted,
-	co *sku.CheckedOut,
+	checkedOut *sku.CheckedOut,
 ) (err error) {
-	var f *os.File
+	var file *os.File
 
-	if f, err = s.envRepo.GetTempLocal().FileTemp(); err != nil {
+	if file, err = store.envRepo.GetTempLocal().FileTemp(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	defer errors.DeferredCloser(&err, f)
+	defer errors.DeferredCloser(&err, file)
 
-	bw := bufio.NewWriter(f)
-	defer errors.DeferredFlusher(&err, bw)
+	bufferedWriter := ohio.BufferedWriter(file)
+	defer pool.FlushBufioWriterAndPut(&err, bufferedWriter)
 
-	blobStore := s.storeSupplies.BlobStore.InventoryList
+	blobStore := store.storeSupplies.BlobStore.InventoryList
+
+	for object := range conflicted.All() {
+		if err = object.Sign(
+			store.envRepo.GetConfigPrivate().ImmutableConfig,
+		); err != nil {
+			err = errors.Wrap(err)
+			return
+		}
+	}
 
 	if _, err = blobStore.WriteBlobToWriter(
 		builtin_types.DefaultOrPanic(genres.InventoryList),
 		conflicted,
-		bw,
+		bufferedWriter,
 	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	var i *sku.FSItem
+	var item *sku.FSItem
 
-	if i, err = s.ReadFSItemFromExternal(co.GetSkuExternal()); err != nil {
+	if item, err = store.ReadFSItemFromExternal(
+		checkedOut.GetSkuExternal(),
+	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	if err = i.GenerateConflictFD(); err != nil {
+	if err = item.GenerateConflictFD(); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	if co.GetSkuExternal().GetGenre() == genres.Zettel {
+	if checkedOut.GetSkuExternal().GetGenre() == genres.Zettel {
 		var h ids.ZettelId
 
-		if err = h.Set(co.GetSkuExternal().GetObjectId().String()); err != nil {
+		if err = h.Set(checkedOut.GetSkuExternal().GetObjectId().String()); err != nil {
 			err = errors.Wrap(err)
 			return
 		}
 
 		if _, err = id.MakeDirIfNecessary(
 			h,
-			s.envRepo.GetCwd(),
+			store.envRepo.GetCwd(),
 		); err != nil {
 			err = errors.Wrap(err)
 			return
@@ -360,14 +372,14 @@ func (s *Store) GenerateConflictMarker(
 	}
 
 	if err = os.Rename(
-		f.Name(),
-		i.Conflict.GetPath(),
+		file.Name(),
+		item.Conflict.GetPath(),
 	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	co.SetState(checked_out_state.Conflicted)
+	checkedOut.SetState(checked_out_state.Conflicted)
 
 	return
 }

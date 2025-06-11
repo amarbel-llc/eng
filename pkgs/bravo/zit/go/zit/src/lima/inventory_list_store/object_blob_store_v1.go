@@ -11,7 +11,6 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
 	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
@@ -69,26 +68,6 @@ func (store *objectBlobStoreV1) ReadOneSha(
 	return
 }
 
-// TODO refactor and move this to envRepo
-func (store *objectBlobStoreV1) signObject(
-	object *sku.Transacted,
-) (err error) {
-	object.Metadata.RepoPubKey = store.envRepo.GetConfigPublic().ImmutableConfig.GetPublicKey()
-
-	sh := sha.Make(object.GetTai().GetShaLike())
-	defer sha.GetPool().Put(sh)
-
-	if object.Metadata.RepoSig, err = repo_signing.Sign(
-		store.envRepo.GetConfigPrivate().ImmutableConfig.GetPrivateKey(),
-		sh.GetShaBytes(),
-	); err != nil {
-		err = errors.Wrap(err)
-		return
-	}
-
-	return
-}
-
 func (store *objectBlobStoreV1) WriteInventoryListObject(
 	object *sku.Transacted,
 ) (err error) {
@@ -121,7 +100,9 @@ func (store *objectBlobStoreV1) WriteInventoryListObject(
 		return
 	}
 
-	if err = store.signObject(object); err != nil {
+	if err = object.Sign(
+		store.envRepo.GetConfigPrivate().ImmutableConfig,
+	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

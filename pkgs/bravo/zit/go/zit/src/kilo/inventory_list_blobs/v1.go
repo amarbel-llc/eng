@@ -31,6 +31,9 @@ func (format V1) WriteObjectToOpenList(
 	object *sku.Transacted,
 	list *sku.OpenList,
 ) (n int64, err error) {
+	err = errors.ErrNotSupported
+	return
+
 	if !list.LastTai.Less(object.GetTai()) {
 		err = errors.Errorf(
 			"object order incorrect. Last: %s, current: %s",
@@ -67,6 +70,8 @@ func (format V1) WriteInventoryListBlob(
 	skus sku.Collection,
 	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
+	err = errors.ErrNotSupported
+	return
 	var n1 int64
 
 	for sk := range skus.All() {
@@ -86,6 +91,8 @@ func (s V1) WriteInventoryListObject(
 	object *sku.Transacted,
 	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
+	err = errors.ErrNotSupported
+	return
 	var n1 int64
 	var n2 int
 
@@ -111,6 +118,8 @@ func (s V1) WriteInventoryListObject(
 func (format V1) ReadInventoryListObject(
 	reader *bufio.Reader,
 ) (n int64, object *sku.Transacted, err error) {
+	err = errors.ErrNotSupported
+	return
 	object = sku.GetTransactedPool().Get()
 
 	if n, err = format.DecodeFrom(object, reader); err != nil {
@@ -129,6 +138,8 @@ func (coder V1StreamCoder) DecodeFrom(
 	output interfaces.FuncIter[*sku.Transacted],
 	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
+	err = errors.ErrNotSupported
+	return
 	for {
 		object := sku.GetTransactedPool().Get()
 		defer sku.GetTransactedPool().Put(object)
@@ -156,6 +167,8 @@ func (format V1) StreamInventoryListBlobSkus(
 	bufferedReader *bufio.Reader,
 	output interfaces.FuncIter[*sku.Transacted],
 ) (err error) {
+	err = errors.ErrNotSupported
+	return
 	for {
 		object := sku.GetTransactedPool().Get()
 		// TODO Fix upstream issues with repooling
@@ -191,6 +204,8 @@ func (coder V1ObjectCoder) EncodeTo(
 	object *sku.Transacted,
 	bufferedWriter *bufio.Writer,
 ) (n int64, err error) {
+	err = errors.ErrNotSupported
+	return
 	if object.Metadata.Sha().IsNull() {
 		err = errors.ErrorWithStackf("empty sha: %q", sku.String(object))
 		return
@@ -222,6 +237,8 @@ func (coder V1ObjectCoder) DecodeFrom(
 	object *sku.Transacted,
 	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
+	err = errors.ErrNotSupported
+	return
 	var isEOF bool
 
 	if n, err = coder.Box.ReadStringFormat(object, bufferedReader); err != nil {
@@ -257,6 +274,8 @@ func (coder V1IterDecoder) DecodeFrom(
 	yield func(*sku.Transacted) bool,
 	bufferedReader *bufio.Reader,
 ) (n int64, err error) {
+	err = errors.ErrNotSupported
+	return
 	for {
 		object := sku.GetTransactedPool().Get()
 		// TODO Fix upstream issues with repooling

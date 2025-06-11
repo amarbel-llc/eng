@@ -213,8 +213,8 @@ function checkin_simple_typ { # @test
 
 	run_zit last -format box-archive
 	assert_success
-	assert_output - <<-EOM
-		[!md @77f414a7068e223113928615caf1b11edd5bd6e8312eea8cdbaff37084b1d10b !toml-type-v1]
+	assert_output --regexp - <<-'EOM'
+		\[!md @77f414a7068e223113928615caf1b11edd5bd6e8312eea8cdbaff37084b1d10b .* !toml-type-v1]
 	EOM
 
 	run_zit show !md:t
@@ -243,9 +243,9 @@ function checkin_simple_etikett { # @test
 
 	run_zit last -format inventory-list-sans-tai
 	assert_success
-	assert_output - <<-EOM
-		[zz @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
-		[zz-archive @b8cd0eaa1891284eafdf99d3acc2007a3d4396e8a7282335f707d99825388a93]
+	assert_output --regexp - <<-'EOM'
+		\[zz @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 .*]
+		\[zz-archive @b8cd0eaa1891284eafdf99d3acc2007a3d4396e8a7282335f707d99825388a93 .*]
 	EOM
 
 	run_zit show -format blob zz-archive?e
@@ -301,7 +301,7 @@ function checkin_zettel_with_komment { # @test
 		\[etikett @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\]
 		\[etikett-one @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\]
 		\[one/uno @d2b258fadce18f2de6356bead0c773ca785237cad5009925a3cf1a77603847fc !md "wildly different" etikett-one\]
-		\[[0-9]+\.[0-9]+ @[0-9a-f]{64} !inventory_list-v1 "message"\]
+		\[[0-9]+\.[0-9]+ @[0-9a-f]{64} !inventory_list-v2 "message"\]
 	EOM
 }
 

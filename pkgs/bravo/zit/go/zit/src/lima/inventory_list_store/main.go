@@ -11,7 +11,6 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
 	"code.linenisgreat.com/zit/go/zit/src/delta/file_lock"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
@@ -216,30 +215,13 @@ func (store *Store) MakeOpenList() (openList *sku.OpenList, err error) {
 	return
 }
 
-func (store *Store) signObject(
-	object *sku.Transacted,
-) (err error) {
-	object.Metadata.RepoPubKey = store.envRepo.GetConfigPublic().ImmutableConfig.GetPublicKey()
-
-	sh := sha.Make(object.GetTai().GetShaLike())
-	defer sha.GetPool().Put(sh)
-
-	if object.Metadata.RepoSig, err = repo_signing.Sign(
-		store.envRepo.GetConfigPrivate().ImmutableConfig.GetPrivateKey(),
-		sh.GetShaBytes(),
-	); err != nil {
-		err = errors.Wrap(err)
-		return
-	}
-
-	return
-}
-
 func (store *Store) AddObjectToOpenList(
 	openList *sku.OpenList,
 	object *sku.Transacted,
 ) (err error) {
-	if err = store.signObject(object); err != nil {
+	if err = object.Sign(
+		store.envRepo.GetConfigPrivate().ImmutableConfig,
+	); err != nil {
 		err = errors.Wrap(err)
 		return
 	}

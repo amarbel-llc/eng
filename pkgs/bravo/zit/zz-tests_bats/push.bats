@@ -399,14 +399,14 @@ function push_history_default_stdio_local_archive_twice { # @test
 
 	assert_success
 	assert_output_unsorted --regexp - <<-'EOM'
-		remote: \[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v1]
+		remote: \[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v2]
 		remote: copied Blob [0-9a-f]+ \([0-9]+ bytes)
-		remote: \[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v1]
+		remote: \[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v2]
 		remote: copied Blob [0-9a-f]+ \([0-9]+ bytes)
-		remote: \[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v1]
+		remote: \[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v2]
 		remote: copied Blob [0-9a-f]+ \([0-9]+ bytes)
 		remote: copied Blob [0-9a-f]+ \([0-9]+ bytes)
-		remote: \[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v1]
+		remote: \[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v2]
 		remote: copied Blob [0-9a-f]+ \([0-9]+ bytes)
 	EOM
 
@@ -414,20 +414,20 @@ function push_history_default_stdio_local_archive_twice { # @test
 	run_zit show
 	assert_success
 	assert_output_unsorted --regexp - <<-'EOM'
-		\[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v1]
-		\[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v1]
-		\[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v1]
-		\[[0-9]+\.[0-9]+ @[0-9a-f]+ !inventory_list-v1]
-		\[konfig @9ad1b8f2538db1acb65265828f4f3d02064d6bef52721ce4cd6d528bc832b822 !toml-config-v1]
-		\[!md @b7ad8c6ccb49430260ce8df864bbf7d6f91c6860d4d602454936348655a42a16 !toml-type-v1]
-		\[one/dos @2d36c504bb5f4c6cc804c63c983174a36303e1e15a3a2120481545eec6cc5f24 !md "wow ok again" tag-3 tag-4]
-		\[one/uno @11e1c0499579c9a892263b5678e1dfc985c8643b2d7a0ebddcf4bd0e0288bc11 !md "wow the first" tag-3 tag-4]
-		\[one/uno @3aa85276929951b03184a038ca0ad67cba78ae626f2e3510426b5a17a56df955 !md "wow ok" tag-1 tag-2]
-		\[tag-1 @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
-		\[tag-2 @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
-		\[tag-3 @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
-		\[tag-4 @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
-		\[tag @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
+		\[[0-9]+\.[0-9]+ @[0-9a-f]+ .* !inventory_list-v2]
+		\[[0-9]+\.[0-9]+ @[0-9a-f]+ .* !inventory_list-v2]
+		\[[0-9]+\.[0-9]+ @[0-9a-f]+ .* !inventory_list-v2]
+		\[[0-9]+\.[0-9]+ @[0-9a-f]+ .* !inventory_list-v2]
+		\[konfig @9ad1b8f2538db1acb65265828f4f3d02064d6bef52721ce4cd6d528bc832b822 .* !toml-config-v1]
+		\[!md @b7ad8c6ccb49430260ce8df864bbf7d6f91c6860d4d602454936348655a42a16 .* !toml-type-v1]
+		\[one/dos @2d36c504bb5f4c6cc804c63c983174a36303e1e15a3a2120481545eec6cc5f24 .* !md "wow ok again" tag-3 tag-4]
+		\[one/uno @11e1c0499579c9a892263b5678e1dfc985c8643b2d7a0ebddcf4bd0e0288bc11 .* !md "wow the first" tag-3 tag-4]
+		\[one/uno @3aa85276929951b03184a038ca0ad67cba78ae626f2e3510426b5a17a56df955 .* !md "wow ok" tag-1 tag-2]
+		\[tag-1 @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 .*]
+		\[tag-2 @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 .*]
+		\[tag-3 @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 .*]
+		\[tag-4 @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 .*]
+		\[tag @e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 .*]
 	EOM
 	popd || exit 1
 

@@ -308,7 +308,7 @@ func (client *client) pullQueryGroupFromWorkingCopy(
 		var listMissingSkus *sku.List
 
 		if listMissingSkus, err = client.typedBlobStore.ReadInventoryListBlob(
-			builtin_types.GetOrPanic(builtin_types.InventoryListTypeV1).Type,
+			builtin_types.GetOrPanic(builtin_types.InventoryListTypeV2).Type,
 			br,
 		); err != nil {
 			err = errors.Wrap(err)

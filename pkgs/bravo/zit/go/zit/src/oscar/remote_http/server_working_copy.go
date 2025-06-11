@@ -22,7 +22,7 @@ func (server *Server) writeInventoryListLocalWorkingCopy(
 	request Request,
 	listSku *sku.Transacted,
 ) (response Response) {
-	listSkuType := builtin_types.GetOrPanic(builtin_types.InventoryListTypeV1).Type
+	listSkuType := builtin_types.GetOrPanic(builtin_types.InventoryListTypeV2).Type
 
 	blobStore := server.Repo.GetBlobStore()
 

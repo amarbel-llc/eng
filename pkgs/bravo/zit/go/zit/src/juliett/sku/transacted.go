@@ -7,6 +7,8 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
 	"code.linenisgreat.com/zit/go/zit/src/charlie/external_state"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
 	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
@@ -245,6 +247,25 @@ func (s *Transacted) SetBlobSha(sh interfaces.Sha) error {
 
 func (o *Transacted) GetKey() string {
 	return ids.FormattedString(o.GetObjectId())
+}
+
+func (object *Transacted) Sign(
+	config config_immutable.ConfigPrivate,
+) (err error) {
+	object.Metadata.RepoPubKey = config.GetPublicKey()
+
+	sh := sha.Make(object.GetTai().GetShaLike())
+	defer sha.GetPool().Put(sh)
+
+	if object.Metadata.RepoSig, err = repo_signing.Sign(
+		config.GetPrivateKey(),
+		sh.GetShaBytes(),
+	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	return
 }
 
 type transactedLessorTaiOnly struct{}

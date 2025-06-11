@@ -710,8 +710,9 @@ func (server *Server) handlePostInventoryList(
 			bufferedReader := ohio.BufferedReader(strings.NewReader(boxString))
 			defer pool.GetBufioReader().Put(bufferedReader)
 
+			// TODO read inventory list version somehow
 			if sk, err = typedInventoryListStore.ReadInventoryListObject(
-				ids.MustType(builtin_types.InventoryListTypeV1),
+				ids.MustType(builtin_types.InventoryListTypeV2),
 				bufferedReader,
 			); err != nil {
 				response.Error(

@@ -19,9 +19,9 @@ function last_after_init { # @test
 
 	run_zit last -format inventory-list-sans-tai
 	assert_success
-	assert_output_unsorted - <<-EOM
-		[!md @$(get_type_blob_sha) !toml-type-v1]
-		[konfig @$(get_konfig_sha) !toml-config-v1]
+	assert_output_unsorted --regexp - <<-EOM
+		\\[!md @$(get_type_blob_sha) .* !toml-type-v1]
+		\\[konfig @$(get_konfig_sha) .* !toml-config-v1]
 	EOM
 }
 
@@ -45,8 +45,8 @@ function last_after_typ_mutate { # @test
 
 	run_zit last -format inventory-list-sans-tai
 	assert_success
-	assert_output - <<-EOM
-		[!md @220519ab7c918ccbd73c2d4d73502ab2ec76106662469feea2db8960b5d68217 !toml-type-v1]
+	assert_output --regexp - <<-EOM
+		\\[!md @220519ab7c918ccbd73c2d4d73502ab2ec76106662469feea2db8960b5d68217 .* !toml-type-v1]
 	EOM
 }
 

@@ -2,7 +2,7 @@
 ! toml-config-immutable-v1
 ---
 
-private-key = 'zit-repo-private_key-v11de69ha3v6jpjl7kvn5e2vuwl8y9veda6z0j0cju4402u9sgazxhqr8sgt2'
+private-key = 'zit-repo-private_key-v11x9qju85xf63kcw4ulqwcqq87pv5alae2n7m83wkrcm9akns28pcsxpmhag'
 store-version = 10
 repo-type = 'working-copy'
 id = 'test-repo-id'
