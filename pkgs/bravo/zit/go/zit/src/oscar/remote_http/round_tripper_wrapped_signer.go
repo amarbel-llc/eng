@@ -1,6 +1,7 @@
 package remote_http
 
 import (
+	"bytes"
 	"crypto/rand"
 	"net/http"
 
@@ -33,13 +34,11 @@ func (roundTripper *RoundTripperBufioWrappedSigner) RoundTrip(
 	}
 
 	nonce := bech32.Value{
-		HRP:  "zit-nonce-v1",
+		HRP:  repo_signing.HRPRequestAuthChallengeV1,
 		Data: nonceBytes,
 	}
 
-	if !roundTripper.PublicKey.IsEmpty() {
-		request.Header.Add(headerChallengeNonce, nonce.String())
-	}
+	request.Header.Add(headerChallengeNonce, nonce.String())
 
 	if response, err = roundTripper.roundTripperBufio.RoundTrip(
 		request,
@@ -50,22 +49,54 @@ func (roundTripper *RoundTripperBufioWrappedSigner) RoundTrip(
 
 	sigString := response.Header.Get(headerChallengeResponse)
 
-	if !roundTripper.PublicKey.IsEmpty() {
-		var sig bech32.Value
+	if sigString == "" {
+		err = errors.Errorf("signature empty or not provided")
+		return
+	}
 
-		if err = sig.Set(sigString); err != nil {
-			err = errors.Wrap(err)
+	var sig bech32.Value
+
+	if sig, err = bech32.MakeValue(
+		repo_signing.HRPRequestAuthResponseV1,
+		sigString,
+	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	pubkeyString := response.Header.Get(headerRepoPublicKey)
+
+	var pubkey bech32.Value
+
+	if pubkey, err = bech32.MakeValue(
+		repo_signing.HRPRepoPubKeyV1,
+		pubkeyString,
+	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	if roundTripper.PublicKey.IsEmpty() {
+		// TODO present prompt to user for TOFU
+	} else {
+		if !bytes.Equal(roundTripper.PublicKey.GetBytes(), pubkey.Data) {
+			err = errors.Errorf(
+				"expected pubkey %q but got %q",
+				roundTripper.PublicKey.GetBytes(),
+				pubkey.Data,
+			)
+
 			return
 		}
+	}
 
-		if err = repo_signing.VerifySignature(
-			roundTripper.PublicKey,
-			nonceBytes,
-			sig.Data,
-		); err != nil {
-			err = errors.Wrap(err)
-			return
-		}
+	if err = repo_signing.VerifySignature(
+		pubkey.Data,
+		nonceBytes,
+		sig.Data,
+	); err != nil {
+		err = errors.Wrap(err)
+		return
 	}
 
 	return

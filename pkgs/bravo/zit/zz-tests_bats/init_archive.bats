@@ -32,7 +32,7 @@ function init_archive { # @test
 			! toml-config-immutable-v1
 			---
 
-			public-key = 'zit-repo-public_key-v0.*'
+			public-key = 'zit-repo-public_key-v1.*'
 			store-version = $storeVersionCurrent
 			repo-type = 'archive'
 			id = ''

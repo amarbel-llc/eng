@@ -16,6 +16,6 @@ func (b TomlPublicKeyV0) GetPublicKey() PublicKey {
 }
 
 func (b *TomlPublicKeyV0) SetPublicKey(key crypto.PublicKey) {
-	b.PublicKey.HRP = "zit-repo-public_key-v0"
+	b.PublicKey.HRP = HRPRepoPubKeyV1
 	b.PublicKey.Data = key.(PublicKey)
 }

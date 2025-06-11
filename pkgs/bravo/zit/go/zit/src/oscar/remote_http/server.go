@@ -1,7 +1,6 @@
 package remote_http
 
 import (
-	"bufio"
 	"bytes"
 	"context"
 	"crypto/tls"
@@ -193,45 +192,63 @@ func (server *Server) makeRouter(
 	}
 
 	router.Use(server.panicHandlingMiddleware)
-
-	if len(server.Repo.GetImmutableConfigPrivate().ImmutableConfig.GetPrivateKey()) > 0 {
-		router.Use(server.sigMiddleware)
-	}
+	router.Use(server.sigMiddleware)
 
 	return router
+}
+
+func (server *Server) addSignatureIfNecessary(
+	nonceString string,
+	header http.Header,
+) (err error) {
+	if nonceString == "" {
+		err = errors.Errorf("nonce empty or not provided")
+		return
+	}
+
+	var nonce bech32.Value
+
+	if nonce, err = bech32.MakeValue(
+		repo_signing.HRPRequestAuthChallengeV1,
+		nonceString,
+	); err != nil {
+		err = errors.Wrap(err)
+		return
+	}
+
+	pubkey := bech32.Value{
+		HRP:  repo_signing.HRPRepoPubKeyV1,
+		Data: server.Repo.GetImmutableConfigPublic().ImmutableConfig.GetPublicKey(),
+	}
+
+	header.Set(headerRepoPublicKey, pubkey.String())
+
+	key := server.Repo.GetImmutableConfigPrivate().ImmutableConfig.GetPrivateKey()
+
+	sig := bech32.Value{
+		HRP: repo_signing.HRPRequestAuthResponseV1,
+	}
+
+	if sig.Data, err = repo_signing.Sign(key, nonce.Data); err != nil {
+		server.EnvLocal.CancelWithError(err)
+		return
+	}
+
+	header.Set(headerChallengeResponse, sig.String())
+
+	return
 }
 
 func (server *Server) sigMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(responseWriter http.ResponseWriter, request *http.Request) {
-			nonceString := request.Header.Get(headerChallengeNonce)
-
-			var nonce bech32.Value
-
-			{
-				var err error
-
-				if err = nonce.Set(nonceString); err != nil {
-					http.Error(responseWriter, err.Error(), http.StatusBadRequest)
-					return
-				}
+			if err := server.addSignatureIfNecessary(
+				request.Header.Get(headerChallengeNonce),
+				responseWriter.Header(),
+			); err != nil {
+				http.Error(responseWriter, err.Error(), http.StatusBadRequest)
+				return
 			}
-
-			key := server.Repo.GetImmutableConfigPrivate().ImmutableConfig.GetPrivateKey()
-
-			sig := bech32.Value{
-				HRP: "zit-request_sig-v1",
-			}
-
-			{
-				var err error
-
-				if sig.Data, err = repo_signing.Sign(key, nonce.Data); err != nil {
-					server.EnvLocal.CancelWithError(err)
-				}
-			}
-
-			responseWriter.Header().Set(headerChallengeResponse, sig.String())
 
 			next.ServeHTTP(responseWriter, request)
 		},
@@ -332,62 +349,6 @@ func (server *Server) ServeStdio() {
 type funcHandler func(Request) Response
 
 type handlerWrapper funcHandler
-
-// TODO switch to using responseWriter
-func (server *Server) makeHandlerUsingBufferedWriter(
-	handler funcHandler,
-	out *bufio.Writer,
-) http.HandlerFunc {
-	return func(responseWriter http.ResponseWriter, req *http.Request) {
-		request := Request{
-			context:    errors.MakeContext(server.EnvLocal),
-			request:    req,
-			MethodPath: MethodPath{Method: req.Method, Path: req.URL.Path},
-			Headers:    req.Header,
-			Body:       req.Body,
-		}
-
-		var response Response
-
-		if err := errors.RunContextWithPrintTicker(
-			request.context,
-			func(ctx errors.Context) {
-				response = handler(request)
-
-				responseModified := http.Response{
-					TransferEncoding: []string{"chunked"},
-					ProtoMajor:       req.ProtoMajor,
-					ProtoMinor:       req.ProtoMinor,
-					Request:          req,
-					StatusCode:       response.StatusCode,
-					Body:             response.Body,
-				}
-
-				// TODO determine why iterating thru the headers and setting them manually
-				// doesn't work
-				responseModified.Header = responseWriter.Header().Clone()
-
-				if responseModified.StatusCode == 0 {
-					responseModified.StatusCode = http.StatusOK
-				}
-
-				if err := responseModified.Write(out); err != nil {
-					if errors.IsEOF(err) {
-						err = nil
-					} else {
-						ctx.CancelWithError(err)
-					}
-				}
-			},
-			func(time time.Time) {
-				ui.Log().Printf("Still serving request (%s): %s", time, req.URL)
-			},
-			3*time.Second,
-		); err != nil {
-			server.EnvLocal.CancelWithError(err)
-		}
-	}
-}
 
 func (server *Server) makeHandler(
 	handler funcHandler,

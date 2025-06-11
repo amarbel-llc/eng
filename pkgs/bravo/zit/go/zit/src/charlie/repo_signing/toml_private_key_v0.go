@@ -27,7 +27,7 @@ func (b *TomlPrivateKeyV0) GeneratePrivateKey() (err error) {
 	}
 
 	b.PrivateKey.Data = privateKey.Seed()
-	b.PrivateKey.HRP = "zit-repo-private_key-v1"
+	b.PrivateKey.HRP = HRPRepoPrivateKeyV1
 
 	return
 }
@@ -37,13 +37,13 @@ func (b TomlPrivateKeyV0) GetPrivateKey() PrivateKey {
 }
 
 func (b *TomlPrivateKeyV0) SetPrivateKey(key crypto.PrivateKey) {
-	b.PrivateKey.HRP = "zit-repo-private_key-v0"
+	b.PrivateKey.HRP = HRPRepoPrivateKeyV1
 	b.PrivateKey.Data = key.(PrivateKey)
 }
 
 func (b *TomlPrivateKeyV0) GetPublicKey() TomlPublicKeyV0 {
 	pub := bech32.Value{
-		HRP:  "zit-repo-public_key-v0",
+		HRP:  HRPRepoPubKeyV1,
 		Data: b.GetPrivateKey().Public().(ed25519.PublicKey),
 	}
 

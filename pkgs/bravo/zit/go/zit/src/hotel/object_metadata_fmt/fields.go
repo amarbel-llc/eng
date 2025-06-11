@@ -6,6 +6,7 @@ import (
 	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
 	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
 	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
 	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
 	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
@@ -96,7 +97,7 @@ func MetadataFieldRepoPubKey(
 	return string_format_writer.Field{
 		Key: "repo-pubkey",
 		Value: bech32.Value{
-			HRP:  "zit-repo-pubkey-v1",
+			HRP:  repo_signing.HRPRepoPubKeyV1,
 			Data: m.RepoPubKey,
 		}.String(),
 		NoTruncate: true,
@@ -110,7 +111,7 @@ func MetadataFieldRepoSig(
 	return string_format_writer.Field{
 		Key: "repo-sig",
 		Value: bech32.Value{
-			HRP:  "zit-repo-sig-v1",
+			HRP:  repo_signing.HRPRepoSigV1,
 			Data: m.RepoSig,
 		}.String(),
 		NoTruncate: true,
