@@ -13,14 +13,16 @@
         let
           pkgs = import nixpkgs {
             inherit system;
+            config.allowUnfree = true;
           };
 
         in
 
         {
+
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              claude
+              claude-code
             ];
           };
         })
