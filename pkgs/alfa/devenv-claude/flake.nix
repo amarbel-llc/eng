@@ -1,5 +1,5 @@
 {
-  description = "A Nix-flake-based Python development environment";
+  description = "A Nix-flake-based claude development environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -20,12 +20,7 @@
         {
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              uv
-              ruff
-              (python313.withPackages (ps: with ps; [
-                python-lsp-server
-                python-lsp-ruff
-              ]))
+              claude
             ];
           };
         })
