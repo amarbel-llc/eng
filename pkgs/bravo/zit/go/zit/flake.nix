@@ -5,6 +5,7 @@
 
     devenv-go.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-go";
     devenv-shell.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-shell";
+    devenv-claude.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-claude";
   };
 
   outputs = {
@@ -14,6 +15,7 @@
     utils,
     devenv-go,
     devenv-shell,
+    devenv-claude,
   }:
     (utils.lib.eachDefaultSystem
       (system:
@@ -64,6 +66,7 @@
             inputsFrom = [
               devenv-go.devShells.${system}.default
               devenv-shell.devShells.${system}.default
+              devenv-claude.devShells.${system}.default
             ];
           };
         })
