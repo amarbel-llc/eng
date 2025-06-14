@@ -81,11 +81,11 @@ func (m *Metadata) SetFlagSetTags(f *flag.FlagSet, usage string) {
 		func() string {
 			return m.Cache.TagPaths.String()
 		},
-		func(v string) (err error) {
-			vs := strings.Split(v, ",")
+		func(value string) (err error) {
+			values := strings.Split(value, ",")
 
-			for _, v := range vs {
-				if err = m.AddTagString(v); err != nil {
+			for _, tagString := range values {
+				if err = m.AddTagString(tagString); err != nil {
 					err = errors.Wrap(err)
 					return
 				}

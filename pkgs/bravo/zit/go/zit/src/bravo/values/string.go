@@ -50,17 +50,17 @@ func (str String) Len() int {
 	return len(str.string)
 }
 
-func (str String) Less(b String) bool {
-	return str.string < b.string
+func (str String) Less(other String) bool {
+	return str.string < other.string
 }
 
 func (str String) WasSet() bool {
 	return str.wasSet
 }
 
-func (a *String) Reset() {
-	a.wasSet = false
-	a.string = ""
+func (str *String) Reset() {
+	str.wasSet = false
+	str.string = ""
 }
 
 func (a *String) ResetWith(b String) {

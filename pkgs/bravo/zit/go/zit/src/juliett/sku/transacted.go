@@ -44,9 +44,9 @@ func (t *Transacted) GetExternalState() external_state.State {
 	return t.State
 }
 
-func (transacted *Transacted) CloneTransacted() (b *Transacted) {
-	b = GetTransactedPool().Get()
-	TransactedResetter.ResetWith(b, transacted)
+func (transacted *Transacted) CloneTransacted() (cloned *Transacted) {
+	cloned = GetTransactedPool().Get()
+	TransactedResetter.ResetWith(cloned, transacted)
 	return
 }
 
@@ -54,14 +54,14 @@ func (t *Transacted) GetSku() *Transacted {
 	return t
 }
 
-func (transacted *Transacted) SetFromTransacted(b *Transacted) (err error) {
-	TransactedResetter.ResetWith(transacted, b)
+func (transacted *Transacted) SetFromTransacted(other *Transacted) (err error) {
+	TransactedResetter.ResetWith(transacted, other)
 
 	return
 }
 
-func (transacted *Transacted) Less(b *Transacted) bool {
-	less := transacted.GetTai().Less(b.GetTai())
+func (transacted *Transacted) Less(other *Transacted) bool {
+	less := transacted.GetTai().Less(other.GetTai())
 
 	return less
 }
@@ -70,19 +70,19 @@ func (transacted *Transacted) GetTags() ids.TagSet {
 	return transacted.Metadata.GetTags()
 }
 
-func (transacted *Transacted) AddTagPtr(e *ids.Tag) (err error) {
+func (transacted *Transacted) AddTagPtr(tag *ids.Tag) (err error) {
 	if transacted.ObjectId.GetGenre() == genres.Tag &&
-		strings.HasPrefix(transacted.ObjectId.String(), e.String()) {
+		strings.HasPrefix(transacted.ObjectId.String(), tag.String()) {
 		return
 	}
 
-	ek := transacted.Metadata.Cache.GetImplicitTags().KeyPtr(e)
+	tagKey := transacted.Metadata.Cache.GetImplicitTags().KeyPtr(tag)
 
-	if transacted.Metadata.Cache.GetImplicitTags().ContainsKey(ek) {
+	if transacted.Metadata.Cache.GetImplicitTags().ContainsKey(tagKey) {
 		return
 	}
 
-	if err = transacted.GetMetadata().AddTagPtr(e); err != nil {
+	if err = transacted.GetMetadata().AddTagPtr(tag); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -90,8 +90,8 @@ func (transacted *Transacted) AddTagPtr(e *ids.Tag) (err error) {
 	return
 }
 
-func (transacted *Transacted) AddTagPtrFast(e *ids.Tag) (err error) {
-	if err = transacted.GetMetadata().AddTagPtrFast(e); err != nil {
+func (transacted *Transacted) AddTagPtrFast(tag *ids.Tag) (err error) {
+	if err = transacted.GetMetadata().AddTagPtrFast(tag); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -111,16 +111,16 @@ func (transacted *Transacted) GetTai() ids.Tai {
 	return transacted.Metadata.GetTai()
 }
 
-func (transacted *Transacted) SetTai(t ids.Tai) {
-	transacted.GetMetadata().Tai = t
+func (transacted *Transacted) SetTai(tai ids.Tai) {
+	transacted.GetMetadata().Tai = tai
 }
 
 func (transacted *Transacted) GetObjectId() *ids.ObjectId {
 	return &transacted.ObjectId
 }
 
-func (transacted *Transacted) SetObjectIdLike(kl interfaces.ObjectId) (err error) {
-	if err = transacted.ObjectId.SetWithIdLike(kl); err != nil {
+func (transacted *Transacted) SetObjectIdLike(objectIdLike interfaces.ObjectId) (err error) {
+	if err = transacted.ObjectId.SetWithIdLike(objectIdLike); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -128,12 +128,12 @@ func (transacted *Transacted) SetObjectIdLike(kl interfaces.ObjectId) (err error
 	return
 }
 
-func (transacted *Transacted) EqualsAny(b any) (ok bool) {
-	return values.Equals(transacted, b)
+func (transacted *Transacted) EqualsAny(other any) (ok bool) {
+	return values.Equals(transacted, other)
 }
 
-func (transacted *Transacted) Equals(b *Transacted) (ok bool) {
-	if transacted.GetObjectId().String() != b.GetObjectId().String() {
+func (transacted *Transacted) Equals(other *Transacted) (ok bool) {
+	if transacted.GetObjectId().String() != other.GetObjectId().String() {
 		return
 	}
 
@@ -142,7 +142,7 @@ func (transacted *Transacted) Equals(b *Transacted) (ok bool) {
 	// 	return
 	// }
 
-	if !transacted.Metadata.Equals(&b.Metadata) {
+	if !transacted.Metadata.Equals(&other.Metadata) {
 		return
 	}
 

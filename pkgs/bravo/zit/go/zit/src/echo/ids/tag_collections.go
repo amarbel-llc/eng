@@ -49,27 +49,27 @@ func MakeTagMutableSet(hs ...Tag) TagMutableSet {
 	)
 }
 
-func TagSetEquals(a, b TagSet) bool {
-	return quiter.SetEqualsPtr(a, b)
+func TagSetEquals(first, second TagSet) bool {
+	return quiter.SetEqualsPtr(first, second)
 }
 
 type TagSlice []Tag
 
-func MakeTagSlice(es ...Tag) (s TagSlice) {
-	s = make([]Tag, len(es))
+func MakeTagSlice(tags ...Tag) (slice TagSlice) {
+	slice = make([]Tag, len(tags))
 
-	for i, e := range es {
-		s[i] = e
+	for index, tag := range tags {
+		slice[index] = tag
 	}
 
 	return
 }
 
-func NewSliceFromStrings(es ...string) (s TagSlice, err error) {
-	s = make([]Tag, len(es))
+func NewSliceFromStrings(tagStrings ...string) (slice TagSlice, err error) {
+	slice = make([]Tag, len(tagStrings))
 
-	for i, e := range es {
-		if err = s[i].Set(e); err != nil {
+	for index, tagString := range tagStrings {
+		if err = slice[index].Set(tagString); err != nil {
 			err = errors.Wrap(err)
 			return
 		}
@@ -88,15 +88,15 @@ func (s TagSlice) Len() int {
 	return len(s)
 }
 
-func (es *TagSlice) AddString(v string) (err error) {
-	var e Tag
+func (tags *TagSlice) AddString(value string) (err error) {
+	var tag Tag
 
-	if err = e.Set(v); err != nil {
+	if err = tag.Set(value); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
 
-	es.Add(e)
+	tags.Add(tag)
 
 	return
 }

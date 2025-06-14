@@ -156,8 +156,8 @@ func (dst *Sha) SetShaLike(src ShaLike) (err error) {
 	return
 }
 
-func (s *Sha) SetParts(a, b string) (err error) {
-	if err = s.Set(a + b); err != nil {
+func (s *Sha) SetParts(head, tail string) (err error) {
+	if err = s.Set(head + tail); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -165,9 +165,9 @@ func (s *Sha) SetParts(a, b string) (err error) {
 	return
 }
 
-func (s *Sha) SetFromPath(p string) (err error) {
-	tail := filepath.Base(p)
-	head := filepath.Base(filepath.Dir(p))
+func (s *Sha) SetFromPath(path string) (err error) {
+	tail := filepath.Base(path)
+	head := filepath.Base(filepath.Dir(path))
 
 	switch {
 	case tail == string(filepath.Separator) || head == string(filepath.Separator):
@@ -191,17 +191,17 @@ func (s *Sha) SetFromPath(p string) (err error) {
 	return
 }
 
-func (s *Sha) ReadAtFrom(r io.ReaderAt, start int64) (n int64, err error) {
+func (s *Sha) ReadAtFrom(reader io.ReaderAt, start int64) (bytesRead int64, err error) {
 	s.allocDataIfNecessary()
 
-	var n1 int
-	n1, err = r.ReadAt(s.data[:], start)
-	n += int64(n1)
+	var bytesCount int
+	bytesCount, err = reader.ReadAt(s.data[:], start)
+	bytesRead += int64(bytesCount)
 
-	if n == 0 && err == io.EOF {
+	if bytesRead == 0 && err == io.EOF {
 		return
-	} else if n != ByteSize && n != 0 {
-		err = errors.ErrorWithStackf("expected to read %d bytes but only read %d", ByteSize, n)
+	} else if bytesRead != ByteSize && bytesRead != 0 {
+		err = errors.ErrorWithStackf("expected to read %d bytes but only read %d", ByteSize, bytesRead)
 		return
 	} else if errors.IsNotNilAndNotEOF(err) {
 		err = errors.Wrap(err)
@@ -211,17 +211,17 @@ func (s *Sha) ReadAtFrom(r io.ReaderAt, start int64) (n int64, err error) {
 	return
 }
 
-func (s *Sha) ReadFrom(r io.Reader) (n int64, err error) {
+func (s *Sha) ReadFrom(reader io.Reader) (bytesRead int64, err error) {
 	s.allocDataIfNecessary()
 
-	var n1 int
-	n1, err = ohio.ReadAllOrDieTrying(r, s.data[:])
-	n += int64(n1)
+	var bytesCount int
+	bytesCount, err = ohio.ReadAllOrDieTrying(reader, s.data[:])
+	bytesRead += int64(bytesCount)
 
-	if n == 0 && err == io.EOF {
+	if bytesRead == 0 && err == io.EOF {
 		return
-	} else if n != ByteSize && n != 0 {
-		err = errors.ErrorWithStackf("expected to read %d bytes but only read %d", ByteSize, n)
+	} else if bytesRead != ByteSize && bytesRead != 0 {
+		err = errors.ErrorWithStackf("expected to read %d bytes but only read %d", ByteSize, bytesRead)
 		return
 	} else if errors.IsNotNilAndNotEOF(err) {
 		err = errors.Wrap(err)
@@ -231,41 +231,41 @@ func (s *Sha) ReadFrom(r io.Reader) (n int64, err error) {
 	return
 }
 
-func (s *Sha) SetHexBytes(b []byte) (err error) {
+func (s *Sha) SetHexBytes(bytess []byte) (err error) {
 	s.allocDataIfNecessary()
 
-	b = bytes.TrimSpace(b)
+	bytess = bytes.TrimSpace(bytess)
 
-	if len(b) == 0 {
+	if len(bytess) == 0 {
 		return
 	}
 
-	var n int
+	var bytesDecoded int
 
-	if _, n, err = hexDecode(s.data[:0], b); err != nil {
-		err = errors.Wrapf(err, "N: %d, Data: %q", n, b)
+	if _, bytesDecoded, err = hexDecode(s.data[:0], bytess); err != nil {
+		err = errors.Wrapf(err, "N: %d, Data: %q", bytesDecoded, bytess)
 		return
 	}
 
 	return
 }
 
-func (s *Sha) Set(v string) (err error) {
+func (s *Sha) Set(value string) (err error) {
 	s.allocDataIfNecessary()
 
-	v1 := strings.TrimSpace(v)
-	v1 = strings.TrimPrefix(v1, "@")
+	value1 := strings.TrimSpace(value)
+	value1 = strings.TrimPrefix(value1, "@")
 
-	var b []byte
+	var decodedBytes []byte
 
-	if b, err = hex.DecodeString(v1); err != nil {
-		err = errors.Wrapf(err, "%q", v1)
+	if decodedBytes, err = hex.DecodeString(value1); err != nil {
+		err = errors.Wrapf(err, "%q", value1)
 		return
 	}
 
-	n := copy(s.data[:], b)
+	bytesWritten := copy(s.data[:], decodedBytes)
 
-	if err = makeErrLength(ByteSize, n); err != nil {
+	if err = makeErrLength(ByteSize, bytesWritten); err != nil {
 		return
 	}
 
@@ -285,26 +285,26 @@ func (s *Sha) Reset() {
 	s.ResetWith(&shaNull)
 }
 
-func (sha *Sha) ResetWith(b *Sha) {
+func (sha *Sha) ResetWith(other *Sha) {
 	sha.allocDataIfNecessary()
 
-	if b.IsNull() {
+	if other.IsNull() {
 		copy(sha.data[:], shaNull.data[:])
 	} else {
-		copy(sha.data[:], b.data[:])
+		copy(sha.data[:], other.data[:])
 	}
 }
 
-func (sha *Sha) ResetWithShaLike(b interfaces.Sha) {
+func (sha *Sha) ResetWithShaLike(other interfaces.Sha) {
 	sha.allocDataIfNecessary()
-	copy(sha.data[:], b.GetShaBytes())
+	copy(sha.data[:], other.GetShaBytes())
 }
 
-func (s *Sha) Path(pc ...string) string {
-	pc = append(pc, s.GetHead())
-	pc = append(pc, s.GetTail())
+func (s *Sha) Path(pathComponents ...string) string {
+	pathComponents = append(pathComponents, s.GetHead())
+	pathComponents = append(pathComponents, s.GetTail())
 
-	return path.Join(pc...)
+	return path.Join(pathComponents...)
 }
 
 func (s *Sha) MarshalBinary() (text []byte, err error) {
