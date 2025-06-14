@@ -145,7 +145,7 @@ func (store *Store) addSuperTags(
 	return
 }
 
-func (k *Store) addImplicitTags(
+func (store *Store) addImplicitTags(
 	sk *sku.Transacted,
 ) (err error) {
 	mp := &sk.Metadata
@@ -156,7 +156,7 @@ func (k *Store) addImplicitTags(
 		p1.Type = tag_paths.TypeIndirect
 		p1.Add(catgut.MakeFromString(e.String()))
 
-		implicitTags := k.config.GetImplicitTags(e)
+		implicitTags := store.config.GetImplicitTags(e)
 
 		if implicitTags.Len() == 0 {
 			sk.Metadata.Cache.TagPaths.AddPathWithType(p1)
@@ -174,7 +174,7 @@ func (k *Store) addImplicitTags(
 
 	mp.GetTags().EachPtr(addImplicitTags)
 
-	typKonfig := k.config.GetApproximatedType(mp.GetType()).ApproximatedOrActual()
+	typKonfig := store.config.GetApproximatedType(mp.GetType()).ApproximatedOrActual()
 
 	if typKonfig != nil {
 		typKonfig.GetTags().EachPtr(ie.AddPtr)

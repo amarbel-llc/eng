@@ -20,8 +20,8 @@ func MakeStringDefault(v string) String {
 	}
 }
 
-func (sv *String) Set(v string) (err error) {
-	*sv = String{
+func (str *String) Set(v string) (err error) {
+	*str = String{
 		wasSet: true,
 		string: v,
 	}
@@ -29,33 +29,33 @@ func (sv *String) Set(v string) (err error) {
 	return
 }
 
-func (sv String) Match(v string) (err error) {
-	if sv.string != v {
-		err = errors.BadRequestf("expected %q but got %q", sv.string, v)
+func (str String) Match(v string) (err error) {
+	if str.string != v {
+		err = errors.BadRequestf("expected %q but got %q", str.string, v)
 		return
 	}
 
 	return
 }
 
-func (sv String) String() string {
-	return sv.string
+func (str String) String() string {
+	return str.string
 }
 
-func (sv String) IsEmpty() bool {
-	return len(sv.string) == 0
+func (str String) IsEmpty() bool {
+	return len(str.string) == 0
 }
 
-func (sv String) Len() int {
-	return len(sv.string)
+func (str String) Len() int {
+	return len(str.string)
 }
 
-func (a String) Less(b String) bool {
-	return a.string < b.string
+func (str String) Less(b String) bool {
+	return str.string < b.string
 }
 
-func (a String) WasSet() bool {
-	return a.wasSet
+func (str String) WasSet() bool {
+	return str.wasSet
 }
 
 func (a *String) Reset() {

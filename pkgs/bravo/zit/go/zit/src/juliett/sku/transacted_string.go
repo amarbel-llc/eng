@@ -2,52 +2,52 @@ package sku
 
 import "fmt"
 
-func (a *Transacted) String() string {
+func (transacted *Transacted) String() string {
 	return fmt.Sprintf(
 		"%s %s %s",
-		&a.ObjectId,
-		a.GetObjectSha(),
-		a.GetBlobSha(),
+		&transacted.ObjectId,
+		transacted.GetObjectSha(),
+		transacted.GetBlobSha(),
 	)
 }
 
-func (a *Transacted) StringObjectIdDescription() string {
+func (transacted *Transacted) StringObjectIdDescription() string {
 	return fmt.Sprintf(
 		"[%s %q]",
-		&a.ObjectId,
-		a.Metadata.Description,
+		&transacted.ObjectId,
+		transacted.Metadata.Description,
 	)
 }
 
-func (a *Transacted) StringObjectIdTai() string {
+func (transacted *Transacted) StringObjectIdTai() string {
 	return fmt.Sprintf(
 		"%s@%s",
-		&a.ObjectId,
-		a.GetTai().StringDefaultFormat(),
+		&transacted.ObjectId,
+		transacted.GetTai().StringDefaultFormat(),
 	)
 }
 
-func (a *Transacted) StringObjectIdTaiBlob() string {
+func (transacted *Transacted) StringObjectIdTaiBlob() string {
 	return fmt.Sprintf(
 		"%s@%s@%s",
-		&a.ObjectId,
-		a.GetTai().StringDefaultFormat(),
-		a.GetBlobSha(),
+		&transacted.ObjectId,
+		transacted.GetTai().StringDefaultFormat(),
+		transacted.GetBlobSha(),
 	)
 }
 
-func (a *Transacted) StringObjectIdSha() string {
+func (transacted *Transacted) StringObjectIdSha() string {
 	return fmt.Sprintf(
 		"%s@%s",
-		&a.ObjectId,
-		a.GetMetadata().Sha(),
+		&transacted.ObjectId,
+		transacted.GetMetadata().Sha(),
 	)
 }
 
-func (a *Transacted) StringObjectIdParent() string {
+func (transacted *Transacted) StringObjectIdParent() string {
 	return fmt.Sprintf(
 		"%s^@%s",
-		&a.ObjectId,
-		a.GetMetadata().Mutter(),
+		&transacted.ObjectId,
+		transacted.GetMetadata().Mutter(),
 	)
 }

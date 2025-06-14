@@ -44,9 +44,9 @@ func (t *Transacted) GetExternalState() external_state.State {
 	return t.State
 }
 
-func (a *Transacted) CloneTransacted() (b *Transacted) {
+func (transacted *Transacted) CloneTransacted() (b *Transacted) {
 	b = GetTransactedPool().Get()
-	TransactedResetter.ResetWith(b, a)
+	TransactedResetter.ResetWith(b, transacted)
 	return
 }
 
@@ -54,35 +54,35 @@ func (t *Transacted) GetSku() *Transacted {
 	return t
 }
 
-func (a *Transacted) SetFromTransacted(b *Transacted) (err error) {
-	TransactedResetter.ResetWith(a, b)
+func (transacted *Transacted) SetFromTransacted(b *Transacted) (err error) {
+	TransactedResetter.ResetWith(transacted, b)
 
 	return
 }
 
-func (a *Transacted) Less(b *Transacted) bool {
-	less := a.GetTai().Less(b.GetTai())
+func (transacted *Transacted) Less(b *Transacted) bool {
+	less := transacted.GetTai().Less(b.GetTai())
 
 	return less
 }
 
-func (a *Transacted) GetTags() ids.TagSet {
-	return a.Metadata.GetTags()
+func (transacted *Transacted) GetTags() ids.TagSet {
+	return transacted.Metadata.GetTags()
 }
 
-func (a *Transacted) AddTagPtr(e *ids.Tag) (err error) {
-	if a.ObjectId.GetGenre() == genres.Tag &&
-		strings.HasPrefix(a.ObjectId.String(), e.String()) {
+func (transacted *Transacted) AddTagPtr(e *ids.Tag) (err error) {
+	if transacted.ObjectId.GetGenre() == genres.Tag &&
+		strings.HasPrefix(transacted.ObjectId.String(), e.String()) {
 		return
 	}
 
-	ek := a.Metadata.Cache.GetImplicitTags().KeyPtr(e)
+	ek := transacted.Metadata.Cache.GetImplicitTags().KeyPtr(e)
 
-	if a.Metadata.Cache.GetImplicitTags().ContainsKey(ek) {
+	if transacted.Metadata.Cache.GetImplicitTags().ContainsKey(ek) {
 		return
 	}
 
-	if err = a.GetMetadata().AddTagPtr(e); err != nil {
+	if err = transacted.GetMetadata().AddTagPtr(e); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -90,8 +90,8 @@ func (a *Transacted) AddTagPtr(e *ids.Tag) (err error) {
 	return
 }
 
-func (a *Transacted) AddTagPtrFast(e *ids.Tag) (err error) {
-	if err = a.GetMetadata().AddTagPtrFast(e); err != nil {
+func (transacted *Transacted) AddTagPtrFast(e *ids.Tag) (err error) {
+	if err = transacted.GetMetadata().AddTagPtrFast(e); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -99,28 +99,28 @@ func (a *Transacted) AddTagPtrFast(e *ids.Tag) (err error) {
 	return
 }
 
-func (a *Transacted) GetType() ids.Type {
-	return a.Metadata.Type
+func (transacted *Transacted) GetType() ids.Type {
+	return transacted.Metadata.Type
 }
 
-func (a *Transacted) GetMetadata() *object_metadata.Metadata {
-	return &a.Metadata
+func (transacted *Transacted) GetMetadata() *object_metadata.Metadata {
+	return &transacted.Metadata
 }
 
-func (a *Transacted) GetTai() ids.Tai {
-	return a.Metadata.GetTai()
+func (transacted *Transacted) GetTai() ids.Tai {
+	return transacted.Metadata.GetTai()
 }
 
-func (a *Transacted) SetTai(t ids.Tai) {
-	a.GetMetadata().Tai = t
+func (transacted *Transacted) SetTai(t ids.Tai) {
+	transacted.GetMetadata().Tai = t
 }
 
-func (a *Transacted) GetObjectId() *ids.ObjectId {
-	return &a.ObjectId
+func (transacted *Transacted) GetObjectId() *ids.ObjectId {
+	return &transacted.ObjectId
 }
 
-func (a *Transacted) SetObjectIdLike(kl interfaces.ObjectId) (err error) {
-	if err = a.ObjectId.SetWithIdLike(kl); err != nil {
+func (transacted *Transacted) SetObjectIdLike(kl interfaces.ObjectId) (err error) {
+	if err = transacted.ObjectId.SetWithIdLike(kl); err != nil {
 		err = errors.Wrap(err)
 		return
 	}
@@ -128,12 +128,12 @@ func (a *Transacted) SetObjectIdLike(kl interfaces.ObjectId) (err error) {
 	return
 }
 
-func (a *Transacted) EqualsAny(b any) (ok bool) {
-	return values.Equals(a, b)
+func (transacted *Transacted) EqualsAny(b any) (ok bool) {
+	return values.Equals(transacted, b)
 }
 
-func (a *Transacted) Equals(b *Transacted) (ok bool) {
-	if a.GetObjectId().String() != b.GetObjectId().String() {
+func (transacted *Transacted) Equals(b *Transacted) (ok bool) {
+	if transacted.GetObjectId().String() != b.GetObjectId().String() {
 		return
 	}
 
@@ -142,7 +142,7 @@ func (a *Transacted) Equals(b *Transacted) (ok bool) {
 	// 	return
 	// }
 
-	if !a.Metadata.Equals(&b.Metadata) {
+	if !transacted.Metadata.Equals(&b.Metadata) {
 		return
 	}
 
@@ -165,7 +165,7 @@ func (s *Transacted) CalculateObjectShas() (err error) {
 	return s.calculateObjectSha(false)
 }
 
-func (s *Transacted) makeShaCalcFunc(
+func (transacted *Transacted) makeShaCalcFunc(
 	f func(object_inventory_format.FormatGeneric, object_inventory_format.FormatterContext) (*sha.Sha, error),
 	of object_inventory_format.FormatGeneric,
 	sh *sha.Sha,
@@ -175,7 +175,7 @@ func (s *Transacted) makeShaCalcFunc(
 
 		if actual, err = f(
 			of,
-			s,
+			transacted,
 		); err != nil {
 			err = errors.Wrap(err)
 			return
@@ -189,7 +189,7 @@ func (s *Transacted) makeShaCalcFunc(
 	}
 }
 
-func (s *Transacted) calculateObjectSha(debug bool) (err error) {
+func (transacted *Transacted) calculateObjectSha(debug bool) (err error) {
 	f := object_inventory_format.GetShaForContext
 
 	if debug {
@@ -199,65 +199,65 @@ func (s *Transacted) calculateObjectSha(debug bool) (err error) {
 	wg := errors.MakeWaitGroupParallel()
 
 	wg.Do(
-		s.makeShaCalcFunc(
+		transacted.makeShaCalcFunc(
 			f,
 			object_inventory_format.Formats.MetadataObjectIdParent(),
-			s.Metadata.Sha(),
+			transacted.Metadata.Sha(),
 		),
 	)
 
 	wg.Do(
-		s.makeShaCalcFunc(
+		transacted.makeShaCalcFunc(
 			f,
 			object_inventory_format.Formats.Metadata(),
-			&s.Metadata.SelfMetadata,
+			&transacted.Metadata.SelfMetadata,
 		),
 	)
 
 	wg.Do(
-		s.makeShaCalcFunc(
+		transacted.makeShaCalcFunc(
 			f,
 			object_inventory_format.Formats.MetadataSansTai(),
-			&s.Metadata.SelfMetadataWithoutTai,
+			&transacted.Metadata.SelfMetadataWithoutTai,
 		),
 	)
 
 	return wg.GetError()
 }
 
-func (s *Transacted) SetDormant(v bool) {
-	s.Metadata.Cache.Dormant.SetBool(v)
+func (transacted *Transacted) SetDormant(v bool) {
+	transacted.Metadata.Cache.Dormant.SetBool(v)
 }
 
-func (s *Transacted) SetObjectSha(v interfaces.Sha) (err error) {
-	return s.GetMetadata().Sha().SetShaLike(v)
+func (transacted *Transacted) SetObjectSha(v interfaces.Sha) (err error) {
+	return transacted.GetMetadata().Sha().SetShaLike(v)
 }
 
-func (s *Transacted) GetObjectSha() interfaces.Sha {
-	return s.GetMetadata().Sha()
+func (transacted *Transacted) GetObjectSha() interfaces.Sha {
+	return transacted.GetMetadata().Sha()
 }
 
-func (s *Transacted) GetBlobSha() interfaces.Sha {
-	return &s.Metadata.Blob
+func (transacted *Transacted) GetBlobSha() interfaces.Sha {
+	return &transacted.Metadata.Blob
 }
 
-func (s *Transacted) SetBlobSha(sh interfaces.Sha) error {
-	return s.Metadata.Blob.SetShaLike(sh)
+func (transacted *Transacted) SetBlobSha(sh interfaces.Sha) error {
+	return transacted.Metadata.Blob.SetShaLike(sh)
 }
 
-func (o *Transacted) GetKey() string {
-	return ids.FormattedString(o.GetObjectId())
+func (transacted *Transacted) GetKey() string {
+	return ids.FormattedString(transacted.GetObjectId())
 }
 
-func (object *Transacted) Sign(
+func (transacted *Transacted) Sign(
 	config config_immutable.ConfigPrivate,
 ) (err error) {
-	object.Metadata.RepoPubKey = config.GetPublicKey()
+	transacted.Metadata.RepoPubKey = config.GetPublicKey()
 
-	sh := sha.Make(object.GetTai().GetShaLike())
+	sh := sha.Make(transacted.GetTai().GetShaLike())
 	defer sha.GetPool().Put(sh)
 
-	if object.Metadata.RepoSig, err = repo_signing.Sign(
+	if transacted.Metadata.RepoSig, err = repo_signing.Sign(
 		config.GetPrivateKey(),
 		sh.GetShaBytes(),
 	); err != nil {

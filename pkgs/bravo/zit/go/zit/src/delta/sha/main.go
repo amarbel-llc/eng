@@ -107,24 +107,24 @@ func (s *Sha) GetTail() string {
 	return s.String()[2:]
 }
 
-func (a *Sha) AssertEqualsShaLike(b interfaces.Sha) error {
-	if !a.EqualsSha(b) {
-		return MakeErrNotEqual(a, b)
+func (sha *Sha) AssertEqualsShaLike(b interfaces.Sha) error {
+	if !sha.EqualsSha(b) {
+		return MakeErrNotEqual(sha, b)
 	}
 
 	return nil
 }
 
-func (a *Sha) EqualsAny(b any) bool {
-	return values.Equals(a, b)
+func (sha *Sha) EqualsAny(b any) bool {
+	return values.Equals(sha, b)
 }
 
-func (a *Sha) EqualsSha(b interfaces.Sha) bool {
-	return a.GetShaString() == b.GetShaString()
+func (sha *Sha) EqualsSha(b interfaces.Sha) bool {
+	return sha.GetShaString() == b.GetShaString()
 }
 
-func (a *Sha) Equals(b *Sha) bool {
-	return a.GetShaString() == b.GetShaString()
+func (sha *Sha) Equals(b *Sha) bool {
+	return sha.GetShaString() == b.GetShaString()
 }
 
 //  __        __    _ _   _
@@ -285,19 +285,19 @@ func (s *Sha) Reset() {
 	s.ResetWith(&shaNull)
 }
 
-func (a *Sha) ResetWith(b *Sha) {
-	a.allocDataIfNecessary()
+func (sha *Sha) ResetWith(b *Sha) {
+	sha.allocDataIfNecessary()
 
 	if b.IsNull() {
-		copy(a.data[:], shaNull.data[:])
+		copy(sha.data[:], shaNull.data[:])
 	} else {
-		copy(a.data[:], b.data[:])
+		copy(sha.data[:], b.data[:])
 	}
 }
 
-func (a *Sha) ResetWithShaLike(b interfaces.Sha) {
-	a.allocDataIfNecessary()
-	copy(a.data[:], b.GetShaBytes())
+func (sha *Sha) ResetWithShaLike(b interfaces.Sha) {
+	sha.allocDataIfNecessary()
+	copy(sha.data[:], b.GetShaBytes())
 }
 
 func (s *Sha) Path(pc ...string) string {

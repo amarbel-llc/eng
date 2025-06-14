@@ -76,22 +76,22 @@ func (store *Store) FlushInventoryList(
 	return
 }
 
-func (c *Store) Flush(
+func (store *Store) Flush(
 	printerHeader interfaces.FuncIter[string],
 ) (err error) {
 	// TODO handle flushes with dry run
-	if c.GetConfig().GetCLIConfig().IsDryRun() {
+	if store.GetConfig().GetCLIConfig().IsDryRun() {
 		return
 	}
 
 	wg := errors.MakeWaitGroupParallel()
 
-	if c.GetEnvRepo().GetLockSmith().IsAcquired() {
+	if store.GetEnvRepo().GetLockSmith().IsAcquired() {
 		gob.Register(quiter.StringerKeyerPtr[ids.Type, *ids.Type]{}) // TODO check if can be removed
-		wg.Do(func() error { return c.streamIndex.Flush(printerHeader) })
-		wg.Do(c.GetAbbrStore().Flush)
-		wg.Do(c.zettelIdIndex.Flush)
-		wg.Do(c.Abbr.Flush)
+		wg.Do(func() error { return store.streamIndex.Flush(printerHeader) })
+		wg.Do(store.GetAbbrStore().Flush)
+		wg.Do(store.zettelIdIndex.Flush)
+		wg.Do(store.Abbr.Flush)
 	}
 
 	if err = wg.GetError(); err != nil {
