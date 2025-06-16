@@ -32,6 +32,29 @@ nix develop
 - `bubblewrap`: Sandboxing tool for creating isolated environments
 - `claude-sandboxed`: Main sandboxed claude-code wrapper
 
+### Code Formatting
+Before committing changes, ensure code is properly formatted:
+
+```bash
+# Format Nix files
+nixfmt-rfc-style flake.nix
+
+# Check and format shell scripts
+shellcheck *.sh
+shfmt -w *.sh
+```
+
+**Requirements:**
+- All `flake.nix` changes must be formatted with `nixfmt-rfc-style`
+- All shell scripts must pass `shellcheck` validation
+- All shell scripts must be formatted with `shfmt`
+
+## AI Code Contributions
+
+After making changes and running tests and ensuring they all pass, commit all
+the changes and set the commit message to a summary of the prompt and what was
+done to address it.
+
 ## Architecture
 
 ### Sandboxing Implementation
