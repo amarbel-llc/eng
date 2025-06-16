@@ -3,7 +3,8 @@
     "allow": [
       "Bash(chmod:*)",
       "Bash(nixfmt-rfc-style:*)",
-      "Bash(command -v:*)"
+      "Bash(command -v:*)",
+      "Bash(git rev-parse:*)"
     ],
     "deny": []
   }
