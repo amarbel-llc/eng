@@ -51,9 +51,10 @@ shfmt -w *.sh
 
 ## AI Code Contributions
 
-After making changes and running tests and ensuring they all pass, commit all
-the changes and set the commit message to a summary of the prompt and what was
-done to address it.
+After completing each task:
+1. Run all tests and ensure they pass
+2. Commit all changes with a descriptive message summarizing the user request and work performed
+3. Set the commit message to clearly describe what was requested and what was implemented
 
 ## Architecture
 
