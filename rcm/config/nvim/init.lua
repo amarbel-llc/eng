@@ -174,10 +174,10 @@ set_keymaps {
   { 'n', ']d',         vim.diagnostic.goto_next },
 }
 -- buf_set_keymaps({
---   {'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>'},
---   {'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>'},
---   {'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>'},
---   {'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>'},
---   {'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>'},
---   {'n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>'},
--- })
+  --   {'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>'},
+  --   {'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>'},
+  --   {'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>'},
+  --   {'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>'},
+  --   {'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>'},
+  --   {'n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>'},
+  -- })

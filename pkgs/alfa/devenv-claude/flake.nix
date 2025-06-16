@@ -45,7 +45,7 @@
           shellHook = ''
             echo "Claude Code Sandbox Environment"
             echo "Available commands:"
-            echo "  sweatshop  - Sandboxed claude-code using git worktree"
+            echo "  sweatshop  - Sandboxed claude-code using a git local clone"
             echo ""
             echo "Usage:"
             echo "  sweatshop [-b BRANCH] [-d TEMP_DIR] [claude-args...]"
