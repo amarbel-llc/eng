@@ -101,6 +101,9 @@ if [[ -n $WORKTREE_ON ]]; then
     exit 1
   fi
 
+  # Configure git user for the worktree
+  (cd "$WORKTREE_PATH" && git config user.email "claude@anthropic.com" && git config user.name "Claude Code")
+
   echo "Worktree created successfully" >&2
   echo "Working directory: $WORKTREE_PATH" >&2
   echo "" >&2
