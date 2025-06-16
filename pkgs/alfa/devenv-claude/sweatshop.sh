@@ -6,11 +6,17 @@ BRANCH="$(git branch --show-current)"
 TEMP_ID=""
 TEMP_DIR=""
 CLONE="true"
+COMMAND=""
 
 # Function to show usage
 usage() {
-  echo "Usage: $0 [-b BRANCH] [-d TEMP_DIR] [claude-args...]"
-  echo "  -b BRANCH    Branch to checkout (default: main)"
+  echo "Usage: $0 [COMMAND] [OPTIONS] [args...]"
+  echo ""
+  echo "Commands:"
+  echo "  run          Run claude-code in sandboxed environment (default)"
+  echo ""
+  echo "Options:"
+  echo "  -b BRANCH    Branch to checkout (default: current branch)"
   echo "  -d TEMP_DIR  Temporary directory to use (default: auto-generated)"
   echo "  -h           Show this help message"
   echo ""
@@ -39,6 +45,25 @@ cleanup() {
 # Set up cleanup trap
 trap cleanup EXIT INT TERM
 
+# Parse command (first argument if it doesn't start with -)
+if [[ $# -gt 0 && $1 != -* ]]; then
+  COMMAND="$1"
+  shift
+else
+  COMMAND="run"
+fi
+
+# Validate command
+case $COMMAND in
+run)
+  # Default behavior - continue with existing logic
+  ;;
+*)
+  echo "Error: Unknown command '$COMMAND'" >&2
+  usage
+  ;;
+esac
+
 # Parse command line options
 while getopts "b:d:h" opt; do
   case $opt in
@@ -61,7 +86,9 @@ done
 # Shift to get remaining arguments for claude
 shift $((OPTIND - 1))
 
-# Create temporary directory if not specified
+# Function to run claude-code in sandboxed environment
+run_claude() {
+  # Create temporary directory if not specified
 if [[ -z $TEMP_DIR ]]; then
   TEMP_DIR=$(mktemp -d -t claude-XXXXXX)
 else
@@ -141,3 +168,11 @@ exec @bwrap@ \
   --share-net \
   --die-with-parent \
   @claude-code@ "$@"
+}
+
+# Execute the appropriate command
+case $COMMAND in
+run)
+  run_claude "$@"
+  ;;
+esac
