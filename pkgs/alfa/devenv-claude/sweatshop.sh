@@ -9,24 +9,24 @@ COMMAND=""
 
 # Function to show usage
 usage() {
-  echo "Usage: $0 [COMMAND] [OPTIONS] [args...]"
-  echo ""
-  echo "Commands:"
-  echo "  attach SWEATSHOP_ID         Attach to an existing sweatshop"
-  echo "  create                      Create a new sweatshop"
-  echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist)"
-  echo "  get                         Get the single sweatshop ID (fails if multiple exist)"
-  echo "  list                        List all sweatshop IDs"
-  echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop"
-  echo "  push SWEATSHOP_ID           Push changes to a sweatshop"
-  echo "  run                         Create a new sweatshop and attach to it"
-  echo "  run-temp                    Create a new sweatshop and attach to it, destroy when it exits"
-  echo ""
-  echo "Options:"
-  echo "  -h           Show this help message"
-  echo ""
-  echo "All remaining arguments are passed to the agent (claude-code)"
-  exit 1
+	echo "Usage: $0 [COMMAND] [OPTIONS] [args...]"
+	echo ""
+	echo "Commands:"
+	echo "  attach SWEATSHOP_ID         Attach to an existing sweatshop"
+	echo "  create [SWEATSHOP_ID]       Create a new sweatshop (optionally with custom ID)"
+	echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist)"
+	echo "  get                         Get the single sweatshop ID (fails if multiple exist)"
+	echo "  list                        List all sweatshop IDs"
+	echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop"
+	echo "  push SWEATSHOP_ID           Push changes to a sweatshop"
+	echo "  run                         Create a new sweatshop and attach to it"
+	echo "  run-temp                    Create a new sweatshop and attach to it, destroy when it exits"
+	echo ""
+	echo "Options:"
+	echo "  -h           Show this help message"
+	echo ""
+	echo "All remaining arguments are passed to the agent (claude-code)"
+	exit 1
 }
 
 # Parse command (first argument if it doesn't start with -)
@@ -75,7 +75,7 @@ shift $((OPTIND - 1))
 # prefixed with `sweatshop`
 destroy() {
   local sweatshop_id
-  sweatshop_id="$(get "${1:-}")"
+  sweatshop_id="$(get "$1")"
 
   local exit_code=$?
 
@@ -98,30 +98,10 @@ destroy() {
   exit $exit_code
 }
 
-# TODO update this to allow a custom sweatshop_id
 create() {
-<<<<<<< HEAD
-  local temp_dir
-  temp_dir=$(mktemp -d -t sweatshop-claude-XXXXXX)
-||||||| parent of ba5fc53 (Add optional sweatshop_id argument to create function)
-	local temp_dir
-	temp_dir=$(mktemp -d -t sweatshop-claude-XXXXXX)
-=======
 	local custom_sweatshop_id="${1:-}"
 	local temp_dir sweatshop_id
->>>>>>> ba5fc53 (Add optional sweatshop_id argument to create function)
 
-<<<<<<< HEAD
-  # TODO be more intelligent about the TEMP_ID, as it could have been
-  # user specified
-  local sweatshop_id
-  sweatshop_id="$(basename "$temp_dir")"
-||||||| parent of ba5fc53 (Add optional sweatshop_id argument to create function)
-	# TODO be more intelligent about the TEMP_ID, as it could have been
-	# user specified
-	local sweatshop_id
-	sweatshop_id="$(basename "$temp_dir")"
-=======
 	if [[ -n $custom_sweatshop_id ]]; then
 		temp_dir=$(mktemp -d -t "sweatshop-claude-XXXXXX")
 		sweatshop_id="sweatshop-claude-$custom_sweatshop_id"
@@ -129,7 +109,26 @@ create() {
 		temp_dir=$(mktemp -d -t sweatshop-claude-XXXXXX)
 		sweatshop_id="$(basename "$temp_dir")"
 	fi
->>>>>>> ba5fc53 (Add optional sweatshop_id argument to create function)
+
+	local origin
+	origin="$(git rev-parse --show-toplevel)"
+
+	if [[ -n $CLONE ]]; then
+		(
+			pushd "$temp_dir" >/dev/null 2>&1 || true
+
+			# Create the worktree
+			if ! git clone --local "$origin" . >/dev/null 2>&1; then
+				echo "Error: Failed to clone repo" >&2
+				exit 1
+			fi
+
+			echo "Clone directory: $temp_dir" >&2
+
+			if ! git config user.email "claude@anthropic.com" >/dev/null 2>&1; then
+				echo "Error: Failed to update clone user.email" >&2
+				exit 1
+			fi
 
   local origin
   origin="$(git rev-parse --show-toplevel)"
@@ -192,7 +191,7 @@ run() {
 
 attach() {
   local sweatshop_id
-  sweatshop_id="$(get "${1:-}")"
+  sweatshop_id="$(get "$1")"
 
   # Validate arguments
   if [[ -z $sweatshop_id ]]; then
@@ -249,7 +248,11 @@ validate_remote() {
 
 push() {
   local sweatshop_id
-  sweatshop_id="$(get "${1:-}")"
+  sweatshop_id="$(get "$1")"
+
+  if [[ -z $sweatshop_id ]]; then
+    sweatshop_id="$(get)"
+  fi
 
   local branch
   branch="${2:-$(git branch --show-current)}"
@@ -270,7 +273,7 @@ push() {
 
 pull() {
   local sweatshop_id
-  sweatshop_id="$(get "${1:-}")"
+  sweatshop_id="$(get "$1")"
 
   local branch
   branch="${2:-$(git branch --show-current)}"
