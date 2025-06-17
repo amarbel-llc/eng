@@ -158,13 +158,13 @@ create() {
 run_temp() {
   trap 'destroy "$sweatshop_id"' EXIT INT TERM
   local sweatshop_id
-  sweatshop_id="$(create "$1")"
+  sweatshop_id="$(create "${1:-}")"
   attach "$sweatshop_id"
 }
 
 run() {
   local sweatshop_id
-  sweatshop_id="$(create "$1")"
+  sweatshop_id="$(create "${1:-}")"
   attach "$sweatshop_id"
 }
 
