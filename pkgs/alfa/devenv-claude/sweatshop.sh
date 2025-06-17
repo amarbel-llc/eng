@@ -9,20 +9,18 @@ COMMAND=""
 
 # Function to show usage
 usage() {
-  # TODO update this to be accurate
-  # TODO keep the list of commands in usage sorted
   echo "Usage: $0 [COMMAND] [OPTIONS] [args...]"
   echo ""
   echo "Commands:"
-  echo "  create                      Create a new sweatshop."
-  echo "  run-temp                    Create a new sweatshop and attach to it. Destroy it when it exits."
-  echo "  run                         Create a new sweatshop and attach to it"
-  echo "  list                        List all sweatshop IDs"
+  echo "  attach SWEATSHOP_ID         Attach to an existing sweatshop"
+  echo "  create                      Create a new sweatshop"
+  echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist)"
   echo "  get                         Get the single sweatshop ID (fails if multiple exist)"
-  echo "  destroy SWEATSHOP_ID        Destroys a sweatshop. Will abort if unmerged changes exist."
-  echo "  attach  SWEATSHOP_ID        Attach to an existing sweatshop."
-  echo "  push SWEATSHOP_ID           Push changes to a sweatpshop."
-  echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop."
+  echo "  list                        List all sweatshop IDs"
+  echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop"
+  echo "  push SWEATSHOP_ID           Push changes to a sweatshop"
+  echo "  run                         Create a new sweatshop and attach to it"
+  echo "  run-temp                    Create a new sweatshop and attach to it, destroy when it exits"
   echo ""
   echo "Options:"
   echo "  -h           Show this help message"
