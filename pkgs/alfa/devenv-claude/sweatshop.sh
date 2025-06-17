@@ -100,13 +100,36 @@ destroy() {
 
 # TODO update this to allow a custom sweatshop_id
 create() {
+<<<<<<< HEAD
   local temp_dir
   temp_dir=$(mktemp -d -t sweatshop-claude-XXXXXX)
+||||||| parent of ba5fc53 (Add optional sweatshop_id argument to create function)
+	local temp_dir
+	temp_dir=$(mktemp -d -t sweatshop-claude-XXXXXX)
+=======
+	local custom_sweatshop_id="${1:-}"
+	local temp_dir sweatshop_id
+>>>>>>> ba5fc53 (Add optional sweatshop_id argument to create function)
 
+<<<<<<< HEAD
   # TODO be more intelligent about the TEMP_ID, as it could have been
   # user specified
   local sweatshop_id
   sweatshop_id="$(basename "$temp_dir")"
+||||||| parent of ba5fc53 (Add optional sweatshop_id argument to create function)
+	# TODO be more intelligent about the TEMP_ID, as it could have been
+	# user specified
+	local sweatshop_id
+	sweatshop_id="$(basename "$temp_dir")"
+=======
+	if [[ -n $custom_sweatshop_id ]]; then
+		temp_dir=$(mktemp -d -t "sweatshop-claude-XXXXXX")
+		sweatshop_id="sweatshop-claude-$custom_sweatshop_id"
+	else
+		temp_dir=$(mktemp -d -t sweatshop-claude-XXXXXX)
+		sweatshop_id="$(basename "$temp_dir")"
+	fi
+>>>>>>> ba5fc53 (Add optional sweatshop_id argument to create function)
 
   local origin
   origin="$(git rev-parse --show-toplevel)"
