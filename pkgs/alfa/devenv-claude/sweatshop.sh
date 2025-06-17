@@ -240,7 +240,7 @@ push() {
 
   git -C "$temp_dir" checkout .
   git add -N . # Add untracked files to index without staging content
-  git diff HEAD | git -C "$temp_dir" apply -
+  git diff HEAD | git -C "$temp_dir" apply --allow-empty -
 }
 
 pull() {
