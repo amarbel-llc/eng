@@ -4,7 +4,10 @@
       "Bash(chmod:*)",
       "Bash(nixfmt-rfc-style:*)",
       "Bash(command -v:*)",
-      "Bash(git rev-parse:*)"
+      "Bash(git rev-parse:*)",
+      "Bash(shellcheck:*)",
+      "Bash(shfmt:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
