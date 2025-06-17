@@ -21,6 +21,7 @@ usage() {
   echo "  push SWEATSHOP_ID           Push changes to a sweatshop"
   echo "  run [SWEATSHOP_ID]          Create a new sweatshop and attach to it (optionally with custom ID)"
   echo "  run-temp [SWEATSHOP_ID]     Create a new sweatshop and attach to it, destroy when it exits (optionally with custom ID)"
+  echo "  sync [SWEATSHOP_ID]         Syncs changes to/from a sweatshop."
   echo ""
   echo "Options:"
   echo "  -h           Show this help message"
@@ -49,6 +50,7 @@ pull) ;;
 push) ;;
 run) ;;
 run-temp) ;;
+sync) ;;
 *)
   echo "Error: Unknown command '$COMMAND'" >&2
   usage
@@ -75,7 +77,7 @@ shift $((OPTIND - 1))
 # prefixed with `sweatshop`
 destroy() {
   local sweatshop_id
-  sweatshop_id="$(get "$1")"
+  sweatshop_id="$(get "${1:-}")"
 
   local exit_code=$?
 
@@ -168,16 +170,7 @@ run() {
 
 attach() {
   local sweatshop_id
-  sweatshop_id="$(get "$1")"
-
-  # Validate arguments
-  if [[ -z $sweatshop_id ]]; then
-    echo "Error: attach command requires SWEATSHOP_ID argument" >&2
-    echo "Usage: $0 attach SWEATSHOP_ID" >&2
-    exit 1
-  fi
-
-  validate_remote "$sweatshop_id"
+  sweatshop_id="$(get "${1:-}")"
 
   local temp_dir workspace_path
   temp_dir="$(git remote get-url "$sweatshop_id")"
@@ -208,6 +201,52 @@ attach() {
     @claude-code@
 }
 
+push() {
+  local sweatshop_id
+  sweatshop_id="$(get "${1:-}")"
+
+  local branch
+  branch="${2:-$(git branch --show-current)}"
+
+  local temp_dir
+  temp_dir="$(git remote get-url "$sweatshop_id")"
+  branch="$(git branch --show-current)"
+
+  git push "$sweatshop_id" HEAD:refs/heads/temp-updates
+  git -C "$temp_dir" rebase temp-updates "$branch"
+  git -C "$temp_dir" branch -d temp-updates
+  # TODO figure out why the parent repo has a "$sweatshop_id/temp-updates"
+  # branch
+}
+
+pull() {
+  local sweatshop_id
+  sweatshop_id="$(get "${1:-}")"
+
+  local branch
+  branch="${2:-$(git branch --show-current)}"
+
+  local temp_dir
+
+  temp_dir="$(git remote get-url "$sweatshop_id")"
+  branch="$(git branch --show-current)"
+
+  git pull "$sweatshop_id" "$branch"
+}
+
+sync() {
+  local sweatshop_id
+  sweatshop_id="$(get "${1:-}")"
+
+  pull "$sweatshop_id"
+  push "$sweatshop_id"
+}
+
+list() {
+  # List all git remotes that start with 'sweatshop-'
+  git remote -v | grep "^sweatshop-" | awk '{print $1}' | sort -u
+}
+
 validate_remote() {
   local remote="${1:-}"
 
@@ -223,58 +262,12 @@ validate_remote() {
   fi
 }
 
-push() {
-  local sweatshop_id
-  sweatshop_id="$(get "$1")"
-
-  if [[ -z $sweatshop_id ]]; then
-    sweatshop_id="$(get)"
-  fi
-
-  local branch
-  branch="${2:-$(git branch --show-current)}"
-
-  if ! validate_remote "$sweatshop_id"; then
-    echo "Error: sweatshop_id validation failed" >&2
-    exit 1
-  fi
-
-  local temp_dir
-  temp_dir="$(git remote get-url "$sweatshop_id")"
-  branch="$(git branch --show-current)"
-
-  git push "$sweatshop_id" HEAD:refs/heads/temp-updates
-  git -C "$temp_dir" rebase temp-updates "$branch"
-  git -C "$temp_dir" branch -d temp-updates
-}
-
-pull() {
-  local sweatshop_id
-  sweatshop_id="$(get "$1")"
-
-  local branch
-  branch="${2:-$(git branch --show-current)}"
-
-  validate_remote "$sweatshop_id"
-
-  local temp_dir
-
-  temp_dir="$(git remote get-url "$sweatshop_id")"
-  branch="$(git branch --show-current)"
-
-  git pull "$sweatshop_id" "$branch"
-}
-
-list() {
-  # List all git remotes that start with 'sweatshop-'
-  git remote -v | grep "^sweatshop-" | awk '{print $1}' | sort -u
-}
-
 get() {
   local sweatshop_id
   sweatshop_id="${1:-}"
 
   if [[ -n $sweatshop_id ]]; then
+    validate_remote "$sweatshop_id"
     echo -n "$sweatshop_id"
     return
   fi
@@ -299,6 +292,7 @@ get() {
     exit 1
   fi
 
+  validate_remote "$sweatshops"
   echo -n "$sweatshops"
 }
 
@@ -313,4 +307,5 @@ pull) pull "$@" ;;
 push) push "$@" ;;
 run) run "$@" ;;
 run-temp) run_temp "$@" ;;
+sync) sync "$@" ;;
 esac
