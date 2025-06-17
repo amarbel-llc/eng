@@ -75,7 +75,7 @@ shift $((OPTIND - 1))
 # prefixed with `sweatshop`
 destroy() {
   local sweatshop_id
-  sweatshop_id="$(get "$1")"
+  sweatshop_id="$(get "${1:-}")"
 
   local exit_code=$?
 
@@ -169,7 +169,7 @@ run() {
 
 attach() {
   local sweatshop_id
-  sweatshop_id="$(get "$1")"
+  sweatshop_id="$(get "${1:-}")"
 
   # Validate arguments
   if [[ -z $sweatshop_id ]]; then
@@ -226,11 +226,7 @@ validate_remote() {
 
 push() {
   local sweatshop_id
-  sweatshop_id="$(get "$1")"
-
-  if [[ -z $sweatshop_id ]]; then
-    sweatshop_id="$(get)"
-  fi
+  sweatshop_id="$(get "${1:-}")"
 
   local branch
   branch="${2:-$(git branch --show-current)}"
@@ -251,7 +247,7 @@ push() {
 
 pull() {
   local sweatshop_id
-  sweatshop_id="$(get "$1")"
+  sweatshop_id="$(get "${1:-}")"
 
   local branch
   branch="${2:-$(git branch --show-current)}"
