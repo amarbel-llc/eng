@@ -7,6 +7,12 @@ COMMAND=""
 
 # TODO update this to not hardcode claude as the agent
 
+# TODO add a `list` command which outputs all of the sweathshop_id's (basically
+# just `git remote -v` but only outputting the remote names)
+#
+# TODO add a `get` command which outputs the only sweathshop_id, or fails if
+# there is more than one sweatshop
+
 # Function to show usage
 usage() {
   # TODO update this to be accurate
