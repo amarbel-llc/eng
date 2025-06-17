@@ -234,6 +234,7 @@ push() {
   git push "$sweatshop_id" HEAD:refs/heads/temp-updates
   git -C "$temp_dir" rebase temp-updates "$branch"
   git -C "$temp_dir" branch -d temp-updates
+<<<<<<< Updated upstream
   
   # Clean up the remote tracking branch created in parent repo
   git branch -d -r "$sweatshop_id/temp-updates" 2>/dev/null || true
@@ -241,6 +242,17 @@ push() {
   git -C "$temp_dir" checkout .
   git add -N . # Add untracked files to index without staging content
   git diff HEAD | git -C "$temp_dir" apply -
+||||||| Stash base
+  # TODO figure out why the parent repo has a "$sweatshop_id/temp-updates"
+  # branch
+=======
+  # TODO fix the issue with the parent repo having a "$sweatshop_id/temp-updates"
+  # branch
+
+  git -C "$temp_dir" checkout .
+  git add -N . # Add untracked files to index without staging content
+  git diff HEAD | git -C "$temp_dir" apply -
+>>>>>>> Stashed changes
 }
 
 pull() {
