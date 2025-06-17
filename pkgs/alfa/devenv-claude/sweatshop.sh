@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /usr/bin/env -S bash -e
 set -euo pipefail
 
 # Default values
@@ -10,6 +10,7 @@ COMMAND=""
 # Function to show usage
 usage() {
   # TODO update this to be accurate
+  # TODO keep the list of commands in usage sorted
   echo "Usage: $0 [COMMAND] [OPTIONS] [args...]"
   echo ""
   echo "Commands:"
@@ -77,7 +78,6 @@ shift $((OPTIND - 1))
 destroy() {
   local sweatshop_id temp_dir
   sweatshop_id="${1:-}"
-  shift
 
   local exit_code=$?
 
@@ -119,38 +119,34 @@ create() {
       pushd "$temp_dir" >/dev/null 2>&1 || true
 
       # Create the worktree
-      if ! git clone --local "$origin" .; then
+      if ! git clone --local "$origin" . >/dev/null 2>&1; then
         echo "Error: Failed to clone repo" >&2
         exit 1
       fi
 
-      echo "Cloned successfully" >&2
       echo "Clone directory: $temp_dir" >&2
-      echo "" >&2
 
-      if ! git config user.email "claude@anthropic.com"; then
+      if ! git config user.email "claude@anthropic.com" >/dev/null 2>&1; then
         echo "Error: Failed to update clone user.email" >&2
         exit 1
       fi
 
-      if ! git config user.name "Claude Code"; then
+      if ! git config user.name "Claude Code" >/dev/null 2>&1; then
         echo "Error: Failed to update clone user.email" >&2
         exit 1
       fi
 
       echo "Git user config created successfully" >&2
-      echo "" >&2
     )
 
     # TODO modify the remote add to use a simple counter suffix for unique
     # remotes rather than using the TEMP_ID to make them unique.
-    if ! git remote add "$sweatshop_id" "$temp_dir"; then
+    if ! git remote add "$sweatshop_id" "$temp_dir" >/dev/null 2>&1; then
       echo "Error: Failed to add remote: $sweatshop_id" >&2
       exit 1
     fi
 
     echo "Git remote added successfully: $sweatshop_id" >&2
-    echo "" >&2
   fi
 
   # Create necessary directories if they don't exist
@@ -178,14 +174,14 @@ attach() {
   local sweatshop_id temp_dir workspace_path
   sweatshop_id="${1:-}"
 
-  shift
-
   # Validate arguments
   if [[ -z $sweatshop_id ]]; then
     echo "Error: attach command requires SWEATSHOP_ID argument" >&2
     echo "Usage: $0 attach SWEATSHOP_ID" >&2
     exit 1
   fi
+
+  shift
 
   validate_remote "$sweatshop_id"
 
@@ -213,12 +209,11 @@ attach() {
     --unshare-all \
     --share-net \
     --die-with-parent \
-    @claude-code@ "$@"
+    @claude-code@
 }
 
 validate_remote() {
   local remote="${1:-}"
-  shift
 
   # Validate that remote exists and is prefixed with 'sweatshop-'
   if ! git remote get-url "$remote" >/dev/null 2>&1; then
@@ -235,11 +230,9 @@ validate_remote() {
 push() {
   local sweatshop_id
   sweatshop_id="${1:-}"
-  shift
 
   local branch
-  branch="${1:-$(git branch --show-current)}"
-  shift
+  branch="${2:-$(git branch --show-current)}"
 
   # Validate arguments
   if [[ -z $sweatshop_id ]]; then
@@ -248,7 +241,10 @@ push() {
     exit 1
   fi
 
-  validate_remote "$sweatshop_id"
+  if ! validate_remote "$sweatshop_id"; then
+    echo "Error: sweatshop_id validation failed" >&2
+    exit 1
+  fi
 
   local temp_dir
   temp_dir="$(git remote get-url "$sweatshop_id")"
@@ -262,11 +258,9 @@ push() {
 pull() {
   local sweatshop_id
   sweatshop_id="${1:-}"
-  shift
 
   local branch
-  branch="${1:-$(git branch --show-current)}"
-  shift
+  branch="${2:-$(git branch --show-current)}"
 
   # Validate arguments
   if [[ -z $sweatshop_id ]]; then

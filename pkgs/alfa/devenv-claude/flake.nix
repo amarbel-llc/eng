@@ -43,17 +43,6 @@
           ];
 
           shellHook = ''
-            echo "Claude Code Sandbox Environment"
-            echo "Available commands:"
-            echo "  sweatshop  - Sandboxed claude-code using a git local clone"
-            echo ""
-            echo "Usage:"
-            echo "  sweatshop [-b BRANCH] [-d TEMP_DIR] [claude-args...]"
-            echo "    -b BRANCH    Branch to checkout (default: current branch)"
-            echo "    -d TEMP_DIR  Temporary directory to use (default: auto-generated)"
-            echo ""
-            echo "The sandbox creates a git worktree and mounts it at /mnt"
-            echo "Worktree is automatically cleaned up on exit"
           '';
 
           inputsFrom = [
