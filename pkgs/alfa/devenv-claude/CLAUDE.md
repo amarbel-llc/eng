@@ -41,13 +41,13 @@ nixfmt-rfc-style flake.nix
 
 # Check and format shell scripts
 shellcheck *.sh
-shfmt -w *.sh
+shfmt -s -i=2 -w *.sh
 ```
 
 **Requirements:**
 - All `flake.nix` changes must be formatted with `nixfmt-rfc-style`
 - All shell scripts must pass `shellcheck` validation
-- All shell scripts must be formatted with `shfmt`
+- All shell scripts must be formatted with `shfmt -s -i=2`
 
 ## AI Code Contributions
 
