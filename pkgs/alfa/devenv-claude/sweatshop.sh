@@ -7,12 +7,6 @@ COMMAND=""
 
 # TODO update this to not hardcode claude as the agent
 
-# TODO add a `list` command which outputs all of the sweathshop_id's (basically
-# just `git remote -v` but only outputting the remote names)
-#
-# TODO add a `get` command which outputs the only sweathshop_id, or fails if
-# there is more than one sweatshop
-
 # Function to show usage
 usage() {
   # TODO update this to be accurate
@@ -22,6 +16,8 @@ usage() {
   echo "  create                      Create a new sweatshop."
   echo "  run-temp                    Create a new sweatshop and attach to it. Destroy it when it exits."
   echo "  run                         Create a new sweatshop and attach to it"
+  echo "  list                        List all sweatshop IDs"
+  echo "  get                         Get the single sweatshop ID (fails if multiple exist)"
   echo "  destroy SWEATSHOP_ID        Destroys a sweatshop. Will abort if unmerged changes exist."
   echo "  attach  SWEATSHOP_ID        Attach to an existing sweatshop."
   echo "  push SWEATSHOP_ID           Push changes to a sweatpshop."
@@ -48,6 +44,8 @@ case $COMMAND in
 attach) ;;
 create) ;;
 destroy) ;;
+get) ;;
+list) ;;
 pull) ;;
 push) ;;
 run) ;;
@@ -287,11 +285,40 @@ pull() {
   git pull "$sweatshop_id" "$branch"
 }
 
+list() {
+  # List all git remotes that start with 'sweatshop-'
+  git remote -v | grep "^sweatshop-" | awk '{print $1}' | sort -u
+}
+
+get() {
+  # Get the single sweatshop ID, fail if there are multiple
+  local sweatshops
+  sweatshops=$(list)
+  
+  if [[ -z $sweatshops ]]; then
+    echo "Error: No sweatshops found" >&2
+    exit 1
+  fi
+  
+  local count
+  count=$(echo "$sweatshops" | wc -l)
+  
+  if [[ $count -gt 1 ]]; then
+    echo "Error: Multiple sweatshops found:" >&2
+    echo "$sweatshops" | sed 's/^/  /' >&2
+    exit 1
+  fi
+  
+  echo "$sweatshops"
+}
+
 case $COMMAND in
 # keep these sorted
 attach) attach "$@" ;;
 create) create "$@" ;;
 destroy) destroy "$@" ;;
+get) get "$@" ;;
+list) list "$@" ;;
 pull) pull "$@" ;;
 push) push "$@" ;;
 run) run "$@" ;;
