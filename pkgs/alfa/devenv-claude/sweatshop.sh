@@ -14,6 +14,7 @@ usage() {
   echo ""
   echo "Commands:"
   echo "  run          Run claude-code in sandboxed environment (default)"
+  echo "  pull REMOTE BRANCH   Pull changes from a claude-prefixed remote"
   echo ""
   echo "Options:"
   echo "  -b BRANCH    Branch to checkout (default: current branch)"
@@ -57,6 +58,9 @@ fi
 case $COMMAND in
 run)
   # Default behavior - continue with existing logic
+  ;;
+pull)
+  # Pull command - validate arguments later
   ;;
 *)
   echo "Error: Unknown command '$COMMAND'" >&2
@@ -170,9 +174,46 @@ exec @bwrap@ \
   @claude-code@ "$@"
 }
 
+# Function to pull changes from a claude-prefixed remote
+pull_from_remote() {
+  local remote="${1:-}"
+  local branch="${2:-}"
+  
+  # Validate arguments
+  if [[ -z $remote || -z $branch ]]; then
+    echo "Error: pull command requires REMOTE and BRANCH arguments" >&2
+    echo "Usage: $0 pull REMOTE BRANCH" >&2
+    exit 1
+  fi
+  
+  # Validate that remote exists and is prefixed with 'claude'
+  if ! git remote get-url "$remote" >/dev/null 2>&1; then
+    echo "Error: Remote '$remote' does not exist" >&2
+    exit 1
+  fi
+  
+  if [[ $remote != claude* ]]; then
+    echo "Error: Remote '$remote' must be prefixed with 'claude'" >&2
+    exit 1
+  fi
+  
+  # Validate that branch exists in the parent repo
+  origin="$(git rev-parse --show-toplevel)"
+  if ! (cd "$origin" && git show-ref --verify --quiet "refs/heads/$branch"); then
+    echo "Error: Branch '$branch' does not exist in the parent repository" >&2
+    exit 1
+  fi
+  
+  # TODO: Implement pull functionality
+  echo "TODO: Pull from remote '$remote' branch '$branch'"
+}
+
 # Execute the appropriate command
 case $COMMAND in
 run)
   run_claude "$@"
+  ;;
+pull)
+  pull_from_remote "$@"
   ;;
 esac
