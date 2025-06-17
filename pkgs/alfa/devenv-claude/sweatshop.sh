@@ -19,8 +19,8 @@ usage() {
   echo "  list                        List all sweatshop IDs"
   echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop"
   echo "  push SWEATSHOP_ID           Push changes to a sweatshop"
-  echo "  run                         Create a new sweatshop and attach to it"
-  echo "  run-temp                    Create a new sweatshop and attach to it, destroy when it exits"
+  echo "  run [SWEATSHOP_ID]          Create a new sweatshop and attach to it (optionally with custom ID)"
+  echo "  run-temp [SWEATSHOP_ID]     Create a new sweatshop and attach to it, destroy when it exits (optionally with custom ID)"
   echo ""
   echo "Options:"
   echo "  -h           Show this help message"
@@ -156,13 +156,13 @@ create() {
 run_temp() {
   trap 'destroy "$sweatshop_id"' EXIT INT TERM
   local sweatshop_id
-  sweatshop_id="$(create)"
+  sweatshop_id="$(create "$1")"
   attach "$sweatshop_id"
 }
 
 run() {
   local sweatshop_id
-  sweatshop_id="$(create)"
+  sweatshop_id="$(create "$1")"
   attach "$sweatshop_id"
 }
 
