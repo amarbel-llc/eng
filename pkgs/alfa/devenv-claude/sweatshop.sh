@@ -219,6 +219,7 @@ attach() {
     @claude-code@
 }
 
+# TODO add support for force pushes
 push() {
   local sweatshop_id
   sweatshop_id="$(get "${1:-}")"
@@ -233,8 +234,13 @@ push() {
   git push "$sweatshop_id" HEAD:refs/heads/temp-updates
   git -C "$temp_dir" rebase temp-updates "$branch"
   git -C "$temp_dir" branch -d temp-updates
-  # TODO figure out why the parent repo has a "$sweatshop_id/temp-updates"
-  # branch
+  
+  # Clean up the remote tracking branch created in parent repo
+  git branch -d -r "$sweatshop_id/temp-updates" 2>/dev/null || true
+
+  git -C "$temp_dir" checkout .
+  git add -N . # Add untracked files to index without staging content
+  git diff HEAD | git -C "$temp_dir" apply -
 }
 
 pull() {
