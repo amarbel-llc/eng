@@ -12,7 +12,8 @@
       "Bash(./sweatshop.sh destroy:*)",
       "Bash(./sweatshop.sh list:*)",
       "Bash(grep:*)",
-      "Bash(./sweatshop.sh:*)"
+      "Bash(./sweatshop.sh:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
