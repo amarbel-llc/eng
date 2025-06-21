@@ -429,6 +429,64 @@ attach() {
     @claude-code@
 }
 
+# Function to handle .claude/ directory changes before pull operations
+handle_claude_changes() {
+  # Check if .claude/ directory has changes
+  if ! git diff --quiet .claude/ 2>/dev/null || ! git diff --cached --quiet .claude/ 2>/dev/null; then
+    echo "Detected changes in .claude/ directory:" >&2
+    echo "" >&2
+    
+    # Show the changes
+    echo "=== Changes in .claude/ ===" >&2
+    git diff .claude/ 2>/dev/null || true
+    git diff --cached .claude/ 2>/dev/null || true
+    echo "=========================" >&2
+    echo "" >&2
+    
+    # Prompt user for action
+    while true; do
+      echo -n "Would you like to commit these .claude/ changes before pulling? [y/n/s/d]: " >&2
+      read -r response
+      case $response in
+        [Yy]*)
+          echo "Committing .claude/ changes..." >&2
+          git add .claude/
+          if git commit -m "Update Claude settings
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"; then
+            echo ".claude/ changes committed successfully." >&2
+            return 0
+          else
+            echo "Failed to commit .claude/ changes." >&2
+            return 1
+          fi
+          ;;
+        [Nn]*)
+          echo "Proceeding without committing .claude/ changes." >&2
+          return 0
+          ;;
+        [Ss]*)
+          echo "Stashing .claude/ changes..." >&2
+          git stash push .claude/ -m "Stashed .claude/ changes before pull"
+          return 0
+          ;;
+        [Dd]*)
+          echo "Showing detailed diff for .claude/..." >&2
+          git diff .claude/ 2>/dev/null || true
+          git diff --cached .claude/ 2>/dev/null || true
+          ;;
+        *)
+          echo "Please answer y (yes), n (no), s (stash), or d (show diff)." >&2
+          ;;
+      esac
+    done
+  fi
+  
+  return 0
+}
+
 # TODO add support for force pushes
 push() {
   local sweatshop_id
@@ -477,6 +535,9 @@ push() {
 pull() {
   local sweatshop_id
   sweatshop_id="$(get "${1:-}")"
+
+  # Handle .claude/ directory changes before pulling
+  handle_claude_changes
 
   local branch
   branch="${2:-$(git branch --show-current)}"
