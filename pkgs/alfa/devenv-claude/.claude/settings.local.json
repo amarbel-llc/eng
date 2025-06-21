@@ -13,7 +13,9 @@
       "Bash(./sweatshop.sh list:*)",
       "Bash(grep:*)",
       "Bash(./sweatshop.sh:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(rg:*)",
+      "Bash(/nix/store/b9a4bfrb23fv03ysmqwybqcsc7iw97jf-ripgrep-14.1.1/bin/rg \"git\\s+(pull|merge|rebase)\" /mnt/pkgs/alfa/devenv-claude/sweatshop.sh -n)"
     ],
     "deny": []
   }
