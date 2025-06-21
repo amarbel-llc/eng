@@ -379,13 +379,14 @@ run_temp() {
   sweatshop_id="$(create "${1:-}")"
 
   cleanup_temp() {
+    local cleanup_sweatshop_id="$1"
     if [[ $PULL == "true" ]]; then
-      pull "$sweatshop_id"
+      pull "$cleanup_sweatshop_id"
     fi
-    destroy "$sweatshop_id"
+    destroy "$cleanup_sweatshop_id"
   }
 
-  trap cleanup_temp EXIT INT TERM
+  trap "cleanup_temp '$sweatshop_id'" EXIT INT TERM
 
   attach "$sweatshop_id"
 }
