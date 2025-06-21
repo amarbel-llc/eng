@@ -7,6 +7,7 @@ COMMAND=""
 FORCE="false"
 ALL="false"
 WORKTREE="false"
+PULL="false"
 
 # TODO update this to not hardcode claude as the agent
 
@@ -31,6 +32,7 @@ usage() {
   echo "  -a           Destroy all sweatshops (only valid with destroy command)"
   echo "  -f           Force operation (skip safety checks)"
   echo "  -h           Show this help message"
+  echo "  -p           Pull changes before destroying (only valid with run-temp command)"
   echo "  -w           Use git worktrees instead of cloned repos"
   echo ""
   echo "All remaining arguments are passed to the agent (claude-code)"
@@ -65,7 +67,7 @@ sync) ;;
 esac
 
 # Parse command line options
-while getopts "afhw" opt; do
+while getopts "afhpw" opt; do
   case $opt in
   a)
     ALL="true"
@@ -75,6 +77,9 @@ while getopts "afhw" opt; do
     ;;
   h)
     usage
+    ;;
+  p)
+    PULL="true"
     ;;
   w)
     WORKTREE="true"
@@ -92,6 +97,12 @@ shift $((OPTIND - 1))
 # Validate that -a flag is only used with destroy command
 if [[ $ALL == "true" && $COMMAND != "destroy" ]]; then
   echo "Error: -a flag can only be used with destroy command" >&2
+  usage
+fi
+
+# Validate that -p flag is only used with run-temp command
+if [[ $PULL == "true" && $COMMAND != "run-temp" ]]; then
+  echo "Error: -p flag can only be used with run-temp command" >&2
   usage
 fi
 
@@ -347,7 +358,11 @@ create() {
 }
 
 run_temp() {
-  trap 'destroy "$sweatshop_id"' EXIT INT TERM
+  if [[ $PULL == "true" ]]; then
+    trap 'pull "$sweatshop_id"; destroy "$sweatshop_id"' EXIT INT TERM
+  else
+    trap 'destroy "$sweatshop_id"' EXIT INT TERM
+  fi
   local sweatshop_id
   sweatshop_id="$(create "${1:-}")"
   attach "$sweatshop_id"
