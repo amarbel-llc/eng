@@ -4,6 +4,7 @@ set -euo pipefail
 # Default values
 CLONE="true"
 COMMAND=""
+FORCE="false"
 
 # TODO update this to not hardcode claude as the agent
 
@@ -14,7 +15,7 @@ usage() {
   echo "Commands:"
   echo "  attach SWEATSHOP_ID         Attach to an existing sweatshop"
   echo "  create [SWEATSHOP_ID]       Create a new sweatshop (optionally with custom ID)"
-  echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist)"
+  echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist, use -f to force)"
   echo "  get                         Get the single sweatshop ID (fails if multiple exist)"
   echo "  list                        List all sweatshop IDs"
   echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop"
@@ -24,6 +25,7 @@ usage() {
   echo "  sync [SWEATSHOP_ID]         Syncs changes to/from a sweatshop."
   echo ""
   echo "Options:"
+  echo "  -f           Force operation (skip safety checks)"
   echo "  -h           Show this help message"
   echo ""
   echo "All remaining arguments are passed to the agent (claude-code)"
@@ -58,8 +60,11 @@ sync) ;;
 esac
 
 # Parse command line options
-while getopts "h" opt; do
+while getopts "fh" opt; do
   case $opt in
+  f)
+    FORCE="true"
+    ;;
   h)
     usage
     ;;
@@ -84,8 +89,8 @@ destroy() {
   local temp_dir
   temp_dir="$(git remote get-url "$sweatshop_id")"
 
-  # Check if there are unmerged changes against the parent repo
-  if [[ -d $temp_dir ]]; then
+  # Check if there are unmerged changes against the parent repo (unless force is used)
+  if [[ $FORCE != "true" && -d $temp_dir ]]; then
     local current_branch parent_branch
     current_branch="$(git -C "$temp_dir" branch --show-current)"
     parent_branch="$(git branch --show-current)"
@@ -93,14 +98,14 @@ destroy() {
     # Check if sweatshop has commits not in parent repo
     if git -C "$temp_dir" rev-list --count "$parent_branch..$current_branch" 2>/dev/null | grep -q '^[1-9]'; then
       echo "Error: Sweatshop '$sweatshop_id' has unmerged changes" >&2
-      echo "Use 'pull' or 'sync' to merge changes before destroying" >&2
+      echo "Use 'pull' or 'sync' to merge changes before destroying, or use -f to force" >&2
       exit 1
     fi
 
     # Check if sweatshop has uncommitted changes
     if ! git -C "$temp_dir" diff-index --quiet HEAD 2>/dev/null; then
       echo "Error: Sweatshop '$sweatshop_id' has uncommitted changes" >&2
-      echo "Commit or stash changes before destroying" >&2
+      echo "Commit or stash changes before destroying, or use -f to force" >&2
       exit 1
     fi
   fi
