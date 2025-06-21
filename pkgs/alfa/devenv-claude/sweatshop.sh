@@ -180,12 +180,12 @@ destroy() {
         temp_dir="$(get_sweatshop_path "$sweatshop_id")"
 
         if [[ -d $temp_dir ]]; then
-          local current_branch parent_branch
-          current_branch="$(git -C "$temp_dir" branch --show-current)"
-          parent_branch="$(git branch --show-current)"
+          # Check if branches are synchronized - compare commit hashes
+          local parent_commit sweatshop_commit
+          parent_commit="$(git rev-parse HEAD)"
+          sweatshop_commit="$(git -C "$temp_dir" rev-parse HEAD)"
 
-          # Check if sweatshop has commits not in parent repo
-          if git -C "$temp_dir" rev-list --count "$parent_branch..$current_branch" 2>/dev/null | grep -q '^[1-9]'; then
+          if [[ $parent_commit != "$sweatshop_commit" ]]; then
             echo "Error: Sweatshop '$sweatshop_id' has unmerged changes" >&2
             echo "Use 'pull' or 'sync' to merge changes before destroying, or use -f to force" >&2
             exit 1
@@ -239,12 +239,12 @@ destroy() {
 
   # Check if there are unmerged changes against the parent repo (unless force is used)
   if [[ $FORCE != "true" && -d $temp_dir ]]; then
-    local current_branch parent_branch
-    current_branch="$(git -C "$temp_dir" branch --show-current)"
-    parent_branch="$(git branch --show-current)"
+    # Check if branches are synchronized - compare commit hashes
+    local parent_commit sweatshop_commit
+    parent_commit="$(git rev-parse HEAD)"
+    sweatshop_commit="$(git -C "$temp_dir" rev-parse HEAD)"
 
-    # Check if sweatshop has commits not in parent repo
-    if git -C "$temp_dir" rev-list --count "$parent_branch..$current_branch" 2>/dev/null | grep -q '^[1-9]'; then
+    if [[ $parent_commit != "$sweatshop_commit" ]]; then
       echo "Error: Sweatshop '$sweatshop_id' has unmerged changes" >&2
       echo "Use 'pull' or 'sync' to merge changes before destroying, or use -f to force" >&2
       exit 1
@@ -373,13 +373,13 @@ create() {
 run_temp() {
   local sweatshop_id
   sweatshop_id="$(create "${1:-}")"
-  
+
   if [[ $PULL == "true" ]]; then
     trap 'pull "$sweatshop_id"; destroy "$sweatshop_id"' EXIT INT TERM
   else
     trap 'destroy "$sweatshop_id"' EXIT INT TERM
   fi
-  
+
   attach "$sweatshop_id"
 }
 
