@@ -518,18 +518,22 @@ diff() {
 
   # Check if it's a worktree
   if git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
-    # For worktrees, compare current branch HEAD with worktree HEAD
-    local sweatshop_branch
+    # For worktrees, find merge base and show changes since divergence
+    local sweatshop_branch merge_base
     sweatshop_branch="$(git -C "$temp_dir" branch --show-current)"
+    merge_base="$(git merge-base HEAD "refs/heads/$sweatshop_branch" 2>/dev/null || echo "")"
 
-    echo "Showing differences between current branch ($current_branch) and sweatshop ($sweatshop_id:$sweatshop_branch):"
-    git diff HEAD "refs/heads/$sweatshop_branch"
+    if [[ -n $merge_base ]]; then
+      echo "Showing changes in sweatshop ($sweatshop_id:$sweatshop_branch) since divergence from $current_branch:"
+      git diff "$merge_base" "refs/heads/$sweatshop_branch"
+    else
+      echo "No common history found between $current_branch and sweatshop ($sweatshop_id:$sweatshop_branch)"
+      git diff HEAD "refs/heads/$sweatshop_branch"
+    fi
   else
-    # For clones, compare current branch HEAD with sweatshop HEAD
-    local sweatshop_branch
+    # For clones, find merge base and show changes since divergence
+    local sweatshop_branch merge_base
     sweatshop_branch="$(git -C "$temp_dir" branch --show-current)"
-
-    echo "Showing differences between current branch ($current_branch) and sweatshop ($sweatshop_id:$sweatshop_branch):"
 
     # Create a temporary remote ref to compare against
     local temp_ref
@@ -539,8 +543,16 @@ diff() {
     git -C "$temp_dir" push . HEAD:"refs/heads/$temp_ref" >/dev/null 2>&1
     git fetch "$sweatshop_id" "$temp_ref:refs/remotes/$sweatshop_id/$temp_ref" >/dev/null 2>&1
 
-    # Show the diff
-    git diff HEAD "refs/remotes/$sweatshop_id/$temp_ref"
+    # Find merge base between current HEAD and sweatshop HEAD
+    merge_base="$(git merge-base HEAD "refs/remotes/$sweatshop_id/$temp_ref" 2>/dev/null || echo "")"
+
+    if [[ -n $merge_base ]]; then
+      echo "Showing changes in sweatshop ($sweatshop_id:$sweatshop_branch) since divergence from $current_branch:"
+      git diff "$merge_base" "refs/remotes/$sweatshop_id/$temp_ref"
+    else
+      echo "No common history found between $current_branch and sweatshop ($sweatshop_id:$sweatshop_branch)"
+      git diff HEAD "refs/remotes/$sweatshop_id/$temp_ref"
+    fi
 
     # Clean up temporary refs
     git -C "$temp_dir" branch -D "$temp_ref" 2>/dev/null || true
