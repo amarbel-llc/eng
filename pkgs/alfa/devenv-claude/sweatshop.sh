@@ -5,6 +5,7 @@ set -euo pipefail
 CLONE="true"
 COMMAND=""
 FORCE="false"
+ALL="false"
 
 # TODO update this to not hardcode claude as the agent
 
@@ -15,7 +16,8 @@ usage() {
   echo "Commands:"
   echo "  attach SWEATSHOP_ID         Attach to an existing sweatshop"
   echo "  create [SWEATSHOP_ID]       Create a new sweatshop (optionally with custom ID)"
-  echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist, use -f to force)"
+  echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist, use -f to force)
+  destroy -a                  Destroy all sweatshops (will abort if any have unmerged changes exist, use -f to force)"
   echo "  get                         Get the single sweatshop ID (fails if multiple exist)"
   echo "  list                        List all sweatshop IDs"
   echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop"
@@ -25,6 +27,7 @@ usage() {
   echo "  sync [SWEATSHOP_ID]         Syncs changes to/from a sweatshop."
   echo ""
   echo "Options:"
+  echo "  -a           Destroy all sweatshops (only valid with destroy command)"
   echo "  -f           Force operation (skip safety checks)"
   echo "  -h           Show this help message"
   echo ""
@@ -60,8 +63,11 @@ sync) ;;
 esac
 
 # Parse command line options
-while getopts "fh" opt; do
+while getopts "afh" opt; do
   case $opt in
+  a)
+    ALL="true"
+    ;;
   f)
     FORCE="true"
     ;;
@@ -78,9 +84,74 @@ done
 # Shift to get remaining arguments for claude
 shift $((OPTIND - 1))
 
+# Validate that -a flag is only used with destroy command
+if [[ $ALL == "true" && $COMMAND != "destroy" ]]; then
+  echo "Error: -a flag can only be used with destroy command" >&2
+  usage
+fi
+
 # TODO update this to support tab-completion thru the list of git remotes
 # prefixed with `sweatshop`
 destroy() {
+  if [[ $ALL == "true" ]]; then
+    # Destroy all sweatshops
+    local sweatshops
+    sweatshops=$(list)
+
+    if [[ -z $sweatshops ]]; then
+      echo "No sweatshops to destroy" >&2
+      return 0
+    fi
+
+    # Check for unmerged changes in all sweatshops first (unless force is used)
+    if [[ $FORCE != "true" ]]; then
+      while IFS= read -r sweatshop_id; do
+        local temp_dir
+        temp_dir="$(git remote get-url "$sweatshop_id")"
+
+        if [[ -d $temp_dir ]]; then
+          local current_branch parent_branch
+          current_branch="$(git -C "$temp_dir" branch --show-current)"
+          parent_branch="$(git branch --show-current)"
+
+          # Check if sweatshop has commits not in parent repo
+          if git -C "$temp_dir" rev-list --count "$parent_branch..$current_branch" 2>/dev/null | grep -q '^[1-9]'; then
+            echo "Error: Sweatshop '$sweatshop_id' has unmerged changes" >&2
+            echo "Use 'pull' or 'sync' to merge changes before destroying, or use -f to force" >&2
+            exit 1
+          fi
+
+          # Check if sweatshop has uncommitted changes
+          if ! git -C "$temp_dir" diff-index --quiet HEAD 2>/dev/null; then
+            echo "Error: Sweatshop '$sweatshop_id' has uncommitted changes" >&2
+            echo "Commit or stash changes before destroying, or use -f to force" >&2
+            exit 1
+          fi
+        fi
+      done <<<"$sweatshops"
+    fi
+
+    # Destroy all sweatshops
+    while IFS= read -r sweatshop_id; do
+      local temp_dir
+      temp_dir="$(git remote get-url "$sweatshop_id")"
+
+      if [[ -n $temp_dir && -d $temp_dir ]]; then
+        echo "Removing temporary directory: $temp_dir" >&2
+        rm -rf "$temp_dir" 2>/dev/null || true
+      fi
+
+      if [[ -n $CLONE && -n $sweatshop_id ]]; then
+        echo "Removing git remote: $sweatshop_id" >&2
+        git remote remove "$sweatshop_id"
+      fi
+    done <<<"$sweatshops"
+
+    echo "All sweatshops destroyed" >&2
+    return 0
+  fi
+
+  # Single sweatshop destroy (original behavior)
   local sweatshop_id
   sweatshop_id="$(get "${1:-}")"
 
