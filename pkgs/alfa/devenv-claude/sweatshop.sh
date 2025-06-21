@@ -6,6 +6,7 @@ CLONE="true"
 COMMAND=""
 FORCE="false"
 ALL="false"
+WORKTREE="false"
 
 # TODO update this to not hardcode claude as the agent
 
@@ -30,6 +31,7 @@ usage() {
   echo "  -a           Destroy all sweatshops (only valid with destroy command)"
   echo "  -f           Force operation (skip safety checks)"
   echo "  -h           Show this help message"
+  echo "  -w           Use git worktrees instead of cloned repos"
   echo ""
   echo "All remaining arguments are passed to the agent (claude-code)"
   exit 1
@@ -63,7 +65,7 @@ sync) ;;
 esac
 
 # Parse command line options
-while getopts "afh" opt; do
+while getopts "afhw" opt; do
   case $opt in
   a)
     ALL="true"
@@ -73,6 +75,9 @@ while getopts "afh" opt; do
     ;;
   h)
     usage
+    ;;
+  w)
+    WORKTREE="true"
     ;;
   \?)
     echo "Invalid option: -$OPTARG" >&2
@@ -89,6 +94,47 @@ if [[ $ALL == "true" && $COMMAND != "destroy" ]]; then
   echo "Error: -a flag can only be used with destroy command" >&2
   usage
 fi
+
+# Helper functions for worktree support
+is_worktree() {
+  local sweatshop_id="${1:-}"
+  if [[ -z $sweatshop_id ]]; then
+    return 1
+  fi
+
+  # Check if this sweatshop_id exists as a worktree
+  git worktree list --porcelain | grep -q "^worktree.*$sweatshop_id"
+}
+
+get_worktree_path() {
+  local sweatshop_id="${1:-}"
+  if [[ -z $sweatshop_id ]]; then
+    return 1
+  fi
+
+  # Get worktree path from git worktree list
+  git worktree list --porcelain | awk "/^worktree.*$sweatshop_id/ { print \$2 }"
+}
+
+list_worktrees() {
+  # List all worktrees that match sweatshop pattern
+  git worktree list --porcelain | awk '/^worktree/ { path=$2; if (match(path, /sweatshop-claude-[^\/]*$/)) print substr(path, RSTART, RLENGTH) }' | sort -u
+}
+
+get_sweatshop_path() {
+  local sweatshop_id="${1:-}"
+  if [[ -z $sweatshop_id ]]; then
+    return 1
+  fi
+
+  # Check if it's a worktree first
+  if git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
+    git worktree list --porcelain | awk "/^worktree.*$sweatshop_id/ { print \$2 }"
+  else
+    # Fall back to git remote (clone mode)
+    git remote get-url "$sweatshop_id" 2>/dev/null || return 1
+  fi
+}
 
 # TODO update this to support tab-completion thru the list of git remotes
 # prefixed with `sweatshop`
@@ -107,7 +153,7 @@ destroy() {
     if [[ $FORCE != "true" ]]; then
       while IFS= read -r sweatshop_id; do
         local temp_dir
-        temp_dir="$(git remote get-url "$sweatshop_id")"
+        temp_dir="$(get_sweatshop_path "$sweatshop_id")"
 
         if [[ -d $temp_dir ]]; then
           local current_branch parent_branch
@@ -134,16 +180,23 @@ destroy() {
     # Destroy all sweatshops
     while IFS= read -r sweatshop_id; do
       local temp_dir
-      temp_dir="$(git remote get-url "$sweatshop_id")"
+      temp_dir="$(get_sweatshop_path "$sweatshop_id")"
 
-      if [[ -n $temp_dir && -d $temp_dir ]]; then
-        echo "Removing temporary directory: $temp_dir" >&2
-        rm -rf "$temp_dir" 2>/dev/null || true
-      fi
+      # Check if it's a worktree
+      if git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
+        echo "Removing worktree: $temp_dir" >&2
+        git worktree remove "$temp_dir" --force 2>/dev/null || true
+      else
+        # Handle as clone/remote
+        if [[ -n $temp_dir && -d $temp_dir ]]; then
+          echo "Removing temporary directory: $temp_dir" >&2
+          rm -rf "$temp_dir" 2>/dev/null || true
+        fi
 
-      if [[ -n $CLONE && -n $sweatshop_id ]]; then
-        echo "Removing git remote: $sweatshop_id" >&2
-        git remote remove "$sweatshop_id"
+        if [[ -n $CLONE && -n $sweatshop_id ]]; then
+          echo "Removing git remote: $sweatshop_id" >&2
+          git remote remove "$sweatshop_id" 2>/dev/null || true
+        fi
       fi
     done <<<"$sweatshops"
 
@@ -158,7 +211,7 @@ destroy() {
   local exit_code=$?
 
   local temp_dir
-  temp_dir="$(git remote get-url "$sweatshop_id")"
+  temp_dir="$(get_sweatshop_path "$sweatshop_id")"
 
   # Check if there are unmerged changes against the parent repo (unless force is used)
   if [[ $FORCE != "true" && -d $temp_dir ]]; then
@@ -181,14 +234,21 @@ destroy() {
     fi
   fi
 
-  if [[ -n $temp_dir && -d $temp_dir ]]; then
-    echo "Removing temporary directory: $temp_dir" >&2
-    rm -rf "$temp_dir" 2>/dev/null || true
-  fi
+  # Check if it's a worktree
+  if git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
+    echo "Removing worktree: $temp_dir" >&2
+    git worktree remove "$temp_dir" --force 2>/dev/null || true
+  else
+    # Handle as clone/remote
+    if [[ -n $temp_dir && -d $temp_dir ]]; then
+      echo "Removing temporary directory: $temp_dir" >&2
+      rm -rf "$temp_dir" 2>/dev/null || true
+    fi
 
-  if [[ -n $CLONE && -n $sweatshop_id ]]; then
-    echo "Removing git remote: $sweatshop_id" >&2
-    git remote remove "$sweatshop_id"
+    if [[ -n $CLONE && -n $sweatshop_id ]]; then
+      echo "Removing git remote: $sweatshop_id" >&2
+      git remote remove "$sweatshop_id" 2>/dev/null || true
+    fi
   fi
 
   exit $exit_code
@@ -198,47 +258,84 @@ create() {
   local custom_sweatshop_id="${1:-}"
   local temp_dir sweatshop_id
 
-  temp_dir="$(mktemp -d -t "sweatshop-claude-XXXXXX")"
+  if [[ $WORKTREE == "true" ]]; then
+    # Worktree mode
+    local current_branch
+    current_branch="$(git branch --show-current)"
 
-  if [[ -n $custom_sweatshop_id ]]; then
-    sweatshop_id="sweatshop-claude-$custom_sweatshop_id"
-  else
-    sweatshop_id="$(basename "$temp_dir")"
-  fi
+    if [[ -n $custom_sweatshop_id ]]; then
+      sweatshop_id="sweatshop-claude-$custom_sweatshop_id"
+    else
+      sweatshop_id="sweatshop-claude-$(date +%s)-$$"
+    fi
 
-  local origin
-  origin="$(git rev-parse --show-toplevel)"
+    temp_dir="$(mktemp -d -t "$sweatshop_id-XXXXXX")"
 
-  if [[ -n $CLONE ]]; then
-    (
-      pushd "$temp_dir" >/dev/null 2>&1 || true
+    echo "Creating worktree: $temp_dir" >&2
 
-      if ! git clone --local "$origin" . >/dev/null 2>&1; then
-        echo "Error: Failed to clone repo" >&2
-        exit 1
-      fi
-
-      echo "Clone directory: $temp_dir" >&2
-
-      if ! git config user.email "claude@anthropic.com" >/dev/null 2>&1; then
-        echo "Error: Failed to update clone user.email" >&2
-        exit 1
-      fi
-
-      if ! git config user.name "Claude Code" >/dev/null 2>&1; then
-        echo "Error: Failed to update clone user.name" >&2
-        exit 1
-      fi
-
-      echo "Git user config created successfully" >&2
-    )
-
-    if ! git remote add "$sweatshop_id" "$temp_dir" >/dev/null 2>&1; then
-      echo "Error: Failed to add remote: $sweatshop_id" >&2
+    if ! git worktree add "$temp_dir" "$current_branch" >/dev/null 2>&1; then
+      echo "Error: Failed to create worktree" >&2
       exit 1
     fi
 
-    echo "Git remote added successfully: $sweatshop_id" >&2
+    # Configure git user in worktree
+    if ! git -C "$temp_dir" config user.email "claude@anthropic.com" >/dev/null 2>&1; then
+      echo "Error: Failed to update worktree user.email" >&2
+      git worktree remove "$temp_dir" --force >/dev/null 2>&1 || true
+      exit 1
+    fi
+
+    if ! git -C "$temp_dir" config user.name "Claude Code" >/dev/null 2>&1; then
+      echo "Error: Failed to update worktree user.name" >&2
+      git worktree remove "$temp_dir" --force >/dev/null 2>&1 || true
+      exit 1
+    fi
+
+    echo "Worktree created successfully: $temp_dir" >&2
+  else
+    # Clone mode (original behavior)
+    temp_dir="$(mktemp -d -t "sweatshop-claude-XXXXXX")"
+
+    if [[ -n $custom_sweatshop_id ]]; then
+      sweatshop_id="sweatshop-claude-$custom_sweatshop_id"
+    else
+      sweatshop_id="$(basename "$temp_dir")"
+    fi
+
+    local origin
+    origin="$(git rev-parse --show-toplevel)"
+
+    if [[ -n $CLONE ]]; then
+      (
+        pushd "$temp_dir" >/dev/null 2>&1 || true
+
+        if ! git clone --local "$origin" . >/dev/null 2>&1; then
+          echo "Error: Failed to clone repo" >&2
+          exit 1
+        fi
+
+        echo "Clone directory: $temp_dir" >&2
+
+        if ! git config user.email "claude@anthropic.com" >/dev/null 2>&1; then
+          echo "Error: Failed to update clone user.email" >&2
+          exit 1
+        fi
+
+        if ! git config user.name "Claude Code" >/dev/null 2>&1; then
+          echo "Error: Failed to update clone user.name" >&2
+          exit 1
+        fi
+
+        echo "Git user config created successfully" >&2
+      )
+
+      if ! git remote add "$sweatshop_id" "$temp_dir" >/dev/null 2>&1; then
+        echo "Error: Failed to add remote: $sweatshop_id" >&2
+        exit 1
+      fi
+
+      echo "Git remote added successfully: $sweatshop_id" >&2
+    fi
   fi
 
   # Create necessary directories if they don't exist
@@ -267,7 +364,7 @@ attach() {
   sweatshop_id="$(get "${1:-}")"
 
   local temp_dir workspace_path
-  temp_dir="$(git remote get-url "$sweatshop_id")"
+  temp_dir="$(get_sweatshop_path "$sweatshop_id")"
   workspace_path="$(realpath --relative-to="$(git rev-parse --show-toplevel)" .)"
 
   # cannot use exec otherwise the cleanup TRAP won't execute
@@ -304,19 +401,40 @@ push() {
   branch="${2:-$(git branch --show-current)}"
 
   local temp_dir
-  temp_dir="$(git remote get-url "$sweatshop_id")"
+  temp_dir="$(get_sweatshop_path "$sweatshop_id")"
   branch="$(git branch --show-current)"
 
-  git push "$sweatshop_id" HEAD:refs/heads/temp-updates
-  git -C "$temp_dir" rebase temp-updates "$branch"
-  git -C "$temp_dir" branch -d temp-updates
+  # Check if it's a worktree
+  if git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
+    # For worktrees, we need to handle this differently since they share the same repo
+    # First, commit current changes to temp branch, then rebase in worktree
+    local temp_branch
+    temp_branch="temp-push-$(date +%s)"
 
-  # Clean up the remote tracking branch created in parent repo
-  git branch -d -r "$sweatshop_id/temp-updates" 2>/dev/null || true
+    git add -A
+    git commit -m "Temporary commit for push to $sweatshop_id" --allow-empty
+    git branch "$temp_branch"
 
-  git -C "$temp_dir" checkout .
-  git add -N . # Add untracked files to index without staging content
-  git diff HEAD | git -C "$temp_dir" apply --allow-empty -
+    # Switch to worktree and rebase
+    git -C "$temp_dir" fetch . "$temp_branch:$temp_branch"
+    git -C "$temp_dir" rebase "$temp_branch"
+
+    # Clean up temp branch
+    git branch -D "$temp_branch"
+    git -C "$temp_dir" branch -D "$temp_branch" 2>/dev/null || true
+  else
+    # Original clone-based behavior
+    git push "$sweatshop_id" HEAD:refs/heads/temp-updates
+    git -C "$temp_dir" rebase temp-updates "$branch"
+    git -C "$temp_dir" branch -d temp-updates
+
+    # Clean up the remote tracking branch created in parent repo
+    git branch -d -r "$sweatshop_id/temp-updates" 2>/dev/null || true
+
+    git -C "$temp_dir" checkout .
+    git add -N . # Add untracked files to index without staging content
+    git diff HEAD | git -C "$temp_dir" apply --allow-empty -
+  fi
 }
 
 pull() {
@@ -327,11 +445,28 @@ pull() {
   branch="${2:-$(git branch --show-current)}"
 
   local temp_dir
-
-  temp_dir="$(git remote get-url "$sweatshop_id")"
+  temp_dir="$(get_sweatshop_path "$sweatshop_id")"
   branch="$(git branch --show-current)"
 
-  git pull "$sweatshop_id" "$branch"
+  # Check if it's a worktree
+  if git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
+    # For worktrees, we need to handle this differently
+    # Create a temporary branch from worktree state
+    local temp_branch
+    temp_branch="temp-pull-$(date +%s)"
+    git -C "$temp_dir" branch "$temp_branch"
+
+    # Switch to main repo and merge the changes
+    git fetch . "refs/heads/$temp_branch:refs/heads/$temp_branch"
+    git merge "$temp_branch"
+
+    # Clean up temp branch
+    git branch -D "$temp_branch"
+    git -C "$temp_dir" branch -D "$temp_branch" 2>/dev/null || true
+  else
+    # Original clone-based behavior
+    git pull "$sweatshop_id" "$branch"
+  fi
 }
 
 sync() {
@@ -343,21 +478,34 @@ sync() {
 }
 
 list() {
-  # List all git remotes that start with 'sweatshop-'
-  git remote -v | grep "^sweatshop-" | awk '{print $1}' | sort -u
+  # List all sweatshops (both git remotes and worktrees)
+  local remotes worktrees
+
+  # Get git remotes that start with 'sweatshop-'
+  remotes=$(git remote -v | grep "^sweatshop-" | awk '{print $1}' | sort -u)
+
+  # Get worktrees that match sweatshop pattern
+  worktrees=$(list_worktrees)
+
+  # Combine and sort uniquely
+  {
+    [[ -n $remotes ]] && echo "$remotes"
+    [[ -n $worktrees ]] && echo "$worktrees"
+  } | sort -u
 }
 
 validate_remote() {
-  local remote="${1:-}"
+  local sweatshop_id="${1:-}"
 
-  # Validate that remote exists and is prefixed with 'sweatshop-'
-  if ! git remote get-url "$remote" >/dev/null 2>&1; then
-    echo "Error: Remote '$remote' does not exist" >&2
+  # Check if sweatshop_id is prefixed with 'sweatshop-'
+  if [[ $sweatshop_id != sweatshop-* ]]; then
+    echo "Error: Sweatshop ID '$sweatshop_id' must be prefixed with 'sweatshop-'" >&2
     exit 1
   fi
 
-  if [[ $remote != sweatshop-* ]]; then
-    echo "Error: Remote '$remote' must be prefixed with 'sweatshop-'" >&2
+  # Validate that sweatshop exists (either as remote or worktree)
+  if ! git remote get-url "$sweatshop_id" >/dev/null 2>&1 && ! git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
+    echo "Error: Sweatshop '$sweatshop_id' does not exist" >&2
     exit 1
   fi
 }
