@@ -180,12 +180,14 @@ destroy() {
         temp_dir="$(get_sweatshop_path "$sweatshop_id")"
 
         if [[ -d $temp_dir ]]; then
-          # Check if branches are synchronized - compare commit hashes
-          local parent_commit sweatshop_commit
+          # Check if sweatshop changes have been integrated into parent
+          local parent_commit sweatshop_commit merge_base
           parent_commit="$(git rev-parse HEAD)"
           sweatshop_commit="$(git -C "$temp_dir" rev-parse HEAD)"
+          merge_base="$(git merge-base "$parent_commit" "$sweatshop_commit" 2>/dev/null || echo "")"
 
-          if [[ $parent_commit != "$sweatshop_commit" ]]; then
+          # If sweatshop commit is not an ancestor of parent, check for unmerged changes
+          if [[ $merge_base != "$sweatshop_commit" ]]; then
             echo "Error: Sweatshop '$sweatshop_id' has unmerged changes" >&2
             echo "Use 'pull' or 'sync' to merge changes before destroying, or use -f to force" >&2
             exit 1
@@ -239,12 +241,14 @@ destroy() {
 
   # Check if there are unmerged changes against the parent repo (unless force is used)
   if [[ $FORCE != "true" && -d $temp_dir ]]; then
-    # Check if branches are synchronized - compare commit hashes
-    local parent_commit sweatshop_commit
+    # Check if sweatshop changes have been integrated into parent
+    local parent_commit sweatshop_commit merge_base
     parent_commit="$(git rev-parse HEAD)"
     sweatshop_commit="$(git -C "$temp_dir" rev-parse HEAD)"
+    merge_base="$(git merge-base "$parent_commit" "$sweatshop_commit" 2>/dev/null || echo "")"
 
-    if [[ $parent_commit != "$sweatshop_commit" ]]; then
+    # If sweatshop commit is not an ancestor of parent, check for unmerged changes
+    if [[ $merge_base != "$sweatshop_commit" ]]; then
       echo "Error: Sweatshop '$sweatshop_id' has unmerged changes" >&2
       echo "Use 'pull' or 'sync' to merge changes before destroying, or use -f to force" >&2
       exit 1
