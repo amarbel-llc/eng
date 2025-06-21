@@ -8,7 +8,11 @@
       "Bash(shellcheck:*)",
       "Bash(shfmt:*)",
       "Bash(git add:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(./sweatshop.sh destroy:*)",
+      "Bash(./sweatshop.sh list:*)",
+      "Bash(grep:*)",
+      "Bash(./sweatshop.sh:*)"
     ],
     "deny": []
   }
