@@ -8,6 +8,7 @@ FORCE="false"
 ALL="false"
 WORKTREE="false"
 PULL="false"
+DESTROY="false"
 
 # TODO update this to not hardcode claude as the agent
 
@@ -30,6 +31,7 @@ usage() {
   echo ""
   echo "Options:"
   echo "  -a           Destroy all sweatshops (only valid with destroy command)"
+  echo "  -d           Destroy sweatshop after pulling (only valid with pull command)"
   echo "  -f           Force operation (skip safety checks)"
   echo "  -h           Show this help message"
   echo "  -p           Pull changes before destroying (only valid with run-temp command)"
@@ -67,10 +69,13 @@ sync) ;;
 esac
 
 # Parse command line options
-while getopts "afhpw" opt; do
+while getopts "afhpdw" opt; do
   case $opt in
   a)
     ALL="true"
+    ;;
+  d)
+    DESTROY="true"
     ;;
   f)
     FORCE="true"
@@ -103,6 +108,12 @@ fi
 # Validate that -p flag is only used with run-temp command
 if [[ $PULL == "true" && $COMMAND != "run-temp" ]]; then
   echo "Error: -p flag can only be used with run-temp command" >&2
+  usage
+fi
+
+# Validate that -d flag is only used with pull command
+if [[ $DESTROY == "true" && $COMMAND != "pull" ]]; then
+  echo "Error: -d flag can only be used with pull command" >&2
   usage
 fi
 
@@ -481,6 +492,11 @@ pull() {
   else
     # Original clone-based behavior
     git pull "$sweatshop_id" "$branch"
+  fi
+
+  # Destroy sweatshop after pulling if -d flag is used
+  if [[ $DESTROY == "true" ]]; then
+    destroy "$sweatshop_id"
   fi
 }
 
