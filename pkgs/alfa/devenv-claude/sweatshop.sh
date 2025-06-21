@@ -21,6 +21,7 @@ usage() {
   echo "  create [SWEATSHOP_ID]       Create a new sweatshop (optionally with custom ID)"
   echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist, use -f to force)
   destroy -a                  Destroy all sweatshops (will abort if any have unmerged changes exist, use -f to force)"
+  echo "  diff [SWEATSHOP_ID]         Show differences between current branch and sweatshop HEAD"
   echo "  get                         Get the single sweatshop ID (fails if multiple exist)"
   echo "  list                        List all sweatshop IDs"
   echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop"
@@ -55,6 +56,7 @@ case $COMMAND in
 attach) ;;
 create) ;;
 destroy) ;;
+diff) ;;
 get) ;;
 list) ;;
 pull) ;;
@@ -500,6 +502,46 @@ pull() {
   fi
 }
 
+diff() {
+  local sweatshop_id
+  sweatshop_id="$(get "${1:-}")"
+
+  local temp_dir current_branch
+  temp_dir="$(get_sweatshop_path "$sweatshop_id")"
+  current_branch="$(git branch --show-current)"
+
+  # Check if it's a worktree
+  if git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
+    # For worktrees, compare current branch HEAD with worktree HEAD
+    local sweatshop_branch
+    sweatshop_branch="$(git -C "$temp_dir" branch --show-current)"
+
+    echo "Showing differences between current branch ($current_branch) and sweatshop ($sweatshop_id:$sweatshop_branch):"
+    git diff HEAD "refs/heads/$sweatshop_branch"
+  else
+    # For clones, compare current branch HEAD with sweatshop HEAD
+    local sweatshop_branch
+    sweatshop_branch="$(git -C "$temp_dir" branch --show-current)"
+
+    echo "Showing differences between current branch ($current_branch) and sweatshop ($sweatshop_id:$sweatshop_branch):"
+
+    # Create a temporary remote ref to compare against
+    local temp_ref
+    temp_ref="temp-diff-$(date +%s)"
+
+    # Fetch the sweatshop's current HEAD to a temporary ref
+    git -C "$temp_dir" push . HEAD:"refs/heads/$temp_ref" >/dev/null 2>&1
+    git fetch "$sweatshop_id" "$temp_ref:refs/remotes/$sweatshop_id/$temp_ref" >/dev/null 2>&1
+
+    # Show the diff
+    git diff HEAD "refs/remotes/$sweatshop_id/$temp_ref"
+
+    # Clean up temporary refs
+    git -C "$temp_dir" branch -D "$temp_ref" 2>/dev/null || true
+    git branch -d -r "$sweatshop_id/$temp_ref" 2>/dev/null || true
+  fi
+}
+
 sync() {
   local sweatshop_id
   sweatshop_id="$(get "${1:-}")"
@@ -580,6 +622,7 @@ case $COMMAND in
 attach) attach "$@" ;;
 create) create "$@" ;;
 destroy) destroy "$@" ;;
+diff) diff "$@" ;;
 get) get "$@" ;;
 list) list "$@" ;;
 pull) pull "$@" ;;
