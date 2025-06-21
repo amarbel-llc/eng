@@ -594,6 +594,29 @@ diff() {
       echo "No common history found between $current_branch and sweatshop ($sweatshop_id:$sweatshop_branch)"
       git diff HEAD "refs/heads/$sweatshop_branch"
     fi
+
+    # Show uncommitted changes in the sweatshop
+    if ! git -C "$temp_dir" diff-index --quiet HEAD 2>/dev/null; then
+      echo ""
+      echo "=== Uncommitted changes in sweatshop ==="
+      git -C "$temp_dir" diff HEAD
+    fi
+
+    # Show untracked files in the sweatshop
+    local untracked_files
+    untracked_files="$(git -C "$temp_dir" ls-files --others --exclude-standard 2>/dev/null || true)"
+    if [[ -n $untracked_files ]]; then
+      echo ""
+      echo "=== Untracked files in sweatshop ==="
+      while IFS= read -r file; do
+        echo "diff --git a/$file b/$file"
+        echo "new file mode 100644"
+        echo "index 0000000..$(git -C "$temp_dir" hash-object "$file" 2>/dev/null || echo "0000000")"
+        echo "--- /dev/null"
+        echo "+++ b/$file"
+        git -C "$temp_dir" diff /dev/null "$file" 2>/dev/null | tail -n +5 || echo "+[Binary file or unreadable content]"
+      done <<<"$untracked_files"
+    fi
   else
     # For clones, find merge base and show changes since divergence
     local sweatshop_branch merge_base
@@ -616,6 +639,29 @@ diff() {
     else
       echo "No common history found between $current_branch and sweatshop ($sweatshop_id:$sweatshop_branch)"
       git diff HEAD "refs/remotes/$sweatshop_id/$temp_ref"
+    fi
+
+    # Show uncommitted changes in the sweatshop
+    if ! git -C "$temp_dir" diff-index --quiet HEAD 2>/dev/null; then
+      echo ""
+      echo "=== Uncommitted changes in sweatshop ==="
+      git -C "$temp_dir" diff HEAD
+    fi
+
+    # Show untracked files in the sweatshop
+    local untracked_files
+    untracked_files="$(git -C "$temp_dir" ls-files --others --exclude-standard 2>/dev/null || true)"
+    if [[ -n $untracked_files ]]; then
+      echo ""
+      echo "=== Untracked files in sweatshop ==="
+      while IFS= read -r file; do
+        echo "diff --git a/$file b/$file"
+        echo "new file mode 100644"
+        echo "index 0000000..$(git -C "$temp_dir" hash-object "$file" 2>/dev/null || echo "0000000")"
+        echo "--- /dev/null"
+        echo "+++ b/$file"
+        git -C "$temp_dir" diff /dev/null "$file" 2>/dev/null | tail -n +5 || echo "+[Binary file or unreadable content]"
+      done <<<"$untracked_files"
     fi
 
     # Clean up temporary refs
