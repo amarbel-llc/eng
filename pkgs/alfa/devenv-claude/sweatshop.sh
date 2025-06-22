@@ -196,6 +196,24 @@ destroy() {
           # Check if sweatshop has uncommitted changes
           if ! git -C "$temp_dir" diff-index --quiet HEAD 2>/dev/null; then
             echo "Error: Sweatshop '$sweatshop_id' has uncommitted changes" >&2
+            echo "" >&2
+            echo -n "Would you like to see the uncommitted changes? [y/N]: " >&2
+            read -r response
+            if [[ $response =~ ^[Yy]$ ]]; then
+              echo "" >&2
+              echo "=== Uncommitted changes in $sweatshop_id ===" >&2
+              git -C "$temp_dir" diff HEAD >&2
+              echo "" >&2
+              
+              # Also show untracked files if any
+              local untracked
+              untracked="$(git -C "$temp_dir" ls-files --others --exclude-standard 2>/dev/null || true)"
+              if [[ -n $untracked ]]; then
+                echo "=== Untracked files ===" >&2
+                echo "$untracked" >&2
+                echo "" >&2
+              fi
+            fi
             echo "Commit or stash changes before destroying, or use -f to force" >&2
             exit 1
           fi
@@ -257,6 +275,24 @@ destroy() {
     # Check if sweatshop has uncommitted changes
     if ! git -C "$temp_dir" diff-index --quiet HEAD 2>/dev/null; then
       echo "Error: Sweatshop '$sweatshop_id' has uncommitted changes" >&2
+      echo "" >&2
+      echo -n "Would you like to see the uncommitted changes? [y/N]: " >&2
+      read -r response
+      if [[ $response =~ ^[Yy]$ ]]; then
+        echo "" >&2
+        echo "=== Uncommitted changes in $sweatshop_id ===" >&2
+        git -C "$temp_dir" diff HEAD >&2
+        echo "" >&2
+        
+        # Also show untracked files if any
+        local untracked
+        untracked="$(git -C "$temp_dir" ls-files --others --exclude-standard 2>/dev/null || true)"
+        if [[ -n $untracked ]]; then
+          echo "=== Untracked files ===" >&2
+          echo "$untracked" >&2
+          echo "" >&2
+        fi
+      fi
       echo "Commit or stash changes before destroying, or use -f to force" >&2
       exit 1
     fi
