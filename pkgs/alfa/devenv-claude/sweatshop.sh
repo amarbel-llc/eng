@@ -9,6 +9,7 @@ ALL="false"
 WORKTREE="false"
 PULL="false"
 DESTROY="false"
+SWEATSHOP_ID=""
 
 # TODO update this to not hardcode claude as the agent
 
@@ -17,18 +18,18 @@ usage() {
   echo "Usage: $0 [COMMAND] [OPTIONS] [args...]"
   echo ""
   echo "Commands:"
-  echo "  attach SWEATSHOP_ID         Attach to an existing sweatshop"
-  echo "  create [SWEATSHOP_ID]       Create a new sweatshop (optionally with custom ID)"
-  echo "  destroy SWEATSHOP_ID        Destroy a sweatshop (will abort if unmerged changes exist, use -f to force)
-  destroy -a                  Destroy all sweatshops (will abort if any have unmerged changes exist, use -f to force)"
-  echo "  diff [SWEATSHOP_ID]         Show differences between current branch and sweatshop HEAD"
-  echo "  get                         Get the single sweatshop ID (fails if multiple exist)"
-  echo "  list                        List all sweatshop IDs"
-  echo "  pull SWEATSHOP_ID           Pull changes from a sweatshop"
-  echo "  push SWEATSHOP_ID           Push changes to a sweatshop"
-  echo "  run [SWEATSHOP_ID]          Create a new sweatshop and attach to it (optionally with custom ID)"
-  echo "  run-temp [SWEATSHOP_ID]     Create a new sweatshop and attach to it, destroy when it exits (optionally with custom ID)"
-  echo "  sync [SWEATSHOP_ID]         Syncs changes to/from a sweatshop."
+  echo "  attach SWEATSHOP_ID [args...] Attach to an existing sweatshop"
+  echo "  create [SWEATSHOP_ID]         Create a new sweatshop (optionally with custom ID)"
+  echo "  destroy SWEATSHOP_ID          Destroy a sweatshop (will abort if unmerged changes exist, use -f to force)
+  destroy -a                    Destroy all sweatshops (will abort if any have unmerged changes exist, use -f to force)"
+  echo "  diff [SWEATSHOP_ID]           Show differences between current branch and sweatshop HEAD"
+  echo "  get                           Get the single sweatshop ID (fails if multiple exist)"
+  echo "  list                          List all sweatshop IDs"
+  echo "  pull SWEATSHOP_ID             Pull changes from a sweatshop"
+  echo "  push SWEATSHOP_ID             Push changes to a sweatshop"
+  echo "  run [-s SWEATSHOP_ID] [args...] Create a new sweatshop and attach to it (optionally with custom ID)"
+  echo "  run-temp [-s SWEATSHOP_ID] [args...] Create a new sweatshop and attach to it, destroy when it exits (optionally with custom ID)"
+  echo "  sync [SWEATSHOP_ID]           Syncs changes to/from a sweatshop."
   echo ""
   echo "Options:"
   echo "  -a           Destroy all sweatshops (only valid with destroy command)"
@@ -36,6 +37,7 @@ usage() {
   echo "  -f           Force operation (skip safety checks)"
   echo "  -h           Show this help message"
   echo "  -p           Pull changes before destroying (only valid with run-temp command)"
+  echo "  -s ID        Specify sweatshop ID (for run and run-temp commands)"
   echo "  -w           Use git worktrees instead of cloned repos"
   echo ""
   echo "All remaining arguments are passed to the agent (claude-code)"
@@ -71,7 +73,7 @@ sync) ;;
 esac
 
 # Parse command line options
-while getopts "afhpdw" opt; do
+while getopts "afhpdws:" opt; do
   case $opt in
   a)
     ALL="true"
@@ -87,6 +89,9 @@ while getopts "afhpdw" opt; do
     ;;
   p)
     PULL="true"
+    ;;
+  s)
+    SWEATSHOP_ID="$OPTARG"
     ;;
   w)
     WORKTREE="true"
@@ -412,7 +417,7 @@ create() {
 
 run_temp() {
   local sweatshop_id
-  sweatshop_id="$(create "${1:-}")"
+  sweatshop_id="$(create "$SWEATSHOP_ID")"
 
   cleanup_temp() {
     local cleanup_sweatshop_id="$1"
@@ -424,18 +429,19 @@ run_temp() {
 
   trap "cleanup_temp '$sweatshop_id'" EXIT INT TERM
 
-  attach "$sweatshop_id"
+  attach "$sweatshop_id" "$@"
 }
 
 run() {
   local sweatshop_id
-  sweatshop_id="$(create "${1:-}")"
-  attach "$sweatshop_id"
+  sweatshop_id="$(create "$SWEATSHOP_ID")"
+  attach "$sweatshop_id" "$@"
 }
 
 attach() {
   local sweatshop_id
   sweatshop_id="$(get "${1:-}")"
+  shift # Remove the sweatshop_id from arguments
 
   local temp_dir workspace_path
   temp_dir="$(get_sweatshop_path "$sweatshop_id")"
@@ -463,7 +469,7 @@ attach() {
     --unshare-all \
     --share-net \
     --die-with-parent \
-    @claude-code@
+    @claude-code@ "$@"
 }
 
 # Function to handle .claude/ directory changes before pull operations
