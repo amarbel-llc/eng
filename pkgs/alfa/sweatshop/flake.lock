@@ -9,10 +9,10 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-nix",
-        "lastModified": 1750076372,
+        "lastModified": 1750509001,
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "be7ca041efd2984502c4235248b4cd888781a1b5",
+        "rev": "b55d221a5a4b6cf290958531101ad9f470aa5e5d",
         "type": "github"
       },
       "original": {
@@ -29,10 +29,10 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-shell",
-        "lastModified": 1750076372,
+        "lastModified": 1750509001,
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "be7ca041efd2984502c4235248b4cd888781a1b5",
+        "rev": "b55d221a5a4b6cf290958531101ad9f470aa5e5d",
         "type": "github"
       },
       "original": {
@@ -182,10 +182,10 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1749794982,
+        "lastModified": 1750506804,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ee930f9755f58096ac6e8ca94a1887e0534e2d81",
+        "rev": "4206c4cb56751df534751b058295ea61357bbbaa",
         "type": "github"
       },
       "original": {
