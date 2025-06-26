@@ -1,5 +1,6 @@
 {
   inputs = {
+    nixpkgs.url = "flake:nixpkgs";
     nixpkgs-stable.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2411.717296.tar.gz";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz";
 
@@ -14,6 +15,7 @@
 
     bash.url = "github:friedenberg/eng?dir=pkgs/alfa/bash";
     ssh.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh";
+    sweatshop.url = "github:friedenberg/eng?dir=pkgs/alfa/sweatshop";
 
     html-to-pdf.url = "github:friedenberg/eng?dir=pkgs/alfa/html-to-pdf";
 
@@ -24,9 +26,9 @@
     chrest.inputs.devenv-go.follows = "devenv-go";
     chrest.inputs.devenv-js.follows = "devenv-js";
 
-    zit.url = "github:friedenberg/eng?dir=pkgs/bravo/zit/go/zit";
-    zit.inputs.devenv-go.follows = "devenv-go";
-    zit.inputs.devenv-shell.follows = "devenv-shell";
+    dodder.url = "github:friedenberg/eng?dir=pkgs/bravo/dodder/go/dodder";
+    dodder.inputs.devenv-go.follows = "devenv-go";
+    dodder.inputs.devenv-shell.follows = "devenv-shell";
   };
 
   outputs =
@@ -34,6 +36,7 @@
     , nixpkgs
     , nixpkgs-stable
     , utils
+    #
     , devenv-go
     , devenv-js
     , devenv-nix
@@ -41,12 +44,15 @@
     , devenv-system-common
     , devenv-system-darwin
     , devenv-system-linux
+    #
     , bash
     , ssh
-    , zit
+    , sweatshop
+    #
     , chrest
     , html-to-pdf
     , pa6e
+    , dodder
     }:
     (utils.lib.eachDefaultSystem
       (system:
@@ -75,7 +81,8 @@
             html-to-pdf.packages.${system}.default
             pa6e.packages.${system}.default
             ssh.packages.${system}.default
-            zit.packages.${system}.default
+            sweatshop.packages.${system}.default
+            dodder.packages.${system}.default
           ];
         };
 
