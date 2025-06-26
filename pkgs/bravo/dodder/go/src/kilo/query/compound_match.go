@@ -1,7 +1,7 @@
 package query
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 type CompoundMatch struct {

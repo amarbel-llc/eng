@@ -1,6 +1,6 @@
 package stream_index
 
-import "code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+import "code.linenisgreat.com/zit/go/src/alfa/errors"
 
 var errConcurrentPageAccess = errors.New("concurrent page access")
 

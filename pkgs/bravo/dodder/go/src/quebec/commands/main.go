@@ -3,9 +3,9 @@ package commands
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/config_mutable_cli"
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/foxtrot/config_mutable_cli"
+	"code.linenisgreat.com/zit/go/src/golf/command"
 )
 
 func Run(ctx errors.Context, args ...string) {

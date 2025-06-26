@@ -8,14 +8,14 @@ import (
 	"sync"
 	"time"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/coordinates"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/collections"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/delta/object_id_provider"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/alfa/coordinates"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/charlie/collections"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/delta/object_id_provider"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 type index struct {

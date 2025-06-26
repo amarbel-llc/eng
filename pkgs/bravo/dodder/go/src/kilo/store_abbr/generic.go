@@ -3,12 +3,12 @@ package store_abbr
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/collections"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/charlie/collections"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 // TODO refactor this whole thing to be simpler and get rid of generics

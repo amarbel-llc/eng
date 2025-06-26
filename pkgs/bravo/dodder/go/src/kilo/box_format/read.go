@@ -3,14 +3,14 @@ package box_format
 import (
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/unicorn"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/box"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/unicorn"
+	"code.linenisgreat.com/zit/go/src/bravo/bech32"
+	"code.linenisgreat.com/zit/go/src/charlie/box"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/delta/string_format_writer"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 // TODO make this error for invalid input

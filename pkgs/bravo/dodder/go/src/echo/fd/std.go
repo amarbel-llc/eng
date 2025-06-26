@@ -3,7 +3,7 @@ package fd
 import (
 	"os"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 )
 
 type Std struct {

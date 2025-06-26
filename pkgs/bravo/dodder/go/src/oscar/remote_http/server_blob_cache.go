@@ -3,11 +3,11 @@ package remote_http
 import (
 	"sync"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/tridex"
-	"code.linenisgreat.com/zit/go/zit/src/echo/fd"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/charlie/tridex"
+	"code.linenisgreat.com/zit/go/src/echo/fd"
 )
 
 type serverBlobCache struct {

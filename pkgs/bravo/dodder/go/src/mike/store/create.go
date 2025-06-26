@@ -3,14 +3,14 @@ package store
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/checkout_options"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/collections"
-	"code.linenisgreat.com/zit/go/zit/src/delta/file_lock"
-	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/charlie/checkout_options"
+	"code.linenisgreat.com/zit/go/src/charlie/collections"
+	"code.linenisgreat.com/zit/go/src/delta/file_lock"
+	"code.linenisgreat.com/zit/go/src/echo/env_dir"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 // TODO-P2 add support for quiet reindexing

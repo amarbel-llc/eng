@@ -3,9 +3,9 @@ package env_dir
 import (
 	"os"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/id"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/id"
+	"code.linenisgreat.com/zit/go/src/charlie/files"
 )
 
 type Mover struct {

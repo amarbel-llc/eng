@@ -3,7 +3,7 @@ package object_metadata
 import (
 	"slices"
 
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 var Resetter resetter

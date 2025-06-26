@@ -1,8 +1,8 @@
 package store
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	"code.linenisgreat.com/zit/go/zit/src/mike/importer"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/mike/importer"
 )
 
 func (store *Store) MakeImporter(

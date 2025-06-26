@@ -1,9 +1,9 @@
 package stream_index
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/india/object_probe_index"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/india/object_probe_index"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 type skuWithSigil struct {

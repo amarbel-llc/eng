@@ -1,11 +1,11 @@
 package store
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/collections"
-	"code.linenisgreat.com/zit/go/zit/src/delta/lua"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/type_blobs"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/charlie/collections"
+	"code.linenisgreat.com/zit/go/src/delta/lua"
+	"code.linenisgreat.com/zit/go/src/hotel/type_blobs"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 func (s *Store) tryNewHook(

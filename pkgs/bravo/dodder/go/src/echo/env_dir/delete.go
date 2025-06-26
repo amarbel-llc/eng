@@ -4,8 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 )
 
 func (env env) Delete(paths ...string) (err error) {

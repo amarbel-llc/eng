@@ -3,15 +3,15 @@ package user_ops
 import (
 	"sync"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/checkout_mode"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/checkout_options"
-	"code.linenisgreat.com/zit/go/zit/src/golf/object_metadata"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/query"
-	"code.linenisgreat.com/zit/go/zit/src/lima/organize_text"
-	"code.linenisgreat.com/zit/go/zit/src/november/local_working_copy"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/checkout_mode"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/charlie/checkout_options"
+	"code.linenisgreat.com/zit/go/src/golf/object_metadata"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/kilo/query"
+	"code.linenisgreat.com/zit/go/src/lima/organize_text"
+	"code.linenisgreat.com/zit/go/src/november/local_working_copy"
 )
 
 type Checkin struct {

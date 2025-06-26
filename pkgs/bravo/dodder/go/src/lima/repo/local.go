@@ -1,9 +1,9 @@
 package repo
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/golf/config_immutable_io"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/env_workspace"
+	"code.linenisgreat.com/zit/go/src/golf/config_immutable_io"
+	"code.linenisgreat.com/zit/go/src/hotel/env_repo"
+	"code.linenisgreat.com/zit/go/src/kilo/env_workspace"
 )
 
 type LocalRepo interface {

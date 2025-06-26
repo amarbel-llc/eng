@@ -1,4 +1,4 @@
-module code.linenisgreat.com/zit/go/zit
+module code.linenisgreat.com/zit/go
 
 go 1.24.0
 
@@ -20,6 +20,7 @@ require (
 )
 
 require (
+	code.linenisgreat.com/zit/go/zit v0.0.0-20250117135934-13cad81ec864 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/akutz/memconn v0.1.0 // indirect
 	github.com/alexbrainman/sspi v0.0.0-20231016080023-1a75b4708caa // indirect

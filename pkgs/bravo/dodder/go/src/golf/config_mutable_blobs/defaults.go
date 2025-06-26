@@ -1,8 +1,8 @@
 package config_mutable_blobs
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/bravo/quiter"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 type DefaultsV0 struct {

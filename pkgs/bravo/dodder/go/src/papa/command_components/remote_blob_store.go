@@ -3,11 +3,11 @@ package command_components
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
-	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/blob_store"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_local"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/src/echo/env_dir"
+	"code.linenisgreat.com/zit/go/src/hotel/blob_store"
+	"code.linenisgreat.com/zit/go/src/hotel/env_local"
 )
 
 type RemoteBlobStore struct {

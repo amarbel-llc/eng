@@ -7,11 +7,11 @@ import (
 	"os/exec"
 	"syscall"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/delim_io"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
-	"code.linenisgreat.com/zit/go/zit/src/golf/env_ui"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/charlie/delim_io"
+	"code.linenisgreat.com/zit/go/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/src/golf/env_ui"
+	"code.linenisgreat.com/zit/go/src/hotel/env_repo"
 )
 
 type RoundTripperStdio struct {

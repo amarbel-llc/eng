@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os/exec"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/reset"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/equality"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/reset"
+	"code.linenisgreat.com/zit/go/src/bravo/equality"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 )
 
 type ScriptConfig struct {

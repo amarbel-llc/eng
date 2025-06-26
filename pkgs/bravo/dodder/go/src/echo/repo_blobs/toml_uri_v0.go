@@ -1,8 +1,8 @@
 package repo_blobs
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/src/bravo/values"
+	"code.linenisgreat.com/zit/go/src/charlie/repo_signing"
 )
 
 type TomlUriV0 struct {

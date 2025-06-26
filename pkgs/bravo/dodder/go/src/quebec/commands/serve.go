@@ -4,10 +4,10 @@ import (
 	"flag"
 	"net"
 
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
-	"code.linenisgreat.com/zit/go/zit/src/golf/env_ui"
-	"code.linenisgreat.com/zit/go/zit/src/oscar/remote_http"
-	"code.linenisgreat.com/zit/go/zit/src/papa/command_components"
+	"code.linenisgreat.com/zit/go/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/golf/env_ui"
+	"code.linenisgreat.com/zit/go/src/oscar/remote_http"
+	"code.linenisgreat.com/zit/go/src/papa/command_components"
 	"tailscale.com/client/local"
 )
 

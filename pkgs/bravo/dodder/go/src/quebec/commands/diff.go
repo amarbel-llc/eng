@@ -4,17 +4,17 @@ import (
 	"flag"
 	"path/filepath"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/checkout_options"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
-	"code.linenisgreat.com/zit/go/zit/src/golf/object_metadata"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_local"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/query"
-	"code.linenisgreat.com/zit/go/zit/src/papa/command_components"
-	"code.linenisgreat.com/zit/go/zit/src/papa/user_ops"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/charlie/checkout_options"
+	"code.linenisgreat.com/zit/go/src/charlie/files"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/golf/object_metadata"
+	"code.linenisgreat.com/zit/go/src/hotel/env_local"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/kilo/query"
+	"code.linenisgreat.com/zit/go/src/papa/command_components"
+	"code.linenisgreat.com/zit/go/src/papa/user_ops"
 )
 
 // TODO switch to registerCommandWithExternalQuery

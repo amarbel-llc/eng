@@ -1,8 +1,8 @@
 package repo_blobs
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
-	"code.linenisgreat.com/zit/go/zit/src/delta/xdg"
+	"code.linenisgreat.com/zit/go/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/src/delta/xdg"
 )
 
 type TomlXDGV0 struct {

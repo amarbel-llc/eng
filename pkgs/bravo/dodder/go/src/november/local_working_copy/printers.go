@@ -1,15 +1,15 @@
 package local_working_copy
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
-	"code.linenisgreat.com/zit/go/zit/src/echo/checked_out_state"
-	"code.linenisgreat.com/zit/go/zit/src/echo/fd"
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/id_fmts"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/box_format"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/delta/string_format_writer"
+	"code.linenisgreat.com/zit/go/src/echo/checked_out_state"
+	"code.linenisgreat.com/zit/go/src/echo/fd"
+	"code.linenisgreat.com/zit/go/src/foxtrot/id_fmts"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/kilo/box_format"
 )
 
 // TODO migrate to StringFormatWriterSkuBoxCheckedOut

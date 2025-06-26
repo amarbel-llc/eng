@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/type_blobs"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	"code.linenisgreat.com/zit/go/zit/src/lima/typed_blob_store"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/hotel/type_blobs"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/lima/typed_blob_store"
 )
 
 type formatterTypFormatterUTIGroups struct {

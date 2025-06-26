@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/bravo/values"
 )
 
 func TestReset(t1 *testing.T) {

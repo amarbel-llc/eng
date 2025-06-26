@@ -3,8 +3,8 @@ package quiter
 import (
 	"iter"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/todo"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/todo"
 )
 
 // TODO move to own package

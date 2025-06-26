@@ -3,7 +3,7 @@ package commands
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/golf/command"
 )
 
 type Test struct{}

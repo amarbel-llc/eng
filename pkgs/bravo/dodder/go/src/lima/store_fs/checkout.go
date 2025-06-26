@@ -6,17 +6,17 @@ import (
 	"path"
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/checkout_mode"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/id"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/checkout_options"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/echo/checked_out_state"
-	"code.linenisgreat.com/zit/go/zit/src/echo/fd"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/golf/object_metadata"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/checkout_mode"
+	"code.linenisgreat.com/zit/go/src/bravo/id"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/charlie/checkout_options"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/echo/checked_out_state"
+	"code.linenisgreat.com/zit/go/src/echo/fd"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/golf/object_metadata"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 func (s *Store) CheckoutOne(

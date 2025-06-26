@@ -1,9 +1,9 @@
 package config_immutable_io
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
-	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/src/echo/env_dir"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 type ConfigLoadedPublic struct {

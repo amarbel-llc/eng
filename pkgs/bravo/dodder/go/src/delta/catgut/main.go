@@ -1,6 +1,6 @@
 package catgut
 
-import "code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+import "code.linenisgreat.com/zit/go/src/alfa/interfaces"
 
 type (
 	StringFormatReader[T any] interface {

@@ -3,9 +3,9 @@ package command_components
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/query"
-	"code.linenisgreat.com/zit/go/zit/src/november/local_working_copy"
+	"code.linenisgreat.com/zit/go/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/kilo/query"
+	"code.linenisgreat.com/zit/go/src/november/local_working_copy"
 )
 
 type LocalWorkingCopyWithQueryGroup struct {

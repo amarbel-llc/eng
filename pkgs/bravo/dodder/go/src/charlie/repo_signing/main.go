@@ -3,7 +3,7 @@ package repo_signing
 import (
 	"crypto/ed25519"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 type (

@@ -3,8 +3,8 @@ package env_workspace
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/mike/store_workspace"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/mike/store_workspace"
 )
 
 type ErrUnsupportedType ids.Type

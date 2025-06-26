@@ -5,12 +5,12 @@ import (
 	"crypto"
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/toml"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
-	"code.linenisgreat.com/zit/go/zit/src/echo/triple_hyphen_io"
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/alfa/toml"
+	"code.linenisgreat.com/zit/go/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/src/echo/triple_hyphen_io"
+	"code.linenisgreat.com/zit/go/src/foxtrot/builtin_types"
 )
 
 type Blob interface {

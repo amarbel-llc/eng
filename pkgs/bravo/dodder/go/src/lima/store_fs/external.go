@@ -1,11 +1,11 @@
 package store_fs
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/checkout_mode"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/echo/fd"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/checkout_mode"
+	"code.linenisgreat.com/zit/go/src/bravo/quiter"
+	"code.linenisgreat.com/zit/go/src/echo/fd"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 func (s *Store) GetCheckoutMode(

@@ -1,6 +1,6 @@
 package type_blobs
 
-import "code.linenisgreat.com/zit/go/zit/src/bravo/equality"
+import "code.linenisgreat.com/zit/go/src/bravo/equality"
 
 type UTIGroup map[string]string
 

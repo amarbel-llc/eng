@@ -5,8 +5,8 @@ import (
 	"encoding/gob"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 func TestGob(t1 *testing.T) {

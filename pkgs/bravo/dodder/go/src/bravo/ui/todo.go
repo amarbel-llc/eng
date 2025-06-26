@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
+	"code.linenisgreat.com/zit/go/src/alfa/stack_frame"
 )
 
 var todo todoPrinter

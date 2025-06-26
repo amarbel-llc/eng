@@ -3,10 +3,10 @@ package organize_text
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/tag_paths"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/foxtrot/tag_paths"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 var keyer = sku.GetExternalLikeKeyer[sku.SkuType]()

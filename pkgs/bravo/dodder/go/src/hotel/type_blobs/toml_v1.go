@@ -1,8 +1,8 @@
 package type_blobs
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/reset"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/script_config"
+	"code.linenisgreat.com/zit/go/src/alfa/reset"
+	"code.linenisgreat.com/zit/go/src/charlie/script_config"
 )
 
 type TomlV1 struct {

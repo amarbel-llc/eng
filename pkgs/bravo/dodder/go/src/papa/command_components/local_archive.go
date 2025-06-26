@@ -3,12 +3,12 @@ package command_components
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/repo_type"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
-	"code.linenisgreat.com/zit/go/zit/src/lima/inventory_list_store"
-	"code.linenisgreat.com/zit/go/zit/src/lima/repo"
-	"code.linenisgreat.com/zit/go/zit/src/mike/env_box"
-	"code.linenisgreat.com/zit/go/zit/src/november/local_working_copy"
+	"code.linenisgreat.com/zit/go/src/alfa/repo_type"
+	"code.linenisgreat.com/zit/go/src/hotel/env_repo"
+	"code.linenisgreat.com/zit/go/src/lima/inventory_list_store"
+	"code.linenisgreat.com/zit/go/src/lima/repo"
+	"code.linenisgreat.com/zit/go/src/mike/env_box"
+	"code.linenisgreat.com/zit/go/src/november/local_working_copy"
 )
 
 type LocalArchive struct {

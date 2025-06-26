@@ -8,8 +8,8 @@ import (
 	"io"
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/charlie/files"
 	"github.com/DataDog/zstd"
 )
 

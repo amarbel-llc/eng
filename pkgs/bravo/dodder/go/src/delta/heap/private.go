@@ -4,8 +4,8 @@ import (
 	"container/heap"
 	"sort"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/pool"
 )
 
 type Element interface{}

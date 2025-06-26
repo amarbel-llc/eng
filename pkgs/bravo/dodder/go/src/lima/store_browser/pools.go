@@ -1,9 +1,9 @@
 package store_browser
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 var (

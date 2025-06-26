@@ -1,10 +1,10 @@
 package local_working_copy
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/query"
-	"code.linenisgreat.com/zit/go/zit/src/lima/repo"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/kilo/query"
+	"code.linenisgreat.com/zit/go/src/lima/repo"
 )
 
 func (local *Repo) PullQueryGroupFromRemote(

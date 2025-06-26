@@ -1,6 +1,6 @@
 package collections_coding
 
-import "code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+import "code.linenisgreat.com/zit/go/src/alfa/interfaces"
 
 type EncoderLike[T any] interface {
 	Encode(*T) (int64, error)

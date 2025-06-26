@@ -1,11 +1,11 @@
 package config_mutable_blobs
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/options_tools"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
-	"code.linenisgreat.com/zit/go/zit/src/delta/file_extensions"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/options_tools"
+	"code.linenisgreat.com/zit/go/src/charlie/options_print"
+	"code.linenisgreat.com/zit/go/src/delta/file_extensions"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 type V1 struct {

@@ -1,8 +1,8 @@
 package env_local
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
-	"code.linenisgreat.com/zit/go/zit/src/golf/env_ui"
+	"code.linenisgreat.com/zit/go/src/echo/env_dir"
+	"code.linenisgreat.com/zit/go/src/golf/env_ui"
 )
 
 type (

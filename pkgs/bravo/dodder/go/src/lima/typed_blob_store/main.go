@@ -1,11 +1,11 @@
 package typed_blob_store
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/object_inventory_format"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/type_blobs"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/box_format"
-	"code.linenisgreat.com/zit/go/zit/src/lima/env_lua"
+	"code.linenisgreat.com/zit/go/src/hotel/env_repo"
+	"code.linenisgreat.com/zit/go/src/hotel/object_inventory_format"
+	"code.linenisgreat.com/zit/go/src/hotel/type_blobs"
+	"code.linenisgreat.com/zit/go/src/kilo/box_format"
+	"code.linenisgreat.com/zit/go/src/lima/env_lua"
 )
 
 type Stores struct {

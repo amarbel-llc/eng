@@ -1,9 +1,9 @@
 package store
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/checkout_options"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/charlie/checkout_options"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 func (s *Store) ReadExternalAndMergeIfNecessary(

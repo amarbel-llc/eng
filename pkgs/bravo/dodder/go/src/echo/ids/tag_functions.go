@@ -3,8 +3,8 @@ package ids
 import (
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/expansion"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
+	"code.linenisgreat.com/zit/go/src/bravo/expansion"
+	"code.linenisgreat.com/zit/go/src/bravo/quiter"
 )
 
 func IsDependentLeaf(a Tag) (has bool) {

@@ -1,7 +1,7 @@
 package quiter
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
 )
 
 func PrintPointer[T any, TPtr interfaces.Ptr[T]](e TPtr) (err error) {

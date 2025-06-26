@@ -1,9 +1,9 @@
 package sku
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
-	"code.linenisgreat.com/zit/go/zit/src/echo/checked_out_state"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/src/echo/checked_out_state"
 )
 
 func makeCheckedOut() *CheckedOut {

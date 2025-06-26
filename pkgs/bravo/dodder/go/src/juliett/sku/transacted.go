@@ -3,17 +3,17 @@ package sku
 import (
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/external_state"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/golf/object_metadata"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/object_inventory_format"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/values"
+	"code.linenisgreat.com/zit/go/src/charlie/external_state"
+	"code.linenisgreat.com/zit/go/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/delta/sha"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/golf/object_metadata"
+	"code.linenisgreat.com/zit/go/src/hotel/object_inventory_format"
 )
 
 type Transacted struct {

@@ -3,7 +3,7 @@ package repo_signing
 import (
 	"encoding/base64"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 func SignBase64(key PrivateKey, message []byte) (signature string, err error) {

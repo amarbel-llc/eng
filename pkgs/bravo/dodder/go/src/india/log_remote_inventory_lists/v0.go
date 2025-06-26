@@ -9,14 +9,14 @@ import (
 	"path/filepath"
 	"sync"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/collections"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/tridex"
-	"code.linenisgreat.com/zit/go/zit/src/delta/file_lock"
-	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/charlie/collections"
+	"code.linenisgreat.com/zit/go/src/charlie/files"
+	"code.linenisgreat.com/zit/go/src/charlie/tridex"
+	"code.linenisgreat.com/zit/go/src/delta/file_lock"
+	"code.linenisgreat.com/zit/go/src/delta/sha"
+	"code.linenisgreat.com/zit/go/src/hotel/env_repo"
 )
 
 type v0 struct {

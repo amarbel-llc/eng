@@ -3,9 +3,9 @@ package sku
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/charlie/external_state"
-	"code.linenisgreat.com/zit/go/zit/src/echo/checked_out_state"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/charlie/external_state"
+	"code.linenisgreat.com/zit/go/src/echo/checked_out_state"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 func InternalAndExternalEqualsWithoutTai(co SkuType) bool {

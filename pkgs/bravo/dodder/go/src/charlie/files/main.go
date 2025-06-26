@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 func CreateExclusiveReadOnly(path string) (file *os.File, err error) {

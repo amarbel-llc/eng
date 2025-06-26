@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 )
 
 func ReadDir(ps ...string) (dirEntries []os.DirEntry, err error) {

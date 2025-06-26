@@ -3,16 +3,16 @@ package box_format
 import (
 	"slices"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
-	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/golf/env_ui"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/object_metadata_fmt"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/charlie/options_print"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/delta/string_format_writer"
+	"code.linenisgreat.com/zit/go/src/echo/env_dir"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/golf/env_ui"
+	"code.linenisgreat.com/zit/go/src/hotel/object_metadata_fmt"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 func MakeBoxTransactedArchive(

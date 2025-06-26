@@ -3,12 +3,12 @@ package object_metadata
 import (
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/script_config"
-	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
-	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
-	"code.linenisgreat.com/zit/go/zit/src/echo/triple_hyphen_io"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/charlie/script_config"
+	"code.linenisgreat.com/zit/go/src/delta/sha"
+	"code.linenisgreat.com/zit/go/src/delta/string_format_writer"
+	"code.linenisgreat.com/zit/go/src/echo/triple_hyphen_io"
 )
 
 type textParser struct {

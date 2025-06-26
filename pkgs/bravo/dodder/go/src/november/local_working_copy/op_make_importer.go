@@ -1,7 +1,7 @@
 package local_working_copy
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 func (repo *Repo) MakeImporter(

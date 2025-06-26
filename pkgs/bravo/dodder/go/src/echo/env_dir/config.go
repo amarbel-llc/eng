@@ -1,9 +1,9 @@
 package env_dir
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/delta/age"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/delta/age"
+	"code.linenisgreat.com/zit/go/src/delta/config_immutable"
 )
 
 type Config struct {

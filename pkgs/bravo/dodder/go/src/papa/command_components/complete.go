@@ -1,16 +1,16 @@
 package command_components
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/bravo/flag"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
-	"code.linenisgreat.com/zit/go/zit/src/golf/object_metadata"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_local"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	pkg_query "code.linenisgreat.com/zit/go/zit/src/kilo/query"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/sku_fmt"
-	"code.linenisgreat.com/zit/go/zit/src/november/local_working_copy"
+	"code.linenisgreat.com/zit/go/src/bravo/flag"
+	"code.linenisgreat.com/zit/go/src/bravo/values"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/golf/object_metadata"
+	"code.linenisgreat.com/zit/go/src/hotel/env_local"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	pkg_query "code.linenisgreat.com/zit/go/src/kilo/query"
+	"code.linenisgreat.com/zit/go/src/kilo/sku_fmt"
+	"code.linenisgreat.com/zit/go/src/november/local_working_copy"
 )
 
 type Complete struct {

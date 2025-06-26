@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 func ReadAllOrDieTrying(r io.Reader, b []byte) (n int, err error) {

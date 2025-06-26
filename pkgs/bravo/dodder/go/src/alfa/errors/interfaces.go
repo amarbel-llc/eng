@@ -1,6 +1,6 @@
 package errors
 
-import "code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
+import "code.linenisgreat.com/zit/go/src/alfa/stack_frame"
 
 type Flusher interface {
 	Flush() error

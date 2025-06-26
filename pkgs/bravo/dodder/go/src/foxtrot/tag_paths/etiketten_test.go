@@ -3,8 +3,8 @@ package tag_paths
 import (
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/delta/catgut"
 )
 
 func TestAddPaths(t1 *testing.T) {

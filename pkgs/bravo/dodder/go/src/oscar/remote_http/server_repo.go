@@ -8,14 +8,14 @@ import (
 	"io"
 	"net/http"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/collections"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/tridex"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
-	"code.linenisgreat.com/zit/go/zit/src/india/log_remote_inventory_lists"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/charlie/collections"
+	"code.linenisgreat.com/zit/go/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/src/charlie/tridex"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/delta/sha"
+	"code.linenisgreat.com/zit/go/src/india/log_remote_inventory_lists"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 func (server *Server) writeInventoryList(

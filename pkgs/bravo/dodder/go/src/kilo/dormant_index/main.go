@@ -7,15 +7,15 @@ import (
 	"os"
 	"slices"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
-	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/tag_paths"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/charlie/files"
+	"code.linenisgreat.com/zit/go/src/charlie/ohio"
+	"code.linenisgreat.com/zit/go/src/delta/catgut"
+	"code.linenisgreat.com/zit/go/src/foxtrot/tag_paths"
+	"code.linenisgreat.com/zit/go/src/hotel/env_repo"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 type Index struct {

@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
-	"code.linenisgreat.com/zit/go/zit/src/papa/command_components"
+	"code.linenisgreat.com/zit/go/src/delta/catgut"
+	"code.linenisgreat.com/zit/go/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/papa/command_components"
 )
 
 func init() {

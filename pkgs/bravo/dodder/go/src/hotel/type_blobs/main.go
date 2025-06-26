@@ -1,8 +1,8 @@
 package type_blobs
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/charlie/script_config"
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
+	"code.linenisgreat.com/zit/go/src/charlie/script_config"
+	"code.linenisgreat.com/zit/go/src/foxtrot/builtin_types"
 )
 
 const (

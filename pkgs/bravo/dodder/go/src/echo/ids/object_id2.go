@@ -5,14 +5,14 @@ import (
 	"math"
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/box"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
-	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
-	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/src/charlie/box"
+	"code.linenisgreat.com/zit/go/src/charlie/ohio"
+	"code.linenisgreat.com/zit/go/src/delta/catgut"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/delta/sha"
 )
 
 var poolObjectId2 interfaces.Pool[objectId2, *objectId2]

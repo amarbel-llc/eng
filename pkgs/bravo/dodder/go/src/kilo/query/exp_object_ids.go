@@ -1,6 +1,6 @@
 package query
 
-import "code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+import "code.linenisgreat.com/zit/go/src/juliett/sku"
 
 type expObjectIds struct {
 	internal map[string]ObjectId

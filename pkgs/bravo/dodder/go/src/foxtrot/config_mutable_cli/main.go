@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/options_tools"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/options_print"
-	"code.linenisgreat.com/zit/go/zit/src/delta/debug"
-	"code.linenisgreat.com/zit/go/zit/src/echo/descriptions"
+	"code.linenisgreat.com/zit/go/src/bravo/options_tools"
+	"code.linenisgreat.com/zit/go/src/charlie/options_print"
+	"code.linenisgreat.com/zit/go/src/delta/debug"
+	"code.linenisgreat.com/zit/go/src/echo/descriptions"
 )
 
 type Config struct {

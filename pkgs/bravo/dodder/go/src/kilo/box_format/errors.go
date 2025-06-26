@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/charlie/box"
+	"code.linenisgreat.com/zit/go/src/charlie/box"
 )
 
 type ErrBoxParse struct {

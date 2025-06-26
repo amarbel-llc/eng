@@ -3,9 +3,9 @@ package commands
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/charlie/store_version"
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
-	"code.linenisgreat.com/zit/go/zit/src/papa/command_components"
+	"code.linenisgreat.com/zit/go/src/charlie/store_version"
+	"code.linenisgreat.com/zit/go/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/papa/command_components"
 )
 
 func init() {

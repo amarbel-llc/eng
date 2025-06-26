@@ -4,8 +4,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
 )
 
 func MakeRightAligned() interfaces.StringEncoderTo[string] {

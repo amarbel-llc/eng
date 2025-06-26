@@ -6,10 +6,10 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/primordial"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/alfa/primordial"
+	"code.linenisgreat.com/zit/go/src/charlie/files"
 	"github.com/google/shlex"
 )
 

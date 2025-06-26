@@ -1,7 +1,7 @@
 package quiter
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
 )
 
 func ResetMap[K comparable, V any](m map[K]V) {

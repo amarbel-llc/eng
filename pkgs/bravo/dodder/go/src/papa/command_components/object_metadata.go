@@ -3,10 +3,10 @@ package command_components
 import (
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/flag_policy"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/flag"
-	"code.linenisgreat.com/zit/go/zit/src/golf/object_metadata"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/flag_policy"
+	"code.linenisgreat.com/zit/go/src/bravo/flag"
+	"code.linenisgreat.com/zit/go/src/golf/object_metadata"
 )
 
 type ObjectMetadata struct{}

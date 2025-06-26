@@ -1,7 +1,7 @@
 package values
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
 )
 
 func Equals[T interfaces.Equatable[T]](a T, b any) bool {

@@ -3,14 +3,14 @@ package command_components
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/repo_type"
-	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
-	"code.linenisgreat.com/zit/go/zit/src/golf/env_ui"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_local"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
-	"code.linenisgreat.com/zit/go/zit/src/lima/repo"
-	"code.linenisgreat.com/zit/go/zit/src/november/local_working_copy"
+	"code.linenisgreat.com/zit/go/src/alfa/repo_type"
+	"code.linenisgreat.com/zit/go/src/echo/env_dir"
+	"code.linenisgreat.com/zit/go/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/golf/env_ui"
+	"code.linenisgreat.com/zit/go/src/hotel/env_local"
+	"code.linenisgreat.com/zit/go/src/hotel/env_repo"
+	"code.linenisgreat.com/zit/go/src/lima/repo"
+	"code.linenisgreat.com/zit/go/src/november/local_working_copy"
 )
 
 type Genesis struct {

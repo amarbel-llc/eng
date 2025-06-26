@@ -5,10 +5,10 @@ import (
 	"io"
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/config_mutable_cli"
-	"code.linenisgreat.com/zit/go/zit/src/golf/command"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_local"
-	"code.linenisgreat.com/zit/go/zit/src/papa/command_components"
+	"code.linenisgreat.com/zit/go/src/foxtrot/config_mutable_cli"
+	"code.linenisgreat.com/zit/go/src/golf/command"
+	"code.linenisgreat.com/zit/go/src/hotel/env_local"
+	"code.linenisgreat.com/zit/go/src/papa/command_components"
 )
 
 func init() {

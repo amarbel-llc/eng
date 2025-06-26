@@ -4,10 +4,10 @@ import (
 	"io"
 	"sync"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
-	"code.linenisgreat.com/zit/go/zit/src/echo/triple_hyphen_io"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/object_inventory_format"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/charlie/ohio"
+	"code.linenisgreat.com/zit/go/src/echo/triple_hyphen_io"
+	"code.linenisgreat.com/zit/go/src/hotel/object_inventory_format"
 )
 
 func makePrinter(

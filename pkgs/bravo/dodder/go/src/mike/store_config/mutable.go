@@ -1,11 +1,11 @@
 package store_config
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/golf/config_mutable_blobs"
-	"code.linenisgreat.com/zit/go/zit/src/lima/typed_blob_store"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/golf/config_mutable_blobs"
+	"code.linenisgreat.com/zit/go/src/lima/typed_blob_store"
 )
 
 type mutable_config_blob struct {

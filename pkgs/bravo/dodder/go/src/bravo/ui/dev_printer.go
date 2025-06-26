@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
+	"code.linenisgreat.com/zit/go/src/alfa/stack_frame"
 )
 
 type devPrinter struct {

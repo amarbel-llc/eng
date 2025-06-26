@@ -3,10 +3,10 @@ package env_repo
 import (
 	"path/filepath"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/todo"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
-	"code.linenisgreat.com/zit/go/zit/src/delta/xdg"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/bravo/todo"
+	"code.linenisgreat.com/zit/go/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/src/delta/xdg"
 )
 
 type directoryPaths interface {

@@ -3,8 +3,8 @@ package env_repo
 import (
 	"path/filepath"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/delta/xdg"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/delta/xdg"
 )
 
 type directoryV1 struct {

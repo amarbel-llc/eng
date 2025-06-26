@@ -1,9 +1,9 @@
 package store
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	"code.linenisgreat.com/zit/go/zit/src/lima/store_browser"
-	"code.linenisgreat.com/zit/go/zit/src/lima/store_fs"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/lima/store_browser"
+	"code.linenisgreat.com/zit/go/src/lima/store_fs"
 )
 
 // TODO remove entirely

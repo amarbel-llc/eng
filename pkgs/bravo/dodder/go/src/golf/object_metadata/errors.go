@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os/exec"
 
-	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
-	"code.linenisgreat.com/zit/go/zit/src/echo/fd"
+	"code.linenisgreat.com/zit/go/src/delta/sha"
+	"code.linenisgreat.com/zit/go/src/echo/fd"
 )
 
 func MakeErrBlobFormatterFailed(

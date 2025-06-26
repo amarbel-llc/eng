@@ -5,7 +5,7 @@ import (
 	"crypto/ed25519"
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 type PrivateKey ed25519.PrivateKey

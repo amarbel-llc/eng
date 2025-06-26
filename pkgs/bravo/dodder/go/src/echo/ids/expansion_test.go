@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/expansion"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/bravo/expansion"
+	"code.linenisgreat.com/zit/go/src/bravo/quiter"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 )
 
 func stringSliceEquals(a, b []string) bool {

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"unicode"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/unicorn"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/alfa/unicorn"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 )
 
 func TestRingBufferReader(t1 *testing.T) {

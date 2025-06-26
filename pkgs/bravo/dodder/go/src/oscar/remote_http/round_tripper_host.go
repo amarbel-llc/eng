@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/values"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/values"
 )
 
 type UrlData struct {

@@ -1,7 +1,7 @@
 package string_format_writer
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
 )
 
 func MakeFunc[T any](

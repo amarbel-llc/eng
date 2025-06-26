@@ -1,6 +1,6 @@
 package german_keys
 
-import "code.linenisgreat.com/zit/go/zit/src/delta/catgut"
+import "code.linenisgreat.com/zit/go/src/delta/catgut"
 
 var (
 	KeyAkte        = catgut.MakeFromString("Akte")

@@ -3,7 +3,7 @@ package repo
 import (
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 //go:generate stringer -type=RemoteServeType

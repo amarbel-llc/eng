@@ -1,8 +1,8 @@
 package file_extensions
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/delta/genres"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/delta/genres"
 )
 
 type V0 struct {

@@ -3,7 +3,7 @@ package command
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_local"
+	"code.linenisgreat.com/zit/go/src/hotel/env_local"
 )
 
 type SupportsCompletion interface {

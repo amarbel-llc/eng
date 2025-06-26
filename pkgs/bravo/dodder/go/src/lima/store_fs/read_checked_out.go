@@ -1,10 +1,10 @@
 package store_fs
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/collections"
-	"code.linenisgreat.com/zit/go/zit/src/echo/checked_out_state"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/charlie/collections"
+	"code.linenisgreat.com/zit/go/src/echo/checked_out_state"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 // TODO what does this even do. This caused [cervicis/marshall.zettel !task pom-2 project-2021-zit-bugs project-25q1-zit_workspaces-crit] fix issue with tags other than workspace in `checkin -organize` bei…

@@ -3,8 +3,8 @@ package env_dir
 import (
 	"os"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/delta/debug"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/delta/debug"
 )
 
 type beforeXDG struct {

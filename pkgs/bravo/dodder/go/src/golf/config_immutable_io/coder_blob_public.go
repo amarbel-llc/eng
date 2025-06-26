@@ -5,9 +5,9 @@ import (
 	"encoding/gob"
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/toml"
-	"code.linenisgreat.com/zit/go/zit/src/delta/config_immutable"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/toml"
+	"code.linenisgreat.com/zit/go/src/delta/config_immutable"
 )
 
 type blobV1CoderPublic struct{}

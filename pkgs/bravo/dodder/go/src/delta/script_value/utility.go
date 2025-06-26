@@ -3,7 +3,7 @@ package script_value
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 	"github.com/google/shlex"
 )
 

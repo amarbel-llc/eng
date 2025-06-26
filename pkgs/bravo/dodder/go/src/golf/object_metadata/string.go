@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/bravo/quiter"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 func StringSansTai(o *Metadata) (str string) {

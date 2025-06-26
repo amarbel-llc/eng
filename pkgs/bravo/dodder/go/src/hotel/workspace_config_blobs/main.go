@@ -3,12 +3,12 @@ package workspace_config_blobs
 import (
 	"os"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/files"
-	"code.linenisgreat.com/zit/go/zit/src/echo/triple_hyphen_io"
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/builtin_types"
-	"code.linenisgreat.com/zit/go/zit/src/golf/config_mutable_blobs"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/charlie/files"
+	"code.linenisgreat.com/zit/go/src/echo/triple_hyphen_io"
+	"code.linenisgreat.com/zit/go/src/foxtrot/builtin_types"
+	"code.linenisgreat.com/zit/go/src/golf/config_mutable_blobs"
 )
 
 const (

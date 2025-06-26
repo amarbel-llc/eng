@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 )
 
 func TestMain(m *testing.M) {

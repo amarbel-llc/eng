@@ -5,9 +5,9 @@ import (
 	"crypto/rand"
 	"net/http"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/repo_signing"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/bech32"
+	"code.linenisgreat.com/zit/go/src/charlie/repo_signing"
 )
 
 const (

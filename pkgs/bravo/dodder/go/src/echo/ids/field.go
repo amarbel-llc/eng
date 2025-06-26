@@ -1,6 +1,6 @@
 package ids
 
-import "code.linenisgreat.com/zit/go/zit/src/delta/catgut"
+import "code.linenisgreat.com/zit/go/src/delta/catgut"
 
 type Field struct {
 	key, value catgut.String

@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/primordial"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
+	"code.linenisgreat.com/zit/go/src/alfa/primordial"
+	"code.linenisgreat.com/zit/go/src/alfa/stack_frame"
 )
 
 func MakePrinter(f *os.File) printer {

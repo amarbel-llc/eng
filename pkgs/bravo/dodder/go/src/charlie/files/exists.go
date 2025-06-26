@@ -3,7 +3,7 @@ package files
 import (
 	"os"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 func Exists(path string) bool {

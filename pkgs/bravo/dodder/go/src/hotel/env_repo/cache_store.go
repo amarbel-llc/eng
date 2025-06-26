@@ -1,8 +1,8 @@
 package env_repo
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/delta/sha"
-	"code.linenisgreat.com/zit/go/zit/src/echo/env_dir"
+	"code.linenisgreat.com/zit/go/src/delta/sha"
+	"code.linenisgreat.com/zit/go/src/echo/env_dir"
 )
 
 func (s Env) ReadCloserCache(p string) (sha.ReadCloser, error) {

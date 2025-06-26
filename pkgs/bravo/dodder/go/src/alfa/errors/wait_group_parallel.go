@@ -3,7 +3,7 @@ package errors
 import (
 	"sync"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/stack_frame"
+	"code.linenisgreat.com/zit/go/src/alfa/stack_frame"
 )
 
 func MakeWaitGroupParallel() WaitGroup {

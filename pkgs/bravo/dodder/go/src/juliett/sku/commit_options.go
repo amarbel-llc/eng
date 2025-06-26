@@ -1,7 +1,7 @@
 package sku
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 type CommitOptions struct {

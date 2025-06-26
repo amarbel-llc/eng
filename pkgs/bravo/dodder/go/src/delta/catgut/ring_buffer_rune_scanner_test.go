@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 	"github.com/google/go-cmp/cmp"
 )
 

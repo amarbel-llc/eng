@@ -3,8 +3,8 @@ package tag_paths
 import (
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/ohio"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/charlie/ohio"
 )
 
 //go:generate stringer -type=Type

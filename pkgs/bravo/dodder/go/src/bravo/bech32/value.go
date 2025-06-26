@@ -1,6 +1,6 @@
 package bech32
 
-import "code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+import "code.linenisgreat.com/zit/go/src/alfa/errors"
 
 type Value struct {
 	HRP  string // human-readable part

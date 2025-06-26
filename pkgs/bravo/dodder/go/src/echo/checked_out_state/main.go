@@ -3,7 +3,7 @@ package checked_out_state
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
+	"code.linenisgreat.com/zit/go/src/delta/string_format_writer"
 )
 
 // TODO define this state much more clearly, as it's currently overloaded and

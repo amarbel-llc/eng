@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/pool"
+	"code.linenisgreat.com/zit/go/src/bravo/pool"
 )
 
 func BufferedWriter(writer io.Writer) *bufio.Writer {

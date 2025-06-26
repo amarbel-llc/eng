@@ -1,8 +1,8 @@
 package box_format
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/delta/string_format_writer"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/delta/string_format_writer"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
 )
 
 type CheckedOutHeaderString string

@@ -1,6 +1,6 @@
 package pool
 
-import "code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+import "code.linenisgreat.com/zit/go/src/alfa/interfaces"
 
 type fakePool[T any, TPtr interfaces.Ptr[T]] struct{}
 

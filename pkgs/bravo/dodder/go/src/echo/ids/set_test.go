@@ -3,10 +3,10 @@ package ids
 import (
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/expansion"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/quiter"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
-	"code.linenisgreat.com/zit/go/zit/src/delta/collections_delta"
+	"code.linenisgreat.com/zit/go/src/bravo/expansion"
+	"code.linenisgreat.com/zit/go/src/bravo/quiter"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/delta/collections_delta"
 )
 
 func TestNormalize(t *testing.T) {

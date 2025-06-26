@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"io"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/alfa/toml"
-	"code.linenisgreat.com/zit/go/zit/src/golf/config_mutable_blobs"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/toml"
+	"code.linenisgreat.com/zit/go/src/golf/config_mutable_blobs"
 )
 
 type V0 struct {

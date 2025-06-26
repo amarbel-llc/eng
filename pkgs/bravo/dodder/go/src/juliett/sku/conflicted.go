@@ -3,8 +3,8 @@ package sku
 import (
 	"iter"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 type ParentNegotiator interface {

@@ -1,6 +1,6 @@
 package object_metadata
 
-import "code.linenisgreat.com/zit/go/zit/src/delta/heap"
+import "code.linenisgreat.com/zit/go/src/delta/heap"
 
 type (
 	Heap = heap.Heap[Metadata, *Metadata]

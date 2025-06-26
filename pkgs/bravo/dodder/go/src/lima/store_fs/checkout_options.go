@@ -3,7 +3,7 @@ package store_fs
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/charlie/checkout_options"
+	"code.linenisgreat.com/zit/go/src/charlie/checkout_options"
 )
 
 //go:generate stringer -type=PathOption

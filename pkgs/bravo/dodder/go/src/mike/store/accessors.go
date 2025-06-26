@@ -1,19 +1,19 @@
 package store
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
-	"code.linenisgreat.com/zit/go/zit/src/delta/thyme"
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
-	"code.linenisgreat.com/zit/go/zit/src/foxtrot/zettel_id_index"
-	"code.linenisgreat.com/zit/go/zit/src/golf/config_mutable_blobs"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/env_repo"
-	"code.linenisgreat.com/zit/go/zit/src/hotel/object_inventory_format"
-	"code.linenisgreat.com/zit/go/zit/src/india/object_probe_index"
-	"code.linenisgreat.com/zit/go/zit/src/juliett/sku"
-	"code.linenisgreat.com/zit/go/zit/src/kilo/stream_index"
-	"code.linenisgreat.com/zit/go/zit/src/lima/inventory_list_store"
-	"code.linenisgreat.com/zit/go/zit/src/lima/typed_blob_store"
-	"code.linenisgreat.com/zit/go/zit/src/mike/store_config"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/delta/thyme"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/foxtrot/zettel_id_index"
+	"code.linenisgreat.com/zit/go/src/golf/config_mutable_blobs"
+	"code.linenisgreat.com/zit/go/src/hotel/env_repo"
+	"code.linenisgreat.com/zit/go/src/hotel/object_inventory_format"
+	"code.linenisgreat.com/zit/go/src/india/object_probe_index"
+	"code.linenisgreat.com/zit/go/src/juliett/sku"
+	"code.linenisgreat.com/zit/go/src/kilo/stream_index"
+	"code.linenisgreat.com/zit/go/src/lima/inventory_list_store"
+	"code.linenisgreat.com/zit/go/src/lima/typed_blob_store"
+	"code.linenisgreat.com/zit/go/src/mike/store_config"
 )
 
 func (s *Store) GetTypedBlobStore() typed_blob_store.Stores {

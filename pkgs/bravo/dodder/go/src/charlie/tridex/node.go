@@ -3,7 +3,7 @@ package tridex
 import (
 	"strings"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/interfaces"
+	"code.linenisgreat.com/zit/go/src/alfa/interfaces"
 )
 
 func (n *node) Add(v string) {

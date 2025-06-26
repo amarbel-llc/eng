@@ -5,9 +5,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/charlie/box"
-	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/charlie/box"
+	"code.linenisgreat.com/zit/go/src/delta/catgut"
 )
 
 // TODO-P1 move to catgut.String

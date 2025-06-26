@@ -3,7 +3,7 @@ package ids
 import (
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/ui"
+	"code.linenisgreat.com/zit/go/src/bravo/ui"
 )
 
 func TestObjectId2IsVirtual(t1 *testing.T) {

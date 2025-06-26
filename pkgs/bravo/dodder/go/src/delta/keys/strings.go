@@ -1,7 +1,7 @@
 package keys
 
 import (
-	"code.linenisgreat.com/zit/go/zit/src/delta/catgut"
+	"code.linenisgreat.com/zit/go/src/delta/catgut"
 )
 
 const (

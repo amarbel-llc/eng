@@ -3,7 +3,7 @@ package repo
 import (
 	"flag"
 
-	"code.linenisgreat.com/zit/go/zit/src/echo/ids"
+	"code.linenisgreat.com/zit/go/src/echo/ids"
 )
 
 // TODO add HTTP header options for these flags

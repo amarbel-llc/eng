@@ -20,7 +20,7 @@ import (
 	"strings"
 	"testing"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
+	"code.linenisgreat.com/zit/go/src/bravo/bech32"
 )
 
 func TestBech32(t *testing.T) {

@@ -4,8 +4,8 @@ import (
 	"crypto"
 	"crypto/ed25519"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
-	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/bravo/bech32"
 )
 
 // TODO hide inner fields

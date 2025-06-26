@@ -3,7 +3,7 @@ package repo_signing
 import (
 	"crypto"
 
-	"code.linenisgreat.com/zit/go/zit/src/bravo/bech32"
+	"code.linenisgreat.com/zit/go/src/bravo/bech32"
 )
 
 // TODO hide inner fields

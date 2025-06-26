@@ -3,7 +3,7 @@ package object_id_provider
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 type ErrDoesNotExist struct {

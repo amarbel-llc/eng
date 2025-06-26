@@ -3,7 +3,7 @@ package object_inventory_format
 import (
 	"fmt"
 
-	"code.linenisgreat.com/zit/go/zit/src/alfa/errors"
+	"code.linenisgreat.com/zit/go/src/alfa/errors"
 )
 
 type errInvalidGenericFormat string
