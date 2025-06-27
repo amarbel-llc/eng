@@ -26,7 +26,7 @@
     chrest.inputs.devenv-go.follows = "devenv-go";
     chrest.inputs.devenv-js.follows = "devenv-js";
 
-    dodder.url = "github:friedenberg/eng?dir=pkgs/bravo/dodder/go/dodder";
+    dodder.url = "github:friedenberg/dodder?dir=go";
     dodder.inputs.devenv-go.follows = "devenv-go";
     dodder.inputs.devenv-shell.follows = "devenv-shell";
   };

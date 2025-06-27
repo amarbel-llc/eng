@@ -447,6 +447,8 @@ attach() {
   temp_dir="$(get_sweatshop_path "$sweatshop_id")"
   workspace_path="$(realpath --relative-to="$(git rev-parse --show-toplevel)" .)"
 
+  mkdir -p ./.claude
+
   # cannot use exec otherwise the cleanup TRAP won't execute
   @bwrap@ \
     --ro-bind / / \
