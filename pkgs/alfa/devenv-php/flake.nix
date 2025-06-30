@@ -17,9 +17,10 @@
         {
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              php
-              phpPackages.composer
+              php82
+              php82Packages.composer
               phpactor
+              php82Packages.php-cs-fixer
             ];
           };
         })

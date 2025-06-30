@@ -198,6 +198,8 @@ function! FormatViaEqualsPrg()
   cexpr []
   w
 
+  echom &l:equalprg
+  return
   let save_pos = getpos(".")
   normal gg=G
   call setpos(".", save_pos)
