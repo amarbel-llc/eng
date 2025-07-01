@@ -13,10 +13,10 @@
         in
         {
           packages.default = pkgs.symlinkJoin {
-            name = "vim";
+            name = "gpg";
 
             paths = [
-              pkgs.vim
+              pkgs.gnupg
             ];
 
             buildInputs = [
@@ -24,9 +24,11 @@
             ];
 
             postBuild = ''
-              wrapProgram $out/bin/vim \
-                --add-flags '-u "$XDG_CONFIG_HOME/vim/vimrc"' \
-                --prefix PATH : $out/bin
+              for prog in $out/bin/*; do
+                wrapProgram "$prog" \
+                  --prefix PATH : "$out/bin" \
+                  --run 'export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"'
+              done
             '';
           };
         }

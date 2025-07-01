@@ -15,6 +15,7 @@
 
     bash.url = "github:friedenberg/eng?dir=pkgs/alfa/bash";
     ssh.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh";
+    gpg.url = "github:friedenberg/eng?dir=pkgs/alfa/gpg";
     sweatshop.url = "github:friedenberg/eng?dir=pkgs/alfa/sweatshop";
     vim.url = "github:friedenberg/eng?dir=pkgs/alfa/vim";
 
@@ -47,6 +48,7 @@
     , devenv-system-linux
       #
     , bash
+    , gpg
     , ssh
     , sweatshop
     , vim
@@ -78,13 +80,14 @@
               x86_64-darwin = devenv-system-darwin;
             }.${system}.packages.${system}.default
 
-            bash.packages.${system}.default
             # chrest.packages.${system}.default
+            bash.packages.${system}.default
+            dodder.packages.${system}.default
+            gpg.packages.${system}.default
             html-to-pdf.packages.${system}.default
             pa6e.packages.${system}.default
             ssh.packages.${system}.default
             sweatshop.packages.${system}.default
-            dodder.packages.${system}.default
             vim.packages.${system}.default
           ];
         };
