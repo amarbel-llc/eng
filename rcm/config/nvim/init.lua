@@ -1,6 +1,7 @@
 vim.cmd("source $HOME/.config/vim/rc_before_plugins.vim")
 require("config.lazy")
 vim.cmd("source $HOME/.config/vim/rc_after_plugins.vim")
+vim.cmd("colorscheme solarized8")
 
 vim.diagnostic.config({
   virtual_text = false

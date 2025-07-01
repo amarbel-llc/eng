@@ -2,6 +2,7 @@
 source $XDG_CONFIG_HOME/vim/load_plugin_file.vim
 source $XDG_CONFIG_HOME/vim/rc_before_plugins.vim
 
+" TODO decide on how vim plugins should be loaded
 " call plug#begin()
 " call LoadPluginFile('~/.vim/plugins')
 " call LoadPluginFile('~/.vim/plugins.local')

@@ -1,4 +1,6 @@
 
 " https://github.com/lifepillar/vim-solarized8/tree/neovim#installation
 set background=dark
-" autocmd vimenter * ++nested colorscheme solarized8
+" TODO determine how to make this work in vim and neovim. Currently only works
+" in neovim.
+autocmd vimenter * ++nested colorscheme solarized8
