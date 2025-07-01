@@ -23,9 +23,9 @@
             ];
 
             postBuild = ''
-            wrapProgram $out/bin/vim \
-              --add-flags '-u "$XDG_CONFIG_HOME/vim/vimrc"' \
-              --prefix PATH : $out/bin
+              wrapProgram $out/bin/vim \
+                --add-flags '-u "$XDG_CONFIG_HOME/vim/vimrc"' \
+                --prefix PATH : $out/bin
             '';
           };
         }

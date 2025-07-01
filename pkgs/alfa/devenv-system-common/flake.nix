@@ -94,7 +94,6 @@
               tmux
               tree
               uv
-              vim
               watchexec
               websocat
               wget

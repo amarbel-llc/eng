@@ -16,6 +16,7 @@
     bash.url = "github:friedenberg/eng?dir=pkgs/alfa/bash";
     ssh.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh";
     sweatshop.url = "github:friedenberg/eng?dir=pkgs/alfa/sweatshop";
+    vim.url = "github:friedenberg/eng?dir=pkgs/alfa/vim";
 
     html-to-pdf.url = "github:friedenberg/eng?dir=pkgs/alfa/html-to-pdf";
 
@@ -36,7 +37,7 @@
     , nixpkgs
     , nixpkgs-stable
     , utils
-    #
+      #
     , devenv-go
     , devenv-js
     , devenv-nix
@@ -44,11 +45,12 @@
     , devenv-system-common
     , devenv-system-darwin
     , devenv-system-linux
-    #
+      #
     , bash
     , ssh
     , sweatshop
-    #
+    , vim
+      #
     , chrest
     , html-to-pdf
     , pa6e
@@ -83,6 +85,7 @@
             ssh.packages.${system}.default
             sweatshop.packages.${system}.default
             dodder.packages.${system}.default
+            vim.packages.${system}.default
           ];
         };
 

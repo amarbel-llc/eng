@@ -11,7 +11,7 @@ set termguicolors
 set mouse=
 " set ttymouse=
 
-colorscheme solarized
+" colorscheme solarized
 set cursorline
 
 " highlight! link CursorLineSign CursorLineNr
@@ -111,6 +111,7 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
+" TODO add support for XDG_CONFIG_HOME
 " Set spellfile to location that is guaranteed to exist
 set spellfile=$HOME/.vim-spell-en.utf-8.add
 
@@ -249,6 +250,7 @@ endfunction
 set tabline=%!MyTabLine()
 
 function EditFtplugin()
+  " TODO add support for XDG_CONFIG_HOME
   execute(":tabedit $HOME/.vim/ftplugin/".&ft.".vim")
 endfunction
 
@@ -285,6 +287,7 @@ augroup quickfix
 augroup END
 
 " Local config
+" TODO add support for XDG_CONFIG_HOME
 if filereadable($HOME . "/.vimrc.local")
   source ~/.vimrc.local
 endif
