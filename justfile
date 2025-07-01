@@ -1,4 +1,4 @@
-all: clean update build
+all: update build clean
 
 clean-nix:
   nix-store --gc
