@@ -1,4 +1,4 @@
-#! /usr/bin/env -S bash -xe
+#! /usr/bin/env -S bash -e
 
 chmod 700 $HOME/.config/ssh
 chmod 700 $HOME/.config/gnupg

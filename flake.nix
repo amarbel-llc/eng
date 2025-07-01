@@ -1,7 +1,7 @@
 {
   inputs = {
-    nixpkgs.url = "flake:nixpkgs";
-    nixpkgs-stable.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2411.717296.tar.gz";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
+    nixpkgs-stable.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2505.805252.tar.gz";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz";
 
     # devenv
