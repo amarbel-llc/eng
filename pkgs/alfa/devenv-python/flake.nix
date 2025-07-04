@@ -23,9 +23,10 @@
               uv
               ruff
               (python313.withPackages (ps: with ps; [
-                python-lsp-server
-                python-lsp-ruff
                 mypy
+                pylsp-mypy
+                python-lsp-ruff
+                python-lsp-server
               ]))
             ];
           };
