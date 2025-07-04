@@ -5,17 +5,16 @@
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz";
 
     # devenv
-    devenv-go.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-go";
-    devenv-js.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-js";
-    devenv-nix.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-nix";
-    devenv-shell.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-shell";
-    devenv-system-common.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-common";
-    devenv-system-linux.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-linux";
-    devenv-system-darwin.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-darwin";
+    devenv-go.url = "path:./pkgs/alfa/devenv-go";
+    devenv-js.url = "path:./pkgs/alfa/devenv-js";
+    devenv-nix.url = "path:./pkgs/alfa/devenv-nix";
+    devenv-shell.url = "path:./pkgs/alfa/devenv-shell";
+    devenv-system-common.url = "path:./pkgs/alfa/devenv-system-common";
+    devenv-system-linux.url = "path:./pkgs/alfa/devenv-system-linux";
+    devenv-system-darwin.url = "path:./pkgs/alfa/devenv-system-darwin";
 
     bash.url = "github:friedenberg/eng?dir=pkgs/alfa/bash";
     ssh.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh";
-    gpg.url = "github:friedenberg/eng?dir=pkgs/alfa/gpg";
     sweatshop.url = "github:friedenberg/eng?dir=pkgs/alfa/sweatshop";
     vim.url = "github:friedenberg/eng?dir=pkgs/alfa/vim";
 
@@ -48,7 +47,6 @@
     , devenv-system-linux
       #
     , bash
-    , gpg
     , ssh
     , sweatshop
     , vim
@@ -83,7 +81,6 @@
             # chrest.packages.${system}.default
             bash.packages.${system}.default
             dodder.packages.${system}.default
-            gpg.packages.${system}.default
             html-to-pdf.packages.${system}.default
             pa6e.packages.${system}.default
             ssh.packages.${system}.default
