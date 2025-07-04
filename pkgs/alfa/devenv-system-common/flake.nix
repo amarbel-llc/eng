@@ -58,6 +58,7 @@
               git-secret
               glibcLocales
               gnumake
+              (pkgs.gnupg.override { withPcsc = true; })
               gnuplot
               gpgme
               graphviz
@@ -77,8 +78,10 @@
               ocrmypdf
               pandoc
               paperkey
-              # pinentry
               parallel
+              pay-respects
+              # pcsclite
+              # pinentry
               plantuml
               rcm
               rsync
@@ -87,7 +90,6 @@
               silver-searcher
               socat
               sshpass
-              thefuck
               timidity
               timg
               tldr
