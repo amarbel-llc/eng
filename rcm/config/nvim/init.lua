@@ -86,24 +86,6 @@ vim.api.nvim_create_user_command(
 
     if tryLspFormat() == false then
       vim.cmd("call FormatViaEqualsPrg()")
-      -- function! FormatViaEqualsPrg()
-      --   cexpr []
-      --   w
-
-      --   let save_pos = getpos(".")
-      --   normal gg=G
-      --   call setpos(".", save_pos)
-
-      --   if v:shell_error
-      --     let contents = join(getline(1, '$'), "\n")
-      --     undo
-      --     :cexpr contents
-      --     copen
-      --   else
-      --     w
-      --     ccl
-      --   endif
-      -- endfunction
     end
   end,
   {}

@@ -25,6 +25,7 @@
             inherit (pkgs)
               go
               golangci-lint
+              golines
               gopls
               gotools
               govulncheck
