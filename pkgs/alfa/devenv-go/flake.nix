@@ -24,6 +24,7 @@
           packages = {
             inherit (pkgs)
               go
+              gofumpt
               golangci-lint
               golines
               gopls
