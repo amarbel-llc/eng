@@ -1,3 +1,4 @@
+# TODO move to devenv-go
 function go-refactor
   if test (count $argv) -lt 3
     echo "Not enough arguments" >&2

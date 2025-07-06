@@ -1,3 +1,3 @@
-function zit-dev
-  $HOME/eng/pkgs/bravo/dodder/go/dodder/build/zit $argv
+function der-dev --wraps=der
+  $HOME/eng/pkgs/bravo/dodder/go/build/der $argv
 end
