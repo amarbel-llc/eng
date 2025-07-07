@@ -70,6 +70,8 @@
 [merge]
   conflictstyle = diff3
   tool = vimdiff
+[mergetool "vimdiff"]
+	path = editor
 [merge "ours"]
   driver = true
 [pull]

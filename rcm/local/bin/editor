@@ -6,6 +6,8 @@ if command -v nvim >/dev/null 2>&1; then
   which_vim=nvim
 fi
 
+printf '\033]2;%s\033\\' "$which_vim"
+
 if ! tty >/dev/null 2>&1; then
   if command -v kitty >/dev/null 2>&1; then
     which_kitty=kitty
