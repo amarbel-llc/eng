@@ -10,6 +10,4 @@ export GOPATH="$HOME/.cache/go/"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh/gpg-agent.sock"
 export SSH_CONFIG="$HOME/.config/ssh/config"
 export TMUX_CONF="$HOME/.config/tmux/tmux.conf"
-# export VIMDOTDIR="$XDG_CONFIG_HOME/vim"
-# export VIMINIT='let $MYVIMRC="$HOME/.config/vim/vimrc" | source $MYVIMRC'
 export XDG_CONFIG_HOME="$HOME/.config"
