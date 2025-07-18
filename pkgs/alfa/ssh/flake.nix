@@ -36,7 +36,7 @@
               for prog in "''${programsWithConfig[@]}"; do
                 wrapProgram "$out/bin/$prog" \
                   --add-flags -F \
-                  --add-flags \\\"\\\$SSH_CONFIG\\\" \
+                  --add-flags \\\"\\$SSH_CONFIG\\\" \
                   --prefix PATH : $out/bin
               done
             '';
