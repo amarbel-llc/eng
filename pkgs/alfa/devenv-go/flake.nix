@@ -1,5 +1,6 @@
 {
   inputs = {
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2505.806427.tar.gz";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     utils.url = "github:numtide/flake-utils";
 
