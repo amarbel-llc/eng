@@ -1,10 +1,10 @@
 
 complete \
-  --command zit \
+  --command der \
   --no-files \
-  --arguments "(__zit_complete)"
+  --arguments "(__der_complete)"
 
-function __zit_complete
+function __der_complete
   set -l in_progress (commandline -ct)
   set -l cmd (commandline -p --tokenize)
   set cmd $cmd[1] complete -in-progress=$in_progress $cmd[2..]

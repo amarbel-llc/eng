@@ -5,11 +5,10 @@ set -euo pipefail
 COMMAND=""
 FORCE="false"
 ALL="false"
-PULL="false"
-DESTROY="false"
 SWEATSHOP_ID=""
 
-# TODO update this to not hardcode claude as the agent
+# TODO support other $AGENT's
+AGENT=claude
 
 # Function to show usage
 usage() {
@@ -23,18 +22,14 @@ usage() {
   echo "  diff [SWEATSHOP_ID]           Show differences between current branch and sweatshop HEAD"
   echo "  get                           Get the single sweatshop ID (fails if multiple exist)"
   echo "  list                          List all sweatshop IDs"
-  echo "  pull SWEATSHOP_ID             Pull changes from a sweatshop"
-  echo "  push SWEATSHOP_ID             Push changes to a sweatshop"
   echo "  run [-s SWEATSHOP_ID] [args...] Create a new sweatshop and attach to it (optionally with custom ID)"
   echo "  run-temp [-s SWEATSHOP_ID] [args...] Create a new sweatshop and attach to it, destroy when it exits (optionally with custom ID)"
   echo "  sync [SWEATSHOP_ID]           Syncs changes to/from a sweatshop."
   echo ""
   echo "Options:"
   echo "  -a           Destroy all sweatshops (only valid with destroy command)"
-  echo "  -d           Destroy sweatshop after pulling (only valid with pull command)"
   echo "  -f           Force operation (skip safety checks)"
   echo "  -h           Show this help message"
-  echo "  -p           Pull changes before destroying (only valid with run-temp command)"
   echo "  -s ID        Specify sweatshop ID (for run and run-temp commands)"
   echo ""
   echo "All remaining arguments are passed to the agent (claude-code)"
@@ -58,7 +53,6 @@ destroy) ;;
 diff) ;;
 get) ;;
 list) ;;
-pull) ;;
 push) ;;
 run) ;;
 run-temp) ;;
@@ -70,22 +64,16 @@ sync) ;;
 esac
 
 # Parse command line options
-while getopts "afhpds:" opt; do
+while getopts "afhs:" opt; do
   case $opt in
   a)
     ALL="true"
-    ;;
-  d)
-    DESTROY="true"
     ;;
   f)
     FORCE="true"
     ;;
   h)
     usage
-    ;;
-  p)
-    PULL="true"
     ;;
   s)
     SWEATSHOP_ID="$OPTARG"
@@ -97,24 +85,12 @@ while getopts "afhpds:" opt; do
   esac
 done
 
-# Shift to get remaining arguments for claude
+# Shift to get remaining arguments for $AGENT
 shift $((OPTIND - 1))
 
 # Validate that -a flag is only used with destroy command
 if [[ $ALL == "true" && $COMMAND != "destroy" ]]; then
   echo "Error: -a flag can only be used with destroy command" >&2
-  usage
-fi
-
-# Validate that -p flag is only used with run-temp command
-if [[ $PULL == "true" && $COMMAND != "run-temp" ]]; then
-  echo "Error: -p flag can only be used with run-temp command" >&2
-  usage
-fi
-
-# Validate that -d flag is only used with pull command
-if [[ $DESTROY == "true" && $COMMAND != "pull" ]]; then
-  echo "Error: -d flag can only be used with pull command" >&2
   usage
 fi
 
@@ -131,7 +107,7 @@ get_worktree_path() {
 
 list_worktrees() {
   # List all worktrees that match sweatshop pattern
-  git worktree list --porcelain | awk '/^worktree/ { path=$2; if (match(path, /sweatshop-claude-[^\/]*$/)) print substr(path, RSTART, RLENGTH) }' | sort -u
+  git worktree list --porcelain | awk "/^worktree/ { path=\$2; if (match(path, /sweatshop-$AGENT-[^\\/]*$/)) print substr(path, RSTART, RLENGTH) }" | sort -u
 }
 
 get_sweatshop_path() {
@@ -188,7 +164,7 @@ destroy() {
               echo "=== Uncommitted changes in $sweatshop_id ===" >&2
               git -C "$temp_dir" diff HEAD >&2
               echo "" >&2
-              
+
               # Also show untracked files if any
               local untracked
               untracked="$(git -C "$temp_dir" ls-files --others --exclude-standard 2>/dev/null || true)"
@@ -256,7 +232,7 @@ destroy() {
         echo "=== Uncommitted changes in $sweatshop_id ===" >&2
         git -C "$temp_dir" diff HEAD >&2
         echo "" >&2
-        
+
         # Also show untracked files if any
         local untracked
         untracked="$(git -C "$temp_dir" ls-files --others --exclude-standard 2>/dev/null || true)"
@@ -289,9 +265,9 @@ create() {
   current_branch="$(git branch --show-current)"
 
   if [[ -n $custom_sweatshop_id ]]; then
-    sweatshop_id="sweatshop-claude-$custom_sweatshop_id"
+    sweatshop_id="sweatshop-$AGENT-$custom_sweatshop_id"
   else
-    sweatshop_id="sweatshop-claude-$(date +%s)-$$"
+    sweatshop_id="sweatshop-$AGENT-$(date +%s)-$$"
   fi
 
   temp_dir="$(mktemp -d -t "$sweatshop_id-XXXXXX")"
@@ -303,22 +279,10 @@ create() {
     exit 1
   fi
 
-  # Configure git user in worktree
-  if ! git -C "$temp_dir" config user.email "claude@anthropic.com" >/dev/null 2>&1; then
-    echo "Error: Failed to update worktree user.email" >&2
-    git worktree remove "$temp_dir" --force >/dev/null 2>&1 || true
-    exit 1
-  fi
-
-  if ! git -C "$temp_dir" config user.name "Claude Code" >/dev/null 2>&1; then
-    echo "Error: Failed to update worktree user.name" >&2
-    git worktree remove "$temp_dir" --force >/dev/null 2>&1 || true
-    exit 1
-  fi
-
   echo "Worktree created successfully: $temp_dir" >&2
 
-  # Create necessary directories if they don't exist
+  # Create necessary directories for $AGENT if they don't exist
+  # TODO support other $AGENT's
   mkdir -p "$HOME/.config/claude" >/dev/null 2>&1
   mkdir -p "$HOME/.local/share/claude" >/dev/null 2>&1
 
@@ -332,10 +296,8 @@ run_temp() {
 
   cleanup_temp() {
     local cleanup_sweatshop_id="$1"
-    if [[ $PULL == "true" ]]; then
-      pull "$cleanup_sweatshop_id"
-    fi
-    destroy "$cleanup_sweatshop_id"
+    # TODO merge worktree changes
+    # destroy "$cleanup_sweatshop_id"
   }
 
   trap "cleanup_temp '$sweatshop_id'" EXIT INT TERM
@@ -358,9 +320,11 @@ attach() {
   temp_dir="$(get_sweatshop_path "$sweatshop_id")"
   workspace_path="$(realpath --relative-to="$(git rev-parse --show-toplevel)" .)"
 
+  # TODO support other $AGENT's
   mkdir -p ./.claude
 
   # cannot use exec otherwise the cleanup TRAP won't execute
+  # TODO support other $AGENT's
   @bwrap@ \
     --ro-bind / / \
     --bind "$temp_dir" /mnt \
@@ -383,64 +347,6 @@ attach() {
     --share-net \
     --die-with-parent \
     @claude-code@ "$@"
-}
-
-# Function to handle .claude/ directory changes before pull operations
-handle_claude_changes() {
-  # Check if .claude/ directory has changes
-  if ! git diff --quiet .claude/ 2>/dev/null || ! git diff --cached --quiet .claude/ 2>/dev/null; then
-    echo "Detected changes in .claude/ directory:" >&2
-    echo "" >&2
-    
-    # Show the changes
-    echo "=== Changes in .claude/ ===" >&2
-    git diff .claude/ 2>/dev/null || true
-    git diff --cached .claude/ 2>/dev/null || true
-    echo "=========================" >&2
-    echo "" >&2
-    
-    # Prompt user for action
-    while true; do
-      echo -n "Would you like to commit these .claude/ changes before pulling? [y/n/s/d]: " >&2
-      read -r response
-      case $response in
-        [Yy]*)
-          echo "Committing .claude/ changes..." >&2
-          git add .claude/
-          if git commit -m "Update Claude settings
-
-🤖 Generated with [Claude Code](https://claude.ai/code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>"; then
-            echo ".claude/ changes committed successfully." >&2
-            return 0
-          else
-            echo "Failed to commit .claude/ changes." >&2
-            return 1
-          fi
-          ;;
-        [Nn]*)
-          echo "Proceeding without committing .claude/ changes." >&2
-          return 0
-          ;;
-        [Ss]*)
-          echo "Stashing .claude/ changes..." >&2
-          git stash push .claude/ -m "Stashed .claude/ changes before pull"
-          return 0
-          ;;
-        [Dd]*)
-          echo "Showing detailed diff for .claude/..." >&2
-          git diff .claude/ 2>/dev/null || true
-          git diff --cached .claude/ 2>/dev/null || true
-          ;;
-        *)
-          echo "Please answer y (yes), n (no), s (stash), or d (show diff)." >&2
-          ;;
-      esac
-    done
-  fi
-  
-  return 0
 }
 
 # TODO add support for force pushes
@@ -471,40 +377,6 @@ push() {
   # Clean up temp branch
   git branch -D "$temp_branch"
   git -C "$temp_dir" branch -D "$temp_branch" 2>/dev/null || true
-}
-
-pull() {
-  local sweatshop_id
-  sweatshop_id="$(get "${1:-}")"
-
-  # Handle .claude/ directory changes before pulling
-  handle_claude_changes
-
-  local branch
-  branch="${2:-$(git branch --show-current)}"
-
-  local temp_dir
-  temp_dir="$(get_sweatshop_path "$sweatshop_id")"
-  branch="$(git branch --show-current)"
-
-  # For worktrees, we need to handle this differently
-  # Create a temporary branch from worktree state
-  local temp_branch
-  temp_branch="temp-pull-$(date +%s)"
-  git -C "$temp_dir" branch "$temp_branch"
-
-  # Switch to main repo and merge the changes
-  git fetch . "refs/heads/$temp_branch:refs/heads/$temp_branch"
-  git merge "$temp_branch"
-
-  # Clean up temp branch
-  git branch -D "$temp_branch"
-  git -C "$temp_dir" branch -D "$temp_branch" 2>/dev/null || true
-
-  # Destroy sweatshop after pulling if -d flag is used
-  if [[ $DESTROY == "true" ]]; then
-    destroy "$sweatshop_id"
-  fi
 }
 
 diff() {
@@ -556,7 +428,6 @@ sync() {
   local sweatshop_id
   sweatshop_id="$(get "${1:-}")"
 
-  pull "$sweatshop_id"
   push "$sweatshop_id"
 }
 
@@ -623,7 +494,6 @@ destroy) destroy "$@" ;;
 diff) diff "$@" ;;
 get) get "$@" ;;
 list) list "$@" ;;
-pull) pull "$@" ;;
 push) push "$@" ;;
 run) run "$@" ;;
 run-temp) run_temp "$@" ;;

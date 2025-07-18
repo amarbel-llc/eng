@@ -1,2 +1,2 @@
 
-pay-respects fish | source
+$HOME/eng/result/bin/pay-respects fish | source

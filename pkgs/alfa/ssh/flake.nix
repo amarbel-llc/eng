@@ -24,10 +24,22 @@
               makeWrapper
             ];
 
-            postBuild = "
-              wrapProgram $out/bin/ssh --add-flags -F --add-flags \\\"\\\$SSH_CONFIG\\\" --prefix PATH : $out/bin
-              wrapProgram $out/bin/sshfs --add-flags -F --add-flags \\\"\\\$SSH_CONFIG\\\" --prefix PATH : $out/bin
-            ";
+            postBuild = ''
+              programsWithConfig=(
+                scp
+                sftp
+                ssh
+                ssh-copy-id
+                sshfs
+              )
+
+              for prog in "''${programsWithConfig[@]}"; do
+                wrapProgram "$out/bin/$prog" \
+                  --add-flags -F \
+                  --add-flags \\\"\\\$SSH_CONFIG\\\" \
+                  --prefix PATH : $out/bin
+              done
+            '';
           };
         }
       )

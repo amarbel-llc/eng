@@ -8,11 +8,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/bash",
-        "lastModified": 1752574935,
-        "narHash": "sha256-/+lKIPyCEDLyQ/oKF47u9HT3Jf0CYqkcHZya501nCA8=",
+        "lastModified": 1752580329,
+        "narHash": "sha256-IjVDjKQ+u2wqRB2t9KSiaR24Igxx0ndhC0wxykPnLGU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "0e7aa14f3ad3c4ca28c5f99f7fbbd3146571baa8",
+        "rev": "9ff0a2207d519c54e5b9bbb44bc1a6be1da9edac",
         "type": "github"
       },
       "original": {
@@ -48,11 +48,11 @@
     "brew-api": {
       "flake": false,
       "locked": {
-        "lastModified": 1752579641,
-        "narHash": "sha256-9ybJtlhQmW26y1wXyYNoh28CMVVM/OhBxrXokjBBwqg=",
+        "lastModified": 1752663286,
+        "narHash": "sha256-SNbWo1HuNtu9/6+rbrkWyZiePkiWo1tE7tBwMXi1kzY=",
         "owner": "BatteredBunny",
         "repo": "brew-api",
-        "rev": "2647360d7ca9fde732fa5f547af9bc84e61d6693",
+        "rev": "5dd4792f852f135bae243c3f7ca98e7c2abce21f",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
       },
       "locked": {
         "dir": "pkgs/bravo/chrest",
-        "lastModified": 1752574935,
-        "narHash": "sha256-/+lKIPyCEDLyQ/oKF47u9HT3Jf0CYqkcHZya501nCA8=",
+        "lastModified": 1752580329,
+        "narHash": "sha256-IjVDjKQ+u2wqRB2t9KSiaR24Igxx0ndhC0wxykPnLGU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "0e7aa14f3ad3c4ca28c5f99f7fbbd3146571baa8",
+        "rev": "9ff0a2207d519c54e5b9bbb44bc1a6be1da9edac",
         "type": "github"
       },
       "original": {
@@ -261,11 +261,11 @@
       },
       "locked": {
         "dir": "go",
-        "lastModified": 1752579901,
-        "narHash": "sha256-BbanwR+RCsNNCMx7NdiGlW61XPJUvAXtO+higQLIanU=",
+        "lastModified": 1752580768,
+        "narHash": "sha256-J+yAPuj+1vDv6MzKhBtG44LGusFub630Gf7lTvbBTOE=",
         "owner": "friedenberg",
         "repo": "dodder",
-        "rev": "dc9a62845fdf438010ecaa5d049d83a477247674",
+        "rev": "5c53bf0415ccffd168cb3261f53004bd8d55d2f3",
         "type": "github"
       },
       "original": {
@@ -464,11 +464,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/html-to-pdf",
-        "lastModified": 1752574935,
-        "narHash": "sha256-/+lKIPyCEDLyQ/oKF47u9HT3Jf0CYqkcHZya501nCA8=",
+        "lastModified": 1752580329,
+        "narHash": "sha256-IjVDjKQ+u2wqRB2t9KSiaR24Igxx0ndhC0wxykPnLGU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "0e7aa14f3ad3c4ca28c5f99f7fbbd3146571baa8",
+        "rev": "9ff0a2207d519c54e5b9bbb44bc1a6be1da9edac",
         "type": "github"
       },
       "original": {
@@ -618,12 +618,12 @@
     },
     "nixpkgs-stable_10": {
       "locked": {
-        "lastModified": 1752308619,
-        "narHash": "sha256-pzrVLKRQNPrii06Rm09Q0i0dq3wt2t2pciT/GNq5EZQ=",
-        "rev": "650e572363c091045cdbc5b36b0f4c1f614d3058",
-        "revCount": 806273,
+        "lastModified": 1752436162,
+        "narHash": "sha256-Kt1UIPi7kZqkSc5HVj6UY5YLHHEzPBkgpNUByuyxtlw=",
+        "rev": "dfcd5b901dbab46c9c6e80b265648481aafb01f8",
+        "revCount": 806304,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/NixOS/nixpkgs/0.2505.806273%2Brev-650e572363c091045cdbc5b36b0f4c1f614d3058/019804de-4447-7b40-88ef-4e58b0e7553e/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/NixOS/nixpkgs/0.2505.806304%2Brev-dfcd5b901dbab46c9c6e80b265648481aafb01f8/01980f2c-e7f3-7efc-b369-7ebec7be6e59/source.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -826,11 +826,11 @@
     },
     "nixpkgs_11": {
       "locked": {
-        "lastModified": 1752446735,
-        "narHash": "sha256-Nz2vtUEaRB/UjvPfuhHpez060P/4mvGpXW4JCDIboA4=",
+        "lastModified": 1752596105,
+        "narHash": "sha256-lFNVsu/mHLq3q11MuGkMhUUoSXEdQjCHvpReaGP1S2k=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a421ac6595024edcfbb1ef950a3712b89161c359",
+        "rev": "dab3a6e781554f965bde3def0aa2fda4eb8f1708",
         "type": "github"
       },
       "original": {
@@ -1117,11 +1117,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/pa6e",
-        "lastModified": 1752574935,
-        "narHash": "sha256-/+lKIPyCEDLyQ/oKF47u9HT3Jf0CYqkcHZya501nCA8=",
+        "lastModified": 1752580329,
+        "narHash": "sha256-IjVDjKQ+u2wqRB2t9KSiaR24Igxx0ndhC0wxykPnLGU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "0e7aa14f3ad3c4ca28c5f99f7fbbd3146571baa8",
+        "rev": "9ff0a2207d519c54e5b9bbb44bc1a6be1da9edac",
         "type": "github"
       },
       "original": {
@@ -1212,11 +1212,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/ssh",
-        "lastModified": 1752574935,
-        "narHash": "sha256-/+lKIPyCEDLyQ/oKF47u9HT3Jf0CYqkcHZya501nCA8=",
+        "lastModified": 1752580329,
+        "narHash": "sha256-IjVDjKQ+u2wqRB2t9KSiaR24Igxx0ndhC0wxykPnLGU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "0e7aa14f3ad3c4ca28c5f99f7fbbd3146571baa8",
+        "rev": "9ff0a2207d519c54e5b9bbb44bc1a6be1da9edac",
         "type": "github"
       },
       "original": {
@@ -1235,11 +1235,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/sweatshop",
-        "lastModified": 1752574935,
-        "narHash": "sha256-/+lKIPyCEDLyQ/oKF47u9HT3Jf0CYqkcHZya501nCA8=",
+        "lastModified": 1752580329,
+        "narHash": "sha256-IjVDjKQ+u2wqRB2t9KSiaR24Igxx0ndhC0wxykPnLGU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "0e7aa14f3ad3c4ca28c5f99f7fbbd3146571baa8",
+        "rev": "9ff0a2207d519c54e5b9bbb44bc1a6be1da9edac",
         "type": "github"
       },
       "original": {
@@ -1839,11 +1839,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/vim",
-        "lastModified": 1752574935,
-        "narHash": "sha256-/+lKIPyCEDLyQ/oKF47u9HT3Jf0CYqkcHZya501nCA8=",
+        "lastModified": 1752580329,
+        "narHash": "sha256-IjVDjKQ+u2wqRB2t9KSiaR24Igxx0ndhC0wxykPnLGU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "0e7aa14f3ad3c4ca28c5f99f7fbbd3146571baa8",
+        "rev": "9ff0a2207d519c54e5b9bbb44bc1a6be1da9edac",
         "type": "github"
       },
       "original": {
