@@ -328,6 +328,7 @@ attach() {
   @bwrap@ \
     --ro-bind / / \
     --bind "$temp_dir" /mnt \
+    --tmpfs /mnt/.git \
     --tmpfs /tmp \
     --bind "$HOME/.config/claude" /tmp/config \
     --bind "$HOME/.local/share/claude" /tmp/data \
