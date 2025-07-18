@@ -257,12 +257,15 @@ attach() {
   # TODO support other $AGENT's
   mkdir -p ./.claude
 
+  # hide git entirely from the agent
+  export GIT_DIR=/dev/null
+
   # cannot use exec otherwise the cleanup TRAP won't execute
   # TODO support other $AGENT's
+
   @bwrap@ \
     --ro-bind / / \
     --bind "$temp_dir" /mnt \
-    --tmpfs /mnt/.git \
     --tmpfs /tmp \
     --bind "$HOME/.config/claude" /tmp/config \
     --bind "$HOME/.local/share/claude" /tmp/data \
