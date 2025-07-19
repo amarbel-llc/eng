@@ -5,17 +5,28 @@ clean-nix:
 
 clean: clean-nix
 
-# TODO find all flake.nix's and run flake update for local flakes
-update-nix-local:
-  nix flake update
-
 update-nix:
   nix flake update
 
 update: update-nix
 
-build-nix: update-nix-local
-  nix build
+nix_overrides := shell('''
+  nix eval --file flake.nix --json inputs \
+    | jq -r '
+      [
+        to_entries[]
+        | select(.value.url | startswith("github:friedenberg/eng"))
+        | [
+            "--override-input",
+            .key,
+            (.value.url | sub("github:friedenberg/eng\\?dir="; "path:./"))
+        ]
+      ] | add | join(" ")
+    '
+      ''')
+
+build-nix:
+  nix build {{nix_overrides}}
 
 [working-directory: "rcm"]
 build-rcm: build-rcm-hooks-pre-up build-rcm-hooks-post-up

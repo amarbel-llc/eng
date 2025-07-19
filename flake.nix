@@ -1,17 +1,17 @@
 {
   inputs = {
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2505.806427.tar.gz";
     nixpkgs-stable.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2505.805252.tar.gz";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz";
 
     # devenv
-    devenv-go.url = "path:./pkgs/alfa/devenv-go";
-    devenv-js.url = "path:./pkgs/alfa/devenv-js";
-    devenv-nix.url = "path:./pkgs/alfa/devenv-nix";
-    devenv-shell.url = "path:./pkgs/alfa/devenv-shell";
-    devenv-system-common.url = "path:./pkgs/alfa/devenv-system-common";
-    devenv-system-linux.url = "path:./pkgs/alfa/devenv-system-linux";
-    devenv-system-darwin.url = "path:./pkgs/alfa/devenv-system-darwin";
+    devenv-go.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-go";
+    devenv-js.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-js";
+    devenv-nix.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-nix";
+    devenv-shell.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-shell";
+    devenv-system-common.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-common";
+    devenv-system-linux.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-linux";
+    devenv-system-darwin.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-darwin";
 
     bash.url = "github:friedenberg/eng?dir=pkgs/alfa/bash";
     ssh.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh";
