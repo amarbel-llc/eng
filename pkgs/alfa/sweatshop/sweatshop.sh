@@ -22,6 +22,7 @@ usage() {
   echo "  diff [SWEATSHOP_ID]           Show differences between current branch and sweatshop HEAD"
   echo "  get                           Get the single sweatshop ID (fails if multiple exist)"
   echo "  list                          List all sweatshop IDs"
+  echo "  pull [SWEATSHOP_ID]           Pull changes from sweatshop to main branch"
   echo "  run [-s SWEATSHOP_ID] [args...] Create a new sweatshop and attach to it (optionally with custom ID)"
   echo "  run-temp [-s SWEATSHOP_ID] [args...] Create a new sweatshop and attach to it, destroy when it exits (optionally with custom ID)"
   echo "  sync [SWEATSHOP_ID]           Syncs changes to/from a sweatshop."
@@ -53,6 +54,7 @@ destroy) ;;
 diff) ;;
 get) ;;
 list) ;;
+pull) ;;
 run) ;;
 run-temp) ;;
 sync) ;;
@@ -101,17 +103,23 @@ run_cmd() {
 
   # shellcheck disable=SC2034
   coproc cmd {
-    "$@" 2>&1 | while IFS= read -r line; do
+    local needs_newline=""
+
+    # shellcheck disable=SC2068
+    eval "$*" 2>&1 | while IFS= read -r line; do
+      needs_newline=1
       echo "  > $line" >&2
     done
+
+    if [[ -n $needs_newline ]]; then
+      echo >&2
+    fi
   }
 
   # shellcheck disable=SC2154
   if ! wait "$cmd_PID"; then
     echo "Failure: '$name'" >&2
     exit 1
-  else
-    echo >&2
   fi
 
   echo "Success '$name'" >&2
@@ -125,12 +133,12 @@ get_worktree_path() {
   fi
 
   # Get worktree path from git worktree list
-  git worktree list --porcelain | awk "/^worktree.*$sweatshop_id/ { print \$2 }"
+  git worktree list --porcelain | awk "\$0 ~ \"^worktree.*$sweatshop_id\" { print \$2 }"
 }
 
 list_worktrees() {
   # List all worktrees that match sweatshop pattern
-  git worktree list --porcelain | awk "/^worktree/ { path=\$2; if (match(path, /sweatshop-$AGENT-[^\\/]*$/)) print substr(path, RSTART, RLENGTH) }" | sort -u
+  git worktree list --porcelain | awk "/^branch/ { path=\$2; if (match(path, \"sweatshop-$AGENT-[^/]*$\")) print substr(path, RSTART, RLENGTH) }" | sort -u
 }
 
 get_sweatshop_path() {
@@ -140,7 +148,8 @@ get_sweatshop_path() {
   fi
 
   # Get worktree path
-  git worktree list --porcelain | awk "/^worktree.*$sweatshop_id/ { print \$2 }"
+  git worktree list --porcelain | awk "\$0 ~ \"^worktree.*$sweatshop_id\" { print \$2 }"
+  # git worktree list --porcelain | awk "/^branch/ { path=\$2; if (match(path, \"refs/heads/$sweatshop_id\")) print substr(path, RSTART, RLENGTH) }" | sort -u
 }
 
 # TODO update this to support tab-completion through the list of worktrees
@@ -163,30 +172,30 @@ destroy() {
     local temp_dir
     temp_dir="$(get_sweatshop_path "$sweatshop_id")"
 
-    cmd_list_worktrees=(
+    cmd_git_mk_patch=(
       git worktree list --porcelain
     )
 
-    cmd_check_worktree_exists=(
+    cmd_git_apply_patch=(
       grep -q "worktree.*$sweatshop_id"
     )
 
-    if "${cmd_list_worktrees[@]}" |
-      "${cmd_check_worktree_exists[@]}"; then
+    if "${cmd_git_mk_patch[@]}" |
+      "${cmd_git_apply_patch[@]}"; then
       run_cmd \
         "remove sweatshop worktree: $sweatshop_id" \
         git worktree remove "$temp_dir" --force \
         >/dev/null
     fi
 
-    run_cmd \
-      "remove sweatshop branch: $sweatshop_id" \
-      git branch -d "$sweatshop_id" \
-      >/dev/null
-  done
+    if git show-ref --verify --quiet "$sweatshop_id"; then
+      run_cmd \
+        "remove sweatshop branch: $sweatshop_id" \
+        git branch -d "$sweatshop_id" \
+        >/dev/null
+    fi
 
-  echo "All sweatshops destroyed" >&2
-  return 0
+  done
 }
 
 create() {
@@ -196,6 +205,22 @@ create() {
   # Worktree mode
   local current_branch
   current_branch="$(git branch --show-current)"
+
+  # Check for uncommitted changes in current working directory
+  local has_uncommitted_changes=false
+  local has_untracked_files=false
+  local uncommitted_changes=""
+  local untracked_files=""
+
+  if ! git diff-index --quiet HEAD 2>/dev/null; then
+    has_uncommitted_changes=true
+    uncommitted_changes="$(git diff HEAD)"
+  fi
+
+  untracked_files="$(git ls-files --others --exclude-standard 2>/dev/null || true)"
+  if [[ -n $untracked_files ]]; then
+    has_untracked_files=true
+  fi
 
   if [[ -n $custom_sweatshop_id ]]; then
     sweatshop_id="sweatshop-$AGENT-$custom_sweatshop_id"
@@ -220,6 +245,40 @@ create() {
   mkdir -p "$HOME/.config/claude" >/dev/null 2>&1
   mkdir -p "$HOME/.local/share/claude" >/dev/null 2>&1
 
+  # Check if we should apply working directory changes to new worktree
+  if [[ $has_uncommitted_changes == true ]] || [[ $has_untracked_files == true ]]; then
+    echo >&2
+    echo "Working directory has changes:" >&2
+    if [[ $has_uncommitted_changes == true ]]; then
+      echo "  - Uncommitted changes detected" >&2
+    fi
+    if [[ $has_untracked_files == true ]]; then
+      echo "  - Untracked files detected" >&2
+    fi
+    echo >&2
+    read -p "Apply these changes to the new worktree? (y/N): " -r apply_changes >&2
+    echo >&2
+
+    if [[ $apply_changes =~ ^[Yy]$ ]]; then
+      # Apply uncommitted changes
+      if [[ $has_uncommitted_changes == true ]]; then
+        echo "$uncommitted_changes" | git -C "$temp_dir" apply
+      fi
+
+      # Copy untracked files
+      if [[ $has_untracked_files == true ]]; then
+        while IFS= read -r file; do
+          if [[ -n $file ]]; then
+            mkdir -p "$(dirname "$temp_dir/$file")"
+            cp "$file" "$temp_dir/$file"
+          fi
+        done <<<"$untracked_files"
+      fi
+
+      echo "Changes applied to new worktree: $temp_dir" >&2
+    fi
+  fi
+
   # return value
   echo -n "$sweatshop_id"
 }
@@ -230,8 +289,48 @@ run_temp() {
 
   cleanup_temp() {
     local cleanup_sweatshop_id="$1"
-    # TODO merge worktree changes
-    destroy "$cleanup_sweatshop_id"
+    local temp_dir
+    temp_dir="$(get_sweatshop_path "$cleanup_sweatshop_id")"
+
+    # Check if worktree is dirty
+    if git -C "$temp_dir" diff --quiet && git -C "$temp_dir" diff --cached --quiet; then
+      # Worktree is clean, destroy without prompting
+      destroy "$cleanup_sweatshop_id"
+    else
+      # Worktree is dirty, show changes and ask for confirmation
+      echo "=== Sweatshop has uncommitted changes ===" >&2
+      echo "Changes will be shown in pager. Press 'q' to quit the pager." >&2
+      echo "" >&2
+
+      # Show changes via pager
+      {
+        echo "=== Staged changes ==="
+        git -C "$temp_dir" diff --cached --color=always
+        echo ""
+        echo "=== Unstaged changes ==="
+        git -C "$temp_dir" diff --color=always
+      } | "${PAGER:-less -R}"
+
+      echo "" >&2
+      echo -n "Do you want to pull these changes to the main branch before destroying? (y/N): " >&2
+      read -r response
+
+      case "$response" in
+      [yY] | [yY][eE][sS])
+        echo "Pulling changes..." >&2
+        if pull "$cleanup_sweatshop_id"; then
+          echo "Changes successfully pulled." >&2
+        else
+          echo "Warning: Failed to pull changes. They will be lost." >&2
+        fi
+        ;;
+      *)
+        echo "Changes will be lost." >&2
+        ;;
+      esac
+
+      destroy "$cleanup_sweatshop_id"
+    fi
   }
 
   trap "cleanup_temp '$sweatshop_id'" EXIT INT TERM
@@ -257,13 +356,12 @@ attach() {
   # TODO support other $AGENT's
   mkdir -p ./.claude
 
-  # hide git entirely from the agent
-  export GIT_DIR=/dev/null
-
   # cannot use exec otherwise the cleanup TRAP won't execute
   # TODO support other $AGENT's
 
-  @bwrap@ \
+  # hide git entirely from the agent
+  env GIT_DIR=/dev/null \
+    @bwrap@ \
     --ro-bind / / \
     --bind "$temp_dir" /mnt \
     --tmpfs /tmp \
@@ -387,6 +485,28 @@ get() {
   echo -n "$sweatshops"
 }
 
+pull() {
+  local sweatshop_id
+  sweatshop_id="$(get "${1:-}")"
+  shift # Remove the sweatshop_id from arguments
+
+  local temp_dir
+  temp_dir="$(get_sweatshop_path "$sweatshop_id")"
+
+  cmd_git_mk_patch=(
+    git -C "$temp_dir" diff
+  )
+
+  cmd_git_apply_patch=(
+    git apply --3way
+  )
+
+  run_cmd \
+    "applying sweatshop patch: $sweatshop_id" \
+    "${cmd_git_mk_patch[@]}" \| "${cmd_git_apply_patch[@]}" \
+    >/dev/null
+}
+
 sync() {
   echo "not implemented yet" >&1
   exit 1
@@ -400,6 +520,7 @@ destroy) destroy "$@" ;;
 diff) diff "$@" ;;
 get) get "$@" ;;
 list) list "$@" ;;
+pull) pull "$@" ;;
 run) run "$@" ;;
 run-temp) run_temp "$@" ;;
 sync) sync "$@" ;;
