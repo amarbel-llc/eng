@@ -3,7 +3,7 @@
 # keep sorted
 # export PATH="$HOME/eng/result/bin:$PATH"
 
-export EDITOR="$HOME/.local/bin/editor"
+export EDITOR="$HOME/.local/bin/vim"
 export GIT_CONFIG_GLOBAL="$HOME/.config/git/config"
 export GNUPGHOME="$HOME/.config/gnupg"
 export GOPATH="$HOME/.cache/go/"

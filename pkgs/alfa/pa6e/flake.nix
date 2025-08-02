@@ -33,7 +33,7 @@
         });
 
         # to include all the templates and styles
-        src = ./.;
+        src = self;
 
       in
       {

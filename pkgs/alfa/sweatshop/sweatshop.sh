@@ -111,9 +111,13 @@ run_cmd() {
       echo "  > $line" >&2
     done
 
+    status=$?
+
     if [[ -n $needs_newline ]]; then
       echo >&2
     fi
+
+    exit $status
   }
 
   # shellcheck disable=SC2154
@@ -188,7 +192,7 @@ destroy() {
         >/dev/null
     fi
 
-    if git show-ref --verify --quiet "$sweatshop_id"; then
+    if git show-ref --verify --quiet "refs/heads/$sweatshop_id"; then
       run_cmd \
         "remove sweatshop branch: $sweatshop_id" \
         git branch -d "$sweatshop_id" \
@@ -205,22 +209,6 @@ create() {
   # Worktree mode
   local current_branch
   current_branch="$(git branch --show-current)"
-
-  # Check for uncommitted changes in current working directory
-  local has_uncommitted_changes=false
-  local has_untracked_files=false
-  local uncommitted_changes=""
-  local untracked_files=""
-
-  if ! git diff-index --quiet HEAD 2>/dev/null; then
-    has_uncommitted_changes=true
-    uncommitted_changes="$(git diff HEAD)"
-  fi
-
-  untracked_files="$(git ls-files --others --exclude-standard 2>/dev/null || true)"
-  if [[ -n $untracked_files ]]; then
-    has_untracked_files=true
-  fi
 
   if [[ -n $custom_sweatshop_id ]]; then
     sweatshop_id="sweatshop-$AGENT-$custom_sweatshop_id"
@@ -245,41 +233,16 @@ create() {
   mkdir -p "$HOME/.config/claude" >/dev/null 2>&1
   mkdir -p "$HOME/.local/share/claude" >/dev/null 2>&1
 
-  # Check if we should apply working directory changes to new worktree
-  if [[ $has_uncommitted_changes == true ]] || [[ $has_untracked_files == true ]]; then
-    echo >&2
-    echo "Working directory has changes:" >&2
-    if [[ $has_uncommitted_changes == true ]]; then
-      echo "  - Uncommitted changes detected" >&2
-    fi
-    if [[ $has_untracked_files == true ]]; then
-      echo "  - Untracked files detected" >&2
-    fi
-    echo >&2
-    read -p "Apply these changes to the new worktree? (y/N): " -r apply_changes >&2
-    echo >&2
+  run_cmd \
+    "mark all working directory changes with --intent-to-add: $sweatshop_id" \
+    git add -N . \
+    >/dev/null
 
-    if [[ $apply_changes =~ ^[Yy]$ ]]; then
-      # Apply uncommitted changes
-      if [[ $has_uncommitted_changes == true ]]; then
-        echo "$uncommitted_changes" | git -C "$temp_dir" apply
-      fi
+  run_cmd \
+    "applying working directory changes to new worktree: $sweatshop_id" \
+    git diff HEAD \| git -C "$temp_dir" apply --3way \
+    >/dev/null
 
-      # Copy untracked files
-      if [[ $has_untracked_files == true ]]; then
-        while IFS= read -r file; do
-          if [[ -n $file ]]; then
-            mkdir -p "$(dirname "$temp_dir/$file")"
-            cp "$file" "$temp_dir/$file"
-          fi
-        done <<<"$untracked_files"
-      fi
-
-      echo "Changes applied to new worktree: $temp_dir" >&2
-    fi
-  fi
-
-  # return value
   echo -n "$sweatshop_id"
 }
 
@@ -298,21 +261,14 @@ run_temp() {
       destroy "$cleanup_sweatshop_id"
     else
       # Worktree is dirty, show changes and ask for confirmation
-      echo "=== Sweatshop has uncommitted changes ===" >&2
-      echo "Changes will be shown in pager. Press 'q' to quit the pager." >&2
-      echo "" >&2
-
-      # Show changes via pager
       {
-        echo "=== Staged changes ==="
-        git -C "$temp_dir" diff --cached --color=always
+        echo "=== Reviewing $cleanup_sweatshop_id changes before pulling ==="
         echo ""
-        echo "=== Unstaged changes ==="
         git -C "$temp_dir" diff --color=always
-      } | "${PAGER:-less -R}"
+      } | ${PAGER:-less -R}
 
       echo "" >&2
-      echo -n "Do you want to pull these changes to the main branch before destroying? (y/N): " >&2
+      echo -n "Do you want to pull these changes to the current branch before destroying? (y/N): " >&2
       read -r response
 
       case "$response" in
@@ -321,7 +277,8 @@ run_temp() {
         if pull "$cleanup_sweatshop_id"; then
           echo "Changes successfully pulled." >&2
         else
-          echo "Warning: Failed to pull changes. They will be lost." >&2
+          echo "Warning: Failed to pull changes. Aborting." >&2
+          exit 1
         fi
         ;;
       *)
@@ -333,6 +290,7 @@ run_temp() {
     fi
   }
 
+  # shellcheck disable=SC2064
   trap "cleanup_temp '$sweatshop_id'" EXIT INT TERM
 
   attach "$sweatshop_id" "$@"
@@ -493,17 +451,14 @@ pull() {
   local temp_dir
   temp_dir="$(get_sweatshop_path "$sweatshop_id")"
 
-  cmd_git_mk_patch=(
-    git -C "$temp_dir" diff
-  )
-
-  cmd_git_apply_patch=(
-    git apply --3way
-  )
+  run_cmd \
+    "adding --intent-to-add sweatshop changes: $sweatshop_id" \
+    git -C "$temp_dir" add -N . \
+    >/dev/null
 
   run_cmd \
     "applying sweatshop patch: $sweatshop_id" \
-    "${cmd_git_mk_patch[@]}" \| "${cmd_git_apply_patch[@]}" \
+    git -C "$temp_dir" diff \| git apply --3way \
     >/dev/null
 }
 

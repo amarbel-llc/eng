@@ -11,7 +11,9 @@ test_one() (
   tmp="$(mktemp -d)"
   trap "rm -r '$tmp'" EXIT
 
-  if ! go test -c $pkg/*.go -o "$tmp/tester" >"$tmp/out" 2>&1; then
+  pkg_rel="$(realpath --relative-to=. "$pkg")"
+
+  if ! go test -c "./$pkg_rel/" -o "$tmp/tester" >"$tmp/out" 2>&1; then
     echo "not ok $no $pkg # failed to build tester" >&2
     cat "$tmp/out"
     exit 1
