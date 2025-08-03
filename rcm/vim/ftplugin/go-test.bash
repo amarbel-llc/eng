@@ -3,6 +3,9 @@
 # TODO move this to dev/dev-flake-templates/go
 # PATH="$PATH:$(realpath "$(dirname "$0")/result/bin")"
 
+dir_script="$(dirname "$0")"
+export dir_script
+
 test_one() (
   set -e
   no="$1"
@@ -13,7 +16,11 @@ test_one() (
 
   pkg_rel="$(realpath --relative-to=. "$pkg")"
 
-  if ! go test -c "./$pkg_rel/" -o "$tmp/tester" >"$tmp/out" 2>&1; then
+  go_test_compile() {
+    go test -c "./$pkg_rel/" -o "$tmp/tester"
+  }
+
+  if ! go_test_compile >"$tmp/out" 2>&1; then
     echo "not ok $no $pkg # failed to build tester" >&2
     cat "$tmp/out"
     exit 1
@@ -24,7 +31,16 @@ test_one() (
     exit 0
   fi
 
-  if ! "$tmp/tester" -test.v -test.timeout 1s >"$tmp/out" 2>&1; then
+  go_test_format() {
+    "$dir_script"/go-test-format.bash ./"$pkg"
+  }
+
+  go_test() {
+    set -o pipefail
+    "$tmp/tester" -test.count=1 -test.v -test.timeout 1s | go_test_format
+  }
+
+  if ! go_test >"$tmp/out" 2>&1; then
     echo "not ok $no $pkg" >&2
     cat "$tmp/out"
     exit 1

@@ -35,8 +35,10 @@
 
               for prog in "''${programsWithConfig[@]}"; do
                 wrapProgram "$out/bin/$prog" \
+                  --add-flags -o \
+                  --add-flags 'UserKnownHostsFile=$SSH_HOME/known_hosts' \
                   --add-flags -F \
-                  --add-flags '$SSH_CONFIG' \
+                  --add-flags '$SSH_HOME/config' \
                   --prefix PATH : $out/bin
               done
             '';

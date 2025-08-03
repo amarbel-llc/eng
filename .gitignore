@@ -16,3 +16,4 @@ rcm/ssh/my-secret-config
 rcm/config/git/config-user
 rcm/config/ssh/my-secret-config
 rcm/config/ssh/sasha_linenisgreat_com.pub
+rcm/config/ssh/known_hosts
