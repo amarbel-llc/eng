@@ -22,9 +22,13 @@
               pkgs.makeWrapper
             ];
 
-            postBuild = "
-              wrapProgram $out/bin/bash --set LOCALE_ARCHIVE ${pkgs.glibcLocales}/lib/locale/locale-archive --prefix PATH : $out/bin
-            ";
+            # TODO add library functions
+            postBuild = ''
+              wrapProgram $out/bin/bash \
+                --set LOCALE_ARCHIVE
+                ${pkgs.glibcLocales}/lib/locale/locale-archive \
+                --prefix PATH : $out/bin
+            '';
           };
         }
       )

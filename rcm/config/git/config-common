@@ -70,6 +70,7 @@
 [merge]
   conflictstyle = diff3
   tool = vimdiff
+	autostash = true
 [mergetool "vimdiff"]
 	path = editor
 [merge "ours"]

@@ -46,4 +46,3 @@ git-add-and-commit *PATHS:
 
   echo "pushing..." >&2
   git push
-
