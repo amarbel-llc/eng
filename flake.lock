@@ -303,11 +303,11 @@
       },
       "locked": {
         "dir": "go",
-        "lastModified": 1755607044,
-        "narHash": "sha256-0/iHL5lQB+mlWSwDmjQmoaU+mXKQUZspBmdjdn6FsFw=",
+        "lastModified": 1755621832,
+        "narHash": "sha256-xg19MBwdwf0SMWz5vzWbQ3kLVBks4P0DxhzncVRrmPQ=",
         "owner": "friedenberg",
         "repo": "dodder",
-        "rev": "c318269198576f026ce09cc915b1972eb4809336",
+        "rev": "da36b1c0dce9d1dfced8d1aa22de0a9b16e336a5",
         "type": "github"
       },
       "original": {
