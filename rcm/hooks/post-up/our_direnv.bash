@@ -1,9 +1,11 @@
 #! /usr/bin/env -S bash -e
 
-our_direnv="$(readlink "$HOME/eng/result/bin/direnv")"
+git_root="$(git rev-parse --show-toplevel)"
+our_direnv="$(readlink "$git_root/result/bin/direnv")"
+echo 'generating `~/.config/fish/direnv-config.fish`' >&2
 "$our_direnv" hook fish > ~/.config/fish/direnv-config.fish
 
-# format the file
+echo 'formatting `~/.config/fish/direnv-config.fish`' >&2
 vim \
   -e \
   -s \
@@ -12,3 +14,7 @@ vim \
   -c 'wq' \
   ~/.config/fish/direnv-config.fish \
   </dev/null
+
+echo 'direnv config updated.' >&2
+echo 'If fish shows an error like `fish: Command not found: /nix/store/*/bin/direnv`:' >&2
+echo 'run `exec fish` to reload the config.' >&2

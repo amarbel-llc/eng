@@ -38,11 +38,11 @@ build-rcm-rcrc:
   cp rcrc ~/.rcrc
 
 [working-directory: "rcm/hooks/pre-up"]
-build-rcm-hooks-pre-up:
+@build-rcm-hooks-pre-up:
   chmod +x *
 
 [working-directory: "rcm/hooks/post-up"]
-build-rcm-hooks-post-up:
+@build-rcm-hooks-post-up:
   chmod +x *
 
 build: build-nix build-rcm
