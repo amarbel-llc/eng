@@ -24,6 +24,7 @@
 
           packages = {
             inherit (pkgs)
+              delve
               go
               gofumpt
               golangci-lint
