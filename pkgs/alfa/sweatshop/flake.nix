@@ -3,13 +3,15 @@
   claude code for now";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/8cd5ce828d5d1d16feff37340171a98fc3bf6526";
+    nixpkgs.url = "github:NixOS/nixpkgs/f4ee7c92235a73f6af52d4ac2ba25b784214aa75";
     flake-utils.url = "github:numtide/flake-utils";
     devenv-nix.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-nix";
     devenv-shell.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-shell";
   };
 
-  outputs = { self, nixpkgs, flake-utils, devenv-nix, devenv-shell }:
+  outputs = { self, nixpkgs, flake-utils, devenv-nix, devenv-shell, nixpkgs-stable, utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {

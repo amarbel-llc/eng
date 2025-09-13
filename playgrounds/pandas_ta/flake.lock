@@ -1,54 +1,55 @@
 {
   "nodes": {
-    "chromium-html-to-pdf": {
+    "devenv-python": {
       "inputs": {
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1742139237,
-        "narHash": "sha256-5x6p8jPR9jeXRC0BxB0bMskHHLfvinWkNp2MIVC8ZlE=",
+        "dir": "pkgs/alfa/devenv-python",
+        "lastModified": 1755787543,
+        "narHash": "sha256-Uid3lU6fxXXZ3L/Jlr0pTmHm0XMq7mCdxSUMh2BpvXg=",
         "owner": "friedenberg",
-        "repo": "chromium-html-to-pdf",
-        "rev": "5be5b2dcba28137c18add27e8fac514188cf603f",
+        "repo": "eng",
+        "rev": "fd654b7f37126f3d909f3094de485c8a72c58435",
         "type": "github"
       },
       "original": {
+        "dir": "pkgs/alfa/devenv-python",
         "owner": "friedenberg",
-        "repo": "chromium-html-to-pdf",
+        "repo": "eng",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1735268880,
-        "narHash": "sha256-7QEFnKkzD13SPxs+UFR5bUFN2fRw+GlL0am72ZjNre4=",
-        "owner": "nixos",
+        "lastModified": 1749285348,
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7cc0bff31a3a705d3ac4fdceb030a17239412210",
+        "rev": "3e3afe5174c561dee0df6f2c2b2236990146329f",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-unstable",
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1735403105,
-        "narHash": "sha256-3rQ4IOMr4qN9snK73K0mmP/0W9/nFH9K4tBPYZJVJZY=",
-        "owner": "NixOS",
+        "lastModified": 1749668643,
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "32666c671b0bbce4e216b3e63e864ba73877654a",
+        "rev": "1965fd20a39c8e441746bee66d550af78f0c0a7b",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "ref": "release-24.11",
-        "type": "indirect"
+        "owner": "nixos",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs-stable_2": {
@@ -85,7 +86,7 @@
     },
     "root": {
       "inputs": {
-        "chromium-html-to-pdf": "chromium-html-to-pdf",
+        "devenv-python": "devenv-python",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-stable": "nixpkgs-stable_2",
         "utils": "utils_2"
@@ -127,7 +128,6 @@
       },
       "locked": {
         "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",

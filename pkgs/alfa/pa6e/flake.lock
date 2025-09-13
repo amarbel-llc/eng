@@ -7,14 +7,20 @@
         "utils": "utils"
       },
       "locked": {
-        "path": "../../alfa/html-to-pdf",
-        "type": "path"
+        "dir": "pkgs/alfa/html-to-pdf",
+        "lastModified": 1755787543,
+        "narHash": "sha256-Uid3lU6fxXXZ3L/Jlr0pTmHm0XMq7mCdxSUMh2BpvXg=",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "rev": "fd654b7f37126f3d909f3094de485c8a72c58435",
+        "type": "github"
       },
       "original": {
-        "path": "../../alfa/html-to-pdf",
-        "type": "path"
-      },
-      "parent": []
+        "dir": "pkgs/alfa/html-to-pdf",
+        "owner": "friedenberg",
+        "repo": "eng",
+        "type": "github"
+      }
     },
     "nixpkgs": {
       "locked": {
@@ -45,29 +51,34 @@
     },
     "nixpkgs-stable_2": {
       "locked": {
-        "lastModified": 1748708754,
+        "lastModified": 1757545623,
+        "narHash": "sha256-mCxPABZ6jRjUQx3bPP4vjA68ETbPLNz9V2pk9tO7pRQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f7ae65486211d1bd6a2091a57851a6627aff4b43",
+        "rev": "8cd5ce828d5d1d16feff37340171a98fc3bf6526",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "ref": "release-24.11",
-        "type": "indirect"
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "8cd5ce828d5d1d16feff37340171a98fc3bf6526",
+        "type": "github"
       }
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1748568828,
+        "lastModified": 1757764876,
+        "narHash": "sha256-V/bKpiPIppEoDyP12DwWikj0l0vWY1kCi71TcfBAd6g=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6bfd7663660ecf5336c1054e9e877824a4f84954",
+        "rev": "f4ee7c92235a73f6af52d4ac2ba25b784214aa75",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f4ee7c92235a73f6af52d4ac2ba25b784214aa75",
+        "type": "github"
       }
     },
     "root": {
@@ -131,15 +142,15 @@
       },
       "locked": {
         "lastModified": 1731533236,
-        "owner": "numtide",
-        "repo": "flake-utils",
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
+        "revCount": 102,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/numtide/flake-utils/0.1.102%2Brev-11707dc2f618dd54ca8739b309ec4fc024de578b/0193276d-5b8f-7dbc-acf1-41cb7b54ad2e/source.tar.gz"
       },
       "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz"
       }
     }
   },

@@ -451,9 +451,11 @@ pull() {
   local temp_dir
   temp_dir="$(get_sweatshop_path "$sweatshop_id")"
 
+  # TODO adjust the pull strategy, as it currently fails with conflicts quite
+  # often
   run_cmd \
     "adding --intent-to-add sweatshop changes: $sweatshop_id" \
-    git -C "$temp_dir" add -N . \
+    git -C "$temp_dir" add -N "$temp_dir" \
     >/dev/null
 
   run_cmd \

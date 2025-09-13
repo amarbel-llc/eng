@@ -9,5 +9,6 @@ function count-pattern
   -- $argv[2..] \
   | sort \
   | uniq -c \
-  | sort -r
+  | sort -r \
+  | sort -nr
 end

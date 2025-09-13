@@ -1,12 +1,13 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    utils.url = "github:numtide/flake-utils";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/8cd5ce828d5d1d16feff37340171a98fc3bf6526";
+    nixpkgs.url = "github:NixOS/nixpkgs/f4ee7c92235a73f6af52d4ac2ba25b784214aa75";
+    utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz";
 
     devenv-lua.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-lua";
   };
 
-  outputs = { self, nixpkgs, utils, devenv-lua }:
+  outputs = { self, nixpkgs, utils, devenv-lua, nixpkgs-stable }:
     (utils.lib.eachDefaultSystem
       (system:
         let

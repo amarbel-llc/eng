@@ -8,3 +8,4 @@ result
 *.old
 .direnv/
 .envrc
+.in_progress.commit.md
