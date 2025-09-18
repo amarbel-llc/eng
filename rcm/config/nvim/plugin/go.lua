@@ -18,6 +18,8 @@ require 'lspconfig'.gopls.setup {
         ["ST1003"] = false, -- specifically, underscores package names
         ["ST1020"] = false, -- specifically, comments for public functions
         ["ST1021"] = false, -- specifically, comments for public types
+        ["ST1005"] = false, -- error formats
+        ["ST1006"] = false, -- named return values
       },
       staticcheck = true,
     },
