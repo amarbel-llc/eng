@@ -73,17 +73,17 @@
                   nodePackages.prettier
                 ];
 
-                postBuild = ''
-                  for f in "$out/lib/node_modules/.bin/"*; do
-                    path="$(readlink --canonicalize-missing "$f")"
-                    ln -s "$path" "$out/bin/$(basename $f)"
-                  done
+              postBuild = ''
+                for f in "$out/lib/node_modules/.bin/"*; do
+                  path="$(readlink --canonicalize-missing "$f")"
+                  ln -s "$path" "$out/bin/$(basename $f)"
+                done
 
-                  find \
-                    "$out/share/go/bin/" \
-                    ! -type d \
-                    -exec mv {} "$out/bin/" \;
-                '';
+                find \
+                  "$out/share/go/bin/" \
+                  ! -type d \
+                  -exec mv {} "$out/bin/" \;
+              '';
             };
 
             default = packages.all;

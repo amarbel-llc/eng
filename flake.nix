@@ -74,6 +74,7 @@
             devenv-system-common.packages.${system}.default
 
             {
+              aarch64-darwin = devenv-system-darwin;
               x86_64-linux = devenv-system-linux;
               x86_64-darwin = devenv-system-darwin;
             }.${system}.packages.${system}.default
@@ -81,8 +82,8 @@
             # chrest.packages.${system}.default
             bash.packages.${system}.default
             dodder.packages.${system}.default
-            html-to-pdf.packages.${system}.default
-            pa6e.packages.${system}.default
+            # html-to-pdf.packages.${system}.default
+            # pa6e.packages.${system}.default
             ssh.packages.${system}.default
             sweatshop.packages.${system}.default
             vim.packages.${system}.default

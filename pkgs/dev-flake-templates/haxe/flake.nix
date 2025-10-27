@@ -7,7 +7,9 @@
 
   outputs =
     { self
-    , nixpkgs, nixpkgs-stable, utils
+    , nixpkgs
+    , nixpkgs-stable
+    , utils
     ,
     }:
     let

@@ -23,24 +23,27 @@
     , brew-api
     , brew
     }:
-    let
-      system = "x86_64-darwin";
-
-      pkgs = import nixpkgs
-        {
-          inherit system;
+    utils.lib.eachSystem [
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ]
+      (system:
+      let
+        pkgs = import nixpkgs
+          {
+            inherit system;
+          };
+      in
+      {
+        packages = {
+          default = with pkgs; symlinkJoin {
+            name = "system-packages";
+            paths = [
+              pinentry_mac
+              reattach-to-user-namespace
+            ];
+          };
         };
-
-    in
-    {
-      packages.${system} = {
-        default = with pkgs; symlinkJoin {
-          name = "system-packages";
-          paths = [
-            pinentry-mac
-            reattach-to-user-namespace
-          ];
-        };
-      };
-    };
+      }
+      );
 }

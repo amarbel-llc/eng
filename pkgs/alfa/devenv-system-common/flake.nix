@@ -53,6 +53,7 @@
               fswatch
               fh
               gawk
+              helix
               pkgs-stable.gftp
               git
               git-secret

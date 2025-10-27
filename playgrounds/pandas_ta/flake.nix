@@ -24,7 +24,7 @@
     in
     {
       devShells.default = pkgs.mkShell {
-        packages = with pkgs; [];
+        packages = with pkgs; [ ];
 
         inputsFrom = [
           devenv-python.devShells.${system}.default

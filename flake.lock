@@ -8,11 +8,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/bash",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -48,11 +48,11 @@
     "brew-api": {
       "flake": false,
       "locked": {
-        "lastModified": 1758195210,
-        "narHash": "sha256-322LWdorU+2Gw7eTnrY1UGljZtPA91w/zyZK3hhGNRs=",
+        "lastModified": 1759235034,
+        "narHash": "sha256-HpiLxt6jaYQ9xVmsNKsnbQzAf+3XTwKGMar1lNeKH90=",
         "owner": "BatteredBunny",
         "repo": "brew-api",
-        "rev": "047e8a65dcd13f7d1257bd2ae16e2bf55a95d47a",
+        "rev": "c8f76e06afab43aa91935a70aca8062a0c735e42",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
       },
       "locked": {
         "dir": "pkgs/bravo/chrest",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -140,11 +140,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-go",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -162,11 +162,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-js",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -185,11 +185,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-nix",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -208,11 +208,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-nix",
-        "lastModified": 1757765938,
-        "narHash": "sha256-EKkOVf0fCZfnSx9k5q38x6hru/qhjhNytZBFe1TZsOE=",
+        "lastModified": 1758199624,
+        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "8b391e31935b11ed5bd80655d10a8064652985de",
+        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
         "type": "github"
       },
       "original": {
@@ -230,11 +230,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-shell",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -252,11 +252,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-shell",
-        "lastModified": 1757765938,
-        "narHash": "sha256-EKkOVf0fCZfnSx9k5q38x6hru/qhjhNytZBFe1TZsOE=",
+        "lastModified": 1758199624,
+        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "8b391e31935b11ed5bd80655d10a8064652985de",
+        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
         "type": "github"
       },
       "original": {
@@ -275,11 +275,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-system-common",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -299,11 +299,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-system-darwin",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -322,11 +322,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-system-linux",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -350,11 +350,11 @@
       },
       "locked": {
         "dir": "go",
-        "lastModified": 1759234978,
-        "narHash": "sha256-/kXa5Se+sfrTSjqNlGjzhnAitrCfZVVUMjLgoOjtvyw=",
+        "lastModified": 1761041903,
+        "narHash": "sha256-w0F6BB3dhBVA9xQyLcucmB9Xxv790fjkrh9lyAFVBLs=",
         "owner": "friedenberg",
         "repo": "dodder",
-        "rev": "cef7db02ae24abe8444cfc9307cb2e928aceb971",
+        "rev": "cf0fc871c34b7f7a852d9412dfb3387242093f3d",
         "type": "github"
       },
       "original": {
@@ -554,11 +554,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/html-to-pdf",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -577,11 +577,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1755275124,
-        "narHash": "sha256-nZY/3Wx+sILtwpNbWuGkzgwxdTEcLCOCIAiKZ9k55PU=",
+        "lastModified": 1759056911,
+        "narHash": "sha256-CyjbxMzgMgEJzvkfGyx52HvooSTh/BsmeV5B1TdBUeg=",
         "ref": "refs/heads/master",
-        "rev": "a38004ff4df4beda648ec5b1374173d3192d61ae",
-        "revCount": 991,
+        "rev": "5a763290de4aa8de90d132f11c33327a14856b91",
+        "revCount": 994,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/kmonad/kmonad"
@@ -729,33 +729,33 @@
     },
     "nixpkgs-stable_15": {
       "locked": {
-        "lastModified": 1757545623,
-        "narHash": "sha256-mCxPABZ6jRjUQx3bPP4vjA68ETbPLNz9V2pk9tO7pRQ=",
+        "lastModified": 1758070117,
+        "narHash": "sha256-uLwwHFCZnT1c3N3biVe/0hCkag2GSrf9+M56+Okf+WY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8cd5ce828d5d1d16feff37340171a98fc3bf6526",
+        "rev": "e9b7f2ff62b35f711568b1f0866243c7c302028d",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8cd5ce828d5d1d16feff37340171a98fc3bf6526",
+        "rev": "e9b7f2ff62b35f711568b1f0866243c7c302028d",
         "type": "github"
       }
     },
     "nixpkgs-stable_16": {
       "locked": {
-        "lastModified": 1757545623,
-        "narHash": "sha256-mCxPABZ6jRjUQx3bPP4vjA68ETbPLNz9V2pk9tO7pRQ=",
+        "lastModified": 1758070117,
+        "narHash": "sha256-uLwwHFCZnT1c3N3biVe/0hCkag2GSrf9+M56+Okf+WY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8cd5ce828d5d1d16feff37340171a98fc3bf6526",
+        "rev": "e9b7f2ff62b35f711568b1f0866243c7c302028d",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8cd5ce828d5d1d16feff37340171a98fc3bf6526",
+        "rev": "e9b7f2ff62b35f711568b1f0866243c7c302028d",
         "type": "github"
       }
     },
@@ -1063,17 +1063,17 @@
     },
     "nixpkgs_19": {
       "locked": {
-        "lastModified": 1757764876,
-        "narHash": "sha256-V/bKpiPIppEoDyP12DwWikj0l0vWY1kCi71TcfBAd6g=",
+        "lastModified": 1758198490,
+        "narHash": "sha256-gtHb5F/zL/2UwBj6b8uU7yeQMyeT11frx1FACSLWWlo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f4ee7c92235a73f6af52d4ac2ba25b784214aa75",
+        "rev": "dcfec31546cb7676a5f18e80008e5c56af471925",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f4ee7c92235a73f6af52d4ac2ba25b784214aa75",
+        "rev": "dcfec31546cb7676a5f18e80008e5c56af471925",
         "type": "github"
       }
     },
@@ -1095,17 +1095,17 @@
     },
     "nixpkgs_20": {
       "locked": {
-        "lastModified": 1757764876,
-        "narHash": "sha256-V/bKpiPIppEoDyP12DwWikj0l0vWY1kCi71TcfBAd6g=",
+        "lastModified": 1758198490,
+        "narHash": "sha256-gtHb5F/zL/2UwBj6b8uU7yeQMyeT11frx1FACSLWWlo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f4ee7c92235a73f6af52d4ac2ba25b784214aa75",
+        "rev": "dcfec31546cb7676a5f18e80008e5c56af471925",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f4ee7c92235a73f6af52d4ac2ba25b784214aa75",
+        "rev": "dcfec31546cb7676a5f18e80008e5c56af471925",
         "type": "github"
       }
     },
@@ -1260,11 +1260,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/pa6e",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -1355,11 +1355,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/ssh",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -1380,11 +1380,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/sweatshop",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {
@@ -2008,11 +2008,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/vim",
-        "lastModified": 1758199624,
-        "narHash": "sha256-wQEhf4PXVAMpgzH00oQ6Erj+IdjEiNeX6n1PKQi/1XE=",
+        "lastModified": 1759236352,
+        "narHash": "sha256-VQqGedG8PKj4RKrwMzvDs0L4xppaEWgkGY3s/V2IJ6o=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f517142f0ca9e7ccaee61ac02b8ce8db140efd70",
+        "rev": "b9c228ed6aedae021c9bb5cb856a6c7648fb583c",
         "type": "github"
       },
       "original": {

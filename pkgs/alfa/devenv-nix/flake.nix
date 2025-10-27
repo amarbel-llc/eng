@@ -36,7 +36,10 @@
       in
 
       {
-        inherit packages;
+        packages.default = pkgs.symlinkJoin {
+          name = "devenv-nix";
+          paths = builtins.attrValues packages;
+        };
 
         devShells.default = pkgs.mkShell {
           packages = builtins.attrValues packages;

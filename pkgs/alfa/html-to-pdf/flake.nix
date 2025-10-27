@@ -30,11 +30,12 @@
 
         html-to-pdf = (
           pkgs.writeScriptBin name (builtins.readFile ./html-to-pdf.bash)
-        ).overrideAttrs(old: {
+        ).overrideAttrs (old: {
           buildCommand = "${old.buildCommand}\n patchShebangs $out";
         });
 
-      in {
+      in
+      {
         packages.default = pkgs.symlinkJoin {
           name = name;
           paths = [ html-to-pdf ] ++ buildInputs;
@@ -49,7 +50,7 @@
             websocat
           ]);
 
-          inputsFrom = [];
+          inputsFrom = [ ];
         };
       }
     );

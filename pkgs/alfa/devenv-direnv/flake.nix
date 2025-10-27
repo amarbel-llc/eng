@@ -8,7 +8,8 @@
   outputs =
     { self
     , nixpkgs-stable
-    , utils, nixpkgs
+    , utils
+    , nixpkgs
     }:
     (utils.lib.eachDefaultSystem
       (system:

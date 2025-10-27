@@ -110,7 +110,7 @@ nix_overrides := shell('''
       ''')
 
 build-nix:
-  nix build {{nix_overrides}}
+  nix build --show-trace {{nix_overrides}}
 
 [working-directory: "rcm"]
 build-rcm: build-rcm-hooks-pre-up build-rcm-hooks-post-up

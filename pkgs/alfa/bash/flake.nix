@@ -23,8 +23,7 @@
               pkgs.makeWrapper
             ];
 
-            # TODO add library functions
-            postBuild = ''
+            postBuild = pkgs.lib.optionalString pkgs.stdenv.isLinux ''
               wrapProgram $out/bin/bash \
                 --set LOCALE_ARCHIVE \
                 ${pkgs.glibcLocales}/lib/locale/locale-archive \
