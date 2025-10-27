@@ -31,9 +31,11 @@
         default = with pkgs; symlinkJoin {
           name = "system-packages";
           paths = [
+            pcsclite
             espanso-wayland
-            kmonad.packages.${system}.default
             keyd
+            kmonad.packages.${system}.default
+            pinentry
           ];
         };
       };

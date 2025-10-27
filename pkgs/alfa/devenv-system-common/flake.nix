@@ -81,8 +81,8 @@
               paperkey
               parallel
               pay-respects
-              # pcsclite
               # pinentry
+              pinentry-tty
               plantuml
               rcm
               rsync

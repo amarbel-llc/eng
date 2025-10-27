@@ -1,5 +1,10 @@
 #! /usr/bin/env -S bash -e
 
+# Only Linux supports the PCSC_DRIVER
+if [[ ! "$(uname)" == "Linux" ]]; then
+  exit 0
+fi
+
 FILE_TPL="$HOME/.config/gnupg/scdaemon.conf.tpl"
 FILE_CONFIG="$HOME/.config/gnupg/scdaemon.conf"
 
