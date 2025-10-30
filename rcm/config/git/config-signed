@@ -1,0 +1,10 @@
+# vim: ft=gitconfig
+
+[commit]
+	gpgsign = true
+[gpg]
+  format = ssh
+[user]
+	signingKey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCpbBLRw5bHC/Jqb1Q4oQUbqU8OMmrCk6zFrWajOg+vRRFGrfEKQtMWm6ODNDidtSWWbtDS1GGM1h4d0N+coTQZubJoJ43yWA1MpnIWlXkkfH7EG9JCwgty536EZBwW4xjD1kR6+gZ18zvxJtkKv4BHjUWwTSKgSfWNxFRWZB9CePgBopcEg6K9u+/MSPSAJjgQCLJYATVSjkgwyU9/Z3BVzZDBI5YRLev6/5yVrWEr/0kFPHLIaF0DPLKU+UoA/9ZFFKEgacqugyFvRM+w1WpUL5g9hSe5mvmrTV52OmXI/5b6aUIOzsOZWVImKJ1th/1Li5ehDsKvt8NvG/thECuAHF+EMKrbpxxXNLjvBN5s7cRTJQkk/N+gqeIevqlkbLPPokKlEZerTpd8skeZ4Ty4+f3mKG1gOqHvk/PO5qI7szhm4byNB7SrLtKSOmrrVrFLnx9sadhgEq+WneI1vg5XG146CbF8m4B8SpAAxI6WLcm9kIYyEsITXxlibg+hvzaqL/UvOh2rNDMiKpUdaNYb70TYYXBU9GGJXuZ3jln9NICM0lDKs2Egy4JP9v5QXWo8/j6/+ETnzl2vlVYYN2Cos2HBIK8gCSGn8dMCSKs6wsH/id5Wao7vcSBEZ1PDI4XqKVBd7L/Yj8UM2QZu1NSucI2z6mQXZbMkwkUSNSrc+Q== yk606
+[gpg "ssh"]
+	program = ~/eng/result/bin/ssh-keygen

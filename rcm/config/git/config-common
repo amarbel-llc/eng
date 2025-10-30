@@ -21,7 +21,7 @@
   him = log --pretty=nice origin/master..HEAD
   hist = log --graph --pretty=hist --abbrev-commit
   set-signed = "!f() { \
-    git config --local include.path ~/.gitconfig-gpg; \
+    git config --local include.path ~/.config/git/config-signed; \
     }; f"
   last = show HEAD
   last-branch = rev-parse --abbrev-ref @{-1}
