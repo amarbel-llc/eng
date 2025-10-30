@@ -1,4 +1,4 @@
-#! /usr/bin/env -S bash -e
+#! /usr/bin/env -S bash -xe
 
 our_bash="$(readlink "$HOME/eng/result/bin/bash")"
 mkdir -p ~/.config/direnv/
