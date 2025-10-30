@@ -84,7 +84,7 @@
             dodder.packages.${system}.default
             # html-to-pdf.packages.${system}.default
             # pa6e.packages.${system}.default
-            ssh.packages.${system}.default
+            # ssh.packages.${system}.default
             sweatshop.packages.${system}.default
             vim.packages.${system}.default
           ];

@@ -9,7 +9,7 @@ FILE_TPL="$HOME/.config/gnupg/scdaemon.conf.tpl"
 FILE_CONFIG="$HOME/.config/gnupg/scdaemon.conf"
 
 if [[ ! -f "$FILE_TPL" ]]; then
-  return
+  exit 0
 fi
 
 # use `/usr/sbin/ldconfig` to avoid nix

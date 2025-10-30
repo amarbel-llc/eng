@@ -4,6 +4,8 @@ Include ~/.config/ssh/my-secret-config
 
 Host my-github
   Hostname github.com
+  User git
+  IdentityFile ~/.config/ssh/sasha_linenisgreat_com.pub
 
 Host *
   PreferredAuthentications publickey

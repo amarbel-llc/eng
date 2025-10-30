@@ -10,6 +10,8 @@
       (system:
         let
           pkgs = import nixpkgs { inherit system; };
+          # sssdNssLibPath = "${pkgs.sssd}/lib/libnss_sss.so.2";
+
         in
         {
           packages.default = with pkgs; symlinkJoin {
@@ -24,6 +26,7 @@
             buildInputs = [
               makeWrapper
             ];
+            # --set LD_PRELOAD "${sssdNssLibPath}" \
 
             postBuild = ''
               programsWithConfig=(
