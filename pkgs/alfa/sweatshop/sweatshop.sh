@@ -240,7 +240,7 @@ create() {
 
   run_cmd \
     "applying working directory changes to new worktree: $sweatshop_id" \
-    git diff HEAD \| git -C "$temp_dir" apply --3way \
+    git diff HEAD \| git -C "$temp_dir" apply --allow-empty --3way \
     >/dev/null
 
   echo -n "$sweatshop_id"
@@ -257,6 +257,7 @@ run_temp() {
 
     # Check if worktree is dirty
     if git -C "$temp_dir" diff --quiet && git -C "$temp_dir" diff --cached --quiet; then
+      echo "No changes" >&2
       # Worktree is clean, destroy without prompting
       destroy "$cleanup_sweatshop_id"
     else

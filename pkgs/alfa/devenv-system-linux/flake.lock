@@ -8,11 +8,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1759056911,
-        "narHash": "sha256-CyjbxMzgMgEJzvkfGyx52HvooSTh/BsmeV5B1TdBUeg=",
+        "lastModified": 1761259732,
+        "narHash": "sha256-u8/mpvpkSq7gLSKT8ynxduerYw2CghiwQyqDfLUvTAo=",
         "ref": "refs/heads/master",
-        "rev": "5a763290de4aa8de90d132f11c33327a14856b91",
-        "revCount": 994,
+        "rev": "7f8a0b38d4777fbacf3629b6ff8805e8eeec2f19",
+        "revCount": 998,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/kmonad/kmonad"

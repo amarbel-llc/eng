@@ -38,7 +38,7 @@
               asdf
               asdf-vm
               bats
-              # cdparanoia
+              cdparanoia
               coreutils
               csvkit
               curl
@@ -53,7 +53,6 @@
               fswatch
               fh
               gawk
-              helix
               pkgs-stable.gftp
               git
               git-secret
@@ -63,6 +62,7 @@
               gnuplot
               gpgme
               graphviz
+              helix
               hostess
               httpie
               hub
@@ -81,8 +81,7 @@
               paperkey
               parallel
               pay-respects
-              # pinentry
-              pinentry-tty
+              # pcsclite
               plantuml
               rcm
               rsync
@@ -102,7 +101,7 @@
               wget
               yubico-piv-tool
               yt-dlp
-              # yubikey-manager
+              yubikey-manager
               zstd
             ];
           };
