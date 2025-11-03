@@ -1,6 +1,6 @@
 local config_path = vim.fn.stdpath("config")
 
-require('lspconfig').lua_ls.setup({
+vim.lsp.config('lua_ls', {
   root_dir = function()
     return vim.fn.getcwd()
   end,

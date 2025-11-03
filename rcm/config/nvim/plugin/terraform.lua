@@ -1,2 +1,2 @@
 
-require'lspconfig'.terraformls.setup{}
+vim.lsp.config('terraformls', {})

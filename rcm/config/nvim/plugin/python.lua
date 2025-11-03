@@ -1,4 +1,4 @@
-require 'lspconfig'.pylsp.setup {
+vim.lsp.config('pylsp', {
   cmd = { "pylsp", "-vvv" }, -- verbose logging
   settings = {
     pylsp = {
