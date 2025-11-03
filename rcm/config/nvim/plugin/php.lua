@@ -1,4 +1,4 @@
-vim.lsp.config('phpactor', {
+require 'lspconfig'.phpactor.setup {
   init_options = {
     ["language_server_php_cs_fixer.enabled"] = true,
     ["language_server_php_cs_fixer.bin"] = vim.fn.exepath("php-cs-fixer"),

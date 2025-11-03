@@ -1,4 +1,4 @@
-vim.lsp.config('ts_ls', {
+require'lspconfig'.ts_ls.setup{
   filetypes = {
     "javascript",
     "typescript",
