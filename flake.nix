@@ -14,8 +14,10 @@
     devenv-system-darwin.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-darwin";
 
     bash.url = "github:friedenberg/eng?dir=pkgs/alfa/bash";
+    claude.url = "github:friedenberg/eng?dir=pkgs/alfa/claude";
     ssh.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh";
-    sweatshop.url = "github:friedenberg/eng?dir=pkgs/alfa/sweatshop";
+    ssh-agent-mux.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh-agent-mux";
+    sweatshop.url = "github:friedenberg/eng?dir=pkgs/bravo/sweatshop";
     vim.url = "github:friedenberg/eng?dir=pkgs/alfa/vim";
 
     html-to-pdf.url = "github:friedenberg/eng?dir=pkgs/alfa/html-to-pdf";
@@ -47,7 +49,9 @@
     , devenv-system-linux
       #
     , bash
+    , claude
     , ssh
+    , ssh-agent-mux
     , sweatshop
     , vim
       #
@@ -81,11 +85,13 @@
 
             # chrest.packages.${system}.default
             bash.packages.${system}.default
+            claude.packages.${system}.default
             dodder.packages.${system}.default
             # html-to-pdf.packages.${system}.default
             # pa6e.packages.${system}.default
-            # ssh.packages.${system}.default
-            sweatshop.packages.${system}.default
+            ssh.packages.${system}.default
+            ssh-agent-mux.packages.${system}.default
+            # sweatshop.packages.${system}.default
             vim.packages.${system}.default
           ];
         };

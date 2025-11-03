@@ -6,6 +6,7 @@
 export EDITOR="$HOME/.local/bin/vim"
 export GIT_CONFIG_GLOBAL="$HOME/.config/git/config"
 export GNUPGHOME="$HOME/.config/gnupg"
+export GPG_TTY="$(tty)"
 export GOPATH="$HOME/.cache/go"
 export LESS="-x4 -R"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh/gpg-agent.sock"
