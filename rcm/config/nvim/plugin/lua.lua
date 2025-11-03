@@ -1,6 +1,6 @@
 local config_path = vim.fn.stdpath("config")
 
-require('lspconfig').lua_ls.setup({
+require'lspconfig'.lua_ls.setup{
   root_dir = function()
     return vim.fn.getcwd()
   end,
@@ -14,6 +14,9 @@ require('lspconfig').lua_ls.setup({
       },
 
       workspace = {
+        ignoreDir = {
+          ".direnv/",
+        },
         library = { vim.fn.getcwd() },
         checkThirdParty = false,
         maxPreload = 1000,
@@ -21,7 +24,7 @@ require('lspconfig').lua_ls.setup({
       }
     }
   }
-})
+}
 
 -- require 'lspconfig'.lua_ls.setup {
 --   on_init = function(client)
