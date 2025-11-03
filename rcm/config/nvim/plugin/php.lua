@@ -1,6 +1,24 @@
-require 'lspconfig'.phpactor.setup {
-  init_options = {
-    ["language_server_php_cs_fixer.enabled"] = true,
-    ["language_server_php_cs_fixer.bin"] = vim.fn.exepath("php-cs-fixer"),
-  }
-}
+
+local lspconfig = require("lspconfig")
+
+lspconfig.intelephense.setup({
+  settings = {
+    intelephense = {
+      maxMemory = 8192,
+      files = {
+        exclude = {
+          "**/.git/**",
+          "**/node_modules/**",
+          "**/htdocs/assets/dist/**",
+          "**/tmp/**",
+          "translations/**",
+          "**/.phan/**",
+          "**/generated/**",
+          "**/Generated/**",
+          "**/vendor/*/{!(phpunit)/**}",
+        },
+      },
+      environment = { phpVersion = "8.2" },
+    },
+  },
+})

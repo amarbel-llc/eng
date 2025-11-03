@@ -1,4 +1,4 @@
-
 # vim: ft=direnv
+
 dotenv "$HOME/.env"
 dotenv_if_exists "$HOME/.secrets-nix.env"

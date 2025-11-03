@@ -11,6 +11,7 @@
         let
           pkgs = import nixpkgs {
             inherit system;
+            config.allowUnfree = true;
           };
 
         in
@@ -18,10 +19,8 @@
         {
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              php82
-              php82Packages.composer
-              phpactor
-              php82Packages.php-cs-fixer
+              intelephense
+              php82Packages.php-codesniffer
             ];
           };
         })

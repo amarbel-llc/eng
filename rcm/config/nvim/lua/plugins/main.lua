@@ -1,5 +1,9 @@
 return {
   { dir = "~/eng/pkgs/bravo/dodder/zz-vim/", },
+  {
+    'stevearc/conform.nvim',
+    opts = {},
+  },
   { "hashivim/vim-terraform" },
   { "mustache/vim-mustache-handlebars" },
   { "direnv/direnv.vim" },

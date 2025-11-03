@@ -13,6 +13,16 @@ vim.opt.listchars = {
 
 local lsp_util = require("lsp_util")
 
+local conform = require("conform").setup({
+  formatters_by_ft = {
+    lua = { "stylua" },
+    python = { "isort", "black" },
+    php = { "phpcbf" },
+    rust = { "rustfmt", lsp_format = "fallback" },
+    javascript = { "prettierd", "prettier", stop_after_first = true },
+  },
+})
+
 vim.api.nvim_create_user_command(
   'ApplyImports',
   function(opts)
@@ -76,10 +86,7 @@ vim.api.nvim_create_user_command(
         return false
       end
 
-      local cursor = vim.api.nvim_win_get_cursor(0)
-      vim.lsp.buf.format { async = false }
-      -- TODO take min of last line or cursors
-      vim.api.nvim_win_set_cursor(0, cursor)
+      conform.format({ bufnr = args.buf })
 
       return true
     end
@@ -156,6 +163,9 @@ set_keymaps {
   { 'n', '[d',         vim.diagnostic.goto_prev },
   { 'n', ']d',         vim.diagnostic.goto_next },
 }
+
+vim.opt.exrc = true     -- allow project-local config
+vim.opt.secure = true   -- restrict unsafe commands in local configs
 -- buf_set_keymaps({
   --   {'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>'},
   --   {'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>'},
