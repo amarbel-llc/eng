@@ -25,11 +25,11 @@
     "brew-api": {
       "flake": false,
       "locked": {
-        "lastModified": 1761906893,
-        "narHash": "sha256-jPUi73oWooL7ykyik1Knnco9fRNYnIZKfIN0Z+KspQk=",
+        "lastModified": 1762201988,
+        "narHash": "sha256-QUDLq9dRJsP3cuXrSPepUKKQ6vdG4f2DnZPClw/AFsA=",
         "owner": "BatteredBunny",
         "repo": "brew-api",
-        "rev": "376ef8da5e0798ba0564cb787f5daf77f3cb7511",
+        "rev": "f363e1f807c25bee9cf823c073433cc91ad7b07f",
         "type": "github"
       },
       "original": {
@@ -145,7 +145,7 @@
       },
       "original": {
         "type": "tarball",
-        "url": "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz"
+        "url": "https://flakehub.com/f/numtide/flake-utils/0.1.102"
       }
     }
   },

@@ -8,11 +8,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/html-to-pdf",
-        "lastModified": 1761856126,
-        "narHash": "sha256-aPbFMi/YwlTmrqSL8w4YSpsyw8LnLxKS3Aa8b5s2Nt0=",
+        "lastModified": 1762205782,
+        "narHash": "sha256-m1CxExX5eZxYQyUZ/3FFUMQV9pAyiBIUt7OrCvq/E8E=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "6781bc9179845d4b9fb8936a06c3d4ab32a13d92",
+        "rev": "c333d34309176cb2eb76085e9567a7e51802fcdc",
         "type": "github"
       },
       "original": {
@@ -208,7 +208,7 @@
       },
       "original": {
         "type": "tarball",
-        "url": "https://flakehub.com/f/numtide/flake-utils/0.1.102.tar.gz"
+        "url": "https://flakehub.com/f/numtide/flake-utils/0.1.102"
       }
     },
     "utils_3": {
