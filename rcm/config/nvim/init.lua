@@ -12,14 +12,16 @@ vim.opt.listchars = {
 }
 
 local lsp_util = require("lsp_util")
+local conform = require("conform")
 
-local conform = require("conform").setup({
+conform.setup({
   formatters_by_ft = {
-    lua = { "stylua" },
-    python = { "isort", "black" },
-    php = { "phpcbf" },
-    rust = { "rustfmt", lsp_format = "fallback" },
     javascript = { "prettierd", "prettier", stop_after_first = true },
+    lua = { "stylua" },
+    nix = { "nixfmt-rfc-style", "nixpkgs_fmt", "nixfmt", "alejandra" },
+    php = { "phpcbf" },
+    python = { "isort", "black" },
+    rust = { "rustfmt", lsp_format = "fallback" },
   },
 })
 
@@ -86,7 +88,7 @@ vim.api.nvim_create_user_command(
         return false
       end
 
-      conform.format({ bufnr = args.buf })
+      conform.format({ bufnr = opts.buf })
 
       return true
     end

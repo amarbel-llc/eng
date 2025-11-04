@@ -9,14 +9,15 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nixpkgs-stable
-    , utils
-    , fh
+    {
+      self,
+      nixpkgs,
+      nixpkgs-stable,
+      utils,
+      fh,
     }:
-    (utils.lib.eachDefaultSystem
-      (system:
+    (utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = import nixpkgs {
           inherit system;
@@ -45,6 +46,5 @@
           packages = builtins.attrValues packages;
         };
       }
-      )
-    );
+    ));
 }

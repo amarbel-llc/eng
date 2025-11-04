@@ -11,33 +11,47 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nixpkgs-stable
-    , utils
-    , kmonad
-    }:
-    let
-      system = "x86_64-linux";
-
-      pkgs = import nixpkgs
-        {
-          inherit system;
-        };
-
-    in
     {
-      packages.${system} = {
-        default = with pkgs; symlinkJoin {
-          name = "system-packages";
-          paths = [
-            pcsclite
-            espanso-wayland
-            keyd
-            kmonad.packages.${system}.default
-            pinentry
-          ];
-        };
-      };
-    };
+      self,
+      nixpkgs,
+      nixpkgs-stable,
+      utils,
+      kmonad,
+    }:
+    (utils.lib.eachSystem
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+        let
+
+          pkgs = import nixpkgs {
+            inherit system;
+          };
+
+          pkgs-stable = import nixpkgs-stable {
+            inherit system;
+          };
+
+        in
+        {
+          packages.${system} = {
+            default =
+              with pkgs;
+              symlinkJoin {
+                name = "system-packages";
+                paths = [
+                  pcsclite
+                  espanso-wayland
+                  keyd
+                  kmonad.packages.${system}.default
+                  pinentry
+                ];
+              };
+          };
+        }
+      )
+    );
 }

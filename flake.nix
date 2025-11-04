@@ -35,39 +35,39 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nixpkgs-stable
-    , utils
+    {
+      self,
+      nixpkgs,
+      nixpkgs-stable,
+      utils,
       #
-    , devenv-go
-    , devenv-js
-    , devenv-nix
-    , devenv-shell
-    , devenv-system-common
-    , devenv-system-darwin
-    , devenv-system-linux
+      devenv-go,
+      devenv-js,
+      devenv-nix,
+      devenv-shell,
+      devenv-system-common,
+      devenv-system-darwin,
+      devenv-system-linux,
       #
-    , bash
-    , claude
-    , ssh
-    , ssh-agent-mux
-    , sweatshop
-    , vim
+      bash,
+      claude,
+      ssh,
+      ssh-agent-mux,
+      sweatshop,
+      vim,
       #
-    , chrest
-    , html-to-pdf
-    , pa6e
-    , dodder
+      chrest,
+      html-to-pdf,
+      pa6e,
+      dodder,
     }:
-    (utils.lib.eachDefaultSystem
-      (system:
+    (utils.lib.eachDefaultSystem (
+      system:
       let
 
         pkgs = import nixpkgs {
           inherit system;
         };
-
 
       in
       {
@@ -82,7 +82,8 @@
               aarch64-linux = devenv-system-linux;
               x86_64-darwin = devenv-system-darwin;
               x86_64-linux = devenv-system-linux;
-            }.${system}.packages.${system}.default
+            }
+            .${system}.packages.${system}.default
 
             # chrest.packages.${system}.default
             bash.packages.${system}.default
@@ -102,6 +103,6 @@
             devenv-nix.devShells.${system}.default
           ];
         };
-      })
-    );
+      }
+    ));
 }
