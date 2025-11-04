@@ -79,8 +79,9 @@
 
             {
               aarch64-darwin = devenv-system-darwin;
-              x86_64-linux = devenv-system-linux;
+              aarch64-linux = devenv-system-linux;
               x86_64-darwin = devenv-system-darwin;
+              x86_64-linux = devenv-system-linux;
             }.${system}.packages.${system}.default
 
             # chrest.packages.${system}.default
