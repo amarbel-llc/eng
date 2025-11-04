@@ -15,8 +15,37 @@ local lsp_util = require("lsp_util")
 local conform = require("conform")
 
 conform.setup({
+  formatters = {
+    equalprg = {
+      command = function()
+        local prg = vim.bo.equalprg
+
+        if prg and prg ~= "" then
+          -- Extract command (first word before any arguments)
+          local cmdName = vim.split(prg, " ")[1]
+          return cmdName
+        end
+      end,
+      args = function()
+        local prg = vim.bo.equalprg
+
+        if prg and prg ~= "" then
+          -- Extract arguments (everything after first space)
+          local parts = vim.split(prg, " ")
+
+          table.remove(parts, 1)
+
+          return parts
+        end
+
+        return {}
+      end,
+      stdin = true,
+    },
+  },
   formatters_by_ft = {
     javascript = { "prettierd", "prettier", stop_after_first = true },
+    go = { "equalprg" },
     lua = { "stylua" },
     nix = { "nixfmt-rfc-style", "nixpkgs_fmt", "nixfmt", "alejandra" },
     php = { "phpcbf" },
@@ -24,6 +53,10 @@ conform.setup({
     rust = { "rustfmt", lsp_format = "fallback" },
   },
 })
+
+vim.keymap.set({"n", "v"}, "=", function()
+  conform.format()
+end)
 
 vim.api.nvim_create_user_command(
   'ApplyImports',
