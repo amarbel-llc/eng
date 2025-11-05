@@ -1,0 +1,9 @@
+#! /usr/bin/env -S bash -e
+# vim: ft=bash
+
+# use `/usr/sbin/ldconfig` to avoid nix
+cat - <<-EOM
+{
+  "pcsc_driver": "$(/usr/sbin/ldconfig -p | grep libpcsclite | awk '{print $4}' | head -1)"
+}
+EOM

@@ -53,6 +53,7 @@
               fh
               gawk
               pkgs-stable.gftp
+              gh
               git
               git-secret
               glibcLocales
@@ -67,6 +68,7 @@
               hub
               imagemagick
               isolyzer
+              j2cli
               jq
               just
               lftp

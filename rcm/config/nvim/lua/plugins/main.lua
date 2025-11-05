@@ -4,6 +4,7 @@ return {
     'stevearc/conform.nvim',
     opts = {},
   },
+  { "Glench/Vim-Jinja2-Syntax" },
   { "hashivim/vim-terraform" },
   { "mustache/vim-mustache-handlebars" },
   { "direnv/direnv.vim" },

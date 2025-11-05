@@ -16,34 +16,44 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nixpkgs-stable
-    , utils
-    , brew-api
-    , brew
+    {
+      self,
+      nixpkgs,
+      nixpkgs-stable,
+      utils,
+      brew-api,
+      brew,
     }:
-    utils.lib.eachSystem [
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ]
-      (system:
-      let
-        pkgs = import nixpkgs
-          {
+    utils.lib.eachSystem
+      [
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ]
+      (
+        system:
+        let
+          pkgs = import nixpkgs {
             inherit system;
+            overlays = [ brew.overlays.default ];
           };
-      in
-      {
-        packages = {
-          default = with pkgs; symlinkJoin {
-            name = "system-packages";
-            paths = [
-              pinentry_mac
-              reattach-to-user-namespace
-            ];
+
+          casks = with pkgs.brewCasks; [
+            kitty
+          ];
+        in
+        {
+          packages = {
+            default =
+              with pkgs;
+              symlinkJoin {
+                name = "system-packages";
+                paths = [
+                  pinentry_mac
+                  reattach-to-user-namespace
+                ]
+                ++ casks;
+              };
           };
-        };
-      }
+        }
       );
 }
