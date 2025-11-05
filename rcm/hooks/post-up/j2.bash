@@ -8,6 +8,15 @@ dir_log="$XDG_STATE_HOME/rcm_j2"
 mkdir -p "$dir_log"
 log="$dir_log/log"
 
+touch "$log"
+
+while IFS= read -r output
+do
+  rm -f "$output"
+done < <(sort -u < "$log")
+
+rm "$log"
+
 while IFS= read -r -d '' template
 do
   output="${template%.j2}"
@@ -32,4 +41,4 @@ do
 
   echo "$output" >> "$log"
 
-done < <(find $HOME/.* -name .Trash -prune -o -iname '*.j2' -a -print0)
+done < <(find $HOME/.* -name .Trash -prune -o -iname '*.j2' -a -print0 | sort -z)
