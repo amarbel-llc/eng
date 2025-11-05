@@ -1,0 +1,9 @@
+#! /usr/bin/env -S bash -e
+# vim: ft=bash
+
+our_bash="$(readlink "$HOME/eng/result/bin/bash")"
+cat - <<-EOM
+{
+  "our_bash": "$our_bash"
+}
+EOM
