@@ -1,0 +1,7 @@
+#! /usr/bin/env -S bash -e
+
+"$HOME/eng/result/bin/direnv" hook fish
+
+echo 'direnv config generated.' >&2
+echo 'If fish shows an error like `fish: Command not found: /nix/store/*/bin/direnv`:' >&2
+echo 'run `exec fish` to reload the config.' >&2

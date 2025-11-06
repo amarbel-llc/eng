@@ -91,32 +91,12 @@ vim.api.nvim_create_user_command("ApplyImports", function(opts)
 end, {})
 
 vim.api.nvim_create_user_command("Format", function(opts)
-	-- conform.format({ bufnr = opts.buf })
+	vim.cmd("w")
 	conform.format()
-	-- local tryLspFormat = function()
-	--   local client = lsp_util.get_lsp_client()
-
-	--   if client == nil then
-	--     return false
-	--   end
-
-	--   local caps = client.server_capabilities
-
-	--   if caps["documentFormattingProvider"] ~= true then
-	--     return false
-	--   end
-
-	--   conform.format({ bufnr = opts.buf })
-
-	--   return true
-	-- end
-
-	-- if tryLspFormat() == false then
-	--   vim.cmd("call FormatViaEqualsPrg()")
-	-- end
 end, {})
 
 vim.api.nvim_create_user_command("ApplyImportsAndFormat", function(opts)
+	vim.cmd("w")
 	vim.cmd.ApplyImports()
 	conform.format()
 	vim.cmd("w")
