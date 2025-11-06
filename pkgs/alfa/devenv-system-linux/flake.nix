@@ -37,20 +37,18 @@
 
         in
         {
-          packages.${system} = {
-            default =
-              with pkgs;
-              symlinkJoin {
-                name = "system-packages";
-                paths = [
-                  pcsclite
-                  espanso-wayland
-                  keyd
-                  kmonad.packages.${system}.default
-                  pinentry
-                ];
-              };
-          };
+          packages.default =
+            with pkgs;
+            symlinkJoin {
+              name = "system-packages";
+              paths = [
+                pcsclite
+                espanso-wayland
+                keyd
+                kmonad.packages.${system}.default
+                pinentry
+              ];
+            };
         }
       )
     );

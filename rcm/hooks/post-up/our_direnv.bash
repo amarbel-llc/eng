@@ -1,5 +1,6 @@
 #! /usr/bin/env -S bash -e
 
+# TODO transition to templates
 git_root="$(git rev-parse --show-toplevel)"
 our_direnv="$(readlink "$git_root/result/bin/direnv")"
 echo 'generating `~/.config/fish/direnv-config.fish`' >&2
