@@ -18,9 +18,12 @@
         {
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              nodePackages.typescript-language-server
               nodePackages.typescript
+              nodePackages.typescript-language-server
               nodejs
+              vimPlugins.nvim-vtsls
+              vscode-langservers-extracted
+              vtsls
             ];
           };
         })

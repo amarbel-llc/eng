@@ -40,6 +40,7 @@ conform.setup({
 		python = { "isort", "black" },
 		rust = { "rustfmt", lsp_format = "fallback" },
 		sh = { "ftplugin", "shfmt" },
+		typescript = { "prettierd", "prettier", stop_after_first = true },
 	},
 })
 
