@@ -2,3 +2,7 @@
 
 Include ~/.config/ssh/my-config
 Include ~/.config/ssh/recurse
+
+Host *
+  ForwardAgent "~/.local/state/ssh-agent-mux/agent.sock"
+	Include "~/.config/step/ssh/includes"

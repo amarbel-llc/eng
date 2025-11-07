@@ -3,11 +3,13 @@
 # keep sorted
 # export PATH="$HOME/eng/result/bin:$PATH"
 
-export EDITOR="$HOME/.local/bin/vim"
+# export EDITOR="$HOME/eng/result/bin/hx"
+export EDITOR="$HOME/eng/result/bin/nvim"
 export GIT_CONFIG_GLOBAL="$HOME/.config/git/config"
 export GNUPGHOME="$HOME/.config/gnupg"
-export GPG_TTY="$(tty)"
 export GOPATH="$HOME/.cache/go"
+export GPG_TTY="$(tty)"
+export HOMEBREW_NO_AUTO_UPDATE="1"
 export LESS="-x4 -R"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh/gpg-agent.sock"
 export SSH_HOME="$HOME/.config/ssh"
