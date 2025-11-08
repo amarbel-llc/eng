@@ -43,10 +43,12 @@
               name = "system-packages";
               paths = [
                 pcsclite
+                pinentry
                 espanso-wayland
                 keyd
+              ]
+              ++ pkgs.lib.optionals (system == "x86_64-linux") [
                 kmonad.packages.${system}.default
-                pinentry
               ];
             };
         }

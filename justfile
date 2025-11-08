@@ -129,4 +129,7 @@ build-rcm-rcrc:
 @build-rcm-hooks-post-up:
   chmod +x *
 
+run-nix cmd *ARGS:
+  nix {{cmd}} {{nix_overrides}} {{ARGS}}
+
 build: build-nix build-rcm

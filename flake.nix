@@ -76,14 +76,10 @@
           name = "source";
           paths = [
             devenv-system-common.packages.${system}.default
-
-            {
-              aarch64-darwin = devenv-system-darwin;
-              aarch64-linux = devenv-system-linux;
-              x86_64-darwin = devenv-system-darwin;
-              x86_64-linux = devenv-system-linux;
-            }
-            .${system}.packages.${system}.default
+          ]
+          ++ pkgs.lib.optional pkgs.stdenv.isDarwin devenv-system-darwin.packages.${system}.default
+          ++ pkgs.lib.optional pkgs.stdenv.isLinux devenv-system-linux.packages.${system}.default
+          ++ [
 
             # chrest.packages.${system}.default
             bash.packages.${system}.default
