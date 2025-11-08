@@ -94,20 +94,21 @@ update-nix:
 
 update: update-nix
 
-nix_overrides := shell('''
-  nix eval --file flake.nix --json inputs \
-    | jq -r '
-      [
-        to_entries[]
-        | select(.value.url | startswith("github:friedenberg/eng"))
-        | [
-            "--override-input",
-            .key,
-            (.value.url | sub("github:friedenberg/eng\\?dir="; "path:./"))
-        ]
-      ] | add | join(" ")
-    '
-      ''')
+# nix_overrides := shell('''
+#   nix eval --file flake.nix --json inputs \
+#     | jq -r '
+#       [
+#         to_entries[]
+#         | select(.value.url | startswith("github:friedenberg/eng"))
+#         | [
+#             "--override-input",
+#             .key,
+#             (.value.url | sub("github:friedenberg/eng\\?dir="; "path:./"))
+#         ]
+#       ] | add | join(" ")
+#     '
+#       ''')
+nix_overrides := ""
 
 build-nix:
   nix build --show-trace {{nix_overrides}}

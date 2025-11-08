@@ -4,34 +4,10 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/e9b7f2ff62b35f711568b1f0866243c7c302028d";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
-    # devenv
-    devenv-go.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-go";
-    devenv-js.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-js";
-    devenv-nix.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-nix";
-    devenv-shell.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-shell";
-    devenv-system-common.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-common";
-    devenv-system-linux.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-linux";
-    devenv-system-darwin.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-system-darwin";
-
-    bash.url = "github:friedenberg/eng?dir=pkgs/alfa/bash";
-    claude.url = "github:friedenberg/eng?dir=pkgs/alfa/claude";
-    ssh.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh";
-    ssh-agent-mux.url = "github:friedenberg/eng?dir=pkgs/alfa/ssh-agent-mux";
-    sweatshop.url = "github:friedenberg/eng?dir=pkgs/bravo/sweatshop";
-    vim.url = "github:friedenberg/eng?dir=pkgs/alfa/vim";
-
-    html-to-pdf.url = "github:friedenberg/eng?dir=pkgs/alfa/html-to-pdf";
-
-    pa6e.url = "github:friedenberg/eng?dir=pkgs/alfa/pa6e";
-    pa6e.inputs.html-to-pdf.follows = "html-to-pdf";
-
-    chrest.url = "github:friedenberg/eng?dir=pkgs/bravo/chrest";
-    chrest.inputs.devenv-go.follows = "devenv-go";
-    chrest.inputs.devenv-js.follows = "devenv-js";
-
+    chrest.url = "github:friedenberg/chrest";
     dodder.url = "github:friedenberg/dodder?dir=go";
-    dodder.inputs.devenv-go.follows = "devenv-go";
-    dodder.inputs.devenv-shell.follows = "devenv-shell";
+    fh.url = "https://flakehub.com/f/DeterminateSystems/fh/0.1.21.tar.gz";
+    gomod2nix.url = "github:nix-community/gomod2nix";
   };
 
   outputs =
@@ -40,64 +16,115 @@
       nixpkgs,
       nixpkgs-stable,
       utils,
-      #
-      devenv-go,
-      devenv-js,
-      devenv-nix,
-      devenv-shell,
-      devenv-system-common,
-      devenv-system-darwin,
-      devenv-system-linux,
-      #
-      bash,
-      claude,
-      ssh,
-      ssh-agent-mux,
-      sweatshop,
-      vim,
-      #
-      chrest,
-      html-to-pdf,
-      pa6e,
-      dodder,
-    }:
+      ...
+    }@inputs:
     (utils.lib.eachDefaultSystem (
       system:
       let
+        pkgs = import nixpkgs { inherit system; };
 
-        pkgs = import nixpkgs {
-          inherit system;
+        # Helper functions remain the same
+        getFlakesInDir =
+          dir:
+          let
+            entries = builtins.readDir (self + "/${dir}");
+            flakeDirs = builtins.filter (
+              name: entries.${name} == "directory" && builtins.pathExists (self + "/${dir}/${name}/flake.nix")
+            ) (builtins.attrNames entries);
+          in
+          map (name: {
+            inherit name;
+            path = "${dir}/${name}";
+          }) flakeDirs;
+
+        pkgDirs =
+          let
+            pkgsEntries = builtins.readDir (self + "/pkgs");
+            dirs = builtins.filter (name: pkgsEntries.${name} == "directory") (builtins.attrNames pkgsEntries);
+          in
+          builtins.sort builtins.lessThan dirs;
+
+        orderedFlakes = builtins.concatLists (map (dir: getFlakesInDir "pkgs/${dir}") pkgDirs);
+
+        # Modified resolution logic
+        resolvedFlakes = builtins.foldl' (
+          acc: flakeInfo:
+          let
+            flakeNix = import (self + "/${flakeInfo.path}/flake.nix");
+            expectedArgs = builtins.functionArgs flakeNix.outputs;
+            flakeSelf = self + "/${flakeInfo.path}";
+
+            # Build available inputs
+            availableInputs = {
+              self = flakeSelf;
+              inherit nixpkgs nixpkgs-stable utils;
+            }
+            // acc
+            // inputs; # acc has resolved monorepo flakes, inputs has external
+
+            # For child flake inputs that reference other monorepo flakes,
+            # create a mapping function
+            resolveMonorepoInput =
+              inputName: inputSpec:
+              if acc ? ${inputName} then
+                acc.${inputName} # Already resolved monorepo flake
+              else if inputs ? ${inputName} then
+                inputs.${inputName} # External input passed from top-level
+              else if builtins.isAttrs inputSpec && inputSpec ? follows then
+                # Handle follows declarations
+                let
+                  followPath = pkgs.lib.splitString "." inputSpec.follows;
+                in
+                pkgs.lib.getAttrFromPath followPath availableInputs
+              else
+                # For URL-based inputs in child flakes, you need to either:
+                # 1. Add them as top-level inputs, or
+                # 2. Use a dummy/mock value, or
+                # 3. Throw an error
+                throw "Cannot resolve input ${inputName} for ${flakeInfo.name} - add it to top-level inputs";
+
+            # Build the inputs for this flake
+            flakeInputs =
+              let
+                # Start with what we can directly provide
+                directInputs = pkgs.lib.filterAttrs (name: _: builtins.hasAttr name expectedArgs) availableInputs;
+
+                # Add any missing inputs that are defined in the flake itself
+                childDefinedInputs =
+                  if flakeNix ? inputs then pkgs.lib.mapAttrs resolveMonorepoInput flakeNix.inputs else { };
+              in
+              directInputs
+              // (pkgs.lib.filterAttrs (
+                name: _: builtins.hasAttr name expectedArgs && !(directInputs ? ${name})
+              ) childDefinedInputs);
+
+            flakeOutputs = flakeNix.outputs flakeInputs;
+          in
+          acc // { ${flakeInfo.name} = flakeOutputs; }
+        ) { } orderedFlakes;
+
+        # Rest remains the same...
+        localPackages = pkgs.lib.filterAttrs (n: v: v != null) (
+          builtins.mapAttrs (
+            name: flake:
+            if name == "devenv-system-linux" && !pkgs.stdenv.isLinux then
+              null
+            else if name == "devenv-system-darwin" && !pkgs.stdenv.isDarwin then
+              null
+            else
+              flake.packages.${system}.default or null
+          ) resolvedFlakes
+        );
+
+        externalPackages = pkgs.lib.filterAttrs (n: v: v != null) {
+          dodder = inputs.dodder.packages.${system}.default or null;
         };
-
       in
       {
         packages.default = pkgs.symlinkJoin {
           failOnMissing = true;
           name = "source";
-          paths = [
-            devenv-system-common.packages.${system}.default
-          ]
-          ++ pkgs.lib.optional pkgs.stdenv.isDarwin devenv-system-darwin.packages.${system}.default
-          ++ pkgs.lib.optional pkgs.stdenv.isLinux devenv-system-linux.packages.${system}.default
-          ++ [
-
-            # chrest.packages.${system}.default
-            bash.packages.${system}.default
-            claude.packages.${system}.default
-            dodder.packages.${system}.default
-            # html-to-pdf.packages.${system}.default
-            # pa6e.packages.${system}.default
-            ssh.packages.${system}.default
-            ssh-agent-mux.packages.${system}.default
-            # sweatshop.packages.${system}.default
-            vim.packages.${system}.default
-          ];
-        };
-
-        devShells.default = pkgs.mkShell {
-          inputsFrom = [
-            devenv-nix.devShells.${system}.default
-          ];
+          paths = (builtins.attrValues localPackages) ++ (builtins.attrValues externalPackages);
         };
       }
     ));
