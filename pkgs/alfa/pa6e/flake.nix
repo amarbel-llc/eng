@@ -27,13 +27,15 @@
 
         name = "pa6e-markdown-to-html";
 
-        buildInputs = with pkgs; [
-          uv
-          bluez
-          imagemagick
-          pandoc
-          html-to-pdf.packages.${system}.default
-        ];
+        buildInputs =
+          with pkgs;
+          [
+            uv
+            imagemagick
+            pandoc
+            html-to-pdf.packages.${system}.default
+          ]
+          ++ (lib.optionals pkgs.stdenv.isLinux [ pkgs.bluez ]);
 
         pa6e-markdown-to-html =
           (pkgs.writeScriptBin name (builtins.readFile ./markdown-to-html.bash)).overrideAttrs
@@ -44,9 +46,7 @@
         # to include all the templates and styles
         src = self;
 
-      in
-      {
-        packages.default = pkgs.symlinkJoin {
+        defaultPackage = pkgs.symlinkJoin {
           name = name;
 
           paths = [
@@ -62,13 +62,20 @@
           postBuild = "wrapProgram $out/bin/${name} --prefix PATH : $out/bin";
         };
 
-        devShells.default = pkgs.mkShell {
-          packages = (buildInputs);
+        defaultDevShell =
+          if pkgs.stdenv.isLinux then
+            pkgs.mkShell {
+              packages = (buildInputs);
 
-          LD_LIBRARY_PATH = [ "${pkgs.bluez.out}/lib" ];
+              LD_LIBRARY_PATH = [ "${pkgs.bluez.out}/lib" ];
+            }
+          else
+            pkgs.mkShell { };
 
-          inputsFrom = [ ];
-        };
+      in
+      {
+        packages.default = defaultPackage;
+        devShells.default = defaultDevShell;
       }
     );
 }
