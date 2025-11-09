@@ -8,6 +8,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/dcfec31546cb7676a5f18e80008e5c56af471925";
     devenv-nix.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-nix";
     devenv-shell.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-shell";
+    sand-castle.url = "github:friedenberg/eng?dir=pkgs/alfa/sand-castle";
   };
 
   outputs =
@@ -16,6 +17,7 @@
       nixpkgs,
       devenv-nix,
       devenv-shell,
+      sand-castle,
       nixpkgs-stable,
       utils,
     }:
@@ -27,34 +29,35 @@
           config.allowUnfree = true;
         };
 
+        pkg-sand-castle = sand-castle.packages.${system}.default;
+
         sweatshop = pkgs.stdenv.mkDerivation {
           name = "sweatshop";
+
           src = ./sweatshop.sh;
-          buildInputs = [
-            pkgs.bubblewrap
-            pkgs.claude-code
-            pkgs.gum
+          dontUnpack = true;
+
+          buildInputs = with pkgs; [
+            claude-code
+            gum
+            pkg-sand-castle
           ];
-          phases = [ "installPhase" ];
+
           installPhase = ''
             mkdir -p $out/bin
             substitute $src $out/bin/sweatshop \
-              --replace "@bwrap@" "${pkgs.bubblewrap}/bin/bwrap" \
+              --replace "@bwrap@" "${pkg-sand-castle}/bin/sand-castle" \
               --replace "@claude-code@" "${pkgs.claude-code}/bin/claude" \
               --replace "@gum@" "${pkgs.gum}/bin/gum"
             chmod +x $out/bin/sweatshop
           '';
         };
-      in
-      {
-        packages.default = sweatshop;
-        packages.sweatshop = sweatshop;
 
-        devShells.default = pkgs.mkShell {
+        defaultDevShell = pkgs.mkShell {
           buildInputs = with pkgs; [
-            ripgrep
-            bubblewrap
             gum
+            ripgrep
+            pkg-sand-castle
             sweatshop
           ];
 
@@ -65,6 +68,12 @@
             devenv-shell.devShells.${system}.default
           ];
         };
+      in
+      {
+        packages.default = sweatshop;
+        packages.sweatshop = sweatshop;
+
+        devShells.default = defaultDevShell;
 
         apps.default = {
           type = "app";
