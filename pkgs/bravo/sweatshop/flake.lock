@@ -37,11 +37,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-nix",
-        "lastModified": 1762698854,
-        "narHash": "sha256-UI6OsIgC0agolPHmBtCm/7ihcR8bXDTOO6HiXx7x0d8=",
+        "lastModified": 1762702266,
+        "narHash": "sha256-mM4zGUSx+gIJmqO1/5E1uGke4+Mutl54XMCztRFrh2k=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "3184b478287914205b832d7487fb8cedbf9aa05c",
+        "rev": "51d7a7abda7706904a51a41a8659089fb4dcdfaa",
         "type": "github"
       },
       "original": {
@@ -82,11 +82,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-shell",
-        "lastModified": 1762698854,
-        "narHash": "sha256-UI6OsIgC0agolPHmBtCm/7ihcR8bXDTOO6HiXx7x0d8=",
+        "lastModified": 1762702266,
+        "narHash": "sha256-mM4zGUSx+gIJmqO1/5E1uGke4+Mutl54XMCztRFrh2k=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "3184b478287914205b832d7487fb8cedbf9aa05c",
+        "rev": "51d7a7abda7706904a51a41a8659089fb4dcdfaa",
         "type": "github"
       },
       "original": {
@@ -475,11 +475,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/sand-castle",
-        "lastModified": 1762698854,
-        "narHash": "sha256-UI6OsIgC0agolPHmBtCm/7ihcR8bXDTOO6HiXx7x0d8=",
+        "lastModified": 1762702266,
+        "narHash": "sha256-mM4zGUSx+gIJmqO1/5E1uGke4+Mutl54XMCztRFrh2k=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "3184b478287914205b832d7487fb8cedbf9aa05c",
+        "rev": "51d7a7abda7706904a51a41a8659089fb4dcdfaa",
         "type": "github"
       },
       "original": {

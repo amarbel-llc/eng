@@ -5,7 +5,7 @@
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     # explicitly included separately
-    explicit-chrest.url = "github:friedenberg/chrest";
+    explicit-chrest.url = "github:friedenberg/chrest?dir=go";
     explicit-dodder.url = "github:friedenberg/dodder?dir=go";
     explicit-ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
 
@@ -123,17 +123,33 @@
 
         explicitInputs = pkgs.lib.filterAttrs (name: _: pkgs.lib.hasPrefix "explicit-" name) inputs;
 
-        _ = builtins.trace "explicit: ${explicitInputs}";
+        # Extract packages from explicit inputs
+        explicitPackages = builtins.listToAttrs (
+          builtins.filter (x: x.value != null) (
+            map (
+              name:
+              let
+                # Remove the "explicit-" prefix for the package name
+                packageName = pkgs.lib.removePrefix "explicit-" name;
+                flake = inputs.${name};
+              in
+              {
+                name = packageName;
+                value = flake.packages.${system}.default or null;
+              }
+            ) (builtins.attrNames explicitInputs)
+          )
+        );
       in
       {
         packages =
           localPackages
-          // explicitInputs
+          // explicitPackages
           // {
             default = pkgs.symlinkJoin {
               failOnMissing = true;
               name = "source";
-              paths = (builtins.attrValues localPackages) ++ (builtins.attrValues explicitInputs);
+              paths = (builtins.attrValues localPackages) ++ (builtins.attrValues explicitPackages);
             };
           };
       }
