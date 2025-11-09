@@ -3,12 +3,16 @@ set -euo pipefail
 
 # Default values
 COMMAND=""
+# shellcheck disable=SC2034
 FORCE="false"
 ALL="false"
 SWEATSHOP_ID=""
 
 # TODO support other $AGENT's
 AGENT=claude
+
+# Tool paths (substituted by Nix)
+GUM="${GUM:-@gum@}"
 
 # Function to show usage
 usage() {
@@ -96,37 +100,18 @@ run_cmd() {
   name="$1"
   shift
 
-  echo "Run: '$name'" >&2
-  echo >&2
-  echo "  \$ $*" >&2
-  echo >&2
+  $GUM spin --spinner dot --title "$name" -- bash -c "$*" 2>&1 | while IFS= read -r line; do
+    echo "  $line" >&2
+  done
 
-  # shellcheck disable=SC2034
-  coproc cmd {
-    local needs_newline=""
+  status=${PIPESTATUS[0]}
 
-    # shellcheck disable=SC2068
-    eval "$*" 2>&1 | while IFS= read -r line; do
-      needs_newline=1
-      echo "  > $line" >&2
-    done
-
-    status=$?
-
-    if [[ -n $needs_newline ]]; then
-      echo >&2
-    fi
-
-    exit $status
-  }
-
-  # shellcheck disable=SC2154
-  if ! wait "$cmd_PID"; then
-    echo "Failure: '$name'" >&2
+  if [[ $status -ne 0 ]]; then
+    $GUM style --foreground 196 "✗ Failed: $name"
     exit 1
   fi
 
-  echo "Success '$name'" >&2
+  $GUM style --foreground 42 "✓ $name"
 }
 
 # Helper functions for worktree support
@@ -168,7 +153,7 @@ destroy() {
   fi
 
   if [[ ${#sweatshops[@]} -eq 0 ]]; then
-    echo "No sweatshops to destroy" >&2
+    $GUM style --foreground 214 "No sweatshops to destroy"
     return 0
   fi
 
@@ -257,35 +242,26 @@ run_temp() {
 
     # Check if worktree is dirty
     if git -C "$temp_dir" diff --quiet && git -C "$temp_dir" diff --cached --quiet; then
-      echo "No changes" >&2
+      $GUM style --foreground 244 "No changes"
       # Worktree is clean, destroy without prompting
       destroy "$cleanup_sweatshop_id"
     else
       # Worktree is dirty, show changes and ask for confirmation
-      {
-        echo "=== Reviewing $cleanup_sweatshop_id changes before pulling ==="
-        echo ""
-        git -C "$temp_dir" diff --color=always
-      } | ${PAGER:-less -R}
+      $GUM style --border double --border-foreground 212 --padding "1 2" --margin "1 0" \
+        "Reviewing changes in $cleanup_sweatshop_id"
 
-      echo "" >&2
-      echo -n "Do you want to pull these changes to the current branch before destroying? (y/N): " >&2
-      read -r response
+      git -C "$temp_dir" diff --color=always | ${PAGER:-less -R}
 
-      case "$response" in
-      [yY] | [yY][eE][sS])
-        echo "Pulling changes..." >&2
+      if $GUM confirm "Pull these changes to the current branch before destroying?"; then
         if pull "$cleanup_sweatshop_id"; then
-          echo "Changes successfully pulled." >&2
+          $GUM style --foreground 42 "✓ Changes successfully pulled"
         else
-          echo "Warning: Failed to pull changes. Aborting." >&2
+          $GUM style --foreground 196 "✗ Failed to pull changes. Aborting."
           exit 1
         fi
-        ;;
-      *)
-        echo "Changes will be lost." >&2
-        ;;
-      esac
+      else
+        $GUM style --foreground 214 "⚠ Changes will be lost"
+      fi
 
       destroy "$cleanup_sweatshop_id"
     fi
@@ -399,13 +375,13 @@ validate_sweatshop() {
 
   # Check if sweatshop_id is prefixed with 'sweatshop-'
   if [[ $sweatshop_id != sweatshop-* ]]; then
-    echo "Error: Sweatshop ID '$sweatshop_id' must be prefixed with 'sweatshop-'" >&2
+    $GUM style --foreground 196 "Error: Sweatshop ID '$sweatshop_id' must be prefixed with 'sweatshop-'"
     exit 1
   fi
 
   # Validate that sweatshop exists as worktree
   if ! git worktree list --porcelain | grep -q "worktree.*$sweatshop_id"; then
-    echo "Error: Sweatshop '$sweatshop_id' does not exist" >&2
+    $GUM style --foreground 196 "Error: Sweatshop '$sweatshop_id' does not exist"
     exit 1
   fi
 }
@@ -425,7 +401,7 @@ get() {
   sweatshops=$(list)
 
   if [[ -z $sweatshops ]]; then
-    echo "Error: No sweatshops found" >&2
+    $GUM style --foreground 196 "Error: No sweatshops found"
     exit 1
   fi
 
@@ -433,10 +409,8 @@ get() {
   count=$(echo "$sweatshops" | wc -l)
 
   if [[ $count -gt 1 ]]; then
-    echo "Error: Multiple sweatshops found:" >&2
-    while IFS= read -r line; do
-      echo "  $line" >&2
-    done <<<"$sweatshops"
+    $GUM style --foreground 196 "Error: Multiple sweatshops found:"
+    echo "$sweatshops" | $GUM format --type markdown
     exit 1
   fi
 
@@ -466,7 +440,7 @@ pull() {
 }
 
 sync() {
-  echo "not implemented yet" >&1
+  $GUM style --foreground 214 "⚠ Not implemented yet"
   exit 1
 }
 

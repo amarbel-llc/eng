@@ -8,8 +8,15 @@
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-stable, utils }:
-    utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-stable,
+      utils,
+    }:
+    utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = import nixpkgs {
           inherit system;
@@ -21,18 +28,20 @@
 
         name = "html-to-pdf";
 
-        buildInputs = with pkgs; [
-          httpie
-          jq
-          websocat
-          pkgs-stable.chromium
-        ];
+        buildInputs =
+          with pkgs;
+          [
+            httpie
+            jq
+            websocat
+          ]
+          ++ lib.optional (!pkgs.stdenv.isDarwin) pkgs-stable.chromium;
 
-        html-to-pdf = (
-          pkgs.writeScriptBin name (builtins.readFile ./html-to-pdf.bash)
-        ).overrideAttrs (old: {
-          buildCommand = "${old.buildCommand}\n patchShebangs $out";
-        });
+        html-to-pdf =
+          (pkgs.writeScriptBin name (builtins.readFile ./html-to-pdf.bash)).overrideAttrs
+            (old: {
+              buildCommand = "${old.buildCommand}\n patchShebangs $out";
+            });
 
       in
       {
@@ -44,11 +53,14 @@
         };
 
         devShells.default = pkgs.mkShell {
-          packages = (with pkgs; [
-            httpie
-            jq
-            websocat
-          ]);
+          packages = (
+            with pkgs;
+            [
+              httpie
+              jq
+              websocat
+            ]
+          );
 
           inputsFrom = [ ];
         };

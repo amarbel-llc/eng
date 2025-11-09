@@ -8,6 +8,8 @@
     dodder.url = "github:friedenberg/dodder?dir=go";
     fh.url = "https://flakehub.com/f/DeterminateSystems/fh/0.1.21.tar.gz";
     gomod2nix.url = "github:nix-community/gomod2nix";
+    ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
+    brew.url = "github:BatteredBunny/brew-nix";
   };
 
   outputs =

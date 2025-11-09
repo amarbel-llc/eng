@@ -15,7 +15,7 @@ local lsp_util = require("lsp_util")
 local conform = require("conform")
 local conform_util = require("conform.util")
 
-conform.setup({
+conform.setup {
 	formatters = {
 		ftplugin = function(bufnr)
 			local prg = vim.b[bufnr].conform
@@ -42,7 +42,102 @@ conform.setup({
 		sh = { "ftplugin", "shfmt" },
 		typescript = { "prettierd", "prettier", stop_after_first = true },
 	},
+}
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.md",
+  command = "set filetype=pandoc",
 })
+
+-- require'nvim-treesitter.install'.prefer_git = true
+
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all" (the listed parsers MUST always be installed)
+  ensure_installed = {
+    "awk",
+    "bash",
+    "c",
+    "css", 
+    "csv",
+    "diff",
+    "dockerfile",
+    "dot",
+    "editorconfig",
+    "fish",
+    "git_config",
+    "git_rebase",
+    "gitattributes",
+    "gitcommit",
+    "gitignore",
+    "go",
+    "gomod",
+    "gosum",
+    "gotmpl",
+    "gowork",
+    "hcl",
+    "html",
+    "http",
+    "ini",
+    "java",
+    "javascript",
+    "jq",
+    "json",
+    "just",
+    "latex",
+    "lua",
+    "make",
+    "markdown",
+    "markdown_inline",
+    "nix",
+    "perl",
+    "php",
+    "printf",
+    "proto",
+    "python",
+    "query",
+    "regex",
+    "ruby",
+    "rust",
+    "scala",
+    "scss",
+    "sql",
+    "strace",
+    "swift",
+    "tcl",
+    "terraform",
+    "textproto",
+    "tmux",
+    "toml",
+    "tsv",
+    "typescript",
+    "typst",
+    "udev",
+    "vhs",
+    "vim",
+    "vim",
+    "vimdoc",
+    "xml",
+    "yaml",
+    "zig",
+  },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = true,
+
+  highlight = {
+    enable = true,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
 
 vim.keymap.set({ "n", "v" }, "=", function()
 	conform.format()

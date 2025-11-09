@@ -33,13 +33,15 @@
           buildInputs = [
             pkgs.bubblewrap
             pkgs.claude-code
+            pkgs.gum
           ];
           phases = [ "installPhase" ];
           installPhase = ''
             mkdir -p $out/bin
             substitute $src $out/bin/sweatshop \
               --replace "@bwrap@" "${pkgs.bubblewrap}/bin/bwrap" \
-              --replace "@claude-code@" "${pkgs.claude-code}/bin/claude"
+              --replace "@claude-code@" "${pkgs.claude-code}/bin/claude" \
+              --replace "@gum@" "${pkgs.gum}/bin/gum"
             chmod +x $out/bin/sweatshop
           '';
         };
@@ -52,6 +54,7 @@
           buildInputs = with pkgs; [
             ripgrep
             bubblewrap
+            gum
             sweatshop
           ];
 
