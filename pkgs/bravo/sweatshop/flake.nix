@@ -34,7 +34,7 @@
         sweatshop = pkgs.stdenv.mkDerivation {
           name = "sweatshop";
 
-          src = ./sweatshop.sh;
+          src = ./sweatshop.bash;
           dontUnpack = true;
 
           buildInputs = with pkgs; [

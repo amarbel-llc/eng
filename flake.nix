@@ -4,12 +4,15 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/e9b7f2ff62b35f711568b1f0866243c7c302028d";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
-    chrest.url = "github:friedenberg/chrest";
-    dodder.url = "github:friedenberg/dodder?dir=go";
+    # explicitly included separately
+    explicit-chrest.url = "github:friedenberg/chrest";
+    explicit-dodder.url = "github:friedenberg/dodder?dir=go";
+    explicit-ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
+
+    # implicitly required by flake tree
+    brew.url = "github:BatteredBunny/brew-nix";
     fh.url = "https://flakehub.com/f/DeterminateSystems/fh/0.1.21.tar.gz";
     gomod2nix.url = "github:nix-community/gomod2nix";
-    ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
-    brew.url = "github:BatteredBunny/brew-nix";
   };
 
   outputs =
@@ -118,16 +121,21 @@
           ) resolvedFlakes
         );
 
-        externalPackages = pkgs.lib.filterAttrs (n: v: v != null) {
-          dodder = inputs.dodder.packages.${system}.default or null;
-        };
+        explicitInputs = pkgs.lib.filterAttrs (name: _: pkgs.lib.hasPrefix "explicit-" name) inputs;
+
+        _ = builtins.trace "explicit: ${explicitInputs}";
       in
       {
-        packages.default = pkgs.symlinkJoin {
-          failOnMissing = true;
-          name = "source";
-          paths = (builtins.attrValues localPackages) ++ (builtins.attrValues externalPackages);
-        };
+        packages =
+          localPackages
+          // explicitInputs
+          // {
+            default = pkgs.symlinkJoin {
+              failOnMissing = true;
+              name = "source";
+              paths = (builtins.attrValues localPackages) ++ (builtins.attrValues explicitInputs);
+            };
+          };
       }
     ));
 }
