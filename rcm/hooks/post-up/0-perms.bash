@@ -1,5 +1,9 @@
 #! /usr/bin/env -S bash -e
 
+export PATH="$HOME/eng/result/bin:$PATH"
+
+gum log -l info "updating directory permissions"
+
 chmod 700 "$HOME"/.config/ssh
 chmod 700 "$HOME"/.config/gnupg
 

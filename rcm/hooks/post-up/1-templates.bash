@@ -1,6 +1,7 @@
 #! /usr/bin/env -S bash -e
 
 : "${XDG_STATE_HOME:=$HOME/.local/state}"
+export PATH="$HOME/eng/result/bin:$PATH"
 
 dir_log="$XDG_STATE_HOME/rcm"
 mkdir -p "$dir_log"
@@ -13,6 +14,8 @@ while IFS= read -r output; do
 done < <(sort -u <"$log")
 
 rm "$log"
+
+gum log -l info "processing templates and logging to $log"
 
 function format_with_vim() {
   true
@@ -28,6 +31,8 @@ function format_with_vim() {
 
 # jinja
 while IFS= read -r -d '' template; do
+  gum log -l info "processing jinja template $template"
+
   output="${template%.j2}"
   # TODO change to `.j2-json` extension
   values_literal="$template.json"
@@ -71,6 +76,8 @@ done < <(find "$HOME"/.* -name .Trash -prune -o -iname '*.j2' -a -print0 | sort 
 
 # rcm-script
 while IFS= read -r -d '' template; do
+  gum log -l info "processing script template $template"
+
   output="${template%.rcm-script}"
   output_buffer="$(mktemp)"
 
