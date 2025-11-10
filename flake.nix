@@ -8,6 +8,7 @@
     explicit-chrest.url = "github:friedenberg/chrest?dir=go";
     explicit-dodder.url = "github:friedenberg/dodder?dir=go";
     explicit-ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
+    explicit-glyphs-agent-mux.url = "github:friedenberg/glyphs";
 
     # implicitly required by flake tree
     brew.url = "github:BatteredBunny/brew-nix";
