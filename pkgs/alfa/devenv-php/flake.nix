@@ -20,7 +20,8 @@
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               intelephense
-              php82Packages.php-codesniffer
+              php84Packages.php-codesniffer
+              php84Packages.php-cs-fixer
             ];
           };
         })

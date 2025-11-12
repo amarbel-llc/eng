@@ -96,11 +96,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-go",
-        "lastModified": 1762702266,
-        "narHash": "sha256-mM4zGUSx+gIJmqO1/5E1uGke4+Mutl54XMCztRFrh2k=",
+        "lastModified": 1762817542,
+        "narHash": "sha256-VXcvO0myCOrEpWQzolLryJI28odYXF4ihs/0qJCAPH8=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "51d7a7abda7706904a51a41a8659089fb4dcdfaa",
+        "rev": "7873eb23b6b877fa780117fe2d04f0751e7ee19f",
         "type": "github"
       },
       "original": {
@@ -215,11 +215,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-shell",
-        "lastModified": 1762702266,
-        "narHash": "sha256-mM4zGUSx+gIJmqO1/5E1uGke4+Mutl54XMCztRFrh2k=",
+        "lastModified": 1762817542,
+        "narHash": "sha256-VXcvO0myCOrEpWQzolLryJI28odYXF4ihs/0qJCAPH8=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "51d7a7abda7706904a51a41a8659089fb4dcdfaa",
+        "rev": "7873eb23b6b877fa780117fe2d04f0751e7ee19f",
         "type": "github"
       },
       "original": {
@@ -263,11 +263,11 @@
       },
       "locked": {
         "dir": "go",
-        "lastModified": 1762779648,
-        "narHash": "sha256-Jnuxdx02+zVEiQjIjlhU6cmrtdwXMTBky7hI70d0gnk=",
+        "lastModified": 1762861164,
+        "narHash": "sha256-y56e/Ys9suMVhqtZe44+/M8SJlNSiGO+Jm1UdirDWbQ=",
         "owner": "friedenberg",
         "repo": "dodder",
-        "rev": "d790c8ffd8e740ed4064f85c7285bafc557a4d5a",
+        "rev": "c1a494468ef70756f004de4f5eb2b6036f2c874a",
         "type": "github"
       },
       "original": {

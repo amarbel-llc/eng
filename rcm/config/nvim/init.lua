@@ -15,7 +15,7 @@ local lsp_util = require("lsp_util")
 local conform = require("conform")
 local conform_util = require("conform.util")
 
-conform.setup {
+conform.setup({
 	formatters = {
 		ftplugin = function(bufnr)
 			local prg = vim.b[bufnr].conform
@@ -29,6 +29,25 @@ conform.setup {
 				args = conform_util.tbl_slice(prg, 2),
 			}
 		end,
+		php_cs_fixer = {
+			command = "php-cs-fixer",
+			args = {
+				"fix",
+				"$FILENAME",
+				"--rules=@PSR12,array_indentation,no_whitespace_in_blank_line,blank_line_after_namespace,no_trailing_comma_in_singleline,method_argument_space",
+				"--using-cache=no",
+			},
+		},
+		phpcbf = {
+			command = "phpcbf",
+			args = {
+				"--standard=PSR12",
+				"--stdin-path=$FILENAME",
+				"-",
+			},
+			stdin = true,
+			exit_codes = { 0, 1 },
+		},
 	},
 	formatters_by_ft = {
 		bash = { "ftplugin", "shfmt" },
@@ -36,108 +55,108 @@ conform.setup {
 		javascript = { "prettierd", "prettier", stop_after_first = true },
 		lua = { "stylua" },
 		nix = { "nixfmt-rfc-style", "nixpkgs_fmt", "nixfmt", "alejandra" },
-		php = { "phpcbf" },
+		php = { "php_cs_fixer" },
 		python = { "isort", "black" },
 		rust = { "rustfmt", lsp_format = "fallback" },
 		sh = { "ftplugin", "shfmt" },
 		typescript = { "prettierd", "prettier", stop_after_first = true },
 	},
-}
+})
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.md",
-  command = "set filetype=pandoc",
+	pattern = "*.md",
+	command = "set filetype=pandoc",
 })
 
 -- require'nvim-treesitter.install'.prefer_git = true
 
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the listed parsers MUST always be installed)
-  ensure_installed = {
-    "awk",
-    "bash",
-    "c",
-    "css", 
-    "csv",
-    "diff",
-    "dockerfile",
-    "dot",
-    "editorconfig",
-    "fish",
-    "git_config",
-    "git_rebase",
-    "gitattributes",
-    "gitcommit",
-    "gitignore",
-    "go",
-    "gomod",
-    "gosum",
-    "gotmpl",
-    "gowork",
-    "hcl",
-    "html",
-    "http",
-    "ini",
-    "java",
-    "javascript",
-    "jq",
-    "json",
-    "just",
-    "latex",
-    "lua",
-    "make",
-    "markdown",
-    "markdown_inline",
-    "nix",
-    "perl",
-    "php",
-    "printf",
-    "proto",
-    "python",
-    "query",
-    "regex",
-    "ruby",
-    "rust",
-    "scala",
-    "scss",
-    "sql",
-    "strace",
-    "swift",
-    "tcl",
-    "terraform",
-    "textproto",
-    "tmux",
-    "toml",
-    "tsv",
-    "typescript",
-    "typst",
-    "udev",
-    "vhs",
-    "vim",
-    "vim",
-    "vimdoc",
-    "xml",
-    "yaml",
-    "zig",
-  },
+require("nvim-treesitter.configs").setup({
+	-- A list of parser names, or "all" (the listed parsers MUST always be installed)
+	ensure_installed = {
+		"awk",
+		"bash",
+		"c",
+		"css",
+		"csv",
+		"diff",
+		"dockerfile",
+		"dot",
+		"editorconfig",
+		"fish",
+		"git_config",
+		"git_rebase",
+		"gitattributes",
+		"gitcommit",
+		"gitignore",
+		"go",
+		"gomod",
+		"gosum",
+		"gotmpl",
+		"gowork",
+		"hcl",
+		"html",
+		"http",
+		"ini",
+		"java",
+		"javascript",
+		"jq",
+		"json",
+		"just",
+		"latex",
+		"lua",
+		"make",
+		"markdown",
+		"markdown_inline",
+		"nix",
+		"perl",
+		"php",
+		"printf",
+		"proto",
+		"python",
+		"query",
+		"regex",
+		"ruby",
+		"rust",
+		"scala",
+		"scss",
+		"sql",
+		"strace",
+		"swift",
+		"tcl",
+		"terraform",
+		"textproto",
+		"tmux",
+		"toml",
+		"tsv",
+		"typescript",
+		"typst",
+		"udev",
+		"vhs",
+		"vim",
+		"vim",
+		"vimdoc",
+		"xml",
+		"yaml",
+		"zig",
+	},
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
+	-- Install parsers synchronously (only applied to `ensure_installed`)
+	sync_install = false,
 
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
+	-- Automatically install missing parsers when entering buffer
+	-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+	auto_install = true,
 
-  highlight = {
-    enable = true,
+	highlight = {
+		enable = true,
 
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-}
+		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+		-- Using this option may slow down your editor, and you may see some duplicate highlights.
+		-- Instead of true it can also be a list of languages
+		additional_vim_regex_highlighting = false,
+	},
+})
 
 vim.keymap.set({ "n", "v" }, "=", function()
 	conform.format()
