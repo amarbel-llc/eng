@@ -49,6 +49,7 @@
                 dash
                 ddrescue
                 direnv
+                eternal-terminal
                 ffmpeg
                 figlet
                 fish
