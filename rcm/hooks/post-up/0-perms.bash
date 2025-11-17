@@ -13,3 +13,7 @@ chmod 600 "$HOME"/.config/gnupg/*
 # disabled for now because `*.pub` is used in sshconfig `IdentityFile` fields,
 # and OpenSSH treats that as a private key
 # chmod 644 $HOME/.config/ssh/*.pub
+#
+: "${XDG_CACHE_HOME:=$HOME/.cache}"
+mkdir -p "$XDG_CACHE_HOME"
+chmod 700 "$HOME"

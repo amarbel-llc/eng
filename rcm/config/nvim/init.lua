@@ -159,19 +159,17 @@ require("nvim-treesitter.configs").setup({
 })
 
 vim.keymap.set({ "n", "v" }, "=", function()
-	conform.format()
+	conform.format({ lsp_fallback = true })
 end)
 
 vim.api.nvim_create_user_command("ApplyImports", function(opts)
 	local client = lsp_util.get_lsp_client()
 
-	if client == nil then
-		return
-	end
-
-	local caps = client.server_capabilities
-
-	local codeActionProvider = caps["codeActionProvider"]
+	local codeActionProvider = (
+		client
+		and client.server_capabilities
+		and client.server_capabilities["codeActionProvider"]
+	) or nil
 
 	if codeActionProvider == nil or type(codeActionProvider) ~= "table" then
 		return
@@ -187,14 +185,19 @@ vim.api.nvim_create_user_command("ApplyImports", function(opts)
 		return
 	end
 
-	local params = vim.lsp.util.make_range_params()
+	local params = vim.lsp.util.make_range_params(0, "utf-8")
+
+	---@diagnostic disable-next-line: inject-field
 	params.context = { only = { "source.organizeImports" } }
+
 	-- buf_request_sync defaults to a 1000ms timeout. Depending on your
 	-- machine and codebase, you may want longer. Add an additional
 	-- argument after params if you find that you have to write the file
 	-- twice for changes to be saved.
 	-- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
+	--
 	local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+
 	for cid, res in pairs(result or {}) do
 		for _, r in pairs(res.result or {}) do
 			if r.edit then
@@ -207,13 +210,13 @@ end, {})
 
 vim.api.nvim_create_user_command("Format", function(opts)
 	vim.cmd("w")
-	conform.format()
+	conform.format({ lsp_fallback = true })
 end, {})
 
 vim.api.nvim_create_user_command("ApplyImportsAndFormat", function(opts)
 	vim.cmd("w")
 	vim.cmd.ApplyImports()
-	conform.format()
+	conform.format({ lsp_fallback = true })
 	vim.cmd("w")
 end, {})
 

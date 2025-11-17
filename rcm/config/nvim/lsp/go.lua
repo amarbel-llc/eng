@@ -34,11 +34,11 @@ return {
 			staticcheck = true,
 		},
 	},
-	on_attach = function(client, bufnr)
-		-- Disable gopls formatting
-		client.server_capabilities.documentFormattingProvider = false
+	-- on_attach = function(client, bufnr)
+	-- 	-- Disable gopls formatting
+	-- 	client.server_capabilities.documentFormattingProvider = false
 
-		-- Set up golines formatting
-		-- vim.api.nvim_buf_set_option(bufnr, 'equalprg', 'golines --max-len=80 --no-chain-split-dots --shorten-comments --base-formatter=gofumpt %')
-	end,
+	-- 	-- Set up golines formatting
+	-- 	-- vim.api.nvim_buf_set_option(bufnr, 'equalprg', 'golines --max-len=80 --no-chain-split-dots --shorten-comments --base-formatter=gofumpt %')
+	-- end,
 }
