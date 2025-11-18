@@ -36,10 +36,11 @@
             symlinkJoin {
               name = "system-packages";
               paths = [
-                pcsclite
-                pinentry
                 espanso-wayland
                 keyd
+                pcsclite
+                pinentry
+                shpool
               ];
             };
         }
