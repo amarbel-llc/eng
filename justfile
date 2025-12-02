@@ -7,7 +7,7 @@ clean-nix:
 
 clean: clean-nix
 
-nix_nixpkgs_stable_git_branch := "nixos-25.05"
+nix_nixpkgs_stable_git_branch := "nixos-25.11"
 
 file_nixpkgs_git_master_sha := "nixpkgs-git-master.git-sha"
 file_nixpkgs_stable_git_sha := "nixpkgs-stable-git.git-sha"
