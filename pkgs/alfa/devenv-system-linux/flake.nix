@@ -40,7 +40,7 @@
                 keyd
                 pcsclite
                 pinentry-gnome3
-                shpool
+                sway
               ];
             };
         }
