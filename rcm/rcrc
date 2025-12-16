@@ -1,20 +1,15 @@
+# vim: set ft=sh
+
 EXCLUDES="
   *.secret
   Alfred.alfredpreferences
   config/direnv/direnv.toml
   config/fish/config/direnv-config.fish
-  config/gnupg/scdaemon.conf.tpl
+  config/ssh/known_hosts
   dev-flake-templates
   fish_history
   local/share/fish/generated_completions
   rcrc
-"
-
-SYMLINK_DIRS="
-  config/vim
-  config/nvim
-  password-store
-  vim
 "
 
 TAGS="
