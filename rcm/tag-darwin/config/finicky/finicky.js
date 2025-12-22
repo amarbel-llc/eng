@@ -11,6 +11,18 @@
  */
 export default {
   defaultBrowser: "Google Chrome",
+  handlers: [
+    {
+      match: [
+        "https://etsy-hob.okta.com/oauth2/v1/authorize*",
+        "https://accounts.google.com/o/oauth2/auth*",
+      ],
+      browser: {
+        name: "Google Chrome",
+        // args: ["--new-window"],
+      }
+    }
+  ],
   options: {
     checkForUpdates: false,
     logRequests: false,

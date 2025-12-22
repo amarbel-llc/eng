@@ -9,7 +9,7 @@ function fish_title
   if set -q ZMX_SESSION
     echo $prefix"z.$ZMX_SESSION"
   else
-    echo $prefix"_"
+    echo $prefix""(prompt_pwd)
   end
 
 

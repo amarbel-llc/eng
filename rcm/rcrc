@@ -5,11 +5,16 @@ EXCLUDES="
   Alfred.alfredpreferences
   config/direnv/direnv.toml
   config/fish/config/direnv-config.fish
+  config/karabiner/automatic_backups
   config/ssh/known_hosts
   dev-flake-templates
   fish_history
   local/share/fish/generated_completions
   rcrc
+"
+
+SYMLINK_DIRS="
+  config/karabiner
 "
 
 TAGS="
