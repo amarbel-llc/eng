@@ -7,7 +7,7 @@ mkdir -p $HOME/.local/state/ssh
 set -l file_ssh_client_agent $HOME/.local/state/ssh/ssh_client-agent.sock
 
 if test -S $file_ssh_client_agent
-  echo "ssh-agent reused from: $file_ssh_client_agent" >&2
+  echo "ssh-agent reused from: "(prompt_pwd $file_ssh_client_agent) >&2
   set -x SSH_AUTH_SOCK $file_ssh_client_agent
 
 else if test -S $SSH_AUTH_SOCK
