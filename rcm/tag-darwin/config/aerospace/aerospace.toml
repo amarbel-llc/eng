@@ -80,96 +80,106 @@ on-mode-changed = []
 # 'main' binding mode must be always presented
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
-    # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    alt-shift-slash = 'layout tiles horizontal vertical'
-    alt-shift-comma = 'layout accordion horizontal vertical'
+    # switching modes
+    alt-shift-ctrl-semicolon = 'mode service'
+    alt-shift-ctrl-quote = 'mode workspace'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    alt-shift-h = 'focus left'
-    alt-shift-j = 'focus down'
-    alt-shift-k = 'focus up'
-    alt-shift-l = 'focus right'
+    # layout switching: https://nikitabobko.github.io/AeroSpace/commands#layout
+    alt-shift-ctrl-slash = 'layout tiles horizontal vertical'
+    alt-shift-ctrl-comma = 'layout accordion horizontal vertical'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    alt-shift-ctrl-h = 'move left'
-    alt-shift-ctrl-j = 'move down'
-    alt-shift-ctrl-k = 'move up'
-    alt-shift-ctrl-l = 'move right'
+    # focusing: https://nikitabobko.github.io/AeroSpace/commands#focus
+    alt-shift-ctrl-h = 'focus left'
+    alt-shift-ctrl-j = 'focus down'
+    alt-shift-ctrl-k = 'focus up'
+    alt-shift-ctrl-l = 'focus right'
 
-    alt-shift-a = 'workspace A'
-    alt-shift-s = 'workspace S'
-    alt-shift-d = 'workspace D'
-    alt-shift-f = 'workspace F'
+    # moving windows: https://nikitabobko.github.io/AeroSpace/commands#move
+    alt-shift-ctrl-u = 'move left'
+    alt-shift-ctrl-i = 'move down'
+    alt-shift-ctrl-o = 'move up'
+    alt-shift-ctrl-p = 'move right'
 
-    alt-shift-z = 'workspace Z'
-    alt-shift-c = 'workspace C'
-    alt-shift-v = 'workspace V'
-    alt-shift-b = 'workspace B'
+    # switching workspaces
+    alt-shift-ctrl-a = 'workspace A'
+    alt-shift-ctrl-s = 'workspace S'
+    alt-shift-ctrl-d = 'workspace D'
+    alt-shift-ctrl-f = 'workspace F'
+    #
+    alt-shift-ctrl-z = 'workspace Z'
+    alt-shift-ctrl-c = 'workspace C'
+    alt-shift-ctrl-v = 'workspace V'
+    alt-shift-ctrl-b = 'workspace B'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    alt-n = 'resize smart +50'
-    alt-m = 'resize smart -50'
+    # resizing. See: https://nikitabobko.github.io/AeroSpace/commands#resize
+    alt-shift-ctrl-equal = 'resize smart +50'
+    alt-shift-ctrl-minus = 'resize smart -50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     # alt-tab = 'workspace-back-and-forth'
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-    # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
-
-    alt-shift-semicolon = 'mode service'
-    alt-shift-m = 'mode workspace'
+    # alt-shift-ctrl-tab = 'move-workspace-to-monitor --wrap-around next'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
     esc = ['reload-config', 'mode main']
-    r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
-    backspace = ['close-all-windows-but-current', 'mode main']
+
+    # reset layout
+    alt-shift-ctrl-r = ['flatten-workspace-tree', 'mode main']
+    # Toggle between floating and tiling layout
+    alt-shift-ctrl-f = ['layout floating tiling', 'mode main']
+
+    alt-shift-ctrl-backspace = ['close-all-windows-but-current', 'mode main']
+    alt-shift-ctrl-slash = 'layout tiles horizontal vertical'
+    alt-shift-ctrl-comma = 'layout accordion horizontal vertical'
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
 
-    h = ['join-with left', 'mode main']
-    j = ['join-with down', 'mode main']
-    k = ['join-with up', 'mode main']
-    l = ['join-with right', 'mode main']
+    # joining
+    alt-shift-ctrl-h = ['join-with left', 'mode main']
+    alt-shift-ctrl-j = ['join-with down', 'mode main']
+    alt-shift-ctrl-k = ['join-with up', 'mode main']
+    alt-shift-ctrl-l = ['join-with right', 'mode main']
 
 [mode.off.binding]
-    alt-shift-a = ['mode main']
+    alt-shift-ctrl-a = ['mode main']
 
 [mode.workspace.binding]
     esc = ['mode main']
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    a = 'workspace A'
-    s = 'workspace S'
-    d = 'workspace D'
-    f = 'workspace F'
+    alt-shift-ctrl-slash = 'layout tiles horizontal vertical'
+    alt-shift-ctrl-comma = 'layout accordion horizontal vertical'
 
-    z = 'workspace Z'
-    c = 'workspace C'
-    v = 'workspace V'
-    b = 'workspace B'
+    # switching workspaces: https://nikitabobko.github.io/AeroSpace/commands#workspace
+    cmd-alt-shift-ctrl-a = 'workspace A'
+    cmd-alt-shift-ctrl-s = 'workspace S'
+    cmd-alt-shift-ctrl-d = 'workspace D'
+    cmd-alt-shift-ctrl-f = 'workspace F'
+    cmd-alt-shift-ctrl-z = 'workspace Z'
+    cmd-alt-shift-ctrl-c = 'workspace C'
+    cmd-alt-shift-ctrl-v = 'workspace V'
+    cmd-alt-shift-ctrl-b = 'workspace B'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    shift-a = 'move-node-to-workspace A'
-    shift-s = 'move-node-to-workspace S'
-    shift-d = 'move-node-to-workspace D'
-    shift-f = 'move-node-to-workspace F'
+    # moving nodes to workspaces: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+    alt-shift-ctrl-a = 'move-node-to-workspace A'
+    alt-shift-ctrl-s = 'move-node-to-workspace S'
+    alt-shift-ctrl-d = 'move-node-to-workspace D'
+    alt-shift-ctrl-f = 'move-node-to-workspace F'
+    alt-shift-ctrl-z = 'move-node-to-workspace Z'
+    alt-shift-ctrl-x = 'move-node-to-workspace X'
+    alt-shift-ctrl-c = 'move-node-to-workspace C'
+    alt-shift-ctrl-v = 'move-node-to-workspace V'
 
-    shift-z = 'move-node-to-workspace Z'
-    shift-x = 'move-node-to-workspace X'
-    shift-c = 'move-node-to-workspace C'
-    shift-v = 'move-node-to-workspace V'
+    # focusing: https://nikitabobko.github.io/AeroSpace/commands#focus
+    cmd-alt-shift-ctrl-h = 'focus left'
+    cmd-alt-shift-ctrl-j = 'focus down'
+    cmd-alt-shift-ctrl-k = 'focus up'
+    cmd-alt-shift-ctrl-l = 'focus right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    h = 'focus left'
-    j = 'focus down'
-    k = 'focus up'
-    l = 'focus right'
-
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    alt-h = 'move left'
-    alt-j = 'move down'
-    alt-k = 'move up'
-    alt-l = 'move right'
+    # moving: https://nikitabobko.github.io/AeroSpace/commands#move
+    alt-shift-ctrl-h = 'move left'
+    alt-shift-ctrl-j = 'move down'
+    alt-shift-ctrl-k = 'move up'
+    alt-shift-ctrl-l = 'move right'

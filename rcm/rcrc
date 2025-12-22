@@ -15,7 +15,6 @@ EXCLUDES="
 TAGS="
   direnv
   nix
-  termtabs
 "
 
 DOTFILES_DIRS="$HOME/eng/rcm"
