@@ -12,41 +12,48 @@
   ci = commit
   co = checkout
   cop = checkout --patch
-  cob = !git checkout -b $1 && git branch --set-upstream-to=origin/master
-  com = !git rev-parse --verify main >/dev/null && git checkout main || git checkout master
+  cob = "! f() { \
+      default_branch="$(git default-branch)" && \
+      git checkout -b $1 && git branch --set-upstream-to="origin/$default_branch"; \
+    }; f"
+  com = ! git checkout main || git checkout master
+  com = "! f() { \
+      default_branch="$(git default-branch)" && \
+      git checkout "$default_branch"; \
+    }; f"
   no-index-diff = diff --no-index --word-diff
   diffs = diff --staged
   hi = log --pretty=nice
   hig = log --pretty=nice --graph
   him = log --pretty=nice origin/master..HEAD
   hist = log --graph --pretty=hist --abbrev-commit
-  set-signed = "!f() { \
-    git config --local include.path ~/.config/git/config-signed; \
-    }; f"
+  set-signed = ! git config --local include.path ~/.config/git/config-signed
   last = show HEAD
   last-branch = rev-parse --abbrev-ref @{-1}
-  mergem = "!f() { \
+  default-branch = ! git rev-parse --abbrev-ref origin/HEAD | sed 's/origin\\///'
+  mergem = "! f() { \
     BRANCH_NAME=$(git branch --show-current) && \
     git checkout master && \
     git pull origin master && \
-    git checkout \"$BRANCH_NAME\" && \
+    git checkout "$BRANCH_NAME" && \
     git rebase master && \
     git push -f && \
     git checkout master && \
-    git merge --ff-only \"$BRANCH_NAME\" && \
-    git branch -D \"$BRANCH_NAME\"; \
+    git merge --ff-only "$BRANCH_NAME" && \
+    git branch -D "$BRANCH_NAME"; \
     }; f"
   om = !git status --short | ag '(?<=.[MA?] )(.*)$' --no-color --only-matching
   rebasem = rebase origin/master --interactive
   rebasemi = rebase origin/master --interactive
-  show-rev = !git show -p stash@\\{\\$1\\}
-  stash-show = "!f() { \
+  show-rev = ! git show -p stash@\\{\\$1\\}
+  stash-show = "! f() { \
     git stash show 'stash@{$1}' -p; \
     }; f"
-  stash-drop = "!f() { \
+  stash-drop = "! f() { \
     git stash drop 'stash@{$1}'; \
     }; f"
   show-untracked = ls-files --others --exclude-standard
+  show-files = ! git show --pretty="" --name-only $1
   st = status -sb
   su = submodule update --recursive --init
   unstage = reset HEAD --
