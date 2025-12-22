@@ -3,6 +3,8 @@
 Include ~/.config/ssh/my-config
 Include ~/.config/ssh/recurse
 
-Host *
+Match exec "test -z \$SSH_CLIENT"
   ForwardAgent "~/.local/state/ssh-agent-mux/agent.sock"
+
+Host *
 	Include "~/.config/step/ssh/includes"
