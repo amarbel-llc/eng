@@ -1,4 +1,8 @@
 
+if test $SHLVL -gt 1
+  return
+end
+
 if test -z $SSH_CLIENT
   return
 end
