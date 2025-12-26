@@ -8,11 +8,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-lua",
-        "lastModified": 1766693187,
-        "narHash": "sha256-QBjk33CotbvzwwoNNmQp3J1NlBlGA5SdYBCOrHdSODE=",
+        "lastModified": 1766759449,
+        "narHash": "sha256-Xn1oa9AurNILopRCdUiTxacb/ldTvfyJt4rOqMuZSsY=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "22404ea0dc478c1d5e8b53602972faa73499c72f",
+        "rev": "d14babc6d12d100d1b2fda6732439a1093a49302",
         "type": "github"
       },
       "original": {
