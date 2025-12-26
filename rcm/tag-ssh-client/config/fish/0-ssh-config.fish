@@ -1,5 +1,6 @@
 
 mkdir -p $HOME/.local/state/ssh
+
 set -l SSH_OLD_AUTH_SOCK $SSH_AUTH_SOCK
 echo "saving old socket: SSH_OLD_AUTH_SOCK:$SSH_OLD_AUTH_SOCK" >&2
 
