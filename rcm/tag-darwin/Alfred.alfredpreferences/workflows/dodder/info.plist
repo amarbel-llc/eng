@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string>com.linenisgreat.code.zit</string>
+	<string>com.linenisgreat.code.dodder</string>
 	<key>connections</key>
 	<dict>
 		<key>00AFDE95-80F8-4BC7-8892-CE76CF46CA51</key>
@@ -503,7 +503,7 @@
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>zit</string>
+	<string>dodder</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -542,7 +542,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>z open hidden</string>
+				<string>der open hidden</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -675,7 +675,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>z open</string>
+				<string>der open</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -777,7 +777,7 @@
 				<key>filetypes</key>
 				<array/>
 				<key>name</key>
-				<string>Move to Zettelkasten</string>
+				<string>Move to Dodder</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.trigger.action</string>
@@ -844,7 +844,7 @@ fi</string>
 				<key>argumenttype</key>
 				<integer>1</integer>
 				<key>keyword</key>
-				<string>z new</string>
+				<string>der new</string>
 				<key>subtext</key>
 				<string></string>
 				<key>text</key>
@@ -867,7 +867,7 @@ fi</string>
 				<key>filetypes</key>
 				<array/>
 				<key>name</key>
-				<string>Copy to Zettelkasten</string>
+				<string>Copy to Dodder</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.trigger.action</string>
@@ -970,7 +970,7 @@ nohup z add -kind "$kind" -actions "$actions" "$@"</string>
 				<key>filetypes</key>
 				<array/>
 				<key>name</key>
-				<string>Move to Zettelkasten</string>
+				<string>Move to Dodder</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.trigger.action</string>
@@ -1699,6 +1699,6 @@ nohup z add -kind "$kind" -actions "$actions" "$@"</string>
 	<key>version</key>
 	<string></string>
 	<key>webaddress</key>
-	<string>code.linenisgreat.com/zit</string>
+	<string>code.linenisgreat.com/dodder</string>
 </dict>
 </plist>

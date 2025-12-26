@@ -131,6 +131,7 @@ on-mode-changed = []
     alt-shift-ctrl-f = ['layout floating tiling', 'mode main']
 
     alt-shift-ctrl-backspace = ['close-all-windows-but-current', 'mode main']
+
     alt-shift-ctrl-slash = 'layout tiles horizontal vertical'
     alt-shift-ctrl-comma = 'layout accordion horizontal vertical'
 

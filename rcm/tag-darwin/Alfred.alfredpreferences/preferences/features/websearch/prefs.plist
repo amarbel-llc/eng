@@ -4,6 +4,17 @@
 <dict>
 	<key>customSites</key>
 	<dict>
+		<key>0573CC05-4C65-4003-A302-F8FFEEA5D5B9</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>gl</string>
+			<key>text</key>
+			<string>Glean</string>
+			<key>url</key>
+			<string>https://app.glean.com/search?q={query}</string>
+		</dict>
 		<key>74427F2B-E4DB-4991-89CC-03EAC5D5D452</key>
 		<dict>
 			<key>enabled</key>
