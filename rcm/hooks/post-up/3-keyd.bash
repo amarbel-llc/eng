@@ -35,6 +35,10 @@ EOM
 EOM
 fi
 
+if ! gum confirm "Update keyd config?" --default=false; then
+  exit 0
+fi
+
 # assuming we're on linux because keyd exists
 
 pkexec bash "$FILE_KEYD_CONFIG_UP" "$DIR_KEYD_CONFIG_HOME"

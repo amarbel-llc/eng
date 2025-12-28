@@ -1,3 +1,1 @@
 source $HOME/eng/result/share/nix-direnv/direnvrc 
-export PATH="$HOME/eng/result/bin:$PATH"
-# use flake "$HOME/eng"
