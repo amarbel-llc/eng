@@ -7,21 +7,30 @@
 [alias]
   aa = add --all --intent-to-add
   ap = add --patch
+  branch-get-upstream = git rev-parse --abbrev-ref --symbolic-full-name @{u}
+  branch-get-last = rev-parse --abbrev-ref @{-1}
+  branch-get-default = ! git rev-parse --abbrev-ref origin/HEAD | sed 's/origin\\///'
+  ; branch-get-edited_files = "!f() { \
+  ;       git diff --name-only "$(git branch-get-default)...HEAD"; \
+  ;   }; f"
   br = branch
   brc = rev-parse --abbrev-ref HEAD
   ci = commit
   co = checkout
   cop = checkout --patch
   cob = "! f() { \
-      default_branch="$(git default-branch)" && \
+      default_branch="$(git branch-get-default)" && \
       git checkout -b $1 && git branch --set-upstream-to="origin/$default_branch"; \
     }; f"
-  com = ! git checkout main || git checkout master
+  cobu = "! f() { \
+      default_branch="$(git branch-get-default)" && \
+      git checkout -b "$USER-$(date +%Y-%m-%d)-$1" && git branch --set-upstream-to="upstream/$default_branch"; \
+    }; f"
   com = "! f() { \
-      default_branch="$(git default-branch)" && \
+      default_branch="$(git branch-get-default)" && \
       git checkout "$default_branch"; \
     }; f"
-  no-index-diff = diff --no-index --word-diff
+  diff-no-index = diff --no-index --word-diff
   diffs = diff --staged
   hi = log --pretty=nice
   hig = log --pretty=nice --graph
@@ -29,22 +38,9 @@
   hist = log --graph --pretty=hist --abbrev-commit
   set-signed = ! git config --local include.path ~/.config/git/config-signed
   last = show HEAD
-  last-branch = rev-parse --abbrev-ref @{-1}
-  default-branch = ! git rev-parse --abbrev-ref origin/HEAD | sed 's/origin\\///'
-  mergem = "! f() { \
-    BRANCH_NAME=$(git branch --show-current) && \
-    git checkout master && \
-    git pull origin master && \
-    git checkout "$BRANCH_NAME" && \
-    git rebase master && \
-    git push -f && \
-    git checkout master && \
-    git merge --ff-only "$BRANCH_NAME" && \
-    git branch -D "$BRANCH_NAME"; \
-    }; f"
   om = !git status --short | ag '(?<=.[MA?] )(.*)$' --no-color --only-matching
-  rebasem = rebase origin/master --interactive
-  rebasemi = rebase origin/master --interactive
+  ; rebasem = rebase origin/master --interactive
+  ; rebasemi = rebase origin/master --interactive
   show-rev = ! git show -p stash@\\{\\$1\\}
   stash-show = "! f() { \
     git stash show 'stash@{$1}' -p; \
@@ -53,7 +49,7 @@
     git stash drop 'stash@{$1}'; \
     }; f"
   show-untracked = ls-files --others --exclude-standard
-  show-files = ! git show --pretty="" --name-only $1
+  show-files = ! git show --pretty='' --name-only $1
   st = status -sb
   su = submodule update --recursive --init
   unstage = reset HEAD --
