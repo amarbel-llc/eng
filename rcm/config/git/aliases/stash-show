@@ -1,0 +1,3 @@
+#! /usr/bin/env -S bash -e
+
+git stash show "stash@{$1}" -p; \

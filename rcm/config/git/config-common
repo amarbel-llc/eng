@@ -10,26 +10,11 @@
   branch-get-upstream = git rev-parse --abbrev-ref --symbolic-full-name @{u}
   branch-get-last = rev-parse --abbrev-ref @{-1}
   branch-get-default = ! git rev-parse --abbrev-ref origin/HEAD | sed 's/origin\\///'
-  ; branch-get-edited_files = "!f() { \
-  ;       git diff --name-only "$(git branch-get-default)...HEAD"; \
-  ;   }; f"
   br = branch
   brc = rev-parse --abbrev-ref HEAD
   ci = commit
   co = checkout
   cop = checkout --patch
-  cob = "! f() { \
-      default_branch="$(git branch-get-default)" && \
-      git checkout -b $1 && git branch --set-upstream-to="origin/$default_branch"; \
-    }; f"
-  cobu = "! f() { \
-      default_branch="$(git branch-get-default)" && \
-      git checkout -b "$USER-$(date +%Y-%m-%d)-$1" && git branch --set-upstream-to="upstream/$default_branch"; \
-    }; f"
-  com = "! f() { \
-      default_branch="$(git branch-get-default)" && \
-      git checkout "$default_branch"; \
-    }; f"
   diff-no-index = diff --no-index --word-diff
   diffs = diff --staged
   hi = log --pretty=nice
@@ -42,12 +27,6 @@
   ; rebasem = rebase origin/master --interactive
   ; rebasemi = rebase origin/master --interactive
   show-rev = ! git show -p stash@\\{\\$1\\}
-  stash-show = "! f() { \
-    git stash show 'stash@{$1}' -p; \
-    }; f"
-  stash-drop = "! f() { \
-    git stash drop 'stash@{$1}'; \
-    }; f"
   show-untracked = ls-files --others --exclude-standard
   show-files = ! git show --pretty='' --name-only $1
   st = status -sb
@@ -85,3 +64,5 @@
   skippedCherryPicks = false
 [init]
   defaultBranch = master
+[include]
+  path = ~/.config/git/config-aliases

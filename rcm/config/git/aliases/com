@@ -1,0 +1,4 @@
+#! /usr/bin/env -S bash -e
+
+default_branch="$(git branch-get-default)"
+git checkout "$default_branch"

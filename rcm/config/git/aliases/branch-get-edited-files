@@ -1,0 +1,3 @@
+#! /usr/bin/env -S bash -e
+
+git diff --name-only "$(git branch-get-default)...HEAD"
