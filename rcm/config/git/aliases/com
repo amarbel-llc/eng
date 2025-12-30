@@ -1,4 +1,6 @@
 #! /usr/bin/env -S bash -e
+# @file com
+# @brief checkout the default branch (usually master or main)
 
 default_branch="$(git branch-get-default)"
 git checkout "$default_branch"

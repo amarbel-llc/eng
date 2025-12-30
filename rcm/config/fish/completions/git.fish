@@ -3,6 +3,8 @@ set __git_complete_aliases_commit commit
 set __git_complete_aliases_checkout co checkout
 set __git_complete_aliases_branch br branch
 set __git_complete_aliases_show show
+set __git_complete_aliases \
+  (git config list --name-only | grep alias | cut -d. -f2)
 
 
 __fish_complete_empty \
@@ -11,6 +13,7 @@ __fish_complete_empty \
   $__git_complete_aliases_checkout \
   $__git_complete_aliases_branch \
   $__git_complete_aliases_show \
+  $__git_complete_aliases \
   rm
 
 complete \

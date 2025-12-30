@@ -1,3 +1,5 @@
 #! /usr/bin/env -S bash -e
+# @file branch-get-edited-files
+# @brief files changed since the default branch
 
 git diff --name-only "$(git branch-get-default)...HEAD"

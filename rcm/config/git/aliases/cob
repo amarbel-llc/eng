@@ -1,4 +1,6 @@
 #! /usr/bin/env -S bash -e
+# @file cob
+# @brief create a new branch and set the upstream to the default branch
 
 default_branch="$(git branch-get-default)"
 git checkout -b "$1"
