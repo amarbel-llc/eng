@@ -32,6 +32,15 @@ return {
 				["ST1006"] = false, -- named return values
 			},
 			staticcheck = true,
+
+      -- inlayHints = {
+      --               assignVariableTypes = true,
+      --               compositeLiterals = true,
+      --               constantValues = true,
+      --               functionTypeParameters = true,
+      --               parameterNames = true,
+      --               rangeVariableTypes = true,
+      --           },
 		},
 	},
 	-- on_attach = function(client, bufnr)

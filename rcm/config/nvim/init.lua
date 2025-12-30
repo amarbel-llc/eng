@@ -11,6 +11,9 @@ vim.opt.listchars = {
 	tab = "  ",
 }
 
+vim.cmd[[set completeopt+=menuone,noselect,popup]]
+-- vim.lsp.completion.enable({autotrigger=true})
+
 local lsp_util = require("lsp_util")
 local conform = require("conform")
 local conform_util = require("conform.util")
@@ -51,10 +54,11 @@ conform.setup({
 	},
 	formatters_by_ft = {
 		bash = { "ftplugin", "shfmt" },
-		go = { "ftplugin" },
+		-- go = { "ftplugin", },
 		javascript = { "prettierd", "prettier", stop_after_first = true },
 		lua = { "stylua" },
 		nix = { "nixfmt-rfc-style", "nixpkgs_fmt", "nixfmt", "alejandra" },
+    pandoc = { "pandoc" },
 		php = { "php_cs_fixer" },
 		python = { "isort", "black" },
 		rust = { "rustfmt", lsp_format = "fallback" },
