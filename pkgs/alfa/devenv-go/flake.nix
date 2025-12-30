@@ -1,7 +1,7 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/d981d41ffe5b541eae3782029b93e2af5d229cc2";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/09eb77e94fa25202af8f3e81ddc7353d9970ac1b";
+    nixpkgs.url = "github:NixOS/nixpkgs/c4cfc9ced33f81099f419fa59893df11dc3f9de9";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/9ef261221d1e72399f2036786498d78c38185c46";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     gomod2nix = {
@@ -10,44 +10,57 @@
     };
   };
 
-  outputs = { self, nixpkgs, utils, gomod2nix, nixpkgs-stable }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      utils,
+      gomod2nix,
+      nixpkgs-stable,
+    }:
     {
       overlays = gomod2nix.overlays;
-    } //
-    (utils.lib.eachDefaultSystem
-      (system:
-        let
+    }
+    // (utils.lib.eachDefaultSystem (
+      system:
+      let
 
-          pkgs = import nixpkgs {
-            inherit system;
-          };
+        pkgs = import nixpkgs {
+          inherit system;
+        };
 
-          packages = {
-            inherit (pkgs)
-              delve
-              go
-              gofumpt
-              golangci-lint
-              golines
-              gopls
-              gotools
-              govulncheck
-              parallel
-              ;
+        pkgs-stable = import nixpkgs-stable {
+          inherit system;
+        };
 
-            # gopls = gopls.packages.${system}.default;
-            gomod2nix = gomod2nix.packages.${system}.default;
-          };
+        packages = {
+          inherit (pkgs)
+            delve
+            gofumpt
+            golangci-lint
+            golines
+            gopls
+            gotools
+            govulncheck
+            parallel
+            ;
 
-        in
+          inherit (pkgs-stable)
+            go
+            ;
 
-        {
-          inherit packages;
+          # gopls = gopls.packages.${system}.default;
+          gomod2nix = gomod2nix.packages.${system}.default;
+        };
 
-          devShells.default = pkgs.mkShell {
-            packages = builtins.attrValues packages;
-          };
-        }
-      )
-    );
+      in
+
+      {
+        inherit packages;
+
+        devShells.default = pkgs.mkShell {
+          packages = builtins.attrValues packages;
+        };
+      }
+    ));
 }
