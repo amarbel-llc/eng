@@ -5,8 +5,8 @@
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     # explicitly included separately
-    explicit-chrest.url = "github:friedenberg/chrest?dir=go";
-    explicit-dodder.url = "github:friedenberg/dodder?dir=go";
+    # explicit-chrest.url = "github:friedenberg/chrest?dir=go";
+    # explicit-dodder.url = "github:friedenberg/dodder?dir=go";
     explicit-ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
     explicit-glyphs-agent-mux.url = "github:friedenberg/glyphs";
 
