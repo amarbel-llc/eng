@@ -1,0 +1,83 @@
+#!/usr/bin/gawk -f
+# vim: ft=awk ts=4 sw=4
+ 
+function debug(msg) {
+    if (debug_enable) {
+        print "DEBUG: " msg > debug_file
+    }
+}
+
+function reset() {
+    debug("→ reset()")
+
+    delete docblock
+    description = ""
+}
+
+/^[[:space:]]*# @(name|file)/ {
+    debug("→ @name|@file")
+    sub(/^[[:space:]]*# @(name|file) /, "")
+    file_title = $0
+
+    next
+}
+
+/^[[:space:]]*# @brief/ {
+    debug("→ @brief")
+    sub(/^[[:space:]]*# @brief /, "")
+    file_brief = $0
+
+    next
+}
+
+# Handle non comment lines.
+/^[^#]*$/ {
+    debug("→ break")
+
+    # Line is not an opening bracket,
+    # this is not a function declaration.
+    function_declaration = ""
+
+    # Add current (section) description to output.
+    handle_description();
+
+    # Reset docblock.
+    reset()
+
+    # Skip current line.
+    next
+}
+
+function handle_description() {
+    debug("→ handle_description")
+
+    # Remove empty lines at the start of description.
+    sub(/^[[:space:]\n]*\n/, "", description)
+    # Remove empty lines at the end of description.
+    sub(/[[:space:]\n]*$/, "", description)
+
+    if (description == "") {
+        debug("→ → description: empty")
+        return;
+    }
+
+    if (section != "" && section_description == "") {
+      debug("→ → section description: added")
+      section_description = description
+      return;
+    }
+
+    if (file_description == "") {
+        debug("→ → file description: added")
+        file_description = description
+        return;
+    }
+}
+
+ENDFILE {
+    if (file_title == "") {
+        file_title = FILENAME
+    }
+
+    print file_title "\t" file_brief
+}
