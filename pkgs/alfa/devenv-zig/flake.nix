@@ -2,8 +2,8 @@
   description = "A Nix-flake-based Zig development environment";
 
   inputs.utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
-  inputs.nixpkgs-stable.url = "github:NixOS/nixpkgs/09eb77e94fa25202af8f3e81ddc7353d9970ac1b";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/d981d41ffe5b541eae3782029b93e2af5d229cc2";
+  inputs.nixpkgs-stable.url = "github:NixOS/nixpkgs/9ef261221d1e72399f2036786498d78c38185c46";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/c4cfc9ced33f81099f419fa59893df11dc3f9de9";
 
   outputs = { self, nixpkgs, nixpkgs-stable, utils }:
     let
