@@ -1,0 +1,8 @@
+# vim: ft=swayconfig
+
+input type:touchpad {
+  drag enabled
+  natural_scroll enabled
+  tap enabled
+}
+

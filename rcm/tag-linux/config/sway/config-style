@@ -1,0 +1,20 @@
+# vim: ft=swayconfig
+
+output eDP-1 scale 1.8
+
+
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+# TODO
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+
+set $cursor_theme DMZ-Black
+set $cursor_size 24
+
+seat seat0 xcursor_theme $cursor_theme $cursor_size
+
+exec_always {
+    gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
+    gsettings set org.gnome.desktop.interface cursor-size $cursor_size
+}
+
+seat seat0 xcursor_theme "DMZ-Black" 24

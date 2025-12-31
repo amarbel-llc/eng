@@ -1,0 +1,29 @@
+#! /usr/bin/env -S bash -e
+
+# Generates Sway for_window rules from .desktop files
+# Usage: ./generate-sway-titles.sh /path/to/desktop/files
+
+dir="${1:-$HOME/.local/share/applications}"
+
+for file in "$dir"/*.desktop; do
+  [[ -f $file ]] || continue
+
+  name=""
+  app_id=""
+
+  while IFS='=' read -r key value; do
+    case "$key" in
+    Name) [[ -z $name ]] && name="$value" ;;
+    Icon) app_id="$value" ;;
+    Exec) app_exec="$value" ;;
+    esac
+  done <"$file"
+
+  if [[ $app_exec != /opt/google/chrome/google-chrome* ]]; then
+    continue
+  elif [[ $app_id == chrome* && -n $name ]]; then
+    echo "for_window [app_id=\"$app_id\"] title_format \"$name\""
+  fi
+done
+
+update-desktop-database "$dir" >&2
