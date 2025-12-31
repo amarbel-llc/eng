@@ -35,6 +35,8 @@ EOM
 EOM
 fi
 
+gum log -l warn "TODO update $(basename "$0") to install $FILE_KEYD_CONFIG_UP automatically"
+
 if ! gum confirm "Update keyd config?" --default=false; then
   exit 0
 fi
