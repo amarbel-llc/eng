@@ -1,4 +1,5 @@
 #! /usr/bin/env -S bash -e
+# @brief generates config files from .j2, .json, .json-script, and .rcm-script
 
 : "${XDG_STATE_HOME:=$HOME/.local/state}"
 export PATH="$HOME/eng/result/bin:$PATH"

@@ -1,4 +1,5 @@
 #! /usr/bin/env -S bash -e
+# @brief starts ssh-agent-mux and gpg-agent
 
 export PATH="$HOME/eng/result/bin:$PATH"
 eval "$(direnv hook bash)"

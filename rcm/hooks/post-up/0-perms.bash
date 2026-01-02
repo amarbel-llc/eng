@@ -1,4 +1,5 @@
 #! /usr/bin/env -S bash -e
+# @brief updates perms for gnupg
 
 export PATH="$HOME/eng/result/bin:$PATH"
 

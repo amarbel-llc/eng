@@ -1,4 +1,5 @@
 #! /usr/bin/env -S bash -e
+# @brief updates keyd config
 
 if ! command -v keyd >/dev/null; then
   exit 0
