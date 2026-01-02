@@ -129,7 +129,6 @@ require("nvim-treesitter.configs").setup({
 		"tcl",
 		"terraform",
 		"textproto",
-		"tmux",
 		"toml",
 		"tsv",
 		"typescript",
