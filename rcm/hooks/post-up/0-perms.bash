@@ -1,6 +1,8 @@
 #! /usr/bin/env -S bash -e
 # @brief updates perms for gnupg
 
+# TODO remove dangling symlinks if found
+
 export PATH="$HOME/eng/result/bin:$PATH"
 
 gum log -l info "updating directory permissions"

@@ -1,0 +1,10 @@
+# vim: ft=sshconfig
+
+# Match exec "test -z \$SSH_CLIENT"
+Host *
+  ForwardAgent "~/.local/state/ssh-agent-mux/agent.sock"
+  # RemoteCommand zmx attach %k
+  RequestTTY yes
+  ControlPath ~/.local/state/ssh/cm-%C
+  ControlMaster auto
+  ControlPersist 10m

@@ -18,3 +18,6 @@ rcm/config/ssh/my-secret-config
 rcm/config/ssh/sasha_linenisgreat_com.pub
 rcm/config/ssh/known_hosts
 rcm/tag-nix/secrets-nix.env
+rcm/config/ssh/config-user-secret
+rcm/config/ssh/key-user
+rcm/config/ssh/known_hosts-user
