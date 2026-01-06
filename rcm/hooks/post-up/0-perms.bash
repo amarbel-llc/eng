@@ -1,7 +1,7 @@
 #! /usr/bin/env -S bash -e
-# @brief updates perms for gnupg
+# @brief updates permissions
 
-# TODO remove dangling symlinks if found
+find ~/.* -xtype l -delete
 
 export PATH="$HOME/eng/result/bin:$PATH"
 

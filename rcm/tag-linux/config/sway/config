@@ -61,4 +61,9 @@ include $HOME/.config/sway/config-input
 include $HOME/.config/sway/config-keybindings
 include $HOME/.config/sway/config-chrome_app_windows
 
+bindswitch --reload --locked lid:on output eDP-1 disable
+bindswitch --reload --locked lid:off output eDP-1 enable
+
 include /etc/sway/config.d/*
+
+exec lxpolkit

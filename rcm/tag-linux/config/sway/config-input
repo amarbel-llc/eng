@@ -1,5 +1,10 @@
 # vim: ft=swayconfig
 
+input type:pointer {
+  pointer_accel -0.2
+  accel_profile adaptive
+}
+
 input type:touchpad {
   drag enabled
   natural_scroll enabled

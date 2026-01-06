@@ -1,7 +1,6 @@
 # vim: ft=swayconfig
 
-output eDP-1 scale 1.8
-
+output * scale 1.8
 
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # TODO
