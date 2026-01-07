@@ -4,10 +4,8 @@
 set $term kitty
 
 # preferred application launcher
-# Note: pass the final command to swaymsg so that the resulting window can be opened
-# on the original workspace that the command was run on. In this case, that is
-# the `-drun-run-command`
-set $menu rofi -show combi -modes combi -combi-modes "window,drun,run" -drun-run-command 'swaymsg exec -- {cmd}'
+# TODO fix sway path to prefer rofi from ~/eng
+set $menu $HOME/eng/result/bin/rofi -show drun
 
 include /etc/sway/config-vars.d/*
 
@@ -61,8 +59,10 @@ include $HOME/.config/sway/config-input
 include $HOME/.config/sway/config-keybindings
 include $HOME/.config/sway/config-chrome_app_windows
 
-bindswitch --reload --locked lid:on output eDP-1 disable
-bindswitch --reload --locked lid:off output eDP-1 enable
+set $laptop eDP-1
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
+exec_always ~/.config/sway/bin-clamshell.sh
 
 include /etc/sway/config.d/*
 

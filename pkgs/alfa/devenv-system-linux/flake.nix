@@ -37,10 +37,12 @@
               name = "system-packages";
               paths = [
                 espanso-wayland
+                keyd
+                lxsession
                 pcsclite
                 pinentry-gnome3
                 rofi
-                # keyd
+                wlogout
                 # sway
               ];
             };

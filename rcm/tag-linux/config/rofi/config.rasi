@@ -1,0 +1,12 @@
+
+configuration {
+    modi: "drun,run,window,ssh,combi";
+    font: "monospace 12";
+    show-icons: true;
+    terminal: "foot";
+    combi-modi: "drun,run";
+    matching: "fuzzy";
+    sort: true;
+}
+
+@theme "Arc-Dark"
