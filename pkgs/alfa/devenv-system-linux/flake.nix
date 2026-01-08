@@ -39,6 +39,7 @@
                 espanso-wayland
                 keyd
                 lxsession
+                mako
                 pcsclite
                 pinentry-gnome3
                 rofi

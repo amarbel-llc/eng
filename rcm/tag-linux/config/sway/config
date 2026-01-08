@@ -67,3 +67,4 @@ exec_always ~/.config/sway/bin-clamshell.sh
 include /etc/sway/config.d/*
 
 exec lxpolkit
+exec mako

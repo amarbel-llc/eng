@@ -109,6 +109,7 @@ bindsym $mod+f fullscreen
 bindsym $mod+a focus parent
 
 # Scratchpad:
+# TODO change prefix
 #
 # Sway has a "scratchpad", which is a bag of holding for windows.
 # You can send windows there and get them back later.
@@ -145,3 +146,6 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# mako
+bindsym $mod+n exec makoctl dismiss
+bindsym $mod+Shift+n exec makoctl dismiss -a
