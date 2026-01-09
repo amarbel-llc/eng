@@ -43,7 +43,7 @@
                 bats
                 coreutils
                 crush
-                csvkit
+                # csvkit
                 curl
                 curlftpfs
                 dash

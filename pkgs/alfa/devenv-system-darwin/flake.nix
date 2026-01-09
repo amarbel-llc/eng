@@ -4,6 +4,8 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/9ef261221d1e72399f2036786498d78c38185c46";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
+    nix-darwin.url = "github:nix-darwin/nix-darwin-25.05";
+
     brew-api = {
       url = "github:BatteredBunny/brew-api";
       flake = false;
@@ -22,6 +24,7 @@
       nixpkgs-stable,
       utils,
       brew-api,
+      nix-darwin,
       brew,
     }:
     utils.lib.eachSystem
@@ -48,6 +51,7 @@
               symlinkJoin {
                 name = "system-packages";
                 paths = [
+                  nix-darwin
                   pinentry_mac
                   reattach-to-user-namespace
                 ]
