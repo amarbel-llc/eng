@@ -4,7 +4,7 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/9ef261221d1e72399f2036786498d78c38185c46";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
-    nix-darwin.url = "github:nix-darwin/nix-darwin-25.05";
+    nix-darwin.url = "github:nix-darwin/nix-darwin";
 
     brew-api = {
       url = "github:BatteredBunny/brew-api";

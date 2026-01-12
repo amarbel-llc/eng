@@ -116,4 +116,7 @@ build-rcm-rcrc:
 @build-rcm-hooks-post-up:
   chmod +x *
 
+build-nix-darwin:
+  sudo nix run nix-darwin/master -- switch --flake "$(readlink "$HOME/.config/nix-darwin/flake.nix")"
+
 build: build-nix build-rcm

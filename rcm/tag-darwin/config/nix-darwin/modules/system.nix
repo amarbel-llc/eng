@@ -1,4 +1,9 @@
-{ self, pkgs }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 {
   system.defaults = {
     dock.autohide = true;
@@ -9,12 +14,14 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   # TODO update package with ~/eng
-  environment.systemPackages = [
-    pkgs.vim
-  ];
+  # environment.systemPackages = with pkgs; [
+  #   git
+  #   neovim
+  #   vim
+  # ];
 
   # Enable TouchID for sudo
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
@@ -23,7 +30,9 @@
   programs.fish.enable = true;
 
   # Set Git commit hash for darwin-version.
-  system.configurationRevision = self.rev or self.dirtyRev or null;
+  system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
+
+  system.primaryUser = "sfriedenberg";
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog

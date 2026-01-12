@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 {
   home.stateVersion = "24.05";
   home.packages = [
@@ -36,9 +41,9 @@
     ];
 
     # Mac App Store apps (mas search <app name> to find the ID)
-    masApps = {
-      "Bitwarden" = 1352778147;
-      "Tailscale" = 1475387142;
-    };
+    # masApps = {
+    #   "Bitwarden" = 1352778147;
+    #   "Tailscale" = 1475387142;
+    # };
   };
 }

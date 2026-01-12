@@ -14,7 +14,7 @@
     brew.url = "github:BatteredBunny/brew-nix";
     fh.url = "https://flakehub.com/f/DeterminateSystems/fh/0.1.21.tar.gz";
     gomod2nix.url = "github:nix-community/gomod2nix";
-    nix-darwin.url = "github:nix-darwin/nix-darwin-25.05";
+    nix-darwin.url = "github:nix-darwin/nix-darwin";
   };
 
   outputs =
