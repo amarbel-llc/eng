@@ -5,25 +5,45 @@
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
 
-  outputs = { self, nixpkgs, utils, nixpkgs-stable }:
-    (utils.lib.eachDefaultSystem
-      (system:
-        let
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
+  outputs =
+    {
+      self,
+      nixpkgs,
+      utils,
+      nixpkgs-stable,
+    }:
+    (utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+
+        pkgs-stable = import nixpkgs-stable {
+          inherit system;
+          config.allowUnfree = true;
+        };
+
+        selected-packages = with pkgs; [
+          intelephense
+          pkgs-stable.php84Packages.php-codesniffer
+          php84Packages.php-cs-fixer
+        ];
+
+      in
+
+      {
+        packages.default =
+          with pkgs;
+          symlinkJoin {
+            name = "devenv-php";
+            paths = selected-packages;
           };
 
-        in
-
-        {
-          devShells.default = pkgs.mkShell {
-            packages = with pkgs; [
-              intelephense
-              php84Packages.php-codesniffer
-              php84Packages.php-cs-fixer
-            ];
-          };
-        })
-    );
+        devShells.default = pkgs.mkShell {
+          packages = selected-packages;
+        };
+      }
+    ));
 }

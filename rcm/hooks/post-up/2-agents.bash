@@ -4,6 +4,10 @@
 export PATH="$HOME/eng/result/bin:$PATH"
 eval "$(direnv hook bash)"
 
+if [[ -n "NO_ENG_AGENTS" ]]; then
+  exit 0
+fi
+
 {
   output="$(mktemp)"
 

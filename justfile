@@ -101,7 +101,7 @@ build-nix:
 
 [working-directory: "rcm"]
 build-rcm: build-rcm-hooks-pre-up build-rcm-hooks-post-up
-  rcup
+  env PATH="/usr/bin:$PATH" rcup
 
 [working-directory: "rcm"]
 build-rcm-rcrc:

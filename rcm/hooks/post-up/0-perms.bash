@@ -1,7 +1,7 @@
 #! /usr/bin/env -S bash -e
 # @brief updates permissions
 
-# find ~/.* -xtype l -delete
+# /usr/bin/find ~/.* -xtype l -delete
 
 export PATH="$HOME/eng/result/bin:$PATH"
 

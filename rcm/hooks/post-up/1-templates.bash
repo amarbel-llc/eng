@@ -35,7 +35,7 @@ EXT_J2_JSON="json"          # TODO change to `.j2.json` extension
 EXT_J2_SCRIPT="json-script" # TODO change to `.j2.script` extension
 
 # j2
-while IFS= read -r -d '' template; do
+while IFS= read -r template; do
   gum log -l info "processing jinja template $template"
 
   output="${template%".$EXT_J2"}"
@@ -80,12 +80,12 @@ while IFS= read -r -d '' template; do
 
   echo "$output" >>"$log"
 
-done < <(find "$HOME"/.* -name .Trash -prune -o -iname "*.$EXT_J2" -a -print0 | sort -z)
+done < <(lsrc | cut -f1 -d: | grep ".$EXT_J2\$" | sort)
 
 EXT_RCM_SCRIPT="rcm-script"
 
 # rcm-script
-while IFS= read -r -d '' template; do
+while IFS= read -r template; do
   gum log -l info "processing script template $template"
 
   output="${template%".$EXT_RCM_SCRIPT"}"
@@ -109,4 +109,4 @@ while IFS= read -r -d '' template; do
 
   echo "$output" >>"$log"
 
-done < <(find "$HOME"/.* -name .Trash -prune -o -iname "*.$EXT_RCM_SCRIPT" -a -print0 | sort -z)
+done < <(lsrc | cut -f1 -d: | grep ".$EXT_RCM_SCRIPT\$" | sort)
