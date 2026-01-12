@@ -5,6 +5,7 @@
                 "rules": [
                     {
                         "description": "Change Right Command to aerospace control: Control+Option+Shift",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
