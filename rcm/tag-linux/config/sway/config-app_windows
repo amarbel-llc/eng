@@ -1,0 +1,9 @@
+# vim: ft=swayconfig
+
+for_window [all] title_format "%app_id: %title"
+
+for_window [app_id="google-chrome"] title_format "chrome: %title"
+for_window [app_id="org.keepassxc.KeePassXC"] title_format "KeePassXC"
+for_window [app_id="org.signal.Signal"] title_format "Signal"
+
+include $HOME/.config/sway/config-chrome_app_windows

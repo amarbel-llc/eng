@@ -52,12 +52,10 @@ bar {
     swaybar_command waybar
 }
 
-for_window [all] title_format "%app_id: %title"
-
-include $HOME/.config/sway/config-style
+include $HOME/.config/sway/config-app_windows
 include $HOME/.config/sway/config-input
 include $HOME/.config/sway/config-keybindings
-include $HOME/.config/sway/config-chrome_app_windows
+include $HOME/.config/sway/config-style
 
 set $laptop eDP-1
 bindswitch --reload --locked lid:on output $laptop disable
@@ -66,5 +64,5 @@ exec_always ~/.config/sway/bin-clamshell.sh
 
 include /etc/sway/config.d/*
 
-exec lxpolkit
+# exec lxpolkit
 exec mako

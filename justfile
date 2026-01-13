@@ -7,6 +7,11 @@ clean-nix:
 
 clean: clean-nix
 
+update-kitty:
+  curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+  pkexec ln -s "$(which kitty)" /usr/bin/kitty
+  pkexec ln -s "$(which kitten)" /usr/bin/kitten
+
 nix_nixpkgs_stable_git_branch := "nixos-25.11"
 
 file_nixpkgs_git_master_sha := "nixpkgs-git-master.git-sha"

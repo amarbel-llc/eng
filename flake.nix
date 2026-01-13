@@ -6,7 +6,7 @@
 
     # explicitly included separately
     # explicit-chrest.url = "github:friedenberg/chrest?dir=go";
-    # explicit-dodder.url = "github:friedenberg/dodder?dir=go";
+    dodder.url = "github:friedenberg/dodder?dir=go";
     explicit-ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
     explicit-glyphs-agent-mux.url = "github:friedenberg/glyphs";
 
@@ -15,6 +15,7 @@
     fh.url = "https://flakehub.com/f/DeterminateSystems/fh/0.1.21.tar.gz";
     gomod2nix.url = "github:nix-community/gomod2nix";
     nix-darwin.url = "github:nix-darwin/nix-darwin";
+    nixgl.url = "github:nix-community/nixGL";
   };
 
   outputs =

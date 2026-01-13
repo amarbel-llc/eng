@@ -149,3 +149,5 @@ bindsym $mod+r mode "resize"
 # mako
 bindsym $mod+n exec makoctl dismiss
 bindsym $mod+Shift+n exec makoctl dismiss -a
+
+# bindsym $mod+n exec swaymsg rename workspace to "$(swaymsg -t get_workspaces | jq -r '.[] | select(.focused).num'):$(rofi --dmenu -p 'Rename workspace')"
