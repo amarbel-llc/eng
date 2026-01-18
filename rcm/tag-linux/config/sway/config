@@ -57,12 +57,11 @@ include $HOME/.config/sway/config-input
 include $HOME/.config/sway/config-keybindings
 include $HOME/.config/sway/config-style
 
-set $laptop eDP-1
-bindswitch --reload --locked lid:on output $laptop disable
-bindswitch --reload --locked lid:off output $laptop enable
+bindswitch --reload --locked lid:on exec ~/.config/sway/bin-clamshell.sh
+bindswitch --reload --locked lid:off exec ~/.config/sway/bin-clamshell.sh
 exec_always ~/.config/sway/bin-clamshell.sh
 
 include /etc/sway/config.d/*
 
-# exec lxpolkit
+exec lxpolkit
 exec mako
