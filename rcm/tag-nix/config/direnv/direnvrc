@@ -1,1 +1,21 @@
+# vim: set ft=sh
 source $HOME/eng/result/share/nix-direnv/direnvrc 
+
+layout_flake_with_hook() {
+  use_flake "$@"
+
+  FLAKE_PATH=$(nix eval .#packages.$(nix eval --impure --raw --expr 'builtins.currentSystem').default.outPath --raw 2>/dev/null)
+
+  if [ -n "$FLAKE_PATH" ] && [ -d "$FLAKE_PATH/share/fish/vendor_completions.d" ]; then
+    flake_complete_path="$FLAKE_PATH/share/fish/vendor_completions.d"
+    export fish_complete_path="${fish_complete_path:+${fish_complete_path} }$flake_complete_path"
+  fi
+}
+
+on_direnv_loaded() {
+  echo "correct"
+}
+
+direnv_apply_hooks() {
+  on_direnv_loaded
+}

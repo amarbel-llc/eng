@@ -70,14 +70,8 @@
               done
             '';
           };
-        in
-        {
-          apps.download = {
-            type = "app";
-            program = "${download}/bin/download";
-          };
 
-          packages.default = pkgs.stdenv.mkDerivation {
+          package = pkgs.stdenv.mkDerivation {
             pname = "zmx";
             version = version;
 
@@ -90,7 +84,26 @@
               mkdir -p $out/bin
               cp ${binaryName} $out/bin/zmx
               chmod +x $out/bin/zmx
+
+              mkdir -p $out/share/fish/vendor_completions.d
+              cp completions/zmx.fish $out/share/fish/vendor_completions.d/
             '';
+          };
+        in
+        {
+          apps.download = {
+            type = "app";
+            program = "${download}/bin/download";
+          };
+
+          packages.default = package;
+
+          devShells.default = pkgs.mkShell {
+            buildInputs = [ package ];
+            shellHook = ''
+              export fish_complete_path="''${fish_complete_path:+''$fish_complete_path}${package}/share/fish/vendor_completions.d"
+            '';
+            packages = [ package ];
           };
         }
       );

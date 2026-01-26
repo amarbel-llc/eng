@@ -1,4 +1,5 @@
 
+# TODO add support for ssh hosts
 function z --wraps zmx --description 'attach to or create an existing zmx session for a given directory'
   switch (count $argv)
 

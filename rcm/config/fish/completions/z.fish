@@ -1,9 +1,10 @@
 
-# complete \
-#   --command z \
-#   --no-files \
-#   --keep-order \
-#   --arguments "(__z_complete_scripts)"
+# TODO add support for ssh hosts
+complete \
+  --command z \
+  --no-files \
+  --keep-order \
+  --arguments "(__z_complete_scripts)"
 
 # function __z_complete_scripts
 #   set -l z $HOME/Zettelkasten/

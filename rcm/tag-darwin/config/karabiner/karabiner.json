@@ -326,6 +326,16 @@
                             "to": [{ "pointing_button": "button1" }]
                         }
                     ]
+                },
+                {
+                    "identifiers": {
+                        "is_game_pad": true,
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 32779,
+                        "vendor_id": 10730
+                    },
+                    "ignore": false
                 }
             ],
             "name": "Default profile",
