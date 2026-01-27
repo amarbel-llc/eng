@@ -3,7 +3,7 @@
 # keep sorted
 # export EDITOR="$HOME/eng/result/bin/hx"
 export EDITOR="$HOME/eng/result/bin/nvim"
-export GIT_CONFIG_GLOBAL="$HOME/.config/git/config"
+export GIT_CONFIG_GLOBAL="$HOME/.config/git/config-user"
 export GNUPGHOME="$HOME/.config/gnupg"
 export GOPATH="$HOME/.cache/go"
 export GPG_TTY="$(tty)"

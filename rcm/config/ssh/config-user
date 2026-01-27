@@ -6,11 +6,3 @@ Host github-user
   Hostname github.com
   User git
   IdentityFile ~/.config/ssh/key-user
-
-# Host *
-#   PreferredAuthentications publickey
-#   ControlMaster no
-#   ControlPath none
-#   IdentityFile ~/.config/ssh/key-user
-  # LocalForward /Users/sasha.friedenberg/.local/state/ssh/gpg-agent.sock ~/.local/state/ssh/gpg-agent.sock
-  # LocalForward /Users/sasha.friedenberg/.local/state/ssh/ssh-agent.sock ~/.local/state/ssh/ssh-agent.sock
