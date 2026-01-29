@@ -2,7 +2,9 @@
   description = "Example nix-darwin system flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
+    utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/9ef261221d1e72399f2036786498d78c38185c46";
+    nixpkgs.url = "github:NixOS/nixpkgs/c4cfc9ced33f81099f419fa59893df11dc3f9de9";
     nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -11,7 +13,7 @@
     inputs@{
       self,
       nix-darwin,
-      nixpkgs,
+      nixpkgs, nixpkgs-stable, utils,
     }:
     {
       # Build darwin flake using:
