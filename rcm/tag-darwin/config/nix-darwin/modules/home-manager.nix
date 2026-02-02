@@ -6,10 +6,12 @@
 }:
 {
   home.stateVersion = "24.05";
+
   home.packages = [
     pkgs.bat
     pkgs.fzf
   ];
+
   programs.zsh.enable = true; # Home Manager will now manage .zshrc
 
   homebrew = {

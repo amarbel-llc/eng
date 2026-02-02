@@ -5,37 +5,35 @@
   ...
 }:
 {
-
-  # homebrew = {
-  #   enable = true;
-
-  #   casks = [
-  #     "aerospace"
-  #     "alfred"
-  #     "amethyst"
-  #     "bartender"
-  #     "espanso"
-  #     "finicky"
-  #     "font-hack-nerd-font"
-  #     "gcloud-cli"
-  #     "helium"
-  #     "karabiner-elements"
-  #     "kitty"
-  #     "sketchybar"
-  #     "tailscale-app"
-  #     "visual-studio-code"
-  #   ];
-  # };
-
   homebrew = {
     enable = true;
 
+    onActivation = {
+      autoUpdate = true;
+      cleanup = "zap";
+      upgrade = true;
+      extraFlags = [
+        "--verbose"
+      ];
+    };
+
+    taps = [
+      "FelixKratz/formulae"
+    ];
+
     brews = [
-      "sketchybar"
+      {
+        name = "borders";
+        restart_service = true;
+      }
+
+      {
+        name = "sketchybar";
+        restart_service = true;
+      }
     ];
 
     casks = [
-      "aerospace"
       "alfred"
       "amethyst"
       "bartender"
@@ -43,6 +41,7 @@
       "finicky"
       "font-hack-nerd-font"
       "gcloud-cli"
+      "hammerspoon"
       "helium"
       "karabiner-elements"
       "kitty"

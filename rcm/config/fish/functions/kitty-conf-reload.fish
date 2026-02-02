@@ -1,4 +1,3 @@
-function kitty-conf-reload --wraps='pkill -SIGUSR1 kitty' --description 'alias kitty-conf-reload=pkill -SIGUSR1 kitty'
-  pkill -SIGUSR1 kitty $argv
-        
+function kitty-conf-reload --wraps='kitty @ load=config' --description 'alias kitty-conf-reload=kitty @ load-config'
+  kitty @ load-config
 end
