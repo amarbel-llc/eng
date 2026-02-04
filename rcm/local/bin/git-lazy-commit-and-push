@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $# -gt 0 ]]; then
+  git add "$@"
+fi
+
+diff_status=$(git diff --cached 2>&1)
+
+if [[ -z "$diff_status" ]]; then
+  echo "no changes, just pushing" >&2
+else
+  echo "committing..." >&2
+  commit_msg=$(gum spin --spinner monkey --title "generating commit message..." -- \
+    claude -p "output a git commit message that summarizes the current staged changes. include only the output for the git commit message, as it will be piped directly into the git commit message")
+
+  if ! echo -n "$commit_msg" | git commit -e -F -; then
+    exit 1
+  fi
+fi
+
+echo "pushing..." >&2
+git push

@@ -3,12 +3,15 @@
 # keep sorted
 # export EDITOR="$HOME/eng/result/bin/hx"
 export EDITOR="$HOME/eng/result/bin/nvim"
-export GIT_CONFIG_GLOBAL="$HOME/.config/git/config-user"
-export GNUPGHOME="$HOME/.config/gnupg"
-export GOPATH="$HOME/.cache/go"
 export GPG_TTY="$(tty)"
 export LESS="-x4 -R"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh-agent-mux/agent.sock"
+
+# XDG
+# keep sorted
+export GIT_CONFIG_GLOBAL="$HOME/.config/git/config-user"
+export GNUPGHOME="$HOME/.config/gnupg"
+export GOPATH="$HOME/.cache/go"
 export SSH_HOME="$HOME/.config/ssh"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_RUNTIME_HOME="$HOME/.local/runtime"

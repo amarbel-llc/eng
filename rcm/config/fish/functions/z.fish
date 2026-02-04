@@ -10,10 +10,17 @@ function z --wraps zmx --description 'attach to or create an existing zmx sessio
       return $status
 
     # use provided directory or session name
-    case 1
-      if test -d $argv
-        pushd $argv
+    case 1 2
+      if test -d $argv[1]
+        pushd $argv[1]
         set -l session_name (__z_get_session_name_or_directory_for_path $argv)
+
+        if test -n $argv[2]
+          if not command -q $argv[2]
+            set -l session_name $session_name.$argv[2]
+          end
+        end
+
         zmx attach $session_name $SHELL
         return $status
       else
@@ -26,8 +33,8 @@ function z --wraps zmx --description 'attach to or create an existing zmx sessio
       set -l util $argv[2..]
       set -l util_name $argv[2]
 
-      if test -d $argv
-        pushd $argv
+      if test -d $argv[1]
+        pushd $argv[1]
         set -l session_name (__z_get_session_name_or_directory_for_path $argv[1]).$util_name
         zmx attach $session_name $SHELL -c $util
         return $status
