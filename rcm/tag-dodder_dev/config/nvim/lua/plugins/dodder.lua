@@ -1,3 +1,3 @@
 return {
-  dir = "~/eng/pkgs/bravo/dodder/zz-vim/",
+  dir = "~/eng/repos/dodder/zz-vim/",
 }
