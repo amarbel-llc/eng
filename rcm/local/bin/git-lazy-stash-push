@@ -1,0 +1,18 @@
+#! /usr/bin/env -S bash -e
+
+msg_claude_prompt="$(
+  cat - <<-EOM
+  output a single imperative-tense phrase that summarizes the current changes.
+  be brief.
+  include no other output.
+  use the follwoing git-stash flags (which may be empty) to determine what
+  staged or unstaged or untracked content to summarize: \`${@}\`
+EOM
+)"
+
+msg_stash="$(gum spin --spinner monkey --title "generating stash title..." -- \
+  claude -p "$msg_claude_prompt")"
+
+if ! git stash push -m "$msg_stash" "$@"; then
+  exit 1
+fi
