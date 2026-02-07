@@ -7,21 +7,43 @@
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-master, utils }:
-    (utils.lib.eachDefaultSystem
-      (system:
-        let
-          pkgs = import nixpkgs { inherit system; };
-        in
-        {
-          devShells.default = pkgs.mkShell {
-            packages = (with pkgs; [ elixir ]) ++
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-master,
+      utils,
+    }:
+    (utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          packages =
+            (with pkgs; [ elixir ])
+            ++
               # Linux only
-              pkgs.lib.optionals (pkgs.stdenv.isLinux) (with pkgs; [ gigalixir inotify-tools libnotify ]) ++
+              pkgs.lib.optionals (pkgs.stdenv.isLinux) (
+                with pkgs;
+                [
+                  gigalixir
+                  inotify-tools
+                  libnotify
+                ]
+              )
+            ++
               # macOS only
-              pkgs.lib.optionals (pkgs.stdenv.isDarwin) (with pkgs; [ terminal-notifier ]) ++
-              pkgs.lib.optionals (pkgs.stdenv.isDarwin) (with pkgs.darwin.apple_sdk_11_0.frameworks; [ CoreFoundation CoreServices ]);
-          };
-        })
-    );
+              pkgs.lib.optionals (pkgs.stdenv.isDarwin) (with pkgs; [ terminal-notifier ])
+            ++ pkgs.lib.optionals (pkgs.stdenv.isDarwin) (
+              with pkgs.darwin.apple_sdk_11_0.frameworks;
+              [
+                CoreFoundation
+                CoreServices
+              ]
+            );
+        };
+      }
+    ));
 }

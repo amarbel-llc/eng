@@ -5,35 +5,40 @@
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
 
-  outputs = { self, nixpkgs, utils, nixpkgs-master }:
-    (utils.lib.eachDefaultSystem
-      (system:
-        let
+  outputs =
+    {
+      self,
+      nixpkgs,
+      utils,
+      nixpkgs-master,
+    }:
+    (utils.lib.eachDefaultSystem (
+      system:
+      let
 
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
 
-          packages = {
-            inherit (pkgs)
-              terraform-ls
-              opentofu
-              packer
-              docker
-              doctl
-              ;
-          };
+        packages = {
+          inherit (pkgs)
+            terraform-ls
+            opentofu
+            packer
+            docker
+            doctl
+            ;
+        };
 
-        in
+      in
 
-        {
-          inherit packages;
+      {
+        inherit packages;
 
-          devShells.default = pkgs.mkShell {
-            packages = builtins.attrValues packages;
-          };
-        }
-      )
-    );
+        devShells.default = pkgs.mkShell {
+          packages = builtins.attrValues packages;
+        };
+      }
+    ));
 }

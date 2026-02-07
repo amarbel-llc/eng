@@ -7,26 +7,33 @@
     devenv-lua.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-lua";
   };
 
-  outputs = { self, nixpkgs, utils, devenv-lua, nixpkgs-master }:
-    (utils.lib.eachDefaultSystem
-      (system:
-        let
-          pkgs = import nixpkgs {
-            inherit system;
-          };
+  outputs =
+    {
+      self,
+      nixpkgs,
+      utils,
+      devenv-lua,
+      nixpkgs-master,
+    }:
+    (utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
 
-        in
+      in
 
-        {
-          devShells.default = pkgs.mkShell {
-            packages = with pkgs; [
-              pandoc
-            ];
+      {
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            pandoc
+          ];
 
-            inputsFrom = [
-              devenv-lua.devShells.${system}.default
-            ];
-          };
-        })
-    );
+          inputsFrom = [
+            devenv-lua.devShells.${system}.default
+          ];
+        };
+      }
+    ));
 }

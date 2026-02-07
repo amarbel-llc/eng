@@ -7,33 +7,41 @@
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-master, utils }:
-    (utils.lib.eachDefaultSystem
-      (system:
-        let
-          pkgs = import nixpkgs {
-            inherit system;
-          };
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-master,
+      utils,
+    }:
+    (utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
 
-          pkgs-master = import nixpkgs-master {
-            inherit system;
-          };
+        pkgs-master = import nixpkgs-master {
+          inherit system;
+        };
 
-        in
+      in
 
-        {
-          devShells.default = pkgs-master.mkShell {
-            packages = [
-              pkgs-master.uv
-              pkgs-master.ruff
-              (pkgs.python313.withPackages (ps: with ps; [
+      {
+        devShells.default = pkgs-master.mkShell {
+          packages = [
+            pkgs-master.uv
+            pkgs-master.ruff
+            (pkgs.python313.withPackages (
+              ps: with ps; [
                 mypy
                 pylsp-mypy
                 python-lsp-ruff
                 python-lsp-server
-              ]))
-            ];
-          };
-        })
-    );
+              ]
+            ))
+          ];
+        };
+      }
+    ));
 }

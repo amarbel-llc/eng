@@ -6,19 +6,19 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , utils
-    , nixpkgs-master
+    {
+      self,
+      nixpkgs,
+      utils,
+      nixpkgs-master,
     }:
-    (utils.lib.eachDefaultSystem
-      (system:
+    (utils.lib.eachDefaultSystem (
+      system:
       let
 
-        pkgs = import nixpkgs
-          {
-            inherit system;
-          };
+        pkgs = import nixpkgs {
+          inherit system;
+        };
 
       in
       {
@@ -27,14 +27,16 @@
         };
 
         packages = {
-          default = with pkgs; buildEnv {
-            name = "direnv";
-            paths = [
-              direnv
-            ];
-          };
+          default =
+            with pkgs;
+            buildEnv {
+              name = "direnv";
+              paths = [
+                direnv
+              ];
+            };
         };
 
-      })
-    );
+      }
+    ));
 }

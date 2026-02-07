@@ -36,6 +36,8 @@
       in
 
       {
+        formatter = pkgs.nixfmt;
+
         packages.default = pkgs.symlinkJoin {
           name = "devenv-nix";
           paths = builtins.attrValues packages;

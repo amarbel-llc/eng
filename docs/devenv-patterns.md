@@ -17,6 +17,22 @@ This document captures the existing architectural patterns used across the deven
 2. **Stable-first** - Default to stable nixpkgs, override to master when necessary
 3. **Consistency** - Align similar packages on common patterns
 
+## Formatting
+
+All flake.nix files should be formatted using `nixfmt` via the formatter exported by `devenv-nix`:
+
+```sh
+# Format a single flake
+nix fmt --inputs-from pkgs/alfa/devenv-nix pkgs/alfa/devenv-go
+
+# Format all devenv flakes
+for f in pkgs/alfa/devenv-*/flake.nix; do
+  nix fmt --inputs-from pkgs/alfa/devenv-nix "$(dirname "$f")"
+done
+```
+
+The `devenv-nix` flake exports `formatter.${system} = pkgs.nixfmt` which provides the canonical formatting for all Nix files.
+
 ## Outputs Structure
 
 ### Current Patterns
@@ -137,7 +153,7 @@ Used by: `devenv-go`, `devenv-php`, `devenv-python`, `devenv-rust`, `devenv-rust
 | `devenv-kotlin` | eachDefaultSystem | devShells | stable | - |
 | `devenv-latex` | eachDefaultSystem | devShells | stable | - |
 | `devenv-lua` | eachDefaultSystem | devShells | stable | - |
-| `devenv-nix` | eachDefaultSystem | devShells, packages | stable | fh |
+| `devenv-nix` | eachDefaultSystem | devShells, packages, formatter | stable | fh |
 | `devenv-node` | eachDefaultSystem | devShells | stable | - |
 | `devenv-ocaml` | eachDefaultSystem | devShells | stable | - |
 | `devenv-pandoc` | eachDefaultSystem | devShells | stable | devenv-lua |

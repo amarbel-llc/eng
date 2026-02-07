@@ -11,31 +11,38 @@
     };
   };
 
-  outputs = { self, nixpkgs, rust-overlay, nixpkgs-master, utils }:
-    (utils.lib.eachDefaultSystem
-      (system:
-        let
-          overlays = [
-            rust-overlay.overlays.default
-            (final: prev: {
-              rustToolchain = prev.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
-            })
+  outputs =
+    {
+      self,
+      nixpkgs,
+      rust-overlay,
+      nixpkgs-master,
+      utils,
+    }:
+    (utils.lib.eachDefaultSystem (
+      system:
+      let
+        overlays = [
+          rust-overlay.overlays.default
+          (final: prev: {
+            rustToolchain = prev.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+          })
+        ];
+        pkgs = import nixpkgs { inherit system; };
+        pkgs-master = import nixpkgs-master { inherit overlays system; };
+      in
+      {
+        devShells.default = pkgs-master.mkShell {
+          packages = [
+            pkgs-master.rustToolchain
+            pkgs.openssl
+            pkgs.pkg-config
+            pkgs-master.cargo-deny
+            pkgs-master.cargo-edit
+            pkgs-master.cargo-watch
+            pkgs-master.rust-analyzer
           ];
-          pkgs = import nixpkgs { inherit system; };
-          pkgs-master = import nixpkgs-master { inherit overlays system; };
-        in
-        {
-          devShells.default = pkgs-master.mkShell {
-            packages = [
-              pkgs-master.rustToolchain
-              pkgs.openssl
-              pkgs.pkg-config
-              pkgs-master.cargo-deny
-              pkgs-master.cargo-edit
-              pkgs-master.cargo-watch
-              pkgs-master.rust-analyzer
-            ];
-          };
-        })
-    );
+        };
+      }
+    ));
 }
