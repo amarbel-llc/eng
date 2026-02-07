@@ -28,7 +28,7 @@ devShells.${system}.default = pkgs.mkShell {
   packages = [ ... ];
 };
 ```
-Used by: `devenv-bats`, `devenv-elixir`, `devenv-haskell`, `devenv-haxe`, `devenv-js`, `devenv-kotlin`, `devenv-latex`, `devenv-lua`, `devenv-ocaml`, `devenv-protobuf`, `devenv-python`, `devenv-ruby`, `devenv-rust`, `devenv-rust_toolchain`, `devenv-scala`, `devenv-shell`, `devenv-zig`, and others
+Used by: `devenv-bats`, `devenv-elixir`, `devenv-haskell`, `devenv-js`, `devenv-kotlin`, `devenv-latex`, `devenv-lua`, `devenv-ocaml`, `devenv-protobuf`, `devenv-python`, `devenv-ruby`, `devenv-rust`, `devenv-rust_toolchain`, `devenv-scala`, `devenv-shell`, `devenv-zig`, and others
 
 #### packages + devShells (3 packages - 12%)
 Exports both installable packages and development shell:
@@ -90,7 +90,7 @@ in {
   devShells = forEachSupportedSystem ({ pkgs }: { default = pkgs.mkShell { ... }; });
 }
 ```
-Used by: `devenv-elixir`, `devenv-haskell`, `devenv-haxe`, `devenv-kotlin`, `devenv-latex`, `devenv-node`, `devenv-ocaml`, `devenv-protobuf`, `devenv-rust_toolchain`, `devenv-scala`, `devenv-zig`
+Used by: `devenv-elixir`, `devenv-haskell`, `devenv-kotlin`, `devenv-node`, `devenv-ocaml`, `devenv-protobuf`, `devenv-rust_toolchain`, `devenv-scala`, `devenv-zig`
 
 ## Stable vs Master Strategy
 
@@ -116,7 +116,7 @@ Uses only stable nixpkgs (the default):
 ```nix
 let pkgs = import nixpkgs { inherit system; };
 ```
-Used by: `devenv-bats`, `devenv-digital_ocean`, `devenv-direnv`, `devenv-elixir`, `devenv-haskell`, `devenv-haxe`, `devenv-java`, `devenv-js`, `devenv-kotlin`, `devenv-latex`, `devenv-lua`, `devenv-nix`, `devenv-node`, `devenv-ocaml`, `devenv-pandoc`, `devenv-protobuf`, `devenv-qmk`, `devenv-ruby`, `devenv-scala`, `devenv-shell`, `devenv-zig`
+Used by: `devenv-bats`, `devenv-digital_ocean`, `devenv-direnv`, `devenv-elixir`, `devenv-haskell`, `devenv-java`, `devenv-js`, `devenv-kotlin`, `devenv-latex`, `devenv-lua`, `devenv-nix`, `devenv-node`, `devenv-ocaml`, `devenv-pandoc`, `devenv-protobuf`, `devenv-qmk`, `devenv-ruby`, `devenv-scala`, `devenv-shell`, `devenv-zig`
 
 #### Mixed Stable/Master (7 packages - 27%)
 Runtime from stable, tooling from master:
@@ -146,7 +146,6 @@ Used by: `devenv-go`, `devenv-php`, `devenv-python`, `devenv-rust`, `devenv-rust
 | `devenv-elixir` | genAttrs | devShells | stable | - |
 | `devenv-go` | eachDefaultSystem | devShells, packages, overlays | stable + master | gomod2nix |
 | `devenv-haskell` | genAttrs | devShells | stable | - |
-| `devenv-haxe` | genAttrs | devShells | stable | - |
 | `devenv-java` | eachDefaultSystem | devShells, packages | stable | - |
 | `devenv-js` | eachDefaultSystem | devShells | stable | - |
 | `devenv-kotlin` | genAttrs | devShells, overlays | stable | - |
@@ -171,9 +170,9 @@ Used by: `devenv-go`, `devenv-php`, `devenv-python`, `devenv-rust`, `devenv-rust
 
 | Metric | Count | Percentage |
 |--------|-------|------------|
-| Total devenv packages | 26 | 100% |
+| Total devenv packages | 25 | 100% |
 | Using eachDefaultSystem | 17 | 65% |
-| Using genAttrs | 9 | 35% |
+| Using genAttrs | 8 | 32% |
 | With packages output | 6 | 23% |
 | With overlays export | 4 | 15% |
 | Stable-only nixpkgs | 21 | 81% |
@@ -186,7 +185,6 @@ Some packages require special nixpkgs configuration:
 | Package | Configuration | Reason |
 |---------|--------------|--------|
 | `devenv-digital_ocean` | `config.allowUnfree = true` | docker is unfree |
-| `devenv-haxe` | `config.permittedInsecurePackages = [ "mbedtls-2.28.10" ]` | haxe depends on insecure mbedtls |
 | `devenv-elixir` | Uses `apple_sdk_11_0` | Migrated from deprecated `apple_sdk` |
 
 These configurations are applied within the flake itself, so users don't need to configure anything.
