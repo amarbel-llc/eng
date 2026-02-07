@@ -2,6 +2,8 @@
 
 A living document tracking the current state of flake.nix patterns across devenv packages, serving as a reference for consolidation and improvement efforts.
 
+**Note**: System packages (`system-common`, `system-darwin`, `system-linux`) are documented separately in [system-patterns.md](system-patterns.md).
+
 ## Overview
 
 ### Purpose
@@ -28,21 +30,20 @@ devShells.${system}.default = pkgs.mkShell {
 ```
 Used by: `devenv-bats`, `devenv-elixir`, `devenv-haskell`, `devenv-haxe`, `devenv-js`, `devenv-kotlin`, `devenv-latex`, `devenv-lua`, `devenv-ocaml`, `devenv-protobuf`, `devenv-python`, `devenv-ruby`, `devenv-rust`, `devenv-rust_toolchain`, `devenv-scala`, `devenv-shell`, `devenv-zig`, and others
 
-#### packages + devShells (6 packages - 21%)
+#### packages + devShells (3 packages - 12%)
 Exports both installable packages and development shell:
 ```nix
 packages.${system}.default = pkgs.symlinkJoin { ... };
 devShells.${system}.default = pkgs.mkShell { ... };
 ```
-Used by: `devenv-system-common`, `devenv-system-darwin`, `devenv-system-linux`, `devenv-php`, `devenv-nix`, `devenv-go`
+Used by: `devenv-php`, `devenv-nix`, `devenv-go`
 
 #### symlinkJoin Aggregation
 Combines multiple packages into a single derivation:
 ```nix
 packages.default = pkgs.symlinkJoin {
-  name = "system-packages";
+  name = "combined-packages";
   paths = builtins.attrValues packages;
-  failOnMissing = true;  # Used by devenv-system-common
 };
 ```
 
@@ -54,7 +55,7 @@ packages.default = pkgs.buildEnv {
 };
 ```
 
-#### overlays Export (6 packages - 21%)
+#### overlays Export (5 packages - 19%)
 Exports overlays for nixpkgs customization:
 ```nix
 overlays = [(final: prev: {
@@ -62,13 +63,13 @@ overlays = [(final: prev: {
   sbt = prev.sbt.override { jre = jdk; };
 })];
 ```
-Used by: `devenv-node`, `devenv-scala`, `devenv-kotlin`, `devenv-rust_toolchain`, `devenv-go`, `devenv-system-darwin`
+Used by: `devenv-node`, `devenv-scala`, `devenv-kotlin`, `devenv-rust_toolchain`, `devenv-go`
 
 ## Architecture Specification
 
-### Three System Support Patterns
+### Two System Support Patterns
 
-#### 1. utils.lib.eachDefaultSystem (16 packages - 55%)
+#### 1. utils.lib.eachDefaultSystem (15 packages - 58%)
 Implicit system detection via flake-utils:
 ```nix
 outputs = { self, nixpkgs, utils, ... }:
@@ -77,9 +78,9 @@ outputs = { self, nixpkgs, utils, ... }:
     in { devShells.default = pkgs.mkShell { ... }; }
   );
 ```
-Used by: `devenv-bats`, `devenv-digital_ocean`, `devenv-direnv`, `devenv-go`, `devenv-java`, `devenv-js`, `devenv-lua`, `devenv-nix`, `devenv-pandoc`, `devenv-php`, `devenv-python`, `devenv-qmk`, `devenv-ruby`, `devenv-rust`, `devenv-shell`, `devenv-system-common`
+Used by: `devenv-bats`, `devenv-digital_ocean`, `devenv-direnv`, `devenv-go`, `devenv-java`, `devenv-js`, `devenv-lua`, `devenv-nix`, `devenv-pandoc`, `devenv-php`, `devenv-python`, `devenv-qmk`, `devenv-ruby`, `devenv-rust`, `devenv-shell`
 
-#### 2. nixpkgs.lib.genAttrs with Explicit List (10 packages - 34%)
+#### 2. nixpkgs.lib.genAttrs with Explicit List (11 packages - 42%)
 Manual system enumeration:
 ```nix
 let
@@ -90,17 +91,6 @@ in {
 }
 ```
 Used by: `devenv-elixir`, `devenv-haskell`, `devenv-haxe`, `devenv-kotlin`, `devenv-latex`, `devenv-node`, `devenv-ocaml`, `devenv-protobuf`, `devenv-rust_toolchain`, `devenv-scala`, `devenv-zig`
-
-#### 3. utils.lib.eachSystem for Platform-Specific (3 packages - 10%)
-Targeting specific platforms:
-```nix
-# Darwin only
-utils.lib.eachSystem ["x86_64-darwin" "aarch64-darwin"] (system: ...)
-
-# Linux only
-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux"] (system: ...)
-```
-Used by: `devenv-system-darwin`, `devenv-system-linux`
 
 ## Stable vs Master Strategy
 
@@ -140,9 +130,6 @@ in {
 ```
 Used by: `devenv-elixir`, `devenv-go`, `devenv-node`, `devenv-php`, `devenv-python`, `devenv-rust`, `devenv-rust_toolchain`
 
-#### Mixed Large-Scale (2 packages - 7%)
-Extensive use of both sources for system packages:
-Used by: `devenv-system-common`, `devenv-system-darwin`, `devenv-system-linux`
 
 ## Package Reference Table
 
@@ -173,25 +160,20 @@ Used by: `devenv-system-common`, `devenv-system-darwin`, `devenv-system-linux`
 | `devenv-rust_toolchain` | genAttrs | devShells, overlays | master + stable | rust-overlay |
 | `devenv-scala` | genAttrs | devShells, overlays | master | - |
 | `devenv-shell` | eachDefaultSystem | devShells | master | - |
-| `devenv-system-common` | eachDefaultSystem | devShells, packages | mixed | dodder |
-| `devenv-system-darwin` | eachSystem (darwin) | devShells, packages, overlays | mixed | nix-darwin, brew |
-| `devenv-system-linux` | eachSystem (linux) | devShells, packages | mixed | - |
 | `devenv-zig` | genAttrs | devShells | master | - |
 
 ## Summary Statistics
 
 | Metric | Count | Percentage |
 |--------|-------|------------|
-| Total devenv packages | 29 | 100% |
-| Using eachDefaultSystem | 16 | 55% |
-| Using genAttrs | 10 | 34% |
-| Using eachSystem (platform-specific) | 3 | 10% |
-| With packages output | 6 | 21% |
-| Using symlinkJoin | 5 | 17% |
-| With overlays export | 6 | 21% |
-| Master-only nixpkgs | 15 | 52% |
-| Stable-only nixpkgs | 2 | 7% |
-| Mixed stable/master | 12 | 41% |
+| Total devenv packages | 26 | 100% |
+| Using eachDefaultSystem | 15 | 58% |
+| Using genAttrs | 11 | 42% |
+| With packages output | 3 | 12% |
+| With overlays export | 5 | 19% |
+| Master-only nixpkgs | 15 | 58% |
+| Stable-only nixpkgs | 2 | 8% |
+| Mixed stable/master | 9 | 35% |
 
 ## Future Direction
 
