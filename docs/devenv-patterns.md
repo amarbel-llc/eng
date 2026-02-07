@@ -67,10 +67,9 @@ Used by: `devenv-node`, `devenv-scala`, `devenv-kotlin`, `devenv-rust_toolchain`
 
 ## Architecture Specification
 
-### Two System Support Patterns
+### System Support Pattern
 
-#### 1. utils.lib.eachDefaultSystem (15 packages - 58%)
-Implicit system detection via flake-utils:
+All packages use `utils.lib.eachDefaultSystem` for implicit system detection via flake-utils:
 ```nix
 outputs = { self, nixpkgs, utils, ... }:
   utils.lib.eachDefaultSystem (system:
@@ -78,19 +77,6 @@ outputs = { self, nixpkgs, utils, ... }:
     in { devShells.default = pkgs.mkShell { ... }; }
   );
 ```
-Used by: `devenv-bats`, `devenv-digital_ocean`, `devenv-direnv`, `devenv-go`, `devenv-java`, `devenv-js`, `devenv-lua`, `devenv-nix`, `devenv-pandoc`, `devenv-php`, `devenv-python`, `devenv-qmk`, `devenv-ruby`, `devenv-rust`, `devenv-shell`
-
-#### 2. nixpkgs.lib.genAttrs with Explicit List (11 packages - 42%)
-Manual system enumeration:
-```nix
-let
-  supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-  forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f { ... });
-in {
-  devShells = forEachSupportedSystem ({ pkgs }: { default = pkgs.mkShell { ... }; });
-}
-```
-Used by: `devenv-elixir`, `devenv-haskell`, `devenv-kotlin`, `devenv-node`, `devenv-ocaml`, `devenv-protobuf`, `devenv-rust_toolchain`, `devenv-scala`, `devenv-zig`
 
 ## Stable vs Master Strategy
 
@@ -143,40 +129,38 @@ Used by: `devenv-go`, `devenv-php`, `devenv-python`, `devenv-rust`, `devenv-rust
 | `devenv-bats` | eachDefaultSystem | devShells | stable | - |
 | `devenv-digital_ocean` | eachDefaultSystem | devShells, packages | stable | - |
 | `devenv-direnv` | eachDefaultSystem | devShells, packages | stable | - |
-| `devenv-elixir` | genAttrs | devShells | stable | - |
+| `devenv-elixir` | eachDefaultSystem | devShells | stable | - |
 | `devenv-go` | eachDefaultSystem | devShells, packages, overlays | stable + master | gomod2nix |
-| `devenv-haskell` | genAttrs | devShells | stable | - |
+| `devenv-haskell` | eachDefaultSystem | devShells | stable | - |
 | `devenv-java` | eachDefaultSystem | devShells, packages | stable | - |
 | `devenv-js` | eachDefaultSystem | devShells | stable | - |
-| `devenv-kotlin` | genAttrs | devShells, overlays | stable | - |
+| `devenv-kotlin` | eachDefaultSystem | devShells | stable | - |
 | `devenv-latex` | eachDefaultSystem | devShells | stable | - |
 | `devenv-lua` | eachDefaultSystem | devShells | stable | - |
 | `devenv-nix` | eachDefaultSystem | devShells, packages | stable | fh |
 | `devenv-node` | eachDefaultSystem | devShells | stable | - |
-| `devenv-ocaml` | genAttrs | devShells | stable | - |
+| `devenv-ocaml` | eachDefaultSystem | devShells | stable | - |
 | `devenv-pandoc` | eachDefaultSystem | devShells | stable | devenv-lua |
 | `devenv-php` | eachDefaultSystem | devShells, packages | stable + master | - |
-| `devenv-protobuf` | genAttrs | devShells | stable | - |
+| `devenv-protobuf` | eachDefaultSystem | devShells | stable | - |
 | `devenv-python` | eachDefaultSystem | devShells | stable + master | - |
 | `devenv-qmk` | eachDefaultSystem | devShells, packages | stable | - |
 | `devenv-ruby` | eachDefaultSystem | devShells | stable | - |
 | `devenv-rust` | eachDefaultSystem | devShells | stable + master | rust-overlay |
-| `devenv-rust_toolchain` | genAttrs | devShells, overlays | stable + master | rust-overlay |
-| `devenv-scala` | genAttrs | devShells, overlays | stable | - |
+| `devenv-rust_toolchain` | eachDefaultSystem | devShells | stable + master | rust-overlay |
+| `devenv-scala` | eachDefaultSystem | devShells | stable | - |
 | `devenv-shell` | eachDefaultSystem | devShells | stable | - |
-| `devenv-zig` | genAttrs | devShells | stable | - |
+| `devenv-zig` | eachDefaultSystem | devShells | stable | - |
 
 ## Summary Statistics
 
 | Metric | Count | Percentage |
 |--------|-------|------------|
 | Total devenv packages | 25 | 100% |
-| Using eachDefaultSystem | 17 | 65% |
-| Using genAttrs | 8 | 32% |
-| With packages output | 6 | 23% |
-| With overlays export | 4 | 15% |
-| Stable-only nixpkgs | 21 | 81% |
-| Mixed stable/master | 5 | 19% |
+| Using eachDefaultSystem | 25 | 100% |
+| With packages output | 6 | 24% |
+| Stable-only nixpkgs | 20 | 80% |
+| Mixed stable/master | 5 | 20% |
 
 ## Package-Specific Configuration
 
@@ -202,13 +186,12 @@ These configurations are applied within the flake itself, so users don't need to
    - Language runtimes use stable for reliability
    - Dev tooling (LSPs, linters) use master for latest features
 
+3. **Unified System Pattern** (Completed)
+   - All packages now use `eachDefaultSystem`
+
 ### Remaining Goals
 
-1. **Consolidate System Patterns**
-   - Prefer `eachDefaultSystem` over manual `genAttrs`
-   - Currently 17 use eachDefaultSystem, 9 use genAttrs
-
-2. **Unify Overlay Patterns**
+1. **Unify Overlay Patterns**
    - Standardize overlay patterns for JVM-based languages (kotlin, scala)
    - Consider shared overlay modules
 
