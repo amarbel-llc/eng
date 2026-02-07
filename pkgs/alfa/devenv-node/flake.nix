@@ -2,30 +2,26 @@
   description = "A Nix-flake-based Node.js development environment";
 
   inputs = {
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
-    nixpkgs.url = "github:NixOS/nixpkgs/54b154f971b71d260378b284789df6b272b49634";
+    nixpkgs.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/54b154f971b71d260378b284789df6b272b49634";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-stable }:
-    let
-      overlays = [
-        (final: prev: rec {
-          nodejs = prev.nodejs_latest;
-          pnpm = prev.nodePackages.pnpm;
-          yarn = (prev.yarn.override { inherit nodejs; });
+  outputs = { self, nixpkgs, nixpkgs-master, utils }:
+    (utils.lib.eachDefaultSystem
+      (system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              node2nix
+              nodejs_latest
+              nodePackages.pnpm
+              yarn
+            ];
+          };
         })
-      ];
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
-        pkgs = import nixpkgs { inherit overlays system; };
-      });
-    in
-    {
-      devShells = forEachSupportedSystem ({ pkgs }: {
-        default = pkgs.mkShell {
-          packages = with pkgs; [ node2nix nodejs pnpm yarn ];
-        };
-      });
-    };
+    );
 }

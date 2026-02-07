@@ -1,12 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/54b154f971b71d260378b284789df6b272b49634";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
+    nixpkgs.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/54b154f971b71d260378b284789df6b272b49634";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     gomod2nix = {
       url = "github:nix-community/gomod2nix";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -16,7 +16,7 @@
       nixpkgs,
       utils,
       gomod2nix,
-      nixpkgs-stable,
+      nixpkgs-master,
     }:
     {
       overlays = gomod2nix.overlays;
@@ -29,12 +29,12 @@
           inherit system;
         };
 
-        pkgs-stable = import nixpkgs-stable {
+        pkgs-master = import nixpkgs-master {
           inherit system;
         };
 
         packages = {
-          inherit (pkgs)
+          inherit (pkgs-master)
             delve
             gofumpt
             golangci-lint
@@ -45,7 +45,7 @@
             parallel
             ;
 
-          inherit (pkgs-stable)
+          inherit (pkgs)
             go
             ;
 
@@ -58,7 +58,7 @@
       {
         inherit packages;
 
-        devShells.default = pkgs.mkShell {
+        devShells.default = pkgs-master.mkShell {
           packages = builtins.attrValues packages;
         };
       }

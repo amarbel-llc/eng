@@ -115,9 +115,9 @@
         localPackages = pkgs.lib.filterAttrs (n: v: v != null) (
           builtins.mapAttrs (
             name: flake:
-            if name == "devenv-system-linux" && !pkgs.stdenv.isLinux then
+            if name == "system-linux" && !pkgs.stdenv.isLinux then
               null
-            else if name == "devenv-system-darwin" && !pkgs.stdenv.isDarwin then
+            else if name == "system-darwin" && !pkgs.stdenv.isDarwin then
               null
             else
               flake.packages.${system}.default or null
