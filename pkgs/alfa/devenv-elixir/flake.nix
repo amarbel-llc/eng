@@ -20,7 +20,7 @@
             pkgs.lib.optionals (pkgs.stdenv.isLinux) (with pkgs; [ gigalixir inotify-tools libnotify ]) ++
             # macOS only
             pkgs.lib.optionals (pkgs.stdenv.isDarwin) (with pkgs; [ terminal-notifier ]) ++
-            (with pkgs.darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices ]);
+            pkgs.lib.optionals (pkgs.stdenv.isDarwin) (with pkgs.darwin.apple_sdk_11_0.frameworks; [ CoreFoundation CoreServices ]);
         };
       });
     };

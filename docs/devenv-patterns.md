@@ -179,50 +179,40 @@ Used by: `devenv-go`, `devenv-php`, `devenv-python`, `devenv-rust`, `devenv-rust
 | Stable-only nixpkgs | 21 | 81% |
 | Mixed stable/master | 5 | 19% |
 
-## Known Issues
+## Package-Specific Configuration
 
-Some packages have pre-existing issues unrelated to the stable-first pattern:
+Some packages require special nixpkgs configuration:
 
-### devenv-digital_ocean
-**Issue**: Requires `allowUnfree = true` for the `docker` package.
-**Workaround**: Add to your nix configuration:
-```nix
-nixpkgs.config.allowUnfree = true;
-```
+| Package | Configuration | Reason |
+|---------|--------------|--------|
+| `devenv-digital_ocean` | `config.allowUnfree = true` | docker is unfree |
+| `devenv-haxe` | `config.permittedInsecurePackages = [ "mbedtls-2.28.10" ]` | haxe depends on insecure mbedtls |
+| `devenv-elixir` | Uses `apple_sdk_11_0` | Migrated from deprecated `apple_sdk` |
 
-### devenv-elixir
-**Issue**: Uses deprecated `darwin.apple_sdk` which has been removed.
-**Status**: Needs migration to `darwin.apple_sdk_11_0` per [nixpkgs migration guide](https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks).
-
-### devenv-haxe
-**Issue**: Depends on `mbedtls-2.28.10` which is marked as insecure.
-**Workaround**: Add to your nix configuration:
-```nix
-nixpkgs.config.permittedInsecurePackages = [ "mbedtls-2.28.10" ];
-```
+These configurations are applied within the flake itself, so users don't need to configure anything.
 
 ## Future Direction
 
-### Goals for Improvement
+### Completed Goals
 
-1. **Default to Stable**
-   - New packages should use `nixpkgs-stable` as primary source
-   - Only use unstable for packages not available or broken in stable
-   - Reduces build churn and improves reproducibility
+1. **Stable-First Pattern** (Completed)
+   - All packages now use `nixpkgs` (stable) as default
+   - `nixpkgs-master` available for packages needing latest versions
+   - Naming convention: `nixpkgs` = stable, `nixpkgs-master` = master
 
-2. **Easy Override Mechanism**
-   - Establish a consistent pattern for switching between stable/master
-   - Consider a helper function or common module for this purpose
+2. **Runtime vs Tooling Split** (Completed)
+   - Language runtimes use stable for reliability
+   - Dev tooling (LSPs, linters) use master for latest features
 
-3. **Consolidate Similar Strategies**
-   - Align system support patterns (prefer `eachDefaultSystem` where possible)
-   - Standardize outputs structure for similar package types
-   - Unify overlay patterns for JVM-based languages
+### Remaining Goals
 
-4. **Increase Consistency**
-   - Adopt common naming conventions
-   - Standardize package composition approaches
-   - Document and enforce patterns via templates
+1. **Consolidate System Patterns**
+   - Prefer `eachDefaultSystem` over manual `genAttrs`
+   - Currently 17 use eachDefaultSystem, 9 use genAttrs
+
+2. **Unify Overlay Patterns**
+   - Standardize overlay patterns for JVM-based languages (kotlin, scala)
+   - Consider shared overlay modules
 
 ### Recommended Standard Pattern
 

@@ -17,7 +17,10 @@
       forEachSupportedSystem = f:
         nixpkgs.lib.genAttrs supportedSystems (system:
           f {
-            pkgs = import nixpkgs { inherit system; };
+            pkgs = import nixpkgs {
+              inherit system;
+              config.permittedInsecurePackages = [ "mbedtls-2.28.10" ];
+            };
           });
     in
     {
