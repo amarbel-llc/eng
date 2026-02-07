@@ -20,7 +20,7 @@ Language-specific and tool-specific development environments. Each provides a `d
 
 Examples: `devenv-python`, `devenv-rust`, `devenv-go`, `devenv-js`
 
-See [docs/devenv-patterns.md](../../docs/devenv-patterns.md) for pattern documentation.
+See [docs/nix-patterns.md](../../docs/nix-patterns.md) for pattern documentation.
 
 ## system-* (System Packages)
 
