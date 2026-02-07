@@ -19,19 +19,19 @@ This document captures the existing architectural patterns used across the deven
 
 ## Formatting
 
-All flake.nix files should be formatted using `nixfmt` via the formatter exported by `devenv-nix`:
+All flake.nix files should be formatted using `nixfmt` via the `fmt` app exported by `devenv-nix`:
 
 ```sh
-# Format a single flake
-nix fmt --inputs-from pkgs/alfa/devenv-nix pkgs/alfa/devenv-go
-
 # Format all devenv flakes
-for f in pkgs/alfa/devenv-*/flake.nix; do
-  nix fmt --inputs-from pkgs/alfa/devenv-nix "$(dirname "$f")"
-done
+nix run ./pkgs/alfa/devenv-nix#fmt -- pkgs/alfa/devenv-*/flake.nix
+
+# Format a single flake
+nix run ./pkgs/alfa/devenv-nix#fmt -- pkgs/alfa/devenv-go/flake.nix
 ```
 
-The `devenv-nix` flake exports `formatter.${system} = pkgs.nixfmt` which provides the canonical formatting for all Nix files.
+The `devenv-nix` flake exports:
+- `formatter.${system}` - for use with `nix fmt`
+- `apps.${system}.fmt` - for direct invocation via `nix run`
 
 ## Outputs Structure
 

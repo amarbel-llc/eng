@@ -4,18 +4,14 @@ Nix flake packages organized into two categories.
 
 ## Formatting
 
-All flake.nix files are formatted using `nixfmt` via the formatter defined in `devenv-nix`:
+All flake.nix files are formatted using `nixfmt` via `devenv-nix`:
 
 ```sh
-nix fmt pkgs/alfa/devenv-nix
-```
+# Format all devenv flakes
+nix run ./pkgs/alfa/devenv-nix#fmt -- pkgs/alfa/devenv-*/flake.nix
 
-To format all devenv flakes:
-
-```sh
-for f in pkgs/alfa/devenv-*/flake.nix; do
-  nix fmt --inputs-from pkgs/alfa/devenv-nix "$(dirname "$f")"
-done
+# Format a single flake
+nix run ./pkgs/alfa/devenv-nix#fmt -- pkgs/alfa/devenv-go/flake.nix
 ```
 
 ## devenv-* (Development Environments)

@@ -38,6 +38,11 @@
       {
         formatter = pkgs.nixfmt;
 
+        apps.fmt = {
+          type = "app";
+          program = "${pkgs.nixfmt}/bin/nixfmt";
+        };
+
         packages.default = pkgs.symlinkJoin {
           name = "devenv-nix";
           paths = builtins.attrValues packages;
