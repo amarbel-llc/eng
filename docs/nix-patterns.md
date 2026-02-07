@@ -36,35 +36,41 @@ The `devenv-nix` flake exports:
 - `formatter.${system}` - for use with `nix fmt`
 - `apps.${system}.fmt` - for direct invocation via `nix run`
 
-## Nixpkgs Naming Conventions
+## Nixpkgs Naming Convention
 
-### Current State (Inconsistent)
+All flakes use the **stable-first** naming convention:
 
-There are currently **two different naming conventions** in use:
+- `nixpkgs` → stable (the default)
+- `nixpkgs-master` → unstable/rolling (for latest features)
 
-#### devenv-* Packages (stable-first)
-Used by all packages in `pkgs/alfa/devenv-*/`:
-- `nixpkgs` → stable commit (`fa83fd837f3098e3e678e6cf017b2b36102c7211`)
-- `nixpkgs-master` → unstable/rolling commit (`54b154f971b71d260378b284789df6b272b49634`)
+### Variable Naming
 
-#### Non-devenv Packages (unstable-first)
-Used by all other flakes in the repository:
-- `nixpkgs` → unstable/rolling commit (`54b154f971b71d260378b284789df6b272b49634`)
-- `nixpkgs-stable` → stable commit (`fa83fd837f3098e3e678e6cf017b2b36102c7211`)
+- `pkgs = import nixpkgs` → stable packages (default)
+- `pkgs-master = import nixpkgs-master` → unstable packages (when needed)
 
-### Common Input Commits
+### Updating Nixpkgs
 
-Both conventions use the same underlying commits:
-- **Stable**: `github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211`
-- **Unstable/Rolling**: `github:NixOS/nixpkgs/54b154f971b71d260378b284789df6b272b49634`
-- **flake-utils**: `https://flakehub.com/f/numtide/flake-utils/0.1.102`
+Use the justfile commands to update all flakes consistently:
+
+```sh
+# Fetch latest commit SHAs
+just update-nixpkgs
+
+# Update all flakes using fh
+just update-nix
+```
+
+The `bin/update_flakes.bash` script uses `fh` (FlakeHub CLI) to update:
+- `nixpkgs` → latest stable branch commit
+- `nixpkgs-master` → latest master branch commit
+- `utils` → latest flake-utils
 
 ### Rationale
 
-| Convention | Primary Use Case | Reasoning |
-|------------|------------------|-----------|
-| stable-first (devenv) | Development environments | Stability for runtimes; master for latest tooling |
-| unstable-first (non-devenv) | Applications, system packages | Latest features by default; stable as fallback |
+| Input | Points To | Use Case |
+|-------|-----------|----------|
+| `nixpkgs` | stable | Language runtimes, core tools, reliability |
+| `nixpkgs-master` | unstable | LSPs, linters, formatters, latest features |
 
 ---
 
@@ -241,16 +247,16 @@ Standalone repositories:
 
 ## Non-Devenv Nixpkgs Patterns
 
-### Two-Channel Pattern (Most Common)
+### Stable-First Pattern
 ```nix
 inputs = {
-  nixpkgs.url = "github:NixOS/nixpkgs/<unstable-commit>";
-  nixpkgs-stable.url = "github:NixOS/nixpkgs/<stable-commit>";
+  nixpkgs.url = "github:NixOS/nixpkgs/<stable-commit>";
+  nixpkgs-master.url = "github:NixOS/nixpkgs/<unstable-commit>";
   utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 };
 ```
 
-Used by majority of non-devenv packages including:
+Used by all non-devenv packages including:
 - Root `flake.nix`
 - All `pkgs/bravo/*` packages
 - All `pkgs/alfa/system-*` packages
@@ -270,11 +276,9 @@ Used by majority of non-devenv packages including:
 
 ---
 
-# Recommended Patterns
+# Recommended Pattern
 
-## Devenv Pattern (Stable-First)
-
-For development environment packages:
+All flakes should use the stable-first pattern:
 
 ```nix
 {
@@ -290,36 +294,15 @@ For development environment packages:
         pkgs = import nixpkgs { inherit system; };
         pkgs-master = import nixpkgs-master { inherit system; };
       in {
+        # Use pkgs (stable) for runtimes and core tools
+        # Use pkgs-master (unstable) for LSPs, linters, formatters
         devShells.default = pkgs.mkShell {
           packages = [
-            pkgs.runtime-package        # stable (runtimes)
-            pkgs-master.lsp-server      # master (tooling)
+            pkgs.go                     # runtime from stable
+            pkgs-master.gopls           # LSP from master
+            pkgs-master.golangci-lint   # linter from master
           ];
         };
-      }
-    );
-}
-```
-
-## Non-Devenv Pattern (Unstable-First)
-
-For applications and system packages:
-
-```nix
-{
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/<unstable-commit>";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/<stable-commit>";
-    utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1";
-  };
-
-  outputs = { self, nixpkgs, nixpkgs-stable, utils }:
-    utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-        pkgs-stable = import nixpkgs-stable { inherit system; };
-      in {
-        packages.default = pkgs.buildApplication { ... };
       }
     );
 }
@@ -333,13 +316,13 @@ For applications and system packages:
 
 1. **Unified System Pattern** - All packages use `eachDefaultSystem`
 2. **Consistent Formatting** - All flakes formatted with `nixfmt`
-3. **Runtime vs Tooling Split** (devenv) - Runtimes from stable, tooling from master
+3. **Runtime vs Tooling Split** - Runtimes from stable, tooling from master
+4. **Unified Naming Convention** - All flakes use `nixpkgs`/`nixpkgs-master` (stable-first)
 
 ## Remaining Goals
 
-1. **Unify Naming Convention** - Resolve the `nixpkgs`/`nixpkgs-master` vs `nixpkgs`/`nixpkgs-stable` inconsistency
-2. **Unify Overlay Patterns** - Standardize overlay patterns for JVM-based languages
-3. **Document All Packages** - Complete reference tables for non-devenv packages
+1. **Unify Overlay Patterns** - Standardize overlay patterns for JVM-based languages
+2. **Document All Packages** - Complete reference tables for non-devenv packages
 
 ---
 

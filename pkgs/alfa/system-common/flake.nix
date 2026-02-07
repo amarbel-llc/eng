@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/54b154f971b71d260378b284789df6b272b49634";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
     dodder.url = "github:friedenberg/dodder?dir=go";
   };
@@ -10,7 +10,7 @@
     {
       self,
       nixpkgs,
-      nixpkgs-stable,
+      nixpkgs-master,
       utils,
       dodder,
     }:
@@ -24,13 +24,13 @@
           inherit system;
         };
 
-        pkgs-stable = import nixpkgs-stable {
+        pkgs-master = import nixpkgs-master {
           config.allowUnfree = true;
           inherit system;
         };
 
         packages = {
-          inherit (pkgs)
+          inherit (pkgs-master)
             age
             asdf
             asdf-vm
@@ -111,9 +111,9 @@
             # pcsclite
             ;
 
-          gnupg = (pkgs.gnupg.override { withPcsc = true; });
+          gnupg = (pkgs-master.gnupg.override { withPcsc = true; });
 
-          inherit (pkgs-stable)
+          inherit (pkgs)
             csvkit
             gftp
             ;
@@ -123,13 +123,13 @@
 
       in
       {
-        packages.default = pkgs.symlinkJoin {
+        packages.default = pkgs-master.symlinkJoin {
           failOnMissing = true;
           name = "system-packages";
           paths = builtins.attrValues packages;
         };
 
-        devShells.default = pkgs.mkShell {
+        devShells.default = pkgs-master.mkShell {
           packages = builtins.attrValues packages;
         };
       }

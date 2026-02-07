@@ -42,13 +42,13 @@ update_flake_recursive() {
   local master_flake_path
   local stable_flake_path
 
-  master_flake_path="github:NixOS/nixpkgs/$(cat "$file_nixpkgs_git_master_sha")"
   stable_flake_path="github:NixOS/nixpkgs/$(cat "$file_nixpkgs_stable_git_sha")"
+  master_flake_path="github:NixOS/nixpkgs/$(cat "$file_nixpkgs_git_master_sha")"
 
-  # Update current flake after dependencies
+  # Update current flake after dependencies (stable-first convention)
   echo "Updating: $abs_dir"
-  (cd "$abs_dir" && fh add "${master_flake_path}")
-  (cd "$abs_dir" && fh add --input-name nixpkgs-stable "${stable_flake_path}")
+  (cd "$abs_dir" && fh add "${stable_flake_path}")
+  (cd "$abs_dir" && fh add --input-name nixpkgs-master "${master_flake_path}")
   (cd "$abs_dir" && fh add --input-name utils numtide/flake-utils)
   (cd "$abs_dir" && nix flake update)
 }

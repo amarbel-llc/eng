@@ -4,7 +4,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/54b154f971b71d260378b284789df6b272b49634";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
 
@@ -12,7 +12,7 @@
     {
       self,
       nixpkgs,
-      nixpkgs-stable,
+      nixpkgs-master,
       utils,
     }:
     utils.lib.eachDefaultSystem (
@@ -22,39 +22,39 @@
           inherit system;
         };
 
-        pkgs-stable = import nixpkgs-stable {
+        pkgs-master = import nixpkgs-master {
           inherit system;
         };
 
         name = "html-to-pdf";
 
         buildInputs =
-          with pkgs;
+          with pkgs-master;
           [
             httpie
             jq
             websocat
           ]
-          ++ lib.optional (!pkgs.stdenv.isDarwin) pkgs-stable.chromium;
+          ++ lib.optional (!pkgs-master.stdenv.isDarwin) pkgs.chromium;
 
         html-to-pdf =
-          (pkgs.writeScriptBin name (builtins.readFile ./html-to-pdf.bash)).overrideAttrs
+          (pkgs-master.writeScriptBin name (builtins.readFile ./html-to-pdf.bash)).overrideAttrs
             (old: {
               buildCommand = "${old.buildCommand}\n patchShebangs $out";
             });
 
       in
       {
-        packages.default = pkgs.symlinkJoin {
+        packages.default = pkgs-master.symlinkJoin {
           name = name;
           paths = [ html-to-pdf ] ++ buildInputs;
-          buildInputs = [ pkgs.makeWrapper ];
+          buildInputs = [ pkgs-master.makeWrapper ];
           postBuild = "wrapProgram $out/bin/${name} --prefix PATH : $out/bin";
         };
 
-        devShells.default = pkgs.mkShell {
+        devShells.default = pkgs-master.mkShell {
           packages = (
-            with pkgs;
+            with pkgs-master;
             [
               httpie
               jq
