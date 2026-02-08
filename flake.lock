@@ -466,11 +466,11 @@
         "utils": "utils_6"
       },
       "locked": {
-        "lastModified": 1770556656,
-        "narHash": "sha256-yXtmDU3IFf1rTh4Oh2+R8XLxOIdEvYuznRJUatd8qdQ=",
+        "lastModified": 1770564828,
+        "narHash": "sha256-ttVQpCkm71m6p2o3ccRbjHDMIN/27sFfvBOpxshUT3g=",
         "owner": "friedenberg",
         "repo": "lux",
-        "rev": "aad9097ddc400141292f6966a5a3f66b07ffc769",
+        "rev": "0fd7fdddabaad070f0a24cc458c18a30d52b487e",
         "type": "github"
       },
       "original": {
