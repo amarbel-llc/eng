@@ -1,57 +1,59 @@
 
 # TODO add support for ssh hosts
-function z --wraps zmx --description 'attach to or create an existing zmx session for a given directory'
+function z --description 'attach to or create an existing zmx session for a given directory'
   switch (count $argv)
 
     # use current directory
     case 0
-      set -l session_name (__z_get_session_name_or_directory_for_path $PWD)
-      zmx attach $session_name $SHELL
+      set -l z_path (string replace --regex "^$HOME/" '' $PWD)
+      __z_attach_to_path $argv
+
+    # use provided directory
+    case 1
+      if test -d $HOME/$argv
+        zmx attach $arg_path_components
+        return $status
+      end
+
+      if __z_has_session $argv
+        zmx attach $arg_path_components
+        return $status
+      end
+
+      __z_attach_to_path $argv
       return $status
 
-    # use provided directory or session name
-    case 1 2
-      if test -d $argv[1]
-        pushd $argv[1]
-        set -l session_name (__z_get_session_name_or_directory_for_path $argv)
-
-        if test -n $argv[2]
-          if not command -q $argv[2]
-            set -l session_name $session_name.$argv[2]
-          end
-        end
-
-        zmx attach $session_name $SHELL
-        return $status
-      else
-        zmx attach $argv $SHELL
-        return $status
-      end
-
-    # use provided directory or session name and run provided util
     case '*'
-      set -l util $argv[2..]
-      set -l util_name $argv[2]
-
-      if test -d $argv[1]
-        pushd $argv[1]
-        set -l session_name (__z_get_session_name_or_directory_for_path $argv[1]).$util_name
-        zmx attach $session_name $SHELL -c $util
-        return $status
-      else
-        zmx attach $argv[1].$util_name $SHELL -c $util
-        return $status
-      end
-
+      gum log -t error more than one argument provided
+      return 1
   end
 end
 
-function __z_get_session_name_or_directory_for_path
-  if test -f "$argv/TERMTABS_NAME"
-    string trim (cat "$argv/TERMTABS_NAME")
-    return $status
+function __z_has_session
+  zmx list | awk '{split($1, a, "="); $2=$2; $3=$3; print a[2]}' | grep -q $argv>/dev/null
+end
+
+# eng*<area>/worktrees/<repo>/<worktree>
+function __z_attach_to_path
+  set -l arg_path_components (string split / $argv[1])
+
+  set -l eng_area $arg_path_components[1]
+  set -l repo $arg_path_components[3]
+  set -l worktree $arg_path_components[4]
+
+  if not test $arg_path_components[2] = worktrees
+    gum log -t error invalid path provided: $argv
+    return 1
   end
 
-  echo (basename "$argv" | tr -d ".")
-  return $status
+  set -l repo_path $HOME/$eng_area/repos/$repo
+  echo repo_path: $repo_path
+  echo argv: $argv
+
+  mkdir -p $HOME/$argv
+
+  git -C $repo_path worktree add $HOME/$argv
+
+  pushd $HOME/$argv
+  exec zmx attach $argv
 end

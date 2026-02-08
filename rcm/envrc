@@ -5,3 +5,4 @@ dotenv_if_exists "$HOME/.secrets-nix.env"
 
 system="$(uname -s | tr '[:upper:]' '[:lower:]')"
 dotenv_if_exists "$HOME/.env-$system"
+source_up_if_exists .envrc.local

@@ -16,3 +16,4 @@ export GOPATH="$HOME/.cache/go"
 export SSH_HOME="$HOME/.config/ssh"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_RUNTIME_HOME="$HOME/.local/runtime"
+export ZIG_GLOBAL_CACHE_DIR=$HOME/.cache/zig

@@ -20,3 +20,6 @@ vim/plugged
 
 .gitsecret/keys/random_seed
 !*.secret
+
+repos/
+worktrees/
