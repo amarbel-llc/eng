@@ -1,21 +1,23 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/fa83fd837f3098e3e678e6cf017b2b36102c7211";
-    nixpkgs-master.url = "github:NixOS/nixpkgs/54b154f971b71d260378b284789df6b272b49634";
+    nixpkgs.url = "github:NixOS/nixpkgs/23d72dabcb3b12469f57b37170fcbc1789bd7457";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/b28c4999ed71543e71552ccfd0d7e68c581ba7e9";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     # explicitly included separately
     # explicit-chrest.url = "github:friedenberg/chrest?dir=go";
-    dodder.url = "github:friedenberg/dodder?dir=go";
-    explicit-ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
-    explicit-glyphs-agent-mux.url = "github:friedenberg/glyphs";
+    # explicit-glyphs-agent-mux.url = "github:friedenberg/glyphs";
 
     # implicitly required by flake tree
     brew.url = "github:BatteredBunny/brew-nix";
+    dodder.url = "github:friedenberg/dodder?dir=go";
     fh.url = "https://flakehub.com/f/DeterminateSystems/fh/0.1.21.tar.gz";
     gomod2nix.url = "github:nix-community/gomod2nix";
+    lux.url = "github:friedenberg/lux";
     nix-darwin.url = "github:nix-darwin/nix-darwin";
+    nix-mcp-server.url = "github:friedenberg/nix-mcp-server";
     nixgl.url = "github:nix-community/nixGL";
+    ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
   };
 
   outputs =

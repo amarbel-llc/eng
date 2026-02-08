@@ -44,8 +44,16 @@ update-nixpkgs:
   echo ${nix_nixpkgs_stable_darwin_git_digest} > {{file_nixpkgs_stable_darwin_git_sha}}
 
 
+# Update flakes in main eng repo (excludes repos/)
 update-nix:
-  ./bin/update_flakes.bash
+  UPDATE_FLAKES_EXCLUDE="./repos/*" ./bin/update_flakes.bash
+
+# Update flakes in repos/ (separate git repositories)
+update-nix-repos:
+  ./bin/update_flakes.bash repos
+
+# Update all flakes (main repo + repos/)
+update-nix-all: update-nix update-nix-repos
 
 update: update-nix
 

@@ -25,11 +25,11 @@
     "brew-api": {
       "flake": false,
       "locked": {
-        "lastModified": 1770476737,
-        "narHash": "sha256-xquyeo3ZXzxgtj4/+AZBn6jZG5tEfzSa8C6H579glps=",
+        "lastModified": 1770559710,
+        "narHash": "sha256-UVt/PhIBU6vSW6mCFropQ7W1sU55kyugXgD6nU3R2+o=",
         "owner": "BatteredBunny",
         "repo": "brew-api",
-        "rev": "5352ec19f463af5dfed4e6a11e2908aaa0ec7046",
+        "rev": "f5865ed49b6ad13b756bfeac57eb2a142786d869",
         "type": "github"
       },
       "original": {
@@ -93,19 +93,19 @@
         "type": "github"
       }
     },
-    "nixpkgs-stable": {
+    "nixpkgs-master": {
       "locked": {
-        "lastModified": 1769598131,
-        "narHash": "sha256-e7VO/kGLgRMbWtpBqdWl0uFg8Y2XWFMdz0uUJvlML8o=",
+        "lastModified": 1770522055,
+        "narHash": "sha256-03+UdWZAo150UdTZGG4xwSCTTT0GbxpSyGn9j4FBBH8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "fa83fd837f3098e3e678e6cf017b2b36102c7211",
+        "rev": "b28c4999ed71543e71552ccfd0d7e68c581ba7e9",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "fa83fd837f3098e3e678e6cf017b2b36102c7211",
+        "rev": "b28c4999ed71543e71552ccfd0d7e68c581ba7e9",
         "type": "github"
       }
     },
@@ -127,17 +127,17 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1769866281,
-        "narHash": "sha256-bHKvpOAggRZvTXoTR/AWq5sHlCbhG5ml7K5KENcRveA=",
+        "lastModified": 1770464364,
+        "narHash": "sha256-z5NJPSBwsLf/OfD8WTmh79tlSU8XgIbwmk6qB1/TFzY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "54b154f971b71d260378b284789df6b272b49634",
+        "rev": "23d72dabcb3b12469f57b37170fcbc1789bd7457",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "54b154f971b71d260378b284789df6b272b49634",
+        "rev": "23d72dabcb3b12469f57b37170fcbc1789bd7457",
         "type": "github"
       }
     },
@@ -147,7 +147,7 @@
         "brew-api": "brew-api",
         "nix-darwin": "nix-darwin_2",
         "nixpkgs": "nixpkgs_3",
-        "nixpkgs-stable": "nixpkgs-stable",
+        "nixpkgs-master": "nixpkgs-master",
         "utils": "utils"
       }
     },

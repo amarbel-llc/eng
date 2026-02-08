@@ -3,16 +3,16 @@
     "devenv-python": {
       "inputs": {
         "nixpkgs": "nixpkgs",
-        "nixpkgs-stable": "nixpkgs-stable",
+        "nixpkgs-master": "nixpkgs-master",
         "utils": "utils"
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-python",
-        "lastModified": 1769709109,
-        "narHash": "sha256-3iL0TmDTtbU/NV0XPFjIGy8c6m6muWEDV+G8A2lsKJE=",
+        "lastModified": 1770495252,
+        "narHash": "sha256-PBqqMCnIzq8uZp0hjJ+7SUMwP3dWwew+f2yFTSZG0hU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "5f7743bf7a5b2c99002cdbba29ca765012776e71",
+        "rev": "97b00e4db8fd0c267244c129944822cbfc1d3dc8",
         "type": "github"
       },
       "original": {
@@ -23,38 +23,6 @@
       }
     },
     "nixpkgs": {
-      "locked": {
-        "lastModified": 1767105887,
-        "narHash": "sha256-PbWQ8lxOWrc6swJDIG+raNZ9PvoEnmnhkLacatlaKQ0=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "c4cfc9ced33f81099f419fa59893df11dc3f9de9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "c4cfc9ced33f81099f419fa59893df11dc3f9de9",
-        "type": "github"
-      }
-    },
-    "nixpkgs-stable": {
-      "locked": {
-        "lastModified": 1766885793,
-        "narHash": "sha256-P6RVkrM9JLCW6xBjSwHfgTOQ1JwBUma5xe5LI8xAPC0=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "9ef261221d1e72399f2036786498d78c38185c46",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "9ef261221d1e72399f2036786498d78c38185c46",
-        "type": "github"
-      }
-    },
-    "nixpkgs-stable_2": {
       "locked": {
         "lastModified": 1769598131,
         "narHash": "sha256-e7VO/kGLgRMbWtpBqdWl0uFg8Y2XWFMdz0uUJvlML8o=",
@@ -70,7 +38,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
+    "nixpkgs-master": {
       "locked": {
         "lastModified": 1769866281,
         "narHash": "sha256-bHKvpOAggRZvTXoTR/AWq5sHlCbhG5ml7K5KENcRveA=",
@@ -86,11 +54,43 @@
         "type": "github"
       }
     },
+    "nixpkgs-master_2": {
+      "locked": {
+        "lastModified": 1770522055,
+        "narHash": "sha256-03+UdWZAo150UdTZGG4xwSCTTT0GbxpSyGn9j4FBBH8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b28c4999ed71543e71552ccfd0d7e68c581ba7e9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b28c4999ed71543e71552ccfd0d7e68c581ba7e9",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1770464364,
+        "narHash": "sha256-z5NJPSBwsLf/OfD8WTmh79tlSU8XgIbwmk6qB1/TFzY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "23d72dabcb3b12469f57b37170fcbc1789bd7457",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "23d72dabcb3b12469f57b37170fcbc1789bd7457",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "devenv-python": "devenv-python",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-stable": "nixpkgs-stable_2",
+        "nixpkgs-master": "nixpkgs-master_2",
         "utils": "utils_2"
       }
     },
