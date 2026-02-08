@@ -5,12 +5,16 @@
   ...
 }:
 {
+  imports = [
+    ./apps-local.nix
+  ];
+
   homebrew = {
     enable = true;
 
     onActivation = {
       autoUpdate = true;
-      cleanup = "zap";
+      cleanup = "none";
       upgrade = true;
       extraFlags = [
         "--verbose"
@@ -24,29 +28,28 @@
     brews = [
       {
         name = "borders";
+        start_service = true;
         restart_service = true;
       }
 
       {
         name = "sketchybar";
+        start_service = true;
         restart_service = true;
       }
     ];
 
     casks = [
       "alfred"
-      "amethyst"
       "bartender"
       "espanso"
       "finicky"
       "font-hack-nerd-font"
       "gcloud-cli"
       "hammerspoon"
-      "helium"
       "karabiner-elements"
       "kitty"
       "tailscale-app"
-      "visual-studio-code"
     ];
 
     # Mac App Store apps (mas search <app name> to find the ID)
@@ -60,9 +63,9 @@
       PCalc = 403504866;
       Shush = 496437906;
       Soulver = 413965349;
-      xScope = 889428659;
-      Yubico = 1497506650;
       YubiKey = 638161122;
+      Yubico = 1497506650;
+      xScope = 889428659;
     };
   };
 }

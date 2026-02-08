@@ -5,6 +5,12 @@
   ...
 }:
 {
+  nix.nixPath = [
+    "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixpkgs"
+    "darwin-config=$HOME/.config/nix-darwin/configuration.nix"
+    "/nix/var/nix/profiles/per-user/root/channels"
+  ];
+
   system.defaults = {
     dock.autohide = true;
     finder.AppleShowAllExtensions = true;

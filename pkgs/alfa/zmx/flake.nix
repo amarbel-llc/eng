@@ -100,9 +100,9 @@
 
           devShells.default = pkgs.mkShell {
             buildInputs = [ package ];
-            shellHook = ''
-              export fish_complete_path="''${fish_complete_path:+''$fish_complete_path}${package}/share/fish/vendor_completions.d"
-            '';
+            # shellHook = ''
+            #   export fish_complete_path="''${fish_complete_path:+''$fish_complete_path}${package}/share/fish/vendor_completions.d"
+            # '';
             packages = [ package ];
           };
         }
