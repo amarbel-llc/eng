@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-set -e
+#! /usr/bin/env -S bash -e
 
 if [[ $# -gt 0 ]]; then
   git add "$@"
@@ -8,11 +6,19 @@ fi
 
 diff_status=$(git diff --cached 2>&1)
 
-if [[ -z "$diff_status" ]]; then
+if [[ -z $diff_status ]]; then
   echo "no changes, just pushing" >&2
 else
-  commit_msg=$(gum spin --spinner monkey --title "generating commit message..." -- \
-    claude -p "output a git commit message that summarizes the current staged changes. include only the output for the git commit message, as it will be piped directly into the git commit message")
+  msg_claude_prompt="$(
+    cat - <<-EOM
+    output text that will be used for a git commit message that summarizes the
+    current staged changes.
+    include no other output, as it will be piped directly into the git commit message
+EOM
+  )"
+
+  commit_msg="$(gum spin --spinner monkey --title "generating commit message..." -- \
+    claude -p "$msg_claude_prompt")"
 
   if ! echo -n "$commit_msg" | git commit -e -F -; then
     exit 1
