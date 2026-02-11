@@ -10,10 +10,10 @@
     darwin.url = "path:./systems/darwin";
     linux.url = "path:./systems/linux";
 
-    # Temporarily commented out - these depend on devenv which has been migrated
-    # lux.url = "github:amarbel-llc/lux";
+    lux.url = "github:amarbel-llc/lux";
     # nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
-    # ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
+    pivy.url = "github:amarbel-llc/pivy";
+    ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
     # zmx.url = "github:sfriedenberg-etsy/zmx";
   };
 
@@ -26,6 +26,11 @@
       common,
       darwin,
       linux,
+      lux,
+      # nix-mcp-server,
+      pivy,
+      ssh-agent-mux,
+      # zmx,
     }:
     (utils.lib.eachDefaultSystem (
       system:
@@ -38,35 +43,23 @@
           // (builtins.removeAttrs (darwin.packages.${system} or { }) [ "default" ])
           // (builtins.removeAttrs (linux.packages.${system} or { }) [ "default" ]);
 
-        # Repository packages (temporarily disabled during migration)
-        repoPackages = { };
+        # Repository packages
+        repoPackages = {
+          lux = lux.packages.${system}.default;
+          # nix-mcp-server = nix-mcp-server.packages.${system}.default;
+          pivy = pivy.packages.${system}.default;
+          ssh-agent-mux = ssh-agent-mux.packages.${system}.default;
+          # zmx = zmx.packages.${system}.zmx-libvterm;
+        };
+
+        packages = pkgs.symlinkJoin {
+          name = "eng";
+          paths = builtins.attrValues platformPackages ++ builtins.attrValues repoPackages;
+        };
 
       in
       {
-        packages =
-          platformPackages
-          // repoPackages
-          // {
-            # Aggregate all available system packages for this platform
-            all-systems = pkgs.symlinkJoin {
-              name = "all-systems";
-              paths = builtins.attrValues platformPackages;
-            };
-
-            # Aggregate all repository packages
-            all-repos = pkgs.symlinkJoin {
-              name = "all-repos";
-              paths = builtins.filter (p: p != null) (builtins.attrValues repoPackages);
-            };
-
-            # Aggregate everything
-            all = pkgs.symlinkJoin {
-              name = "all";
-              paths =
-                (builtins.attrValues platformPackages)
-                ++ (builtins.filter (p: p != null) (builtins.attrValues repoPackages));
-            };
-          };
+        packages.default = packages;
 
         # Provide a simple devShell for working in this repo
         devShells.default = pkgs.mkShell {
