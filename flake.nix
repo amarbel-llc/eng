@@ -47,14 +47,9 @@
             path = "${dir}/${name}";
           }) flakeDirs;
 
-        pkgDirs =
-          let
-            pkgsEntries = builtins.readDir (self + "/pkgs");
-            dirs = builtins.filter (name: pkgsEntries.${name} == "directory") (builtins.attrNames pkgsEntries);
-          in
-          builtins.sort builtins.lessThan dirs;
-
-        orderedFlakes = builtins.concatLists (map (dir: getFlakesInDir "pkgs/${dir}") pkgDirs);
+        devenvFlakes = getFlakesInDir "devenvs";
+        systemFlakes = getFlakesInDir "systems";
+        orderedFlakes = devenvFlakes ++ systemFlakes;
 
         # Modified resolution logic
         resolvedFlakes = builtins.foldl' (
