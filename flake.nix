@@ -14,7 +14,7 @@
     # nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
     pivy.url = "github:amarbel-llc/pivy";
     ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
-    # zmx.url = "github:sfriedenberg-etsy/zmx";
+    zmx.url = "github:sfriedenberg-etsy/zmx";
   };
 
   outputs =
@@ -30,7 +30,7 @@
       # nix-mcp-server,
       pivy,
       ssh-agent-mux,
-      # zmx,
+      zmx,
     }:
     (utils.lib.eachDefaultSystem (
       system:
@@ -49,7 +49,7 @@
           # nix-mcp-server = nix-mcp-server.packages.${system}.default;
           pivy = pivy.packages.${system}.default;
           ssh-agent-mux = ssh-agent-mux.packages.${system}.default;
-          # zmx = zmx.packages.${system}.zmx-libvterm;
+          zmx = zmx.packages.${system}.zmx-libvterm;
         };
 
         packages = pkgs.symlinkJoin {
