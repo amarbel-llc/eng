@@ -1089,11 +1089,11 @@
         "zig2nix": "zig2nix"
       },
       "locked": {
-        "lastModified": 1770833122,
-        "narHash": "sha256-PxJ33lEjxhwLvb15neQDNviOa/WOxUOG8w7N0eiQV60=",
+        "lastModified": 1770842482,
+        "narHash": "sha256-y4N7DPXa4onWelVaPeKiINID/VyCJr76rCo9pd6sRoY=",
         "owner": "sfriedenberg-etsy",
         "repo": "zmx",
-        "rev": "2071779c458397a32cac2c74364a0fbd30c75b17",
+        "rev": "f659138b285af27f35a40ace031967133b7bb66e",
         "type": "github"
       },
       "original": {
