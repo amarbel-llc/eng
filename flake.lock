@@ -667,11 +667,11 @@
         "utils": "utils_9"
       },
       "locked": {
-        "lastModified": 1770821082,
-        "narHash": "sha256-a058DDNEufx5KGR/YxHaYgXV8mAlsUUi0lLPZufpIgw=",
+        "lastModified": 1770834134,
+        "narHash": "sha256-8O8LowaGa7JWtDj1LwzHsSjB16vymtnagzGPakK2g7U=",
         "owner": "amarbel-llc",
         "repo": "ssh-agent-mux",
-        "rev": "be3f4435db055723ab1b09aebfcde9ab23406e2a",
+        "rev": "ef5d555709da5c3d8b97da2cc78f51b786fb1e0f",
         "type": "github"
       },
       "original": {
