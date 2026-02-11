@@ -1,5 +1,0 @@
-__pycache__
-.venv/
-.gitsecret/keys/random_seed
-!*.secret
-.env
