@@ -1,23 +1,10 @@
 {
+  description = "Monorepo containing devenv templates and system packages";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/23d72dabcb3b12469f57b37170fcbc1789bd7457";
     nixpkgs-master.url = "github:NixOS/nixpkgs/b28c4999ed71543e71552ccfd0d7e68c581ba7e9";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
-
-    # explicitly included separately
-    # explicit-chrest.url = "github:friedenberg/chrest?dir=go";
-    # explicit-glyphs-agent-mux.url = "github:friedenberg/glyphs";
-
-    # implicitly required by flake tree
-    brew.url = "github:BatteredBunny/brew-nix";
-    dodder.url = "github:friedenberg/dodder?dir=go";
-    fh.url = "https://flakehub.com/f/DeterminateSystems/fh/0.1.21.tar.gz";
-    gomod2nix.url = "github:nix-community/gomod2nix";
-    lux.url = "github:friedenberg/lux";
-    nix-darwin.url = "github:nix-darwin/nix-darwin";
-    nix-mcp-server.url = "github:friedenberg/nix-mcp-server";
-    nixgl.url = "github:nix-community/nixGL";
-    ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
   };
 
   outputs =
@@ -26,132 +13,27 @@
       nixpkgs,
       nixpkgs-master,
       utils,
-      ...
-    }@inputs:
+    }:
     (utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = import nixpkgs { inherit system; };
-
-        # Helper functions remain the same
-        getFlakesInDir =
-          dir:
-          let
-            entries = builtins.readDir (self + "/${dir}");
-            flakeDirs = builtins.filter (
-              name: entries.${name} == "directory" && builtins.pathExists (self + "/${dir}/${name}/flake.nix")
-            ) (builtins.attrNames entries);
-          in
-          map (name: {
-            inherit name;
-            path = "${dir}/${name}";
-          }) flakeDirs;
-
-        devenvFlakes = getFlakesInDir "devenvs";
-        systemFlakes = getFlakesInDir "systems";
-        orderedFlakes = devenvFlakes ++ systemFlakes;
-
-        # Modified resolution logic
-        resolvedFlakes = builtins.foldl' (
-          acc: flakeInfo:
-          let
-            flakeNix = import (self + "/${flakeInfo.path}/flake.nix");
-            expectedArgs = builtins.functionArgs flakeNix.outputs;
-            flakeSelf = self + "/${flakeInfo.path}";
-
-            # Build available inputs
-            availableInputs = {
-              self = flakeSelf;
-              inherit nixpkgs nixpkgs-master utils;
-            }
-            // acc
-            // inputs; # acc has resolved monorepo flakes, inputs has external
-
-            # For child flake inputs that reference other monorepo flakes,
-            # create a mapping function
-            resolveMonorepoInput =
-              inputName: inputSpec:
-              if acc ? ${inputName} then
-                acc.${inputName} # Already resolved monorepo flake
-              else if inputs ? ${inputName} then
-                inputs.${inputName} # External input passed from top-level
-              else if builtins.isAttrs inputSpec && inputSpec ? follows then
-                # Handle follows declarations
-                let
-                  followPath = pkgs.lib.splitString "." inputSpec.follows;
-                in
-                pkgs.lib.getAttrFromPath followPath availableInputs
-              else
-                # For URL-based inputs in child flakes, you need to either:
-                # 1. Add them as top-level inputs, or
-                # 2. Use a dummy/mock value, or
-                # 3. Throw an error
-                throw "Cannot resolve input ${inputName} for ${flakeInfo.name} - add it to top-level inputs";
-
-            # Build the inputs for this flake
-            flakeInputs =
-              let
-                # Start with what we can directly provide
-                directInputs = pkgs.lib.filterAttrs (name: _: builtins.hasAttr name expectedArgs) availableInputs;
-
-                # Add any missing inputs that are defined in the flake itself
-                childDefinedInputs =
-                  if flakeNix ? inputs then pkgs.lib.mapAttrs resolveMonorepoInput flakeNix.inputs else { };
-              in
-              directInputs
-              // (pkgs.lib.filterAttrs (
-                name: _: builtins.hasAttr name expectedArgs && !(directInputs ? ${name})
-              ) childDefinedInputs);
-
-            flakeOutputs = flakeNix.outputs flakeInputs;
-          in
-          acc // { ${flakeInfo.name} = flakeOutputs; }
-        ) { } orderedFlakes;
-
-        # Rest remains the same...
-        localPackages = pkgs.lib.filterAttrs (n: v: v != null) (
-          builtins.mapAttrs (
-            name: flake:
-            if name == "system-linux" && !pkgs.stdenv.isLinux then
-              null
-            else if name == "system-darwin" && !pkgs.stdenv.isDarwin then
-              null
-            else
-              flake.packages.${system}.default or null
-          ) resolvedFlakes
-        );
-
-        explicitInputs = pkgs.lib.filterAttrs (name: _: pkgs.lib.hasPrefix "explicit-" name) inputs;
-
-        # Extract packages from explicit inputs
-        explicitPackages = builtins.listToAttrs (
-          builtins.filter (x: x.value != null) (
-            map (
-              name:
-              let
-                # Remove the "explicit-" prefix for the package name
-                packageName = pkgs.lib.removePrefix "explicit-" name;
-                flake = inputs.${name};
-              in
-              {
-                name = packageName;
-                value = flake.packages.${system}.default or null;
-              }
-            ) (builtins.attrNames explicitInputs)
-          )
-        );
       in
       {
-        packages =
-          localPackages
-          // explicitPackages
-          // {
-            default = pkgs.symlinkJoin {
-              failOnMissing = true;
-              name = "source";
-              paths = (builtins.attrValues localPackages) ++ (builtins.attrValues explicitPackages);
-            };
-          };
+        # No aggregated packages - each devenv and system flake should be built independently
+        # Examples:
+        #   nix build ./devenvs/devenv-go
+        #   nix build ./systems/system-common
+
+        # Provide a simple devShell for working in this repo
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            nix
+            git
+            just
+            gum
+          ];
+        };
       }
     ));
 }
