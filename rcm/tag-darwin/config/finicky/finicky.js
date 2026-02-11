@@ -19,7 +19,7 @@ export default {
       ],
       browser: {
         name: "Google Chrome",
-        // args: ["--new-window"],
+        newWindow: true,
       }
     }
   ],

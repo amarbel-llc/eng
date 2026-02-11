@@ -15,6 +15,10 @@ modal:bind({}, "r", nil, function()
     hs.reload()
 end)
 
+hs.hotkey.bind({"alt"}, "space", function()
+    hs.task.new("/Applications/kitty.app/Contents/MacOS/kitty", nil):start()
+end)
+
 --  __        ___           _
 --  \ \      / (_)_ __   __| | _____      __
 --   \ \ /\ / /| | '_ \ / _` |/ _ \ \ /\ / /
@@ -82,7 +86,7 @@ PaperWM:bindHotkeys({
     barf_out = {{"alt"}, "o"},
 
     -- move the focused window into / out of the tiling layer
-    toggle_floating = {{"alt"}, "space"},
+    -- toggle_floating = {{"alt"}, "space"},
     -- raise all floating windows on top of tiled windows
     focus_floating  = {{"alt", "shift"}, "space"},
 

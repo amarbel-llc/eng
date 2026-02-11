@@ -7,6 +7,7 @@
     lux.url = "github:friedenberg/lux";
     nix-mcp-server.url = "github:friedenberg/nix-mcp-server";
     ssh-agent-mux.url = "github:friedenberg/ssh-agent-mux";
+    zmx.url = "github:sfriedenberg-etsy/zmx";
   };
 
   outputs =
@@ -19,6 +20,7 @@
       lux,
       nix-mcp-server,
       ssh-agent-mux,
+      zmx,
     }:
     (utils.lib.eachDefaultSystem (
       system:

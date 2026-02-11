@@ -8,11 +8,11 @@
       },
       "locked": {
         "dir": "pkgs/alfa/devenv-python",
-        "lastModified": 1770566084,
-        "narHash": "sha256-M9P+efk+iO5UdQE7xGWIIt+HoWviDxhVVisFoekN7vQ=",
+        "lastModified": 1770569500,
+        "narHash": "sha256-1s9HgHsLklPw0Bzee1rJnvm/ZxCGINC+R8tev15pPS8=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "dc943822b823a0ba7d35bd705177f6b7ceea8782",
+        "rev": "9067130be0a0c4e93195d939be4a56b7e44f5642",
         "type": "github"
       },
       "original": {
