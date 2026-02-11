@@ -4,7 +4,7 @@
     nixpkgs-master.url = "github:NixOS/nixpkgs/b28c4999ed71543e71552ccfd0d7e68c581ba7e9";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
-    devenv-python.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-python";
+    python.url = "github:friedenberg/eng?dir=devenvs/python";
   };
 
   outputs =
@@ -12,7 +12,7 @@
     , nixpkgs
     , nixpkgs-master
     , utils
-    , devenv-python
+    , python
     ,
     }:
     utils.lib.eachDefaultSystem (system:
@@ -27,7 +27,7 @@
         packages = with pkgs; [ ];
 
         inputsFrom = [
-          devenv-python.devShells.${system}.default
+          python.devShells.${system}.default
         ];
       };
     }

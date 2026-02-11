@@ -4,7 +4,7 @@
     nixpkgs-master.url = "github:NixOS/nixpkgs/b28c4999ed71543e71552ccfd0d7e68c581ba7e9";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
-    devenv-lua.url = "github:friedenberg/eng?dir=pkgs/alfa/devenv-lua";
+    lua.url = "github:friedenberg/eng?dir=devenvs/lua";
   };
 
   outputs =
@@ -12,7 +12,7 @@
       self,
       nixpkgs,
       utils,
-      devenv-lua,
+      lua,
       nixpkgs-master,
     }:
     (utils.lib.eachDefaultSystem (
@@ -31,7 +31,7 @@
           ];
 
           inputsFrom = [
-            devenv-lua.devShells.${system}.default
+            lua.devShells.${system}.default
           ];
         };
       }

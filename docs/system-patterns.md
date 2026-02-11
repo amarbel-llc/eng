@@ -1,15 +1,15 @@
 # System Packages Patterns Documentation
 
-A living document tracking the patterns used in system-* packages for platform-wide package aggregation.
+A living document tracking the patterns used in system packages for platform-wide package aggregation.
 
 ## Overview
 
 ### Purpose
-System packages (`system-*`) provide platform-wide package collections installed at the system level. Unlike devenv packages which create project-specific development environments, system packages aggregate tools and utilities for the entire system.
+System packages (in `systems/`) provide platform-wide package collections installed at the system level. Unlike devenv packages which create project-specific development environments, system packages aggregate tools and utilities for the entire system.
 
 ### Key Differences from devenv-*
 
-| Aspect | devenv-* | system-* |
+| Aspect | devenv-* | systems/* |
 |--------|----------|----------|
 | Purpose | Project-specific development | System-wide tooling |
 | Primary Output | `devShells.default` | `packages.default` |
@@ -19,7 +19,7 @@ System packages (`system-*`) provide platform-wide package collections installed
 
 ## Package Reference
 
-### system-common
+### common
 
 Cross-platform CLI tools and utilities shared across all systems.
 
@@ -42,7 +42,7 @@ packages.default = pkgs.symlinkJoin {
 };
 ```
 
-### system-darwin
+### darwin
 
 macOS-specific packages and integrations.
 
@@ -66,7 +66,7 @@ pkgs = import nixpkgs {
 casks = with pkgs.brewCasks; [ kitty ];
 ```
 
-### system-linux
+### linux
 
 Linux-specific packages for desktop/wayland environments.
 
@@ -130,9 +130,9 @@ packages.default = pkgs.symlinkJoin {
 
 | Package | Integration | Purpose |
 |---------|-------------|---------|
-| system-common | dodder | Custom tooling |
-| system-darwin | nix-darwin | macOS system configuration |
-| system-darwin | brew-nix | Homebrew cask packages |
+| common | dodder | Custom tooling |
+| darwin | nix-darwin | macOS system configuration |
+| darwin | brew-nix | Homebrew cask packages |
 
 ## Summary Statistics
 

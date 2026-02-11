@@ -2,7 +2,7 @@
 
 A living document tracking the current state of flake.nix patterns across the repository, serving as a reference for consolidation and improvement efforts.
 
-**Note**: System packages (`system-common`, `system-darwin`, `system-linux`) are documented separately in [system-patterns.md](system-patterns.md).
+**Note**: System packages (`common`, `darwin`, `linux`) are documented separately in [system-patterns.md](system-patterns.md).
 
 ## Overview
 
@@ -19,20 +19,20 @@ This document captures the existing architectural patterns used across all flake
 
 ## Formatting
 
-All flake.nix files should be formatted using `nixfmt` via the `fmt` app exported by `devenv-nix`:
+All flake.nix files should be formatted using `nixfmt` via the `fmt` app exported by the nix devenv:
 
 ```sh
 # Format all devenv flakes
-nix run ./pkgs/alfa/devenv-nix#fmt -- pkgs/alfa/devenv-*/flake.nix
+nix run ./devenvs/nix#fmt -- devenvs/*/flake.nix
 
 # Format a single flake
-nix run ./pkgs/alfa/devenv-nix#fmt -- pkgs/alfa/devenv-go/flake.nix
+nix run ./devenvs/nix#fmt -- devenvs/go/flake.nix
 
 # Format any flake
-nix run ./pkgs/alfa/devenv-nix#fmt -- path/to/flake.nix
+nix run ./devenvs/nix#fmt -- path/to/flake.nix
 ```
 
-The `devenv-nix` flake exports:
+The nix devenv flake exports:
 - `formatter.${system}` - for use with `nix fmt`
 - `apps.${system}.fmt` - for direct invocation via `nix run`
 
@@ -76,7 +76,7 @@ The `bin/update_flakes.bash` script uses `fh` (FlakeHub CLI) to update:
 
 # Devenv Packages
 
-Development environment packages in `pkgs/alfa/devenv-*/`.
+Development environment packages in `devenvs/`.
 
 ## Outputs Structure
 
@@ -87,7 +87,7 @@ devShells.${system}.default = pkgs.mkShell {
   packages = [ ... ];
 };
 ```
-Used by: `devenv-bats`, `devenv-elixir`, `devenv-haskell`, `devenv-js`, `devenv-kotlin`, `devenv-latex`, `devenv-lua`, `devenv-ocaml`, `devenv-protobuf`, `devenv-python`, `devenv-ruby`, `devenv-rust`, `devenv-rust_toolchain`, `devenv-scala`, `devenv-shell`, `devenv-zig`, and others
+Used by: `bats`, `elixir`, `haskell`, `js`, `kotlin`, `latex`, `lua`, `ocaml`, `protobuf`, `python`, `ruby`, `rust`, `rust_toolchain`, `scala`, `shell`, `zig`, and others
 
 ### packages + devShells (12%)
 Exports both installable packages and development shell:
@@ -95,7 +95,7 @@ Exports both installable packages and development shell:
 packages.${system}.default = pkgs.symlinkJoin { ... };
 devShells.${system}.default = pkgs.mkShell { ... };
 ```
-Used by: `devenv-php`, `devenv-nix`, `devenv-go`
+Used by: `php`, `nix`, `go`
 
 ### symlinkJoin Aggregation
 Combines multiple packages into a single derivation:
@@ -106,7 +106,7 @@ packages.default = pkgs.symlinkJoin {
 };
 ```
 
-Alternative using buildEnv (`devenv-direnv`):
+Alternative using buildEnv (`direnv`):
 ```nix
 packages.default = pkgs.buildEnv {
   name = "direnv";
@@ -122,7 +122,7 @@ overlays = [(final: prev: {
   sbt = prev.sbt.override { jre = jdk; };
 })];
 ```
-Used by: `devenv-node`, `devenv-scala`, `devenv-kotlin`, `devenv-rust_toolchain`, `devenv-go`
+Used by: `node`, `scala`, `kotlin`, `rust_toolchain`, `go`
 
 ## System Support Pattern
 
@@ -142,7 +142,7 @@ Uses only stable nixpkgs (the default):
 ```nix
 let pkgs = import nixpkgs { inherit system; };
 ```
-Used by: `devenv-bats`, `devenv-digital_ocean`, `devenv-direnv`, `devenv-elixir`, `devenv-haskell`, `devenv-java`, `devenv-js`, `devenv-kotlin`, `devenv-latex`, `devenv-lua`, `devenv-nix`, `devenv-node`, `devenv-ocaml`, `devenv-pandoc`, `devenv-protobuf`, `devenv-qmk`, `devenv-ruby`, `devenv-scala`, `devenv-shell`, `devenv-zig`
+Used by: `bats`, `digital_ocean`, `direnv`, `elixir`, `haskell`, `java`, `js`, `kotlin`, `latex`, `lua`, `nix`, `node`, `ocaml`, `pandoc`, `protobuf`, `qmk`, `ruby`, `scala`, `shell`, `zig`
 
 ### Mixed Stable/Master (27%)
 Runtime from stable, tooling from master:
@@ -157,7 +157,7 @@ in {
   };
 }
 ```
-Used by: `devenv-go`, `devenv-php`, `devenv-python`, `devenv-rust`, `devenv-rust_toolchain`
+Used by: `go`, `php`, `python`, `rust`, `rust_toolchain`
 
 **Strategy**: Language runtimes (go, python, node, etc.) use stable for reliability. Dev tooling (LSPs, linters, formatters) use master for latest features.
 
@@ -165,31 +165,31 @@ Used by: `devenv-go`, `devenv-php`, `devenv-python`, `devenv-rust`, `devenv-rust
 
 | Package | Outputs | Nixpkgs Strategy | Special Inputs |
 |---------|---------|------------------|----------------|
-| `devenv-bats` | devShells | stable | - |
-| `devenv-digital_ocean` | devShells, packages | stable | - |
-| `devenv-direnv` | devShells, packages | stable | - |
-| `devenv-elixir` | devShells | stable | - |
-| `devenv-go` | devShells, packages, overlays | stable + master | gomod2nix |
-| `devenv-haskell` | devShells | stable | - |
-| `devenv-java` | devShells, packages | stable | - |
-| `devenv-js` | devShells | stable | - |
-| `devenv-kotlin` | devShells | stable | - |
-| `devenv-latex` | devShells | stable | - |
-| `devenv-lua` | devShells | stable | - |
-| `devenv-nix` | devShells, packages, formatter, apps | stable | fh |
-| `devenv-node` | devShells | stable | - |
-| `devenv-ocaml` | devShells | stable | - |
-| `devenv-pandoc` | devShells | stable | devenv-lua |
-| `devenv-php` | devShells, packages | stable + master | - |
-| `devenv-protobuf` | devShells | stable | - |
-| `devenv-python` | devShells | stable + master | - |
-| `devenv-qmk` | devShells, packages | stable | - |
-| `devenv-ruby` | devShells | stable | - |
-| `devenv-rust` | devShells | stable + master | rust-overlay |
-| `devenv-rust_toolchain` | devShells | stable + master | rust-overlay |
-| `devenv-scala` | devShells | stable | - |
-| `devenv-shell` | devShells | stable | - |
-| `devenv-zig` | devShells | stable | - |
+| `bats` | devShells | stable | - |
+| `digital_ocean` | devShells, packages | stable | - |
+| `direnv` | devShells, packages | stable | - |
+| `elixir` | devShells | stable | - |
+| `go` | devShells, packages, overlays | stable + master | gomod2nix |
+| `haskell` | devShells | stable | - |
+| `java` | devShells, packages | stable | - |
+| `js` | devShells | stable | - |
+| `kotlin` | devShells | stable | - |
+| `latex` | devShells | stable | - |
+| `lua` | devShells | stable | - |
+| `nix` | devShells, packages, formatter, apps | stable | fh |
+| `node` | devShells | stable | - |
+| `ocaml` | devShells | stable | - |
+| `pandoc` | devShells | stable | lua |
+| `php` | devShells, packages | stable + master | - |
+| `protobuf` | devShells | stable | - |
+| `python` | devShells | stable + master | - |
+| `qmk` | devShells, packages | stable | - |
+| `ruby` | devShells | stable | - |
+| `rust` | devShells | stable + master | rust-overlay |
+| `rust_toolchain` | devShells | stable + master | rust-overlay |
+| `scala` | devShells | stable | - |
+| `shell` | devShells | stable | - |
+| `zig` | devShells | stable | - |
 
 ## Devenv Statistics
 
@@ -207,8 +207,8 @@ Some packages require special nixpkgs configuration:
 
 | Package | Configuration | Reason |
 |---------|--------------|--------|
-| `devenv-digital_ocean` | `config.allowUnfree = true` | docker is unfree |
-| `devenv-elixir` | Uses `apple_sdk_11_0` | Migrated from deprecated `apple_sdk` |
+| `digital_ocean` | `config.allowUnfree = true` | docker is unfree |
+| `elixir` | Uses `apple_sdk_11_0` | Migrated from deprecated `apple_sdk` |
 
 ---
 
@@ -218,9 +218,9 @@ All other flake.nix files outside of `pkgs/alfa/devenv-*/`.
 
 ## Package Categories
 
-### pkgs/alfa (Non-devenv)
+### systems/
 System and utility packages:
-- `system-common`, `system-darwin`, `system-linux` - Platform package aggregations
+- `common`, `darwin`, `linux` - Platform package aggregations
 - `vim`, `bash`, `ssh`, `glyphs` - Tool configurations
 - `claude`, `savvy-cli`, `html-to-pdf` - Applications
 - `sand-castle`, `zmx`, `thcon` - Utilities
@@ -259,16 +259,16 @@ inputs = {
 Used by all non-devenv packages including:
 - Root `flake.nix`
 - All `pkgs/bravo/*` packages
-- All `pkgs/alfa/system-*` packages
+- All `systems/*` packages
 - `repos/ssh-agent-mux`, `repos/zmx`
 
 ### Common Additional Inputs
 
 | Input | Source | Used By |
 |-------|--------|---------|
-| `devenv-go` | `github:friedenberg/eng?dir=pkgs/alfa/devenv-go` | Go projects |
-| `devenv-rust` | `github:friedenberg/eng?dir=pkgs/alfa/devenv-rust` | Rust projects |
-| `devenv-nix` | `github:friedenberg/eng?dir=pkgs/alfa/devenv-nix` | Nix projects |
+| `go` | `github:friedenberg/eng?dir=devenvs/go` | Go projects |
+| `rust` | `github:friedenberg/eng?dir=devenvs/rust` | Rust projects |
+| `nix` | `github:friedenberg/eng?dir=devenvs/nix` | Nix projects |
 | `rust-overlay` | `github:oxalica/rust-overlay` | Rust projects |
 | `gomod2nix` | `github:nix-community/gomod2nix` | Go projects |
 | `nix-darwin` | `github:LnL7/nix-darwin` | macOS system config |

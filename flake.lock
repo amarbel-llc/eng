@@ -1,5 +1,53 @@
 {
   "nodes": {
+    "common": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-master": "nixpkgs-master",
+        "utils": "utils"
+      },
+      "locked": {
+        "path": "./systems/common",
+        "type": "path"
+      },
+      "original": {
+        "path": "./systems/common",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "darwin": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2",
+        "nixpkgs-master": "nixpkgs-master_2",
+        "utils": "utils_2"
+      },
+      "locked": {
+        "path": "./systems/darwin",
+        "type": "path"
+      },
+      "original": {
+        "path": "./systems/darwin",
+        "type": "path"
+      },
+      "parent": []
+    },
+    "linux": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3",
+        "nixpkgs-master": "nixpkgs-master_3",
+        "utils": "utils_3"
+      },
+      "locked": {
+        "path": "./systems/linux",
+        "type": "path"
+      },
+      "original": {
+        "path": "./systems/linux",
+        "type": "path"
+      },
+      "parent": []
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1770464364,
@@ -130,61 +178,13 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-master": "nixpkgs-master",
-        "system-common": "system-common",
-        "system-darwin": "system-darwin",
-        "system-linux": "system-linux",
-        "utils": "utils_4"
-      }
-    },
-    "system-common": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_2",
-        "nixpkgs-master": "nixpkgs-master_2",
-        "utils": "utils"
-      },
-      "locked": {
-        "path": "./systems/system-common",
-        "type": "path"
-      },
-      "original": {
-        "path": "./systems/system-common",
-        "type": "path"
-      },
-      "parent": []
-    },
-    "system-darwin": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_3",
-        "nixpkgs-master": "nixpkgs-master_3",
-        "utils": "utils_2"
-      },
-      "locked": {
-        "path": "./systems/system-darwin",
-        "type": "path"
-      },
-      "original": {
-        "path": "./systems/system-darwin",
-        "type": "path"
-      },
-      "parent": []
-    },
-    "system-linux": {
-      "inputs": {
+        "common": "common",
+        "darwin": "darwin",
+        "linux": "linux",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-master": "nixpkgs-master_4",
-        "utils": "utils_3"
-      },
-      "locked": {
-        "path": "./systems/system-linux",
-        "type": "path"
-      },
-      "original": {
-        "path": "./systems/system-linux",
-        "type": "path"
-      },
-      "parent": []
+        "utils": "utils_4"
+      }
     },
     "systems": {
       "locked": {
