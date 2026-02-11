@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file branch-get-last
+# @brief get the previously checked out branch
+
+git rev-parse --abbrev-ref @{-1}

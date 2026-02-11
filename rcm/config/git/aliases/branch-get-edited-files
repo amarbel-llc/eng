@@ -2,4 +2,4 @@
 # @file branch-get-edited-files
 # @brief files changed since the default branch
 
-git diff --name-only "$(git branch-get-default)...HEAD"
+git diff --name-only "$(git remote-get-default)/$(git branch-get-default)...HEAD"

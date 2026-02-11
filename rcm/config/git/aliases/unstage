@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file unstage
+# @brief unstage files
+
+git reset HEAD -- "$@"

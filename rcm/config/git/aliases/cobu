@@ -2,6 +2,6 @@
 # @file cobu
 # @brief create a branch with a `$USER-%Y-%m-%d` prefix and set upstream to default branch
 
-default_branch="$(git branch-get-default)"
+default_branch="${2:-$(git branch-get-default)}"
 git checkout -b "$USER-$(date +%Y-%m-%d)-$1"
 git branch --set-upstream-to="upstream/$default_branch"

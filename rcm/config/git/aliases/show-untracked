@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file show-untracked
+# @brief show untracked files
+
+git ls-files --others --exclude-standard

@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file last
+# @brief show the last commit
+
+git show HEAD "$@"

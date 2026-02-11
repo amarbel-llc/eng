@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file branch-get-upstream
+# @brief get the upstream branch name
+
+git rev-parse --abbrev-ref --symbolic-full-name @{u}

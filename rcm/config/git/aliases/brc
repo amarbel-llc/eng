@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file brc
+# @brief get the current branch name
+
+git rev-parse --abbrev-ref HEAD

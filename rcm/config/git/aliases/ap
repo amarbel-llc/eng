@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file ap
+# @brief add with patch mode
+
+git add --patch

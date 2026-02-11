@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file him
+# @brief log with nice formatting from origin/master to HEAD
+
+git log --pretty=nice origin/master..HEAD "$@"

@@ -4,34 +4,6 @@
   whitespace = nowarn
   excludesfile = ~/.config/git/ignore
   ; sshCommand = ~/eng/result/bin/ssh
-[alias]
-  aa = add --all --intent-to-add
-  ap = add --patch
-  branch-get-upstream = git rev-parse --abbrev-ref --symbolic-full-name @{u}
-  branch-get-last = rev-parse --abbrev-ref @{-1}
-  branch-get-default = ! git rev-parse --abbrev-ref origin/HEAD | sed 's/origin\\///'
-  br = branch
-  brc = rev-parse --abbrev-ref HEAD
-  ci = commit
-  co = checkout
-  cop = checkout --patch
-  diff-no-index = diff --no-index --word-diff
-  diffs = diff --staged
-  hi = log --pretty=nice
-  hig = log --pretty=nice --graph
-  him = log --pretty=nice origin/master..HEAD
-  hist = log --graph --pretty=hist --abbrev-commit
-  set-signed = ! git config --local include.path ~/.config/git/config-signed
-  last = show HEAD
-  om = !git status --short | ag '(?<=.[MA?] )(.*)$' --no-color --only-matching
-  ; rebasem = rebase origin/master --interactive
-  ; rebasemi = rebase origin/master --interactive
-  show-rev = ! git show -p stash@\\{\\$1\\}
-  show-untracked = ls-files --others --exclude-standard
-  show-files = ! git show --pretty='' --name-only $1
-  st = status -sb
-  su = submodule update --recursive --init
-  unstage = reset HEAD --
 [diff]
   colormoved = "default"
   colormovedws = "allow-indentation-change"
@@ -64,5 +36,3 @@
   skippedCherryPicks = false
 [init]
   defaultBranch = master
-[include]
-  path = ~/.config/git/config-aliases

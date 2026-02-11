@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file diff-no-index
+# @brief diff files outside git with word-diff
+
+git diff --no-index --word-diff "$@"

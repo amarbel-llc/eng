@@ -17,10 +17,14 @@ else
 EOM
   )"
 
-  commit_msg="$(gum spin --spinner monkey --title "generating commit message..." -- \
-    claude -p "$msg_claude_prompt")"
+  if ! commit_msg="$(gum spin --spinner monkey --title "generating commit message..." -- \
+    claude -p "$msg_claude_prompt")"; then
+    gum log -t error claude commit message generation failed
+    exit 1
+  fi
 
   if ! echo -n "$commit_msg" | git commit -e -F -; then
+    gum log -t error git commit failed
     exit 1
   fi
 fi
