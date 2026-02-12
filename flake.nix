@@ -11,7 +11,7 @@
     linux.url = "path:./systems/linux";
 
     lux.url = "github:amarbel-llc/lux";
-    # nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
+    nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
     pivy.url = "github:amarbel-llc/pivy";
     ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
     zmx.url = "github:sfriedenberg-etsy/zmx";
@@ -27,7 +27,7 @@
       darwin,
       linux,
       lux,
-      # nix-mcp-server,
+      nix-mcp-server,
       pivy,
       ssh-agent-mux,
       zmx,
@@ -46,7 +46,7 @@
         # Repository packages
         repoPackages = {
           lux = lux.packages.${system}.default;
-          # nix-mcp-server = nix-mcp-server.packages.${system}.default;
+          nix-mcp-server = nix-mcp-server.packages.${system}.default;
           pivy = pivy.packages.${system}.default;
           ssh-agent-mux = ssh-agent-mux.packages.${system}.default;
           zmx = zmx.packages.${system}.zmx-libvterm;
