@@ -32,6 +32,10 @@ end)
 --  |_|  |_|\__,_|_| |_|\__,_|\__, |\___|_| |_| |_|\___|_| |_|\__|
 --                            |___/
 
+WarpMouse = hs.loadSpoon("WarpMouse")
+WarpMouse.margin = 8
+WarpMouse:start()
+
 PaperWM = hs.loadSpoon("PaperWM")
 
 local actions = PaperWM.actions.actions()

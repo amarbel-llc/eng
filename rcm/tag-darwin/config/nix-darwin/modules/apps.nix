@@ -37,6 +37,8 @@
         start_service = true;
         restart_service = true;
       }
+
+      "ykman"
     ];
 
     casks = [

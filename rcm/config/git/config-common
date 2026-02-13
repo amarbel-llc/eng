@@ -3,7 +3,6 @@
 [core]
   whitespace = nowarn
   excludesfile = ~/.config/git/ignore
-  ; sshCommand = ~/eng/result/bin/ssh
 [diff]
   colormoved = "default"
   colormovedws = "allow-indentation-change"
