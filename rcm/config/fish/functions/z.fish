@@ -6,18 +6,22 @@ function z --description 'attach to or create an existing zmx session for a give
     # use current directory
     case 0
       set -l z_path (string replace --regex "^$HOME/" '' $PWD)
-      __z_attach_to_path $argv
+      __z_attach_to_path $z_path
 
     # use provided directory
     case 1
       if test -d $HOME/$argv
-        zmx attach $arg_path_components
-        return $status
+        zmx attach $argv
+        set -l zmx_status $status
+        __z_cd_to_repo $argv
+        return $zmx_status
       end
 
       if __z_has_session $argv
-        zmx attach $arg_path_components
-        return $status
+        zmx attach $argv
+        set -l zmx_status $status
+        __z_cd_to_repo $argv
+        return $zmx_status
       end
 
       __z_attach_to_path $argv
@@ -31,6 +35,22 @@ end
 
 function __z_has_session
   zmx list | awk '{split($1, a, "="); $2=$2; $3=$3; print a[2]}' | grep -q $argv>/dev/null
+end
+
+function __z_cd_to_repo
+  set -l arg_path_components (string split / $argv[1])
+
+  set -l eng_area $arg_path_components[1]
+  set -l repo $arg_path_components[3]
+
+  if not test $arg_path_components[2] = worktrees
+    return 0
+  end
+
+  set -l repo_path $HOME/$eng_area/repos/$repo
+  if test -d $repo_path
+    cd $repo_path
+  end
 end
 
 # eng*<area>/worktrees/<repo>/<worktree>
@@ -55,5 +75,8 @@ function __z_attach_to_path
   git -C $repo_path worktree add $HOME/$argv
 
   pushd $HOME/$argv
-  exec zmx attach $argv
+  zmx attach $argv
+  popd
+
+  cd $repo_path
 end

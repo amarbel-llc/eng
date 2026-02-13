@@ -232,11 +232,11 @@
         "utils": "utils_6"
       },
       "locked": {
-        "lastModified": 1770902930,
-        "narHash": "sha256-bypqDAhuxyAunaQVeoyc5/7SWUxJ1W3T+kR7fyyPxec=",
+        "lastModified": 1770984288,
+        "narHash": "sha256-BElDlunswSrtu6LZBiLUohhjFek1Zaowaetl5dF1NC8=",
         "owner": "amarbel-llc",
         "repo": "lux",
-        "rev": "6d31aca27c67e05be131b3f65a03a100d7439d74",
+        "rev": "9fec5de62b8456038f2fc5587c26d7acb215b7dd",
         "type": "github"
       },
       "original": {
