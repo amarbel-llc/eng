@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    ./apps-local.nix
+    # ./apps-local.nix
   ];
 
   homebrew = {
