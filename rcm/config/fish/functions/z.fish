@@ -1,5 +1,26 @@
 
-# TODO add support for ssh hosts
+function __z_parse_target --description 'parse target into host and path components'
+  set -l target $argv[1]
+
+  if string match -q '*:*' -- $target
+    set -l parts (string split ':' -- $target)
+    echo $parts[1]  # host
+    echo $parts[2]  # path
+  else
+    echo ""  # no host
+    echo $target  # path
+  end
+end
+
+function __z_attach_remote --description 'attach to zmx session on remote host'
+  set -l host $argv[1]
+  set -l path $argv[2]
+
+  gum log -t info "connecting to remote session on $host: $path"
+  ssh -t $host "zmx attach $path"
+  return $status
+end
+
 function z --description 'attach to or create an existing zmx session for a given directory'
   switch (count $argv)
 
@@ -8,8 +29,20 @@ function z --description 'attach to or create an existing zmx session for a give
       set -l z_path (string replace --regex "^$HOME/" '' $PWD)
       __z_attach_to_path $z_path
 
-    # use provided directory
+    # use provided directory or remote target
     case 1
+      # Parse target to check if it's remote
+      set -l parse_result (__z_parse_target $argv[1])
+      set -l host $parse_result[1]
+      set -l path $parse_result[2]
+
+      # Handle remote session
+      if test -n "$host"
+        __z_attach_remote $host $path
+        return $status
+      end
+
+      # Handle local session (existing logic)
       if test -d $HOME/$argv
         zmx attach $argv
         set -l zmx_status $status
