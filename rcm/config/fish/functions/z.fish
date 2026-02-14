@@ -21,6 +21,49 @@ function __z_attach_remote --description 'attach to zmx session on remote host'
   return $status
 end
 
+function __z_post_zmx --description 'offer rebase and merge after zmx exits for worktree paths'
+  set -l z_path $argv[1]
+  set -l arg_path_components (string split / $z_path)
+
+  if not test $arg_path_components[2] = worktrees
+    return 0
+  end
+
+  set -l eng_area $arg_path_components[1]
+  set -l repo $arg_path_components[3]
+  set -l worktree $arg_path_components[4]
+
+  set -l repo_path $HOME/$eng_area/repos/$repo
+  set -l worktree_path $HOME/$z_path
+
+  set -l default_branch (git -C $repo_path branch --show-current)
+
+  if test -z "$default_branch"
+    gum log -t warn "could not determine default branch"
+    return 0
+  end
+
+  if gum confirm "Rebase $worktree onto $default_branch?"
+    git -C $worktree_path rebase $default_branch
+    if test $status -ne 0
+      gum log -t error "rebase failed"
+      return 1
+    end
+    gum log -t info "rebased $worktree onto $default_branch"
+  end
+
+  if gum confirm "Merge $worktree into $default_branch (ff-only)?"
+    git -C $repo_path merge $worktree --ff-only
+    if test $status -ne 0
+      gum log -t error "merge failed (not fast-forward)"
+      return 1
+    end
+    gum log -t info "merged $worktree into $default_branch"
+    git -C $repo_path worktree remove $HOME/$z_path
+    gum log -t info "removed worktree $worktree"
+  end
+end
+
 function z --description 'attach to or create an existing zmx session for a given directory'
   switch (count $argv)
 
@@ -47,6 +90,7 @@ function z --description 'attach to or create an existing zmx session for a give
         zmx attach $argv
         set -l zmx_status $status
         __z_cd_to_repo $argv
+        __z_post_zmx $argv
         return $zmx_status
       end
 
@@ -54,6 +98,7 @@ function z --description 'attach to or create an existing zmx session for a give
         zmx attach $argv
         set -l zmx_status $status
         __z_cd_to_repo $argv
+        __z_post_zmx $argv
         return $zmx_status
       end
 
@@ -112,4 +157,6 @@ function __z_attach_to_path
   popd
 
   cd $repo_path
+
+  __z_post_zmx $argv
 end
