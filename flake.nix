@@ -17,6 +17,7 @@
     nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
     pivy.url = "github:amarbel-llc/pivy";
     purse-first.url = "github:amarbel-llc/purse-first";
+    sandcastle.url = "github:amarbel-llc/sandcastle";
     shdoc.url = "github:amarbel-llc/shdoc";
     ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
     z.url = "github:amarbel-llc/z";
