@@ -152,6 +152,18 @@ function __z_attach_to_path
 
   git -C $repo_path worktree add $HOME/$argv
 
+  set -l rcm_worktrees $HOME/$eng_area/rcm-worktrees
+  if test -d $rcm_worktrees
+    for src in (find $rcm_worktrees -type f)
+      set -l rel (string replace "$rcm_worktrees/" "" $src)
+      set -l dest $HOME/$argv/.$rel
+      if not test -f $dest
+        mkdir -p (dirname $dest)
+        cp $src $dest
+      end
+    end
+  end
+
   pushd $HOME/$argv
   zmx attach $argv
   popd
