@@ -18,7 +18,7 @@
     purse-first.url = "github:amarbel-llc/purse-first";
     shdoc.url = "github:amarbel-llc/shdoc";
     ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
-    z.url = "path:../z";
+    z.url = "github:amarbel-llc/z";
     zmx.url = "github:sfriedenberg-etsy/zmx";
   };
 
