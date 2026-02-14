@@ -74,32 +74,18 @@ function z --description 'attach to or create an existing zmx session for a give
 
     # use provided directory or remote target
     case 1
-      # Parse target to check if it's remote
       set -l parse_result (__z_parse_target $argv[1])
       set -l host $parse_result[1]
       set -l path $parse_result[2]
 
-      # Handle remote session
       if test -n "$host"
         __z_attach_remote $host $path
         return $status
       end
 
-      # Handle local session (existing logic)
-      if test -d $HOME/$argv
-        zmx attach $argv
-        set -l zmx_status $status
-        __z_cd_to_repo $argv
-        __z_post_zmx $argv
-        return $zmx_status
-      end
-
-      if __z_has_session $argv
-        zmx attach $argv
-        set -l zmx_status $status
-        __z_cd_to_repo $argv
-        __z_post_zmx $argv
-        return $zmx_status
+      if test -d $HOME/$argv; or __z_has_session $argv
+        __z_attach_existing $argv
+        return $status
       end
 
       __z_attach_to_path $argv
@@ -131,13 +117,51 @@ function __z_cd_to_repo
   end
 end
 
+function __z_attach_existing --description 'attach to existing zmx session and run post-zmx hooks'
+  set -l z_path $argv[1]
+
+  zmx attach $z_path
+  set -l zmx_status $status
+  __z_cd_to_repo $z_path
+  __z_post_zmx $z_path
+  return $zmx_status
+end
+
+function __z_create_worktree --description 'create a new git worktree and apply rcm-worktrees overlay'
+  set -l eng_area $argv[1]
+  set -l repo_path $argv[2]
+  set -l worktree_path $argv[3]
+
+  mkdir -p $worktree_path
+  git -C $repo_path worktree add $worktree_path
+  __z_apply_rcm_worktrees_overlay $eng_area $worktree_path
+end
+
+function __z_apply_rcm_worktrees_overlay --description 'copy rcm-worktrees dotfiles into a worktree'
+  set -l eng_area $argv[1]
+  set -l worktree_path $argv[2]
+
+  set -l rcm_worktrees $HOME/$eng_area/rcm-worktrees
+  if not test -d $rcm_worktrees
+    return 0
+  end
+
+  for src in (find $rcm_worktrees -type f)
+    set -l rel (string replace "$rcm_worktrees/" "" $src)
+    set -l dest $worktree_path/.$rel
+    if not test -f $dest
+      mkdir -p (dirname $dest)
+      cp $src $dest
+    end
+  end
+end
+
 # eng*<area>/worktrees/<repo>/<worktree>
 function __z_attach_to_path
   set -l arg_path_components (string split / $argv[1])
 
   set -l eng_area $arg_path_components[1]
   set -l repo $arg_path_components[3]
-  set -l worktree $arg_path_components[4]
 
   if not test $arg_path_components[2] = worktrees
     gum log -t error invalid path provided: $argv
@@ -145,30 +169,14 @@ function __z_attach_to_path
   end
 
   set -l repo_path $HOME/$eng_area/repos/$repo
-  echo repo_path: $repo_path
-  echo argv: $argv
+  set -l worktree_path $HOME/$argv
 
-  mkdir -p $HOME/$argv
+  __z_create_worktree $eng_area $repo_path $worktree_path
 
-  git -C $repo_path worktree add $HOME/$argv
-
-  set -l rcm_worktrees $HOME/$eng_area/rcm-worktrees
-  if test -d $rcm_worktrees
-    for src in (find $rcm_worktrees -type f)
-      set -l rel (string replace "$rcm_worktrees/" "" $src)
-      set -l dest $HOME/$argv/.$rel
-      if not test -f $dest
-        mkdir -p (dirname $dest)
-        cp $src $dest
-      end
-    end
-  end
-
-  pushd $HOME/$argv
+  pushd $worktree_path
   zmx attach $argv
   popd
 
   cd $repo_path
-
   __z_post_zmx $argv
 end
