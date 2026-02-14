@@ -4,7 +4,9 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Edit",
-      "Read"
+      "Read",
+      "mcp__grit__status",
+      "mcp__grit__log"
     ]
   }
 }
