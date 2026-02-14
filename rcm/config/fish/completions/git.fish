@@ -56,7 +56,7 @@ function __git_complete_worktrees
   git worktree list --porcelain | while read -l line
     if string match -q 'worktree *' $line
       set -l path (string replace 'worktree ' '' $line)
-      printf "%s\n" $path
+      printf "%s\n" (basename $path)
     end
   end
 end
