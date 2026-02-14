@@ -11,6 +11,8 @@ __fish_complete_empty \
   $__git_complete_aliases_checkout \
   $__git_complete_aliases_branch \
   $__git_complete_aliases_show \
+  merge \
+  worktree \
   rm
 
 complete \
@@ -22,8 +24,14 @@ complete \
 complete \
   --command git \
   --no-files \
-  --condition "__fish_seen_subcommand_from $__git_complete_aliases_checkout; and not __fish_seen_subcommand_from --" \
+  --condition "__fish_seen_subcommand_from merge $__git_complete_aliases_checkout; and not __fish_seen_subcommand_from --" \
   --arguments "(__git_complete_branches)"
+
+complete \
+  --command git \
+  --no-files \
+  --condition "__fish_seen_subcommand_from worktree; and __fish_seen_subcommand_from remove" \
+  --arguments "(__git_complete_worktrees)"
 
 source $HOME/.config/fish/completions/git-commit.fish
 source $HOME/.config/fish/completions/git-diff.fish
@@ -42,6 +50,15 @@ function __git_complete_branches
   git branch \
   --sort=-committerdate \
   --format "%(refname:short)%09%(creatordate:relative)"
+end
+
+function __git_complete_worktrees
+  git worktree list --porcelain | while read -l line
+    if string match -q 'worktree *' $line
+      set -l path (string replace 'worktree ' '' $line)
+      printf "%s\n" $path
+    end
+  end
 end
 
 # CONDITIONS
