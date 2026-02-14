@@ -1,5 +1,5 @@
 return {
 	cmd = { "lux", "serve" },
-	filetypes = { "go", "rust", "nix" },
-	root_markers = { ".lux", "go.mod", "Cargo.toml", "flake.nix", ".git" },
+	filetypes = { "go", "rust", "nix", "bash", "sh", "php", "python", "terraform" },
+	root_markers = { ".lux", "go.mod", "Cargo.toml", "flake.nix", ".envrc", "pyproject.toml", "setup.py", ".git" },
 }
