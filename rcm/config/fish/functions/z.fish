@@ -43,25 +43,51 @@ function __z_post_zmx --description 'offer rebase and merge after zmx exits for 
     return 0
   end
 
-  if gum confirm "Rebase $worktree onto $default_branch?"
-    git -C $worktree_path rebase $default_branch
-    if test $status -ne 0
-      gum log -t error "rebase failed"
-      return 1
-    end
-    gum log -t info "rebased $worktree onto $default_branch"
+  set -l action (gum choose --header "Post-zmx actions for $worktree:" \
+    "Rebase + Merge + Remove worktree + Push" \
+    "Rebase + Merge + Remove worktree" \
+    "Rebase + Merge" \
+    "Rebase")
+
+  if test -z "$action"
+    return 0
   end
 
-  if gum confirm "Merge $worktree into $default_branch (ff-only)?"
-    git -C $repo_path merge $worktree --ff-only
-    if test $status -ne 0
-      gum log -t error "merge failed (not fast-forward)"
-      return 1
-    end
-    gum log -t info "merged $worktree into $default_branch"
-    git -C $repo_path worktree remove $HOME/$z_path
-    gum log -t info "removed worktree $worktree"
+  git -C $worktree_path rebase $default_branch
+  if test $status -ne 0
+    gum log -t error "rebase failed"
+    return 1
   end
+  gum log -t info "rebased $worktree onto $default_branch"
+
+  if test "$action" = "Rebase"
+    return 0
+  end
+
+  git -C $repo_path merge $worktree --ff-only
+  if test $status -ne 0
+    gum log -t error "merge failed (not fast-forward)"
+    return 1
+  end
+  gum log -t info "merged $worktree into $default_branch"
+
+  if test "$action" = "Rebase + Merge"
+    return 0
+  end
+
+  git -C $repo_path worktree remove $HOME/$z_path
+  gum log -t info "removed worktree $worktree"
+
+  if test "$action" = "Rebase + Merge + Remove worktree"
+    return 0
+  end
+
+  git -C $repo_path push origin $default_branch
+  if test $status -ne 0
+    gum log -t error "push failed"
+    return 1
+  end
+  gum log -t info "pushed $default_branch to origin"
 end
 
 function z --description 'attach to or create an existing zmx session for a given directory'
