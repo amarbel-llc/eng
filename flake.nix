@@ -13,6 +13,7 @@
     # keep sorted
     and-so-can-you-repo.url = "github:amarbel-llc/and-so-can-you-repo";
     get-hubbed.url = "github:amarbel-llc/get-hubbed";
+    grit.url = "github:amarbel-llc/grit";
     lux.url = "github:amarbel-llc/lux";
     nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
     pivy.url = "github:amarbel-llc/pivy";
