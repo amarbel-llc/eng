@@ -1,6 +1,8 @@
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
-default: build
+default: && build-nix
+  git pull
+  nix flake update
 
 clean-nix:
   nix-store --gc
