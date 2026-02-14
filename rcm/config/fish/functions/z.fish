@@ -44,6 +44,7 @@ function __z_post_zmx --description 'offer rebase and merge after zmx exits for 
   end
 
   set -l action (gum choose --header "Post-zmx actions for $worktree:" \
+    "Pull + Rebase + Merge + Remove worktree + Push" \
     "Rebase + Merge + Remove worktree + Push" \
     "Rebase + Merge + Remove worktree" \
     "Rebase + Merge" \
@@ -53,6 +54,15 @@ function __z_post_zmx --description 'offer rebase and merge after zmx exits for 
     return 0
   end
 
+  if string match -q "Pull *" -- $action
+    git -C $repo_path pull
+    if test $status -ne 0
+      gum log -t error "pull failed"
+      return 1
+    end
+    gum log -t info "pulled $default_branch from origin"
+  end
+
   git -C $worktree_path rebase $default_branch
   if test $status -ne 0
     gum log -t error "rebase failed"
@@ -60,7 +70,7 @@ function __z_post_zmx --description 'offer rebase and merge after zmx exits for 
   end
   gum log -t info "rebased $worktree onto $default_branch"
 
-  if test "$action" = "Rebase"
+  if string match -q "*Rebase" -- $action
     return 0
   end
 
@@ -71,7 +81,7 @@ function __z_post_zmx --description 'offer rebase and merge after zmx exits for 
   end
   gum log -t info "merged $worktree into $default_branch"
 
-  if test "$action" = "Rebase + Merge"
+  if string match -q "*Merge" -- $action
     return 0
   end
 
@@ -85,7 +95,7 @@ function __z_post_zmx --description 'offer rebase and merge after zmx exits for 
   end
   gum log -t info "deleted branch $worktree"
 
-  if test "$action" = "Rebase + Merge + Remove worktree"
+  if string match -q "*Remove worktree" -- $action
     return 0
   end
 
