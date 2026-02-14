@@ -78,6 +78,13 @@ function __z_post_zmx --description 'offer rebase and merge after zmx exits for 
   git -C $repo_path worktree remove $HOME/$z_path
   gum log -t info "removed worktree $worktree"
 
+  git -C $repo_path branch -d $worktree
+  if test $status -ne 0
+    gum log -t error "failed to delete branch $worktree"
+    return 1
+  end
+  gum log -t info "deleted branch $worktree"
+
   if test "$action" = "Rebase + Merge + Remove worktree"
     return 0
   end
