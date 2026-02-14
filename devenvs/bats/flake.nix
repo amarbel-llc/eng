@@ -30,6 +30,7 @@
             parallel
             shellcheck
             shfmt
+            # TODO: add bats.libraries.bats-support and bats.libraries.bats-assert
           ];
         };
       }
