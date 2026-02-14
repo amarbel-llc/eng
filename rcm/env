@@ -2,6 +2,7 @@
 
 # keep sorted
 # export EDITOR="$HOME/eng/result/bin/hx"
+export AND_SO_CAN_YOU_REPO_DIR=repos
 export CLAUDE_CODE_DISABLE_AUTO_MEMORY=0
 export EDITOR="$HOME/eng/result/bin/nvim"
 export GPG_TTY="$(tty)"

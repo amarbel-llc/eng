@@ -3,7 +3,7 @@
 - prefer commands defined in justfiles
 - prefer nix-based building and testing
 - when performing new tasks that are done frequent, consider suggesting adding to the justfile
-- prefer using direnv+nix-flakes and my devenv flakes from github.com/friedenberg/eng?dir=pkgs/alfa
+- prefer using direnv+nix-flakes and my devenv flakes from `github.com/amarbel-llc/eng?dir=devenvs`
 - function names that are descriptive-enough to avoid redundant comments
 - exclusively use the `nix` mcp when in a nix-backed project
 - exclusively use `lux` mcp to interact with the codebase for projects whose

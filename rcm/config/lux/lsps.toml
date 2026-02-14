@@ -1,0 +1,100 @@
+socket = ""
+
+[[lsp]]
+  name = "gopls"
+  flake = "nixpkgs#gopls"
+  extensions = ["go"]
+  language_ids = ["go"]
+
+  [lsp.settings]
+    gofumpt = true
+    experimentalPostfixCompletions = true
+    staticcheck = true
+
+    [lsp.settings.analyses]
+      unusedparams = true
+      shadow = true
+      ST1000 = false
+      ST1003 = false
+      ST1020 = false
+      ST1021 = false
+      ST1005 = false
+      ST1006 = false
+
+[[lsp]]
+  name = "rust-analyzer"
+  flake = "nixpkgs#rust-analyzer"
+  extensions = ["rs"]
+  language_ids = ["rust"]
+
+  [lsp.settings]
+    [lsp.settings.diagnostics]
+      enable = false
+
+[[lsp]]
+  name = "nil"
+  flake = "nixpkgs#nil"
+  extensions = ["nix"]
+  language_ids = ["nix"]
+
+  [lsp.settings]
+    [lsp.settings.formatting]
+      command = ["nixpkgs-fmt"]
+
+[[lsp]]
+  name = "bash-language-server"
+  flake = "nixpkgs#nodePackages.bash-language-server"
+  extensions = ["sh", "bash"]
+  language_ids = ["bash", "sh"]
+
+[[lsp]]
+  name = "intelephense"
+  flake = "nixpkgs#nodePackages.intelephense"
+  args = ["--stdio"]
+  extensions = ["php", "phtml"]
+  language_ids = ["php"]
+
+  [lsp.settings]
+    stubs = ["Core", "Reflection", "SPL", "composer", "date", "json", "pcre", "standard"]
+
+    [lsp.settings.files]
+      associations = ["*.php", "*.phtml"]
+
+    [lsp.settings.environment]
+      includePaths = ["vendor"]
+      phpVersion = "8.2"
+
+[[lsp]]
+  name = "pylsp"
+  flake = "nixpkgs#python313Packages.python-lsp-server"
+  extensions = ["py"]
+  language_ids = ["python"]
+
+  [lsp.settings.plugins.ruff]
+    formatEnabled = true
+    enabled = true
+    format = ["I"]
+    lineLength = 88
+
+    [lsp.settings.plugins.ruff.pylsp_mypy]
+      enabled = true
+      live_mode = false
+      overrides = ["--explicit-package-bases", "--ignore-missing-imports"]
+
+  [lsp.settings.plugins.pycodestyle]
+    enabled = false
+
+  [lsp.settings.plugins.mccabe]
+    enabled = false
+
+  [lsp.settings.plugins.pyflakes]
+    enabled = false
+
+  [lsp.settings.plugins.flake8]
+    enabled = false
+
+[[lsp]]
+  name = "terraform-ls"
+  flake = "nixpkgs#terraform-ls"
+  extensions = ["tf", "tfvars"]
+  language_ids = ["terraform"]

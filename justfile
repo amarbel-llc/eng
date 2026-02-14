@@ -171,8 +171,4 @@ build-rcm-rcrc:
 @build-rcm-hooks-post-up:
   chmod +x *
 
-# Bootstrap a new repo under repos/
-bootstrap:
-  ./bin/bootstrap_repo.bash
-
 build: build-nix build-rcm
