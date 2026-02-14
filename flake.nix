@@ -10,9 +10,13 @@
     darwin.url = "path:./systems/darwin";
     linux.url = "path:./systems/linux";
 
+    # keep sorted
+    and-so-can-you-repo.url = "github:amarbel-llc/and-so-can-you-repo";
     lux.url = "github:amarbel-llc/lux";
     nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
     pivy.url = "github:amarbel-llc/pivy";
+    purse-first.url = "github:amarbel-llc/purse-first";
+    shdoc.url = "github:amarbel-llc/shdoc";
     ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
     zmx.url = "github:sfriedenberg-etsy/zmx";
   };
@@ -34,7 +38,15 @@
         pkgs = import nixpkgs { inherit system; };
 
         # Infrastructure inputs that are NOT repos
-        infraInputs = [ "self" "nixpkgs" "nixpkgs-master" "utils" "common" "darwin" "linux" ];
+        infraInputs = [
+          "self"
+          "nixpkgs"
+          "nixpkgs-master"
+          "utils"
+          "common"
+          "darwin"
+          "linux"
+        ];
 
         # Repos whose default package isn't named "default"
         repoPackageOverrides = {
@@ -47,8 +59,8 @@
           // (builtins.removeAttrs (darwin.packages.${system} or { }) [ "default" ])
           // (builtins.removeAttrs (linux.packages.${system} or { }) [ "default" ]);
 
-        repoPackages = builtins.mapAttrs (name: input:
-          input.packages.${system}.${repoPackageOverrides.${name} or "default"}
+        repoPackages = builtins.mapAttrs (
+          name: input: input.packages.${system}.${repoPackageOverrides.${name} or "default"}
         ) (builtins.removeAttrs inputs infraInputs);
 
         packages = pkgs.symlinkJoin {
