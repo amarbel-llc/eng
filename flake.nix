@@ -26,16 +26,20 @@
       common,
       darwin,
       linux,
-      lux,
-      nix-mcp-server,
-      pivy,
-      ssh-agent-mux,
-      zmx,
-    }:
+      ...
+    }@inputs:
     (utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = import nixpkgs { inherit system; };
+
+        # Infrastructure inputs that are NOT repos
+        infraInputs = [ "self" "nixpkgs" "nixpkgs-master" "utils" "common" "darwin" "linux" ];
+
+        # Repos whose default package isn't named "default"
+        repoPackageOverrides = {
+          zmx = "zmx-libvterm";
+        };
 
         # Conditionally include platform-specific packages
         platformPackages =
@@ -43,14 +47,9 @@
           // (builtins.removeAttrs (darwin.packages.${system} or { }) [ "default" ])
           // (builtins.removeAttrs (linux.packages.${system} or { }) [ "default" ]);
 
-        # Repository packages
-        repoPackages = {
-          lux = lux.packages.${system}.default;
-          nix-mcp-server = nix-mcp-server.packages.${system}.default;
-          pivy = pivy.packages.${system}.default;
-          ssh-agent-mux = ssh-agent-mux.packages.${system}.default;
-          zmx = zmx.packages.${system}.zmx-libvterm;
-        };
+        repoPackages = builtins.mapAttrs (name: input:
+          input.packages.${system}.${repoPackageOverrides.${name} or "default"}
+        ) (builtins.removeAttrs inputs infraInputs);
 
         packages = pkgs.symlinkJoin {
           name = "eng";
