@@ -5,10 +5,12 @@
       "Bash(git commit:*)",
       "Edit",
       "Read",
-      "mcp__grit__status",
       "mcp__grit__log",
+      "mcp__grit__status",
       "mcp__nix__nix_build",
-      "mcp__nix__nix_flake_show"
+      "mcp__nix__nix_flake_lock",
+      "mcp__nix__nix_flake_show",
+      "mcp__nix__nix_flake_update"
     ]
   }
 }
