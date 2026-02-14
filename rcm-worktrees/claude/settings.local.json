@@ -6,7 +6,9 @@
       "Edit",
       "Read",
       "mcp__grit__status",
-      "mcp__grit__log"
+      "mcp__grit__log",
+      "mcp__nix__nix_build",
+      "mcp__nix__nix_flake_show"
     ]
   }
 }
