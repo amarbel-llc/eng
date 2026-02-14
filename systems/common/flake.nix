@@ -42,6 +42,7 @@
             ddrescue
             direnv
             eternal-terminal
+            expect
             ffmpeg
             figlet
             fish
