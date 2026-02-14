@@ -1,5 +1,10 @@
 {
   "mcpServers": {
+    "get-hubbed": {
+      "type": "stdio",
+      "command": "get-hubbed",
+      "args": []
+    },
     "lux": {
       "type": "stdio",
       "command": "lux",
