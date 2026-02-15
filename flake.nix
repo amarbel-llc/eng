@@ -76,15 +76,16 @@
       {
         packages.default = packages;
 
-        # Provide a simple devShell for working in this repo
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            git
-            gum
-            just
-            nix
-          ];
-        };
+        devShells =
+          let
+            allPackages = platformPackages // repoPackages;
+          in
+          builtins.mapAttrs (name: pkg: pkgs.mkShell { packages = [ pkg ]; }) allPackages
+          // {
+            default = pkgs.mkShell {
+              packages = builtins.attrValues allPackages;
+            };
+          };
       }
     ));
 }
