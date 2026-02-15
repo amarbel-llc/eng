@@ -1218,11 +1218,11 @@
         "utils": "utils_24"
       },
       "locked": {
-        "lastModified": 1771131916,
-        "narHash": "sha256-XKaP2NaEv1KZVgVgS8LJ7EMngmLOU+mUfnIU9/mEfEA=",
+        "lastModified": 1771169557,
+        "narHash": "sha256-Bym7Pl+NWNKLTtFGbDRCG8AtEIIhOKiQtScUYpgs9lw=",
         "owner": "amarbel-llc",
         "repo": "lux",
-        "rev": "b4e4ddd850f221ebf173a402e0f0a02c7595f3d1",
+        "rev": "d62c5cf172f25be82271e6a0caceeb228e8c99ab",
         "type": "github"
       },
       "original": {
