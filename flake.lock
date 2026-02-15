@@ -730,11 +730,11 @@
         "utils": "utils_15"
       },
       "locked": {
-        "lastModified": 1771094194,
-        "narHash": "sha256-DRz2+fN9D9+iojqBhD+h5+eOj38pu3SJgqscqS8VfO4=",
+        "lastModified": 1771167966,
+        "narHash": "sha256-kgHFE/CAkVSYLE9Oi7Y1gLGnNbaVnkqKd+VP+be2CTg=",
         "owner": "amarbel-llc",
         "repo": "get-hubbed",
-        "rev": "f4e218eb111a46274d9520429209aa55132bbadc",
+        "rev": "300983972d2e55946d66018d43a9d3fdc0d09977",
         "type": "github"
       },
       "original": {
@@ -2825,11 +2825,11 @@
         "utils": "utils_41"
       },
       "locked": {
-        "lastModified": 1771163907,
-        "narHash": "sha256-T4C3ZLJXGV3hVKJYDvsjiecpEkDiWO2wCfl92KMBnY8=",
+        "lastModified": 1771168147,
+        "narHash": "sha256-YRjTOqkn8LUuPP8JRUd6Ja7mMMlH9pSsVHbiPwjkp00=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "7e1f037545201b13596c7202c7f65de0ec9d47df",
+        "rev": "8d9eede9a5365a9851671ed10545c13f4ffbaf75",
         "type": "github"
       },
       "original": {
@@ -3451,11 +3451,11 @@
         "utils": "utils_48"
       },
       "locked": {
-        "lastModified": 1771167393,
-        "narHash": "sha256-KRxBQI941aVTZdHAbAqMn9CQ7qf3EfS+puEK6IlAftE=",
+        "lastModified": 1771168878,
+        "narHash": "sha256-0bbshEYNAM1VU552y4nzpKPmT6leR33wkrCmYyMdg0Q=",
         "owner": "amarbel-llc",
         "repo": "sweatshop",
-        "rev": "0914041abd9d928573b925548444527a1eea6887",
+        "rev": "8faa81a2832a2ff3cba4a991a1a49207503ffded",
         "type": "github"
       },
       "original": {
