@@ -12,8 +12,11 @@
 
     # keep sorted
     and-so-can-you-repo.url = "github:amarbel-llc/and-so-can-you-repo";
+    dodder.url = "github:amarbel-llc/dodder";
+    ess-ess-hatch.url = "github:amarbel-llc/ess-ess-hatch";
     get-hubbed.url = "github:amarbel-llc/get-hubbed";
     grit.url = "github:amarbel-llc/grit";
+    just-us.url = "github:amarbel-llc/just-us";
     lux.url = "github:amarbel-llc/lux";
     nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
     pivy.url = "github:amarbel-llc/pivy";
@@ -21,7 +24,7 @@
     sandcastle.url = "github:amarbel-llc/sandcastle";
     shdoc.url = "github:amarbel-llc/shdoc";
     ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
-    z.url = "github:amarbel-llc/z";
+    sweatshop.url = "github:amarbel-llc/sweatshop";
     zmx.url = "github:sfriedenberg-etsy/zmx";
   };
 
