@@ -94,6 +94,7 @@
             skate
             socat
             sshpass
+            termdown
             timidity
             timg
             tldr
