@@ -352,11 +352,11 @@
         "utils": "utils_7"
       },
       "locked": {
-        "lastModified": 1771093390,
-        "narHash": "sha256-y6bxZug6+lRcVxunJQLbQA0T4x4+Wp7jxuHr5itZgTw=",
+        "lastModified": 1771094194,
+        "narHash": "sha256-DRz2+fN9D9+iojqBhD+h5+eOj38pu3SJgqscqS8VfO4=",
         "owner": "amarbel-llc",
         "repo": "get-hubbed",
-        "rev": "4e5eafb8847191f35ddce88d6913c84d1d1affd9",
+        "rev": "f4e218eb111a46274d9520429209aa55132bbadc",
         "type": "github"
       },
       "original": {
@@ -558,11 +558,11 @@
         "utils": "utils_10"
       },
       "locked": {
-        "lastModified": 1771092923,
-        "narHash": "sha256-3XUxwHylNtXIzzJZ9Bksr9VfH4rrLssHF1dXLQ5UK+w=",
+        "lastModified": 1771094760,
+        "narHash": "sha256-AvI+DVbP1hecqHYsOB+vovSBuEWznJkNBC4qkor1ciE=",
         "owner": "amarbel-llc",
         "repo": "grit",
-        "rev": "a0d6bd1d91b0de8deee41a7f1bb8c2024385266a",
+        "rev": "81adfae17b5aca6641dcbea6b8d94825b316e4f5",
         "type": "github"
       },
       "original": {
@@ -620,11 +620,11 @@
         "utils": "utils_16"
       },
       "locked": {
-        "lastModified": 1770903460,
-        "narHash": "sha256-zFe/O/Sr6DKFWUfrQEZ83iDy2rK12Vt4Sfl4kb0nw8E=",
+        "lastModified": 1771098335,
+        "narHash": "sha256-aywOvRlSxuSFhdUydNzFVqJY3PH/vWX0p2KMkrEPFKw=",
         "owner": "amarbel-llc",
         "repo": "nix-mcp-server",
-        "rev": "e9e19a5c85bb40d999318a23139fb631bfc17a73",
+        "rev": "dff48379fa66c49a3eb768fb0d117b89f776c951",
         "type": "github"
       },
       "original": {
@@ -1645,11 +1645,11 @@
       },
       "locked": {
         "dir": "devenvs/rust",
-        "lastModified": 1770817635,
-        "narHash": "sha256-V4X32boiQQW42rRR9bh1RuO6/JQF9nn2VlyXJT1tCzs=",
+        "lastModified": 1771096096,
+        "narHash": "sha256-eAeiDTopgfRmMC93ZtvdwYPtNVEh2694qIk1Ap2qem0=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "d6b1afb577ec35deca1cdc5be6a1776a3639df27",
+        "rev": "732621d021e7587aa3a6ba96b96b6af116df1b27",
         "type": "github"
       },
       "original": {
