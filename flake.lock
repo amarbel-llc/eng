@@ -1483,11 +1483,11 @@
         "utils": "utils_23"
       },
       "locked": {
-        "lastModified": 1771260222,
-        "narHash": "sha256-vnlOk+rnPnY28b8EQQ7dRdg9MOTFOuL2xYWoXxTmd9I=",
+        "lastModified": 1771262107,
+        "narHash": "sha256-cLmHEYvgimv7RibyBjxJk2CQf1oLg6IrIC2pJWVemhs=",
         "owner": "amarbel-llc",
         "repo": "just-us",
-        "rev": "aebcd007a12777adc256d6cbd2f46c780bd4ffeb",
+        "rev": "537731f1e5e83191825bfa2e56a831ce25eccfa3",
         "type": "github"
       },
       "original": {
