@@ -4148,11 +4148,11 @@
         "utils": "utils_59"
       },
       "locked": {
-        "lastModified": 1771248582,
-        "narHash": "sha256-kaxZl+xVXTYvUrjKQ9cmw3VT2WwuG9YdQnXIhIbXT5w=",
+        "lastModified": 1771262614,
+        "narHash": "sha256-+LsexyIAYMNDCsFZWM/lxpdIQYODc+18dViW6xrwJ28=",
         "owner": "amarbel-llc",
         "repo": "sweatshop",
-        "rev": "a9ca133acd60225ca854f8aa8cbd06fd7c122c01",
+        "rev": "53b47ca3dbe3894fbb277fd27e3a8f79808a9a08",
         "type": "github"
       },
       "original": {
