@@ -1,6 +1,8 @@
+set output-format := "tap"
+
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
-default: && build-nix deploy-flake-lock #install-purse-first
+default: && build-nix deploy-flake-lock install-purse-first
   git pull
   nix flake update
 
