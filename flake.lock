@@ -1521,11 +1521,11 @@
         "utils": "utils_27"
       },
       "locked": {
-        "lastModified": 1771244718,
-        "narHash": "sha256-6DtfOcVOTtfAoiGDXcvt1vWBjco+rhwuBudWRRk4bN0=",
+        "lastModified": 1771249035,
+        "narHash": "sha256-dRnWKs7uF6uik7jjy5k6dZSF4ILg6xbPsu9dmc5VBVQ=",
         "owner": "amarbel-llc",
         "repo": "lux",
-        "rev": "bc715f82fb94678d31dadbda76f73d6ac2e4226f",
+        "rev": "3c2501df12b706f4e5369ad5b49d1a8cd4e9faf3",
         "type": "github"
       },
       "original": {
