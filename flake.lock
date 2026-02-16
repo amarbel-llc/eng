@@ -941,11 +941,11 @@
         "utils": "utils_18"
       },
       "locked": {
-        "lastModified": 1771204234,
-        "narHash": "sha256-yX8gKoIvJIozSVLJNccUQAQy+iFlR+0XDPHr4SqWIs4=",
+        "lastModified": 1771250903,
+        "narHash": "sha256-UO9x5J+42ObyR5cimXXTJujSRMO3smNJdg4vAmZv3MM=",
         "owner": "amarbel-llc",
         "repo": "get-hubbed",
-        "rev": "c7d2ad72955957c4d2cd86f8d80cd362c18a45e4",
+        "rev": "d641fb8221b7e0ad58c1fe7a3215276687f6f4b2",
         "type": "github"
       },
       "original": {
