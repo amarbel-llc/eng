@@ -616,11 +616,11 @@
         "utils": "utils_14"
       },
       "locked": {
-        "lastModified": 1771258466,
-        "narHash": "sha256-3S+eYe+ZcENmdoyFdRV0MtIxkjgHuWAR1I/wKCwJ1wI=",
+        "lastModified": 1771266955,
+        "narHash": "sha256-naLhsbtH6szT8aOOBwRe1wjmdBSFV396egpJdjHz07s=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "3fffe5287e952b02a5ad00fb57e5063b81dc6e24",
+        "rev": "21bdbd2cb991978bcc417e7191f1bd6ceb167478",
         "type": "github"
       },
       "original": {
