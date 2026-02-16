@@ -808,11 +808,11 @@
         "utils": "utils_14"
       },
       "locked": {
-        "lastModified": 1771270309,
-        "narHash": "sha256-DDQj76L745M6GKCYaL30M4fU5YFejNlNOIXEISglvuc=",
+        "lastModified": 1771276731,
+        "narHash": "sha256-DRiI61Sk6gWip4S/NqLyaPDz7H4ZlbkOTAE879bZ1Cg=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "c0ef368fcd607e023b28a4029cc59e1fbfadae5d",
+        "rev": "757dbf5a91385cefb35acc606dcaf1bd5a461151",
         "type": "github"
       },
       "original": {
