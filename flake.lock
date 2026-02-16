@@ -466,11 +466,11 @@
         "utils": "utils_14"
       },
       "locked": {
-        "lastModified": 1771203999,
-        "narHash": "sha256-eDZkcKgXF3rHpQ1Ql0HSnw6nyZkspxT3PRXMqARuZsA=",
+        "lastModified": 1771247103,
+        "narHash": "sha256-x+J72+zKliamBPkuf2qM4kRGb0BBnlJ838Eb973SHnU=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "32f1a9eaaf500a72d9de1ec38c25afd0ed16440f",
+        "rev": "9771e185fe45851cc1ea82fc2ff8eb5ed76fc726",
         "type": "github"
       },
       "original": {
@@ -3438,11 +3438,11 @@
         "utils": "utils_51"
       },
       "locked": {
-        "lastModified": 1771246973,
-        "narHash": "sha256-Q+ZA/N1VGZdIpnT3I5HyNJYhBNCQ+5PG9MLUfYQiaGY=",
+        "lastModified": 1771247378,
+        "narHash": "sha256-BEcnwkeYfFaaRofQQxDblor3xSUpXdxk9xl08cOkrqM=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "1da2e5f1a197eb0c524f112e869e8c9a6c05d7a5",
+        "rev": "cc04b1c13e745766342e95cb9314ade5cc09c292",
         "type": "github"
       },
       "original": {
