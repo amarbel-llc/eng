@@ -1432,11 +1432,11 @@
         "utils": "utils_21"
       },
       "locked": {
-        "lastModified": 1771203923,
-        "narHash": "sha256-GIlYsjnd+/U56YdovPTms+B3FEDRdbaSRrAHe1FlKf8=",
+        "lastModified": 1771216149,
+        "narHash": "sha256-CBSh/rqgswwUReWeu+b2koKjaiR25YigWov+MXEWrXE=",
         "owner": "amarbel-llc",
         "repo": "grit",
-        "rev": "2f687639cd704ada81ebbbe5e02f1218c0068cf4",
+        "rev": "c7fcc3bd8688eff3f40ef8d3d256edae46847f13",
         "type": "github"
       },
       "original": {
