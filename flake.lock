@@ -2730,11 +2730,11 @@
         "utils": "utils_23"
       },
       "locked": {
-        "lastModified": 1771265173,
-        "narHash": "sha256-VGXI1dZ3x8h59VwazWAeJvVqM7KICK0xgHJRgKPQn+k=",
+        "lastModified": 1771273932,
+        "narHash": "sha256-nvPnjFIUEnM+fVzlSZvaCLiaf739ggsaXpo2i0JM5cw=",
         "owner": "amarbel-llc",
         "repo": "just-us",
-        "rev": "f1037630baf5d639f38a7d39d13d90b2419d43b2",
+        "rev": "2fbc2121c24dc49d86d005327c19485b01a561a8",
         "type": "github"
       },
       "original": {
