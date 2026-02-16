@@ -2,10 +2,12 @@ set output-format := "tap"
 
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
+# git pull and and flake update
 default: && build-nix deploy-flake-lock install-purse-first
   git pull
   nix flake update
 
+# push flake.lock to origin
 deploy-flake-lock:
   #!/usr/bin/env bash
   set -euo pipefail
