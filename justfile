@@ -1,8 +1,19 @@
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
-default: && build-nix #install-purse-first
+default: && build-nix deploy-flake-lock #install-purse-first
   git pull
   nix flake update
+
+deploy-flake-lock:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if git diff --quiet flake.lock; then
+    echo "flake.lock unchanged, skipping deploy"
+    exit 0
+  fi
+  git add flake.lock
+  git commit -m "update flake.lock"
+  git push
 
 install-purse-first:
   purse-first install
