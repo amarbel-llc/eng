@@ -661,11 +661,11 @@
         "utils": "utils_14"
       },
       "locked": {
-        "lastModified": 1771266955,
-        "narHash": "sha256-naLhsbtH6szT8aOOBwRe1wjmdBSFV396egpJdjHz07s=",
+        "lastModified": 1771270309,
+        "narHash": "sha256-DDQj76L745M6GKCYaL30M4fU5YFejNlNOIXEISglvuc=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "21bdbd2cb991978bcc417e7191f1bd6ceb167478",
+        "rev": "c0ef368fcd607e023b28a4029cc59e1fbfadae5d",
         "type": "github"
       },
       "original": {
