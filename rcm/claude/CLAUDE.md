@@ -1,5 +1,6 @@
 
 - my github username is `friedenberg`
+- my github org for personal projects is `amarbel-llc`
 - prefer commands defined in justfiles
 - prefer nix-based building and testing
 - when performing new tasks that are done frequent, consider suggesting adding to the justfile
@@ -8,10 +9,6 @@
 - exclusively use the `nix` mcp when in a nix-backed project
 - exclusively use `lux` mcp to interact with the codebase for projects whose
   languages and files are supported
-
-# Scripts
-
-- prefer using the `gum` package for log output
 
 # Tests
 

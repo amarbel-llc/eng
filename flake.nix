@@ -20,12 +20,13 @@
     lux.url = "github:amarbel-llc/lux";
     nix-mcp-server.url = "github:amarbel-llc/nix-mcp-server";
     pivy.url = "github:amarbel-llc/pivy";
+    potato.url = "github:amarbel-llc/potato";
     purse-first.url = "github:amarbel-llc/purse-first";
     sandcastle.url = "github:amarbel-llc/sandcastle";
     shdoc.url = "github:amarbel-llc/shdoc";
     ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
     sweatshop.url = "github:amarbel-llc/sweatshop";
-    zmx.url = "github:sfriedenberg-etsy/zmx";
+    zmx.url = "github:amarbel-llc/zmx";
   };
 
   outputs =

@@ -1,6 +1,6 @@
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
-default: && build-nix install-purse-first
+default: && build-nix #install-purse-first
   git pull
   nix flake update
 
