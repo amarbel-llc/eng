@@ -1,23 +1,4 @@
 {
   "mcpServers": {
-    "get-hubbed": {
-      "args": [],
-      "command": "/nix/store/lvg8h9x80ghgw5l1v30bkkn39jknvsya-get-hubbed/bin/get-hubbed"
-    },
-    "grit": {
-      "args": [],
-      "command": "/nix/store/6gywgyxj0yvg5wgrzmyxkpzy9nvfqlis-grit-0.1.0/bin/grit"
-    },
-    "lux": {
-      "args": [
-        "mcp",
-        "stdio"
-      ],
-      "command": "/nix/store/h1hfyb0r7avnv6m9mg82xfwqrqf4lisc-lux-0.1.0/bin/lux"
-    },
-    "nix": {
-      "args": [],
-      "command": "/nix/store/zxc501i4ffnsrr615zc0g7vlqrywlm04-nix-mcp-server/bin/nix-mcp-server"
-    }
   }
 }

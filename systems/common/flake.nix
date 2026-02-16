@@ -70,7 +70,6 @@
             j2cli
             jinja2-cli
             jq
-            just
             lftp
             libcdio
             markscribe
