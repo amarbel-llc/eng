@@ -11790,11 +11790,11 @@
         "utils": "utils_181"
       },
       "locked": {
-        "lastModified": 1771271066,
-        "narHash": "sha256-cFjfqqNCKGgW5Z+ll3ef0nPmjHdSs8NiTF7xaDWrX0k=",
+        "lastModified": 1771341919,
+        "narHash": "sha256-L1Yz9N9JPQW5yFwjS7KYsRnmZ/NPNAXRyt42Mfe7I9g=",
         "owner": "amarbel-llc",
         "repo": "sandcastle",
-        "rev": "a1d51e31d5b9608abfbd5d062cb4199c8aa1768c",
+        "rev": "1fbaa2377188553ce7991744700e8ff939a05ad7",
         "type": "github"
       },
       "original": {
@@ -12763,11 +12763,11 @@
         "utils": "utils_183"
       },
       "locked": {
-        "lastModified": 1771335454,
-        "narHash": "sha256-TZHN7moNVHKlcyGDH3CRB1uUlwon1VhP2vTp3C/vr3g=",
+        "lastModified": 1771347224,
+        "narHash": "sha256-wQBCjTB9iLyJMkPxgdTPH7xRFp8Q3FhdQKJeeSXhBRk=",
         "owner": "amarbel-llc",
         "repo": "sweatshop",
-        "rev": "59ad074faa97e29a96adde6381e2798d3b8d1f91",
+        "rev": "d07702f5196636e85c0da3062cf9f60e2ca0207d",
         "type": "github"
       },
       "original": {
