@@ -10323,11 +10323,11 @@
         "utils": "utils_112"
       },
       "locked": {
-        "lastModified": 1771331743,
-        "narHash": "sha256-YB6qZJcq1YXpnHXOAyoKIJoh6zqmwzaK4qkfaWYDUf8=",
+        "lastModified": 1771336730,
+        "narHash": "sha256-AaVzfziZiz+naQ3K+ALGV4NqG2m12i1Ru6GEfAFzfCA=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "74c6f9d7eb6a12bb8d48adfd6b9b82e6095a4215",
+        "rev": "c6a8df3a8d5b75a6a34efb510580da90f1b0cd18",
         "type": "github"
       },
       "original": {
