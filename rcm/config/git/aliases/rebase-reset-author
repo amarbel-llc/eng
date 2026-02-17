@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file rebase-reset-author
+# @brief run the --reset-author command for all of the commits from <base-ref>
+
+git rebase -x 'git commit --amend --reset-author --no-edit' "$1"
