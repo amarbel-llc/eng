@@ -11520,11 +11520,11 @@
         "utils": "utils_47"
       },
       "locked": {
-        "lastModified": 1771420114,
-        "narHash": "sha256-h4bg/Nn+fPwwxvUfVPi28+0TUe+WBBdH0IybCLaCnMQ=",
+        "lastModified": 1771421072,
+        "narHash": "sha256-9FPGdbhIMrrow7H92FUXSBP/eon427b+sagR5ai5/5A=",
         "owner": "amarbel-llc",
         "repo": "pivy",
-        "rev": "52833cae260cd80486f29cb35454b360d87a2ab3",
+        "rev": "9736473fa8c1138463496d3d6e9383074471588a",
         "type": "github"
       },
       "original": {
