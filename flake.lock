@@ -20470,11 +20470,11 @@
         "utils": "utils_289"
       },
       "locked": {
-        "lastModified": 1771445608,
-        "narHash": "sha256-X7E3esEMJex/1T9NgYzAz8ryPIWM3PlruPfBzJ946FY=",
+        "lastModified": 1771453172,
+        "narHash": "sha256-JdZzeyZ0PdOrxxcLO3DQ0BlFAksqzS23LZEJ9m+y+J0=",
         "owner": "amarbel-llc",
         "repo": "sweatshop",
-        "rev": "653bf49884586f8c914b5a4763115546484ab79a",
+        "rev": "637bebe407d173dad70b5ff89edd03b092d29b03",
         "type": "github"
       },
       "original": {
