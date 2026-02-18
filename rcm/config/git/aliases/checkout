@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file co
+# @file checkout
 # @brief checkout shorthand
 
 git checkout "$@"

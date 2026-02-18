@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file aa
+# @file add-all
 # @brief add all files with intent-to-add
 
 git add --all --intent-to-add

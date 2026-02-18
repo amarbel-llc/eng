@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file hig
+# @file history-graph
 # @brief log with nice formatting and graph
 
 git log --pretty=nice --graph "$@"

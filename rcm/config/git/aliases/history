@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file hi
+# @file history
 # @brief log with nice formatting
 
 git log --pretty=nice "$@"

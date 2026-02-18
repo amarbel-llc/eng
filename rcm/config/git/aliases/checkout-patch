@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file cop
+# @file checkout-patch
 # @brief checkout with patch mode
 
 git checkout --patch "$@"

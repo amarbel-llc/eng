@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file st
+# @file status
 # @brief status in short branch format
 
 git status -sb

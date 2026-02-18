@@ -1,11 +1,11 @@
 #! /usr/bin/env -S bash -e
-# @file cobu
+# @file checkout-branch-upstream
 # @brief create a branch with a `$USER-%Y-%m-%d` prefix and set upstream to default branch
 
 # shellcheck disable=1091
 source "${BATS_LIB_PATH}/tap-writer/load.bash"
 
-branch="$USER-$(date +%Y-%m-%d)-${1:?usage: git cobu <suffix>}"
+branch="$USER-$(date +%Y-%m-%d)-${1:?usage: git checkout-branch-upstream <suffix>}"
 default_branch="${2:-$(git branch-get-default)}"
 
 tap_plan 2
