@@ -9,4 +9,4 @@ while IFS= read -r -d '' alias_script; do
   chmod +x "$alias_script"
   alias_name="$(basename "$alias_script")"
   printf "\t%s = ! %s\n" "$alias_name" "$alias_script"
-done < <(find "$HOME/.config/git/aliases/" -type l -print0 | sort -z)
+done < <(find "$HOME/.config/git/aliases/" -type l -not -xtype l -print0 | sort -z)
