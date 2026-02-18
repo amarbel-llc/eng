@@ -12763,11 +12763,11 @@
         "utils": "utils_183"
       },
       "locked": {
-        "lastModified": 1771347224,
-        "narHash": "sha256-wQBCjTB9iLyJMkPxgdTPH7xRFp8Q3FhdQKJeeSXhBRk=",
+        "lastModified": 1771415939,
+        "narHash": "sha256-EINHV8L9+hRsdl2MP0LuOnVO7xVYaSN6bnJkECsNJyg=",
         "owner": "amarbel-llc",
         "repo": "sweatshop",
-        "rev": "d07702f5196636e85c0da3062cf9f60e2ca0207d",
+        "rev": "c2c29eeda415b006463016d29b75715df7d0060f",
         "type": "github"
       },
       "original": {
