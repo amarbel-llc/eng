@@ -3,7 +3,12 @@ set output-format := "tap"
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
 # git pull and and flake update
-default: && build-nix deploy-flake-lock build-rcm install-purse-first
+default: && \
+    build-nix \
+    deploy-flake-lock \
+    build-rcm \
+    install-purse-first \
+    install-pivy-agent-service
   git pull
   nix flake update
 
@@ -21,6 +26,9 @@ deploy-flake-lock:
 
 install-purse-first:
   purse-first install
+
+install-pivy-agent-service:
+  pivy-agent install-service -A
 
 clean-nix:
   nix-store --gc

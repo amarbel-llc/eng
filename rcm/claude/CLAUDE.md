@@ -12,9 +12,8 @@
 
 # Tests
 
-- format output in TAP-14 (when reasonable)
-- use `bats` for CLI-testing (like integration tests, use my project `dodder` as
-  inspiration)
+- format output in TAP-14 (when reasonable) and use amarbel-llc/tap-dancer
+- use `bats` from amarbel-llc/batman for CLI-testing
 
 # Formatting
 
