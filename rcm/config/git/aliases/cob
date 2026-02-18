@@ -2,6 +2,13 @@
 # @file cob
 # @brief create a new branch and set the upstream to the default branch
 
+# shellcheck disable=1091
+source "${BATS_LIB_PATH}/tap-writer/load.bash"
+
+branch="${1:?usage: git cob <branch>}"
 default_branch="$(git branch-get-default)"
-git checkout -b "$1"
-git branch --set-upstream-to="origin/$default_branch"
+
+tap_plan 2
+
+tap_run "create branch ${branch}" git checkout -b "$branch"
+tap_run "set upstream to origin/${default_branch}" git branch --set-upstream-to="origin/$default_branch"

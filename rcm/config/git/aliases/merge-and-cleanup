@@ -1,0 +1,34 @@
+#! /usr/bin/env -S bash -e
+# @file merge-and-cleanup
+# @brief merges a branch and deletes it and any associated worktree
+
+# shellcheck disable=1091
+source "${BATS_LIB_PATH}/tap-writer/load.bash"
+
+branch="${1:?usage: git merge-and-cleanup <branch>}"
+
+tap_plan 4
+
+if git merge-base --is-ancestor "$branch" HEAD 2>/dev/null; then
+  tap_skip "merge ${branch}" "already merged"
+else
+  tap_run "merge ${branch}" git merge --ff-only "$branch"
+fi
+
+worktree_path="$(git worktree list --porcelain | grep -B2 "^branch refs/heads/${branch}$" | grep "^worktree " | sed 's/^worktree //')"
+
+if [[ -n $worktree_path ]]; then
+  tap_run "remove worktree ${worktree_path}" git worktree remove "$worktree_path"
+else
+  tap_skip "remove worktree" "no worktree for ${branch}"
+fi
+
+tap_run "delete local branch ${branch}" git branch -D "$branch"
+
+remote="$(git config --get "branch.${branch}.remote" 2>/dev/null || true)"
+
+if [[ -n $remote ]]; then
+  tap_run "delete remote branch ${remote}/${branch}" git push --delete "$remote" "$branch"
+else
+  tap_skip "delete remote branch" "no remote tracking branch for ${branch}"
+fi
