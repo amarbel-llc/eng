@@ -153,11 +153,11 @@
         "utils": "utils_130"
       },
       "locked": {
-        "lastModified": 1771421005,
-        "narHash": "sha256-Tr/+Jt7Db+fguqUjPYqL0HMlds8F5C6TDYOkPWdLxZI=",
+        "lastModified": 1771447980,
+        "narHash": "sha256-pDdsnrnHQamDxLmKG4cW8H5Yc+Hz5k/G7wWqwyOAYMY=",
         "owner": "amarbel-llc",
         "repo": "batman",
-        "rev": "491fca0d95e9f87f65669e1ff920cc2e3172ed76",
+        "rev": "65119772ccab87099897e35af64cc406b949e329",
         "type": "github"
       },
       "original": {
@@ -16354,11 +16354,11 @@
         "utils": "utils_155"
       },
       "locked": {
-        "lastModified": 1771440089,
-        "narHash": "sha256-dvJ2y+e2Q6X/DgouTH1t4NmzOQhxl7M6MIzXsehKTwA=",
+        "lastModified": 1771507461,
+        "narHash": "sha256-U7xocRDcr+KpjpRsFeKT7vtgqyZilvPBwFmoRf8V9QU=",
         "owner": "amarbel-llc",
         "repo": "pivy",
-        "rev": "99e6a6dadbdf55713bd441b3982f9658197163f2",
+        "rev": "284d91bb6d9b12a00567d50b8a86474354820db6",
         "type": "github"
       },
       "original": {
