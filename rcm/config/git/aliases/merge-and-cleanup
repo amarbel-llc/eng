@@ -3,7 +3,7 @@
 # @brief merges a branch and deletes it and any associated worktree
 
 # shellcheck disable=1091
-source "${BATS_LIB_PATH}/tap-writer/load.bash"
+source "${TAP_DANCER_LIB}/load.bash"
 
 branch="${1:?usage: git merge-and-cleanup <branch>}"
 

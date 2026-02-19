@@ -3,7 +3,7 @@
 # @brief create a branch with a `$USER-%Y-%m-%d` prefix and set upstream to default branch
 
 # shellcheck disable=1091
-source "${BATS_LIB_PATH}/tap-writer/load.bash"
+source "${TAP_DANCER_LIB}/load.bash"
 
 branch="$USER-$(date +%Y-%m-%d)-${1:?usage: git cobu <suffix>}"
 default_branch="${2:-$(git branch-get-default)}"

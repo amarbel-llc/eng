@@ -25,11 +25,11 @@ git <command> "$@"
 
 ## TAP-14 Output (Multi-Step Aliases)
 
-Aliases with multiple logical steps use the `tap-writer` library from batman (`amarbel-llc/batman`) for structured TAP version 14 output. Currently used by: `checkout-branch`, `checkout-branch-upstream`, `merge-and-cleanup`.
+Aliases with multiple logical steps use the bash library from tap-dancer (`amarbel-llc/tap-dancer`) for structured TAP version 14 output. Currently used by: `cob`, `cobu`, `merge-and-cleanup`.
 
 ```bash
 # shellcheck disable=1091
-source "${BATS_LIB_PATH}/tap-writer/load.bash"
+source "${TAP_DANCER_LIB}/load.bash"
 
 tap_plan <N>
 tap_run "description" command arg1 arg2
@@ -38,7 +38,7 @@ tap_skip "description" "reason"
 
 `tap_run` automatically emits `ok`/`not ok` based on exit code and bails out on failure by default. Use `tap_run --no-bail` to continue after failure.
 
-Single-command aliases (the majority) do not use tap-writer.
+Single-command aliases (the majority) do not use tap-dancer.
 
 ## Adding a New Alias
 
