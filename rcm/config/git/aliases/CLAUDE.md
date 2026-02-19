@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Git aliases implemented as standalone bash scripts. Each file is an executable script whose filename becomes the git alias name (e.g., `status` → `git status`). The `config-aliases.rcm-script` dynamically discovers all scripts via symlinks in `~/.config/git/aliases/` and generates a `[alias]` gitconfig section with `! /path/to/script` entries.
+Git aliases implemented as standalone bash scripts with a `.git-alias` extension. The filename minus the extension becomes the git alias name (e.g., `status.git-alias` → `git status`). The `config-aliases.rcm-script` dynamically discovers all `*.git-alias` symlinks in `~/.config/git/aliases/` and generates a `[alias]` gitconfig section with `! /path/to/script` entries.
 
 ## Script Conventions
 
@@ -45,6 +45,6 @@ Single-command aliases (the majority) do not use tap-dancer.
 
 ## Adding a New Alias
 
-1. Create a new file in this directory following the script conventions above
-2. The filename becomes the alias name — use descriptive hyphenated names (not abbreviations)
+1. Create a new file in this directory with a `.git-alias` extension following the script conventions above
+2. The filename (minus `.git-alias`) becomes the alias name — use descriptive hyphenated names (not abbreviations)
 3. `rcup` will symlink it; `config-aliases.rcm-script` will pick it up automatically

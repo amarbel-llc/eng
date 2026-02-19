@@ -9,6 +9,6 @@ echo
 echo "[alias]"
 
 while IFS= read -r -d '' alias_script; do
-  alias_name="$(basename "$alias_script")"
+  alias_name="$(basename "$alias_script" .git-alias)"
   printf "\t%s = ! %s\n" "$alias_name" "$alias_script"
-done < <(find "$HOME/.config/git/aliases/" -type l -exec test -f {} \; -exec test -x {} \; -print0 | sort -z || kill $$)
+done < <(find "$HOME/.config/git/aliases/" -name '*.git-alias' -type l -print0 | sort -z || kill $$)
