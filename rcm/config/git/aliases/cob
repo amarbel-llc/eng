@@ -3,6 +3,7 @@
 # @brief create a new branch and set the upstream to the default branch
 
 # shellcheck disable=1091
+TAP_DANCER_LIB="$(dirname "$(readlink -f "$0")")/result/share/tap-dancer/lib"
 source "${TAP_DANCER_LIB}/load.bash"
 
 branch="${1:?usage: git cob <branch>}"

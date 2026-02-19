@@ -1,5 +1,8 @@
 #! /usr/bin/env -S bash -eo pipefail
 
+aliases_dir="$HOME/eng/rcm/config/git/aliases"
+nix build "${aliases_dir}" --out-link "${aliases_dir}/result" >&2
+
 echo -n "# "
 echo "vim: ft=gitconfig"
 echo

@@ -3,6 +3,7 @@
 # @brief merges a branch and deletes it and any associated worktree
 
 # shellcheck disable=1091
+TAP_DANCER_LIB="$(dirname "$(readlink -f "$0")")/result/share/tap-dancer/lib"
 source "${TAP_DANCER_LIB}/load.bash"
 
 branch="${1:?usage: git merge-and-cleanup <branch>}"

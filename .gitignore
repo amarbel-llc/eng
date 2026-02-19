@@ -11,6 +11,8 @@ rcm/config/ssh/known_hosts-user
 rcm/host-*/
 rcm/tag-darwin/config/karabiner/automatic_backups/
 rcm/tag-nix/secrets-nix.env
+rcm/config/git/aliases/result
+rcm/config/git/aliases/flake.lock
 
 /__pycache__/
 config/fish/fish_history

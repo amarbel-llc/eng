@@ -3,6 +3,7 @@
 # @brief create a branch with a `$USER-%Y-%m-%d` prefix and set upstream to default branch
 
 # shellcheck disable=1091
+TAP_DANCER_LIB="$(dirname "$(readlink -f "$0")")/result/share/tap-dancer/lib"
 source "${TAP_DANCER_LIB}/load.bash"
 
 branch="$USER-$(date +%Y-%m-%d)-${1:?usage: git cobu <suffix>}"

@@ -29,12 +29,15 @@ Aliases with multiple logical steps use the bash library from tap-dancer (`amarb
 
 ```bash
 # shellcheck disable=1091
+TAP_DANCER_LIB="$(dirname "$(readlink -f "$0")")/result/share/tap-dancer/lib"
 source "${TAP_DANCER_LIB}/load.bash"
 
 tap_plan <N>
 tap_run "description" command arg1 arg2
 tap_skip "description" "reason"
 ```
+
+The `result` symlink is produced by `nix build` of the local `flake.nix` (which pulls in `tap-dancer-bash`). The build runs automatically during `rcup` via `config-aliases.rcm-script`. Scripts resolve their real path via `readlink -f` to find the `result` symlink in the source directory.
 
 `tap_run` automatically emits `ok`/`not ok` based on exit code and bails out on failure by default. Use `tap_run --no-bail` to continue after failure.
 
