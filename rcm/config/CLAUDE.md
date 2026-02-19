@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is the `rcm/config` directory within the `eng` monorepo — dotfiles managed by `rcup` that get symlinked into `~/.config/`. It contains configuration for git, fish shell, neovim, vim, kitty, gnupg, direnv, just, and thefuck.
+This is the `rcm/config` directory within the `eng` monorepo — dotfiles managed by `rcup` that get symlinked into `~/.config/`. It contains configuration for git, fish shell, neovim, vim, kitty, direnv, just, and thefuck.
 
 Files here are deployed via `rcup` (run from the top-level `just build-rcm`). After editing, `rcup` must be run to update symlinks.
 

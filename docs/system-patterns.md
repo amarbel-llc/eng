@@ -32,7 +32,6 @@ Key characteristics:
 - Uses `symlinkJoin` with `failOnMissing = true` for strict aggregation
 - Exports both `packages.default` and `devShells.default`
 - Selective use of `pkgs-stable` for specific packages (csvkit, gftp)
-- Custom overlays (gnupg with PCSC support)
 
 ```nix
 packages.default = pkgs.symlinkJoin {

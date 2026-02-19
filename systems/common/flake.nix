@@ -111,8 +111,6 @@
             # pcsclite
             ;
 
-          gnupg = (pkgs-master.gnupg.override { withPcsc = true; });
-
           inherit (pkgs)
             csvkit
             gftp
