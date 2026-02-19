@@ -2789,11 +2789,11 @@
         "utils": "utils_73"
       },
       "locked": {
-        "lastModified": 1771521043,
-        "narHash": "sha256-gGAxoCjuREyUmvXHg/px/Q0eneVIu8yf6iY/FZRXxk0=",
+        "lastModified": 1771531884,
+        "narHash": "sha256-RInMjsYM/shGjtw5SpJRUiUjC5aVGXdBlfFWDpIeK+g=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "c4b37adeb46b56d90335220e02d555237ace11c2",
+        "rev": "3c9669fcf87d71f81881081334216a1d050659d8",
         "type": "github"
       },
       "original": {
