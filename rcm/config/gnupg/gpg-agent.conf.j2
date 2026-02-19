@@ -1,8 +1,0 @@
-# vim: set filetype=jinja.conf:
-
-default-cache-ttl 600
-enable-ssh-support
-max-cache-ttl 7200
-{% if pinentry_program is defined %}pinentry-program {{ pinentry_program }}{% endif %}
-
-{% if extra is defined %}{{ extra }}{% endif %}

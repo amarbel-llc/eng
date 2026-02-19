@@ -6,14 +6,12 @@ export AND_SO_CAN_YOU_REPO_DIR="$HOME/eng/repos"
 export CLAUDE_CODE_DISABLE_AUTO_MEMORY=0
 export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
 export EDITOR="$HOME/eng/result/bin/nvim"
-export GPG_TTY="$(tty)"
 export LESS="-x4 -R"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh-agent-mux/agent.sock"
 
 # XDG
 # keep sorted
 export GIT_CONFIG_GLOBAL="$HOME/.config/git/config-user"
-export GNUPGHOME="$HOME/.config/gnupg"
 export GOPATH="$HOME/.cache/go"
 export SSH_HOME="$HOME/.config/ssh"
 export XDG_CONFIG_HOME="$HOME/.config"
