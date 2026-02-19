@@ -1,4 +1,4 @@
-#! /usr/bin/env -S bash -e
+#! /usr/bin/env -S bash -eo pipefail
 
 echo -n "# "
 echo "vim: ft=gitconfig"
@@ -8,4 +8,4 @@ echo "[alias]"
 while IFS= read -r -d '' alias_script; do
   alias_name="$(basename "$alias_script")"
   printf "\t%s = ! %s\n" "$alias_name" "$alias_script"
-done < <(find "$HOME/.config/git/aliases/" -type l -not -xtype l -xtype f -perm +111 -print0 | sort -z)
+done < <(find "$HOME/.config/git/aliases/" -type l -exec test -f {} \; -exec test -x {} \; -print0 | sort -z || kill $$)
