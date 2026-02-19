@@ -1,0 +1,3 @@
+#! /usr/bin/env -S bash -e
+
+exec "$HOME/eng/result/bin/glow" -p "$@"
