@@ -23528,11 +23528,11 @@
         "utils": "utils_331"
       },
       "locked": {
-        "lastModified": 1771453497,
-        "narHash": "sha256-Zk1n093n7X9ToBIiEVvPCDbaVoA1KDbWDN8J3u7lVik=",
+        "lastModified": 1771536402,
+        "narHash": "sha256-sE48C2tGjCaqckrFhqMM2W0H1HBOvtkM2B8Y+qf+ipQ=",
         "owner": "amarbel-llc",
         "repo": "sweatshop",
-        "rev": "380136b36b2040dd964ab43d8eabd5045c51a046",
+        "rev": "686dd3fb1d3da772961bc089ab55f957d5528891",
         "type": "github"
       },
       "original": {
