@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file add-patch
+# @file ap
 # @brief add with patch mode
 
 git add --patch

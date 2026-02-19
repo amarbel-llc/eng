@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file history-stat
+# @file hist
 # @brief log with graph and hist formatting
 
 git log --graph --pretty=hist --abbrev-commit "$@"

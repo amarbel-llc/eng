@@ -1,5 +1,5 @@
 #! /usr/bin/env -S bash -e
-# @file commit
+# @file ci
 # @brief commit shorthand
 
 git commit "$@"
