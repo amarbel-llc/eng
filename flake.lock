@@ -28269,11 +28269,11 @@
         "utils": "utils_258"
       },
       "locked": {
-        "lastModified": 1771588843,
-        "narHash": "sha256-9pxJWl03FOBTL/mvevPHXlRkUR4I0eXgeLn64mS9xPM=",
+        "lastModified": 1771612589,
+        "narHash": "sha256-IzlffgHlBuPZTiWpEa4gSTCQvOoqYFI8CVdK4w2wgOE=",
         "owner": "amarbel-llc",
         "repo": "pivy",
-        "rev": "dfa1e7683034eacb3c203e89b2ab3fae533220b1",
+        "rev": "2dc561755ff6547cc13bfec0cab21901c4deaaa5",
         "type": "github"
       },
       "original": {
