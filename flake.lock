@@ -261,11 +261,11 @@
         "utils": "utils_172"
       },
       "locked": {
-        "lastModified": 1771447980,
-        "narHash": "sha256-pDdsnrnHQamDxLmKG4cW8H5Yc+Hz5k/G7wWqwyOAYMY=",
+        "lastModified": 1771588303,
+        "narHash": "sha256-L93F5ApN6GIby1N1xJlP9CPA6LJBwbxXI942LFa7+00=",
         "owner": "amarbel-llc",
         "repo": "batman",
-        "rev": "65119772ccab87099897e35af64cc406b949e329",
+        "rev": "f9a945bb9968fea24e5d1ab582a008fee92b45b2",
         "type": "github"
       },
       "original": {
@@ -2724,11 +2724,11 @@
       },
       "locked": {
         "dir": "devenvs/rust",
-        "lastModified": 1771420388,
-        "narHash": "sha256-3PHCRdnCcXDq8s3qD/I7k0knwXv1AJSQXQgDwswoFXU=",
+        "lastModified": 1771560978,
+        "narHash": "sha256-QRdhPVuaiZR0In7uNHT9Q/k71hguNU8cllaUKAIHdEU=",
         "owner": "friedenberg",
         "repo": "eng",
-        "rev": "f702c2478379e05c0b2d597839e2b871d1507d6b",
+        "rev": "4215d1cd941d4fdbefc57536d303bda3a822120e",
         "type": "github"
       },
       "original": {
@@ -18788,11 +18788,11 @@
         "utils": "utils_197"
       },
       "locked": {
-        "lastModified": 1771507461,
-        "narHash": "sha256-U7xocRDcr+KpjpRsFeKT7vtgqyZilvPBwFmoRf8V9QU=",
+        "lastModified": 1771588843,
+        "narHash": "sha256-9pxJWl03FOBTL/mvevPHXlRkUR4I0eXgeLn64mS9xPM=",
         "owner": "amarbel-llc",
         "repo": "pivy",
-        "rev": "284d91bb6d9b12a00567d50b8a86474354820db6",
+        "rev": "dfa1e7683034eacb3c203e89b2ab3fae533220b1",
         "type": "github"
       },
       "original": {
