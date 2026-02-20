@@ -30,6 +30,10 @@ function format_with_vim() {
   #   </dev/null
 }
 
+# Cache lsrc output to avoid scanning the home directory multiple times
+lsrc_cache="$(mktemp)"
+lsrc | cut -f1 -d: | sort >"$lsrc_cache"
+
 EXT_J2="j2"
 EXT_J2_JSON="json"          # TODO change to `.j2.json` extension
 EXT_J2_SCRIPT="json-script" # TODO change to `.j2.script` extension
@@ -80,7 +84,7 @@ while IFS= read -r template; do
 
   echo "$output" >>"$log"
 
-done < <(lsrc | cut -f1 -d: | grep ".$EXT_J2\$" | sort)
+done < <(grep "\\.$EXT_J2\$" "$lsrc_cache")
 
 EXT_RCM_SCRIPT="rcm-script"
 
@@ -109,4 +113,6 @@ while IFS= read -r template; do
 
   echo "$output" >>"$log"
 
-done < <(lsrc | cut -f1 -d: | grep ".$EXT_RCM_SCRIPT\$" | sort)
+done < <(grep "\\.$EXT_RCM_SCRIPT\$" "$lsrc_cache")
+
+rm "$lsrc_cache"
