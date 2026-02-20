@@ -30,9 +30,35 @@ function format_with_vim() {
   #   </dev/null
 }
 
-# Cache lsrc output to avoid scanning the home directory multiple times
-lsrc_cache="$(mktemp)"
-lsrc | cut -f1 -d: | sort >"$lsrc_cache"
+# Find template destination paths by searching the source dotfiles directory
+# and checking if rcup deployed the corresponding dotfile. This avoids calling
+# lsrc which scans the entire home directory.
+dotfiles_dir="$HOME/eng/rcm"
+
+function dotfile_destination() {
+  local src="$1"
+  local rel="${src#"$dotfiles_dir"/}"
+
+  # Strip tag-<tag>/ prefix if present
+  if [[ $rel == tag-*/* ]]; then
+    rel="${rel#tag-*/}"
+  fi
+
+  echo "$HOME/.$rel"
+}
+
+function find_templates() {
+  local pattern="$1"
+
+  while IFS= read -r src; do
+    local dest
+    dest="$(dotfile_destination "$src")"
+
+    if [[ -f $dest ]]; then
+      echo "$dest"
+    fi
+  done < <(find "$dotfiles_dir" -name "$pattern" -not -path '*/hooks/*' | sort)
+}
 
 EXT_J2="j2"
 EXT_J2_JSON="json"          # TODO change to `.j2.json` extension
@@ -84,7 +110,7 @@ while IFS= read -r template; do
 
   echo "$output" >>"$log"
 
-done < <(grep "\\.$EXT_J2\$" "$lsrc_cache")
+done < <(find_templates "*.$EXT_J2")
 
 EXT_RCM_SCRIPT="rcm-script"
 
@@ -113,6 +139,4 @@ while IFS= read -r template; do
 
   echo "$output" >>"$log"
 
-done < <(grep "\\.$EXT_RCM_SCRIPT\$" "$lsrc_cache")
-
-rm "$lsrc_cache"
+done < <(find_templates "*.$EXT_RCM_SCRIPT")
