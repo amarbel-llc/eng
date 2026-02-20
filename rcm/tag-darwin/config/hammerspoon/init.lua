@@ -16,7 +16,7 @@ modal:bind({}, "r", nil, function()
 end)
 
 hs.hotkey.bind({"alt"}, "space", function()
-    hs.task.new("/Applications/kitty.app/Contents/MacOS/kitty", nil):start()
+    hs.task.new("/Applications/kitty.app/Contents/MacOS/kitty", nil):setWorkingDirectory(os.getenv("HOME")):start()
 end)
 
 --  __        ___           _
