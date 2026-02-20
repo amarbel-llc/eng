@@ -1,13 +1,15 @@
 #! /usr/bin/env -S bash -e
 
-if [[ -z "$ZMX_SESSION" ]]; then
-  gum log -t error "refusing to run claude, not in a zmx session"
-  exit 1
-fi
+# if [[ -z "$ZMX_SESSION" ]]; then
+#   gum log -t error "refusing to run claude, not in a zmx session"
+#   exit 1
+# fi
 
-if ! git rev-parse --is-inside-work-tree 2>/dev/null; then
-  gum log -t error "refusing to run claude, not in a git worktree"
-  exit 1
-fi
+# # TODO add claude CLI flags for safe invocation outside of worktrees instead of
+# # forbidding
+# if ! git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null; then
+#   gum log -t error "refusing to run claude, not in a git worktree"
+#   exit 1
+# fi
 
 exec "$HOME/eng/result/bin/claude" "$@"

@@ -1,4 +1,4 @@
-set output-format := "tap"
+# set output-format := "tap"
 
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 

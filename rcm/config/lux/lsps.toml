@@ -21,15 +21,15 @@ socket = ""
       ST1005 = false
       ST1006 = false
 
-[[lsp]]
-  name = "rust-analyzer"
-  flake = "nixpkgs#rust-analyzer"
-  extensions = ["rs"]
-  language_ids = ["rust"]
+# [[lsp]]
+#   name = "rust-analyzer"
+#   flake = "nixpkgs#rust-analyzer"
+#   extensions = ["rs"]
+#   language_ids = ["rust"]
 
-  [lsp.settings]
-    [lsp.settings.diagnostics]
-      enable = false
+#   [lsp.settings]
+#     [lsp.settings.diagnostics]
+#       enable = false
 
 [[lsp]]
   name = "nil"

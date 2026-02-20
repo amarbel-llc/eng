@@ -336,6 +336,14 @@
                         "vendor_id": 10730
                     },
                     "ignore": false
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "product_id": 25539,
+                        "vendor_id": 20547
+                    },
+                    "manipulate_caps_lock_led": false
                 }
             ],
             "name": "Default profile",
