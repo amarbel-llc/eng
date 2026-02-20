@@ -1,6 +1,9 @@
 #! /usr/bin/env -S bash -e
 # @brief generates config files from .j2, .json, .json-script, and .rcm-script
 
+# TODO fix performance of this hook (lsrc seems to be very slow now because of
+# extra dotfiles
+
 : "${XDG_STATE_HOME:=$HOME/.local/state}"
 export PATH="$HOME/eng/result/bin:$PATH"
 

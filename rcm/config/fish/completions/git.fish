@@ -15,11 +15,12 @@ __fish_complete_empty \
   worktree \
   rm
 
+# TODO this should be made re-usable for shdoc completions
 complete \
   --command git \
   --condition "__fish_contains_empty_args" \
   --no-files \
-  --arguments "(shdoc-fish_completion $HOME/.config/git/aliases/*)"
+  --arguments "(shdoc-fish_completion $HOME/.config/git/aliases/*.git-alias)"
 
 complete \
   --command git \
