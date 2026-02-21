@@ -3,13 +3,24 @@
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
 # git pull and and flake update
-default: && \
+default: \
+    update-git \
+    update-nix-flake \
     build-nix \
     deploy-flake-lock \
     build-rcm \
     install-purse-first \
     install-pivy-agent-service
+
+# TODO implement a check that enforces no active claude sessions, worktrees, or
+# sweatshops open. This is because upgrading the entire environment can break
+# existing sessions
+check-active_sessions:
+
+update-git:
   git pull
+
+update-nix-flake:
   nix flake update
 
 # push flake.lock to origin
