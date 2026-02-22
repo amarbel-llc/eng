@@ -6,23 +6,95 @@
     nixpkgs-master.url = "github:NixOS/nixpkgs/5b7e21f22978c4b740b3907f3251b470f466a9a2";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
-    common.url = "path:./systems/common";
-    darwin.url = "path:./systems/darwin";
-    linux.url = "path:./systems/linux";
+    common = {
+      url = "path:./systems/common";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    darwin = {
+      url = "path:./systems/darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    linux = {
+      url = "path:./systems/linux";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
 
     # keep sorted
-    and-so-can-you-repo.url = "github:amarbel-llc/and-so-can-you-repo";
-    # dodder.url = "github:amarbel-llc/dodder";
-    ess-ess-hatch.url = "github:amarbel-llc/ess-ess-hatch";
-    just-us.url = "github:amarbel-llc/just-us";
-    pivy.url = "github:amarbel-llc/pivy";
-    potato.url = "github:amarbel-llc/potato";
-    purse-first.url = "github:amarbel-llc/purse-first";
-    sandcastle.url = "github:amarbel-llc/sandcastle";
-    shdoc.url = "github:amarbel-llc/shdoc";
-    ssh-agent-mux.url = "github:amarbel-llc/ssh-agent-mux";
-    sweatshop.url = "github:amarbel-llc/sweatshop";
-    zmx.url = "github:amarbel-llc/zmx";
+    and-so-can-you-repo = {
+      url = "github:amarbel-llc/and-so-can-you-repo";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    dodder = {
+      url = "github:amarbel-llc/dodder";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "utils";
+    };
+    ess-ess-hatch = {
+      url = "github:amarbel-llc/ess-ess-hatch";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    just-us = {
+      url = "github:amarbel-llc/just-us";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    pivy = {
+      url = "github:amarbel-llc/pivy";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    potato = {
+      url = "github:amarbel-llc/potato";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    purse-first = {
+      url = "github:amarbel-llc/purse-first";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    sandcastle = {
+      url = "github:amarbel-llc/sandcastle";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    shdoc = {
+      url = "github:amarbel-llc/shdoc";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    ssh-agent-mux = {
+      url = "github:amarbel-llc/ssh-agent-mux";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "utils";
+    };
+    sweatshop = {
+      url = "github:amarbel-llc/sweatshop";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "utils";
+    };
+    zmx = {
+      url = "github:amarbel-llc/zmx";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
   };
 
   outputs =
