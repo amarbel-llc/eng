@@ -4,7 +4,7 @@
     nixpkgs-master.url = "github:NixOS/nixpkgs/5b7e21f22978c4b740b3907f3251b470f466a9a2";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
-    lua.url = "github:friedenberg/eng?dir=devenvs/lua";
+    lua.url = "github:amarbel-llc/eng?dir=devenvs/lua";
   };
 
   outputs =
