@@ -26,12 +26,6 @@
     };
 
     # keep sorted
-    and-so-can-you-repo = {
-      url = "github:amarbel-llc/and-so-can-you-repo";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
     dodder = {
       url = "github:amarbel-llc/dodder";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,20 +49,8 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
-    potato = {
-      url = "github:amarbel-llc/potato";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
     purse-first = {
       url = "github:amarbel-llc/purse-first";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
-    sandcastle = {
-      url = "github:amarbel-llc/sandcastle";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
@@ -81,11 +63,6 @@
     };
     ssh-agent-mux = {
       url = "github:amarbel-llc/ssh-agent-mux";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "utils";
-    };
-    sweatshop = {
-      url = "github:amarbel-llc/sweatshop";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "utils";
     };

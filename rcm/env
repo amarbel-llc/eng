@@ -7,7 +7,7 @@ export CLAUDE_CODE_DISABLE_AUTO_MEMORY=0
 export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
 export EDITOR="$HOME/eng/result/bin/nvim"
 export LESS="-x4 -R"
-export SSH_AUTH_SOCK="$HOME/.local/state/ssh-agent-mux/agent.sock"
+export SSH_AUTH_SOCK="$HOME/.local/state/ssh/mux-agent.sock"
 
 # XDG
 # keep sorted
@@ -18,5 +18,3 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_DIRS="$HOME/eng/result/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
 export XDG_RUNTIME_HOME="$HOME/.local/runtime"
 export ZIG_GLOBAL_CACHE_DIR=$HOME/.cache/zig
-
-export SSH_AUTH_SOCK=/tmp/ssh-XXXXXXIRWyRj/agent.10929
