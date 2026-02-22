@@ -1,8 +1,7 @@
-# set output-format := "tap"
+set output-format := "tap"
 
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
-# git pull and and flake update
 default: \
     update-git \
     update-nix-flake \
