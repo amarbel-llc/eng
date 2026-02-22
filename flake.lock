@@ -61,11 +61,11 @@
       },
       "locked": {
         "dir": "devenvs/bats",
-        "lastModified": 1771792092,
-        "narHash": "sha256-Z9YJ8hpSzynWjkz8QVmzu+glsCN4JCWO2d3+TGy4/SA=",
+        "lastModified": 1771793052,
+        "narHash": "sha256-xCFw8WaT3nmCXVq00tD/uviOEjJL0Z1cpnHYjm7/7dA=",
         "owner": "amarbel-llc",
         "repo": "eng",
-        "rev": "f136ed8f00adb94924ab5365697926ccb5421ac1",
+        "rev": "58610a744260d9473acd21d0219bf99852857de4",
         "type": "github"
       },
       "original": {
@@ -1047,11 +1047,11 @@
       },
       "locked": {
         "dir": "devenvs/go",
-        "lastModified": 1771792092,
-        "narHash": "sha256-Z9YJ8hpSzynWjkz8QVmzu+glsCN4JCWO2d3+TGy4/SA=",
+        "lastModified": 1771793052,
+        "narHash": "sha256-xCFw8WaT3nmCXVq00tD/uviOEjJL0Z1cpnHYjm7/7dA=",
         "owner": "amarbel-llc",
         "repo": "eng",
-        "rev": "f136ed8f00adb94924ab5365697926ccb5421ac1",
+        "rev": "58610a744260d9473acd21d0219bf99852857de4",
         "type": "github"
       },
       "original": {
@@ -1866,11 +1866,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771792935,
-        "narHash": "sha256-S3P1DwKhqsaaboemiTiaGnyb0hCTiT4RM/IruF7m334=",
+        "lastModified": 1771795420,
+        "narHash": "sha256-IabO/C+RqELUeq6XMWF0RUjfS3ab5x4cdCTrqiAVF3g=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "4af2953bf96550c3fd57d77cfb8995ca0675224c",
+        "rev": "6b05e790cf92a76dafc2537fafdb3d4fccd9fbdd",
         "type": "github"
       },
       "original": {
@@ -2308,11 +2308,11 @@
       },
       "locked": {
         "dir": "devenvs/rust",
-        "lastModified": 1771792092,
-        "narHash": "sha256-Z9YJ8hpSzynWjkz8QVmzu+glsCN4JCWO2d3+TGy4/SA=",
+        "lastModified": 1771793052,
+        "narHash": "sha256-xCFw8WaT3nmCXVq00tD/uviOEjJL0Z1cpnHYjm7/7dA=",
         "owner": "amarbel-llc",
         "repo": "eng",
-        "rev": "f136ed8f00adb94924ab5365697926ccb5421ac1",
+        "rev": "58610a744260d9473acd21d0219bf99852857de4",
         "type": "github"
       },
       "original": {
@@ -2511,11 +2511,11 @@
       },
       "locked": {
         "dir": "devenvs/shell",
-        "lastModified": 1771792092,
-        "narHash": "sha256-Z9YJ8hpSzynWjkz8QVmzu+glsCN4JCWO2d3+TGy4/SA=",
+        "lastModified": 1771793052,
+        "narHash": "sha256-xCFw8WaT3nmCXVq00tD/uviOEjJL0Z1cpnHYjm7/7dA=",
         "owner": "amarbel-llc",
         "repo": "eng",
-        "rev": "f136ed8f00adb94924ab5365697926ccb5421ac1",
+        "rev": "58610a744260d9473acd21d0219bf99852857de4",
         "type": "github"
       },
       "original": {
