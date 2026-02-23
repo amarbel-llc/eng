@@ -94,6 +94,13 @@ socket = ""
     enabled = false
 
 [[lsp]]
+  name = "typescript-language-server"
+  flake = "nixpkgs#typescript-language-server"
+  args = ["--stdio"]
+  extensions = ["ts", "tsx", "js", "jsx"]
+  language_ids = ["typescript", "typescriptreact", "javascript", "javascriptreact"]
+
+[[lsp]]
   name = "terraform-ls"
   flake = "nixpkgs#terraform-ls"
   extensions = ["tf", "tfvars"]
