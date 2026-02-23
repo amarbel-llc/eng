@@ -75,20 +75,16 @@
         ]
       },
       "locked": {
-        "dir": "devenvs/bats",
-        "lastModified": 1771855983,
-        "narHash": "sha256-e71Q31bVCjSR7qI6ucaE2RCXp47HELqRq3h9fbLc41A=",
-        "owner": "amarbel-llc",
-        "repo": "eng",
-        "rev": "6be38e2aa9f29095cabca704f60bcb73b6bb188a",
-        "type": "github"
+        "path": "./devenvs/bats",
+        "type": "path"
       },
       "original": {
-        "dir": "devenvs/bats",
-        "owner": "amarbel-llc",
-        "repo": "eng",
-        "type": "github"
-      }
+        "path": "./devenvs/bats",
+        "type": "path"
+      },
+      "parent": [
+        "purse-first"
+      ]
     },
     "common": {
       "inputs": {
@@ -960,20 +956,16 @@
         ]
       },
       "locked": {
-        "dir": "devenvs/go",
-        "lastModified": 1771855983,
-        "narHash": "sha256-e71Q31bVCjSR7qI6ucaE2RCXp47HELqRq3h9fbLc41A=",
-        "owner": "amarbel-llc",
-        "repo": "eng",
-        "rev": "6be38e2aa9f29095cabca704f60bcb73b6bb188a",
-        "type": "github"
+        "path": "./devenvs/go",
+        "type": "path"
       },
       "original": {
-        "dir": "devenvs/go",
-        "owner": "amarbel-llc",
-        "repo": "eng",
-        "type": "github"
-      }
+        "path": "./devenvs/go",
+        "type": "path"
+      },
+      "parent": [
+        "purse-first"
+      ]
     },
     "gomod2nix": {
       "inputs": {
@@ -1605,11 +1597,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771866199,
-        "narHash": "sha256-mvgvbMws2oTJMmH1lECwZ6D/aRqVgB6FezUF97ehNuo=",
+        "lastModified": 1771867764,
+        "narHash": "sha256-Z850GN3tvjsRC0Ve2DISjRlcpjH0BemzCuOnGa+DBKE=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "062d6ee7951c70558f41d25a6862a481274fff03",
+        "rev": "21006f6788371a0088511fc79f29f2c21c7b4861",
         "type": "github"
       },
       "original": {
@@ -2044,20 +2036,16 @@
         ]
       },
       "locked": {
-        "dir": "devenvs/rust",
-        "lastModified": 1771855983,
-        "narHash": "sha256-e71Q31bVCjSR7qI6ucaE2RCXp47HELqRq3h9fbLc41A=",
-        "owner": "amarbel-llc",
-        "repo": "eng",
-        "rev": "6be38e2aa9f29095cabca704f60bcb73b6bb188a",
-        "type": "github"
+        "path": "./devenvs/rust",
+        "type": "path"
       },
       "original": {
-        "dir": "devenvs/rust",
-        "owner": "amarbel-llc",
-        "repo": "eng",
-        "type": "github"
-      }
+        "path": "./devenvs/rust",
+        "type": "path"
+      },
+      "parent": [
+        "purse-first"
+      ]
     },
     "sandcastle": {
       "inputs": {
@@ -2225,20 +2213,16 @@
         ]
       },
       "locked": {
-        "dir": "devenvs/shell",
-        "lastModified": 1771855983,
-        "narHash": "sha256-e71Q31bVCjSR7qI6ucaE2RCXp47HELqRq3h9fbLc41A=",
-        "owner": "amarbel-llc",
-        "repo": "eng",
-        "rev": "6be38e2aa9f29095cabca704f60bcb73b6bb188a",
-        "type": "github"
+        "path": "./devenvs/shell",
+        "type": "path"
       },
       "original": {
-        "dir": "devenvs/shell",
-        "owner": "amarbel-llc",
-        "repo": "eng",
-        "type": "github"
-      }
+        "path": "./devenvs/shell",
+        "type": "path"
+      },
+      "parent": [
+        "purse-first"
+      ]
     },
     "ssh-agent-mux": {
       "inputs": {
