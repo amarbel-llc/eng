@@ -1,7 +1,7 @@
 [[formatter]]
 name = "golines"
 flake = "nixpkgs#golines"
-args = ["--max-len=80", "--no-chain-split-dots", "--shorten-comments", "--write-output"]
+args = ["--max-len=80", "--no-chain-split-dots", "--shorten-comments"]
 mode = "stdin"
 
 [[formatter]]
