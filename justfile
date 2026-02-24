@@ -41,8 +41,8 @@ install-purse-first:
 install-pivy-agent-service:
   #!/usr/bin/env bash
   set -euo pipefail
-  if [[ -z "${SSH_HOST:-}" ]]; then
-    gum log --level info "SSH_HOST not set, skipping pivy-agent service install"
+  if [[ -n "${SSH_HOST:-}" ]]; then
+    gum log --level info "SSH_HOST set, skipping pivy-agent service install"
     exit 0
   fi
   pivy-agent install-service -A
@@ -50,8 +50,8 @@ install-pivy-agent-service:
 install-ssh-agent-mux:
   #!/usr/bin/env bash
   set -euo pipefail
-  if [[ -z "${SSH_HOST:-}" ]]; then
-    gum log --level info "SSH_HOST not set, skipping ssh-agent-mux install"
+  if [[ -n "${SSH_HOST:-}" ]]; then
+    gum log --level info "SSH_HOST set, skipping ssh-agent-mux install"
     exit 0
   fi
   ssh-agent-mux --restart-service
