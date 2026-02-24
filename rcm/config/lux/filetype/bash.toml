@@ -1,0 +1,6 @@
+extensions = ["sh", "bash"]
+language_ids = ["bash", "sh"]
+lsp = "bash-language-server"
+formatters = ["shfmt"]
+formatter_mode = "chain"
+lsp_format = "never"

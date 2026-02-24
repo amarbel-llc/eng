@@ -1,0 +1,6 @@
+extensions = ["ts", "tsx", "js", "jsx"]
+language_ids = ["typescript", "typescriptreact", "javascript", "javascriptreact"]
+lsp = "typescript-language-server"
+formatters = ["prettier"]
+formatter_mode = "chain"
+lsp_format = "never"

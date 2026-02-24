@@ -1,0 +1,6 @@
+extensions = ["go"]
+language_ids = ["go"]
+lsp = "gopls"
+formatters = ["golines", "gofumpt"]
+formatter_mode = "chain"
+lsp_format = "never"
