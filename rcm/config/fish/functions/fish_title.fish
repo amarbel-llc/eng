@@ -6,8 +6,10 @@ function fish_title
     set prefix 🔒
   end
 
-  if set -q ZMX_SESSION
-    set prefix $prefix"z.$ZMX_SESSION"
+  if set -q SPINCLASS_SESSION
+    set prefix $prefix"sc/$SPINCLASS_SESSION"
+  else if set -q ZMX_SESSION
+    set prefix $prefix"z/$ZMX_SESSION"
   end
 
   echo $prefix (prompt_pwd)
