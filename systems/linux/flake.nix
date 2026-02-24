@@ -20,44 +20,27 @@
       (
         system:
         let
-
           pkgs = import nixpkgs {
             inherit system;
           };
-
           pkgs-master = import nixpkgs-master {
             inherit system;
           };
-
-          packages = {
-            inherit (pkgs)
-              espanso-wayland
-              keyd
-              mako
-              pcsclite
-              pinentry-gnome3
-              rofi
-              wlogout
-              # kitty
-              # lxsession
-              # sway
-              ;
-          };
-
+          result = import ./default.nix { inherit pkgs; };
         in
         {
           packages =
-            packages
+            result.packages
             // {
               default = pkgs-master.symlinkJoin {
                 failOnMissing = true;
                 name = "system-packages";
-                paths = builtins.attrValues packages;
+                paths = builtins.attrValues result.packages;
               };
             };
 
           devShells.default = pkgs-master.mkShell {
-            packages = builtins.attrValues packages;
+            packages = builtins.attrValues result.packages;
           };
         }
       )
