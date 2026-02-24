@@ -23,27 +23,21 @@
           pkgs = import nixpkgs {
             inherit system;
           };
-
-          packages = {
-            inherit (pkgs)
-              pinentry_mac
-              reattach-to-user-namespace
-              ;
-          };
+          result = import ./default.nix { inherit pkgs; };
         in
         {
           packages =
-            packages
+            result.packages
             // {
               default = pkgs.symlinkJoin {
                 failOnMissing = true;
                 name = "system-packages";
-                paths = builtins.attrValues packages;
+                paths = builtins.attrValues result.packages;
               };
             };
 
           devShells.default = pkgs.mkShell {
-            packages = builtins.attrValues packages;
+            packages = builtins.attrValues result.packages;
           };
         }
       );
