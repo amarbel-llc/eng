@@ -1,0 +1,34 @@
+[[formatter]]
+name = "golines"
+flake = "nixpkgs#golines"
+args = ["--max-len=80", "--no-chain-split-dots", "--shorten-comments", "--write-output"]
+mode = "stdin"
+
+[[formatter]]
+name = "gofumpt"
+flake = "nixpkgs#gofumpt"
+mode = "stdin"
+
+[[formatter]]
+name = "shfmt"
+flake = "nixpkgs#shfmt"
+args = ["-s", "-i=2"]
+mode = "stdin"
+
+[[formatter]]
+name = "prettier"
+flake = "nixpkgs#prettier"
+args = ["--stdin-filepath", "{file}"]
+mode = "stdin"
+
+[[formatter]]
+name = "jq"
+flake = "nixpkgs#jq"
+args = ["."]
+mode = "stdin"
+
+[[formatter]]
+name = "pandoc"
+flake = "nixpkgs#pandoc"
+args = ["--columns=80", "-f", "markdown", "-t", "markdown"]
+mode = "stdin"
