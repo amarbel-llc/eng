@@ -1,0 +1,3 @@
+extensions = ["nix"]
+language_ids = ["nix"]
+lsp = "nil"

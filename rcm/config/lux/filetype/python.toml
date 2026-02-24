@@ -1,0 +1,3 @@
+extensions = ["py"]
+language_ids = ["python"]
+lsp = "pylsp"
