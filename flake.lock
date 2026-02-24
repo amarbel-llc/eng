@@ -1,27 +1,5 @@
 {
   "nodes": {
-    "common": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-master": [
-          "nixpkgs-master"
-        ],
-        "utils": [
-          "utils"
-        ]
-      },
-      "locked": {
-        "path": "./systems/common",
-        "type": "path"
-      },
-      "original": {
-        "path": "./systems/common",
-        "type": "path"
-      },
-      "parent": []
-    },
     "crane": {
       "locked": {
         "lastModified": 1771796463,
@@ -138,28 +116,6 @@
         "url": "https://flakehub.com/f/ipetkov/crane/0"
       }
     },
-    "darwin": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-master": [
-          "nixpkgs-master"
-        ],
-        "utils": [
-          "utils"
-        ]
-      },
-      "locked": {
-        "path": "./systems/darwin",
-        "type": "path"
-      },
-      "original": {
-        "path": "./systems/darwin",
-        "type": "path"
-      },
-      "parent": []
-    },
     "devenv-nix": {
       "inputs": {
         "fh": "fh_3",
@@ -245,7 +201,6 @@
     "dodder": {
       "inputs": {
         "nixpkgs": [
-          "pivy",
           "nixpkgs"
         ],
         "nixpkgs-master": "nixpkgs-master",
@@ -631,28 +586,6 @@
         "type": "github"
       }
     },
-    "linux": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-master": [
-          "nixpkgs-master"
-        ],
-        "utils": [
-          "utils"
-        ]
-      },
-      "locked": {
-        "path": "./systems/linux",
-        "type": "path"
-      },
-      "original": {
-        "path": "./systems/linux",
-        "type": "path"
-      },
-      "parent": []
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1761468971,
@@ -963,12 +896,9 @@
     },
     "root": {
       "inputs": {
-        "common": "common",
-        "darwin": "darwin",
         "dodder": "dodder",
         "ess-ess-hatch": "ess-ess-hatch",
         "just-us": "just-us",
-        "linux": "linux",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-master": "nixpkgs-master_3",
         "pivy": "pivy",
