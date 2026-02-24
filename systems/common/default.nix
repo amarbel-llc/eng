@@ -6,7 +6,6 @@
       age
       asdf
       asdf-vm
-      bats
       claude-code
       coreutils
       crush
