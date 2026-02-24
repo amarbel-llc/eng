@@ -1,8 +1,5 @@
 #! /usr/bin/env -S bash -e
 
-# TODO move this to dev/dev-flake-templates/go
-# PATH="$PATH:$(realpath "$(dirname "$0")/result/bin")"
-
 dir_script="$(dirname "$0")"
 export dir_script
 
