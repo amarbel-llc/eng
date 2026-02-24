@@ -29,15 +29,13 @@
           result = import ./default.nix { inherit pkgs; };
         in
         {
-          packages =
-            result.packages
-            // {
-              default = pkgs-master.symlinkJoin {
-                failOnMissing = true;
-                name = "system-packages";
-                paths = builtins.attrValues result.packages;
-              };
+          packages = result.packages // {
+            default = pkgs-master.symlinkJoin {
+              failOnMissing = true;
+              name = "system-packages";
+              paths = builtins.attrValues result.packages;
             };
+          };
 
           devShells.default = pkgs-master.mkShell {
             packages = builtins.attrValues result.packages;
