@@ -2,7 +2,7 @@
 
 # Match exec "test -z \$SSH_CLIENT"
 Host *
-  ForwardAgent "~/.local/state/ssh-agent-mux/agent.sock"
+  ForwardAgent "~/.local/state/ssh/mux-agent.sock"
   # RemoteCommand zmx attach %k
   RequestTTY yes
   ControlPath ~/.local/state/ssh/cm-%k
