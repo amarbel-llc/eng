@@ -1435,11 +1435,11 @@
         "zig2nix": "zig2nix"
       },
       "locked": {
-        "lastModified": 1771970776,
-        "narHash": "sha256-spHk3PYq/L6U4m+F5UG0yuOGfKaOtZt9VvAFS1sw6hQ=",
+        "lastModified": 1771971615,
+        "narHash": "sha256-BUByYZ4pe4sSQkfWdkV0z5UHZgoF5H3tOfIIak0k0vE=",
         "owner": "amarbel-llc",
         "repo": "zmx",
-        "rev": "2d4eb6ea9c6a0502731c93de948c08684c79703f",
+        "rev": "beea3809633e6bf2857ec80a65ba9db7b2a31811",
         "type": "github"
       },
       "original": {
