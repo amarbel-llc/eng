@@ -24,9 +24,9 @@ function fish_prompt --description 'Write out the prompt'
       set -a parens "stashed: $stash_count"
     end
 
-    set -l worktree_count (git worktree list | count)
+    set -l worktree_count (math (git worktree list | count) - 1)
 
-    if test $worktree_count -gt 1
+    if test $worktree_count -gt 0
       set -a parens "worktrees: $worktree_count"
     end
   end

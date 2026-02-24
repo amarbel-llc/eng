@@ -3,11 +3,8 @@
 setlocal wrap textwidth=0 wrapmargin=0
 setlocal list listchars=tab:▸\ ,trail:·,nbsp:·
 
-" TODO decide how to handle vim plugin & config dependencies
-let s:path_bin = fnamemodify(resolve(expand('<sfile>:p')), ':p:h') . "/result/bin/"
-let s:path_bin = ""
 setlocal equalprg=shfmt\ %
-let &l:makeprg = "bash -c '".s:path_bin."shellcheck -f gcc % && ".s:path_bin."bats --jobs 8 --tap % >&1'"
+let &l:makeprg = "bash -c 'shellcheck -f gcc % && bats --jobs 8 --tap % >&1'"
 
 let &l:comments = "b:#"
 let &l:commentstring = "#%s"
@@ -18,7 +15,6 @@ setlocal efm=%Enot\ ok\ %*\\d\ %m,
 "# (from function `assert_output' in file zz-test/test_helper/bats-assert/src/assert_output.bash, line 194,
 "#  in test file zz-test/failed_organize.bats, line 59)
 setlocal efm+=%Z%.%#\ in\ test\ file\ %f\\,\ line\ %l)
-" setlocal efm+=%-C#\ (in\ test\ file\ %f\\,\ line\ %l)
 "#   `assert_output "$(cat "$expected_organize")"' failed
 "#
 "# -- output differs --
