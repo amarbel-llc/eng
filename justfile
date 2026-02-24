@@ -9,7 +9,8 @@ default: \
     deploy-flake-lock \
     build-rcm \
     install-purse-first \
-    install-pivy-agent-service
+    install-pivy-agent-service \
+    install-ssh-agent-mux
 
 # TODO implement a check that enforces no active claude sessions, worktrees, or
 # sweatshops open. This is because upgrading the entire environment can break
@@ -38,7 +39,22 @@ install-purse-first:
   purse-first install
 
 install-pivy-agent-service:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if [[ -z "${SSH_HOST:-}" ]]; then
+    gum log --level info "SSH_HOST not set, skipping pivy-agent service install"
+    exit 0
+  fi
   pivy-agent install-service -A
+
+install-ssh-agent-mux:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if [[ -z "${SSH_HOST:-}" ]]; then
+    gum log --level info "SSH_HOST not set, skipping ssh-agent-mux install"
+    exit 0
+  fi
+  ssh-agent-mux --restart-service
 
 clean-nix:
   nix-store --gc
