@@ -6,25 +6,6 @@
     nixpkgs-master.url = "github:NixOS/nixpkgs/5b7e21f22978c4b740b3907f3251b470f466a9a2";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
-    common = {
-      url = "path:./systems/common";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
-    darwin = {
-      url = "path:./systems/darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
-    linux = {
-      url = "path:./systems/linux";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
-
     # keep sorted
     dodder = {
       url = "github:amarbel-llc/dodder";
@@ -80,9 +61,6 @@
       nixpkgs,
       nixpkgs-master,
       utils,
-      common,
-      darwin,
-      linux,
       ...
     }@inputs:
     (utils.lib.eachDefaultSystem (
@@ -96,9 +74,6 @@
           "nixpkgs"
           "nixpkgs-master"
           "utils"
-          "common"
-          "darwin"
-          "linux"
         ];
 
         # Repos whose default package isn't named "default"
@@ -106,11 +81,44 @@
           zmx = "zmx-libvterm";
         };
 
-        # Conditionally include platform-specific packages
-        platformPackages =
-          (builtins.removeAttrs (common.packages.${system} or { }) [ "default" ])
-          // (builtins.removeAttrs (darwin.packages.${system} or { }) [ "default" ])
-          // (builtins.removeAttrs (linux.packages.${system} or { }) [ "default" ]);
+        # Import system packages directly from default.nix
+        buildSystems =
+          let
+            pkgs-unfree = import nixpkgs {
+              inherit system;
+              config.allowUnfree = true;
+            };
+            pkgs-master-unfree = import nixpkgs-master {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          in
+          {
+            common = import ./systems/common {
+              pkgs = pkgs-unfree;
+              pkgs-master = pkgs-master-unfree;
+            };
+          }
+          // (
+            if pkgs.stdenv.isDarwin then
+              {
+                darwin = import ./systems/darwin { pkgs = pkgs-unfree; };
+              }
+            else
+              { }
+          )
+          // (
+            if pkgs.stdenv.isLinux then
+              {
+                linux = import ./systems/linux { pkgs = pkgs-unfree; };
+              }
+            else
+              { }
+          );
+
+        platformPackages = builtins.foldl' (acc: sys: acc // sys.packages) { } (
+          builtins.attrValues buildSystems
+        );
 
         repoPackages = builtins.mapAttrs (
           name: input: input.packages.${system}.${repoPackageOverrides.${name} or "default"}
