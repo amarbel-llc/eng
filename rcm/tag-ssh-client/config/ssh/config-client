@@ -4,7 +4,12 @@
 Host *
   ForwardAgent "~/.local/state/ssh/mux-agent.sock"
   # RemoteCommand zmx attach %k
-  RequestTTY yes
+  # RequestTTY yes — paired with RemoteCommand above (zmx needs a PTY).
+  # Commented out because git invokes SSH as a subprocess with piped stdin,
+  # so SSH never sees a terminal regardless of the calling shell. This causes
+  # "Pseudo-terminal will not be allocated because stdin is not a terminal."
+  # on every git fetch/pull/push. Re-enable alongside RemoteCommand, or
+  # move to a specific Host block for interactive sessions.
   ControlPath ~/.local/state/ssh/cm-%k
   ControlMaster auto
   ControlPersist 10m
