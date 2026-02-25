@@ -10,6 +10,8 @@ function fish_title
     set prefix $prefix"sc/$SPINCLASS_SESSION"
   else if set -q ZMX_SESSION
     set prefix $prefix"z/$ZMX_SESSION"
+    echo $prefix
+    return
   end
 
   echo $prefix (prompt_pwd)
