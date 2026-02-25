@@ -1444,7 +1444,6 @@
       },
       "original": {
         "owner": "amarbel-llc",
-        "ref": "master",
         "repo": "zmx",
         "type": "github"
       }
