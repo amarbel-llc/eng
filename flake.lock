@@ -881,11 +881,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772029727,
-        "narHash": "sha256-V9YzToqJhKNQOhU3Vcg2OH1m8VICsqlS6jFU7B5pDi8=",
+        "lastModified": 1772029805,
+        "narHash": "sha256-6GjXxxA644J4AZkkFZnXD+TQ2Y2cvqLGka3TpEunnmU=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "4f7c14e982c960ae69f266c6f9468fedf6cf5ac9",
+        "rev": "4c14f2a40a205335f949781b1fd81cfea9329c02",
         "type": "github"
       },
       "original": {
