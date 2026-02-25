@@ -48,7 +48,7 @@
       inputs.utils.follows = "utils";
     };
     zmx = {
-      url = "github:amarbel-llc/zmx/master";
+      url = "github:amarbel-llc/zmx";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
