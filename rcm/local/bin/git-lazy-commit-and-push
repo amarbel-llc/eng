@@ -30,4 +30,4 @@ EOM
 fi
 
 echo "pushing..." >&2
-git push
+git sync
