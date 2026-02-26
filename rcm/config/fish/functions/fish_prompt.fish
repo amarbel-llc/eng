@@ -21,7 +21,7 @@ function fish_prompt --description 'Write out the prompt'
     set -l stash_count (git stash list | count)
 
     if test $stash_count -gt 0
-      set -a parens "stashed: $stash_count"
+      set -a parens "stashes: $stash_count"
     end
 
     set -l worktree_count (math (git worktree list | count) - 1)
