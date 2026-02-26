@@ -89,3 +89,7 @@ socket = ""
 [[lsp]]
   name = "terraform-ls"
   flake = "nixpkgs#terraform-ls"
+
+[[lsp]]
+  name = "jdtls"
+  flake = "nixpkgs#jdt-language-server"
