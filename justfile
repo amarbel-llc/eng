@@ -18,7 +18,7 @@ default: \
 check-active_sessions:
 
 update-git:
-  git pull
+  git sync
 
 update-nix-flake:
   nix flake update
