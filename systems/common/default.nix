@@ -31,6 +31,7 @@
       glow
       gnumake
       gnuplot
+      gopls
       gpgme
       graphviz
       gum
