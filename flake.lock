@@ -213,17 +213,17 @@
       },
       "locked": {
         "dir": "devenvs/rust",
-        "lastModified": 1771764220,
-        "narHash": "sha256-DpKN4AZC3VB+tokRz/3e+FmUi+OfSvyzMhD6Dta4pt0=",
+        "lastModified": 1772148857,
+        "narHash": "sha256-JxJ3STaYI238+nKlZVhRndwLUIRR5Mu6zBTp4e7u+5U=",
         "owner": "amarbel-llc",
-        "repo": "eng",
-        "rev": "c6ede5fa960f76d1d9ef8a01ff4806867f3b7458",
+        "repo": "purse-first",
+        "rev": "0cb41ca7943f186e2d501cd65e70e4dc931701c3",
         "type": "github"
       },
       "original": {
         "dir": "devenvs/rust",
         "owner": "amarbel-llc",
-        "repo": "eng",
+        "repo": "purse-first",
         "type": "github"
       }
     },
@@ -1064,11 +1064,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772148857,
-        "narHash": "sha256-JxJ3STaYI238+nKlZVhRndwLUIRR5Mu6zBTp4e7u+5U=",
+        "lastModified": 1772203702,
+        "narHash": "sha256-ZiYCmUJW3CuqvuODGkBVz6+deGnbvrpCyA2df2m4ti8=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "0cb41ca7943f186e2d501cd65e70e4dc931701c3",
+        "rev": "5a43e92c1697e39ee09815943c26fd5976da1fe8",
         "type": "github"
       },
       "original": {
@@ -1339,11 +1339,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771729765,
-        "narHash": "sha256-HNsDSR5bhLSrIpi9bTb2uTK1qnPo1xFSBxs6YmFyprk=",
+        "lastModified": 1772161521,
+        "narHash": "sha256-HmbcapTlcRqtryLUaJhH8t1mz6DaSJT+nxvWIl2bIPU=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "be926cb1a76e8450ab2b92121b2e88d09fa4d41c",
+        "rev": "9b2965450437541d25fde167d8bebfd01c156cef",
         "type": "github"
       },
       "original": {
@@ -1420,11 +1420,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771765797,
-        "narHash": "sha256-ByYAODV0A2n/VQNgp6dcJ3MNxQwOo4rYyapj2ukKGEk=",
+        "lastModified": 1772203204,
+        "narHash": "sha256-uzLA78w0mjWmKVGqnESAG/eFs+4L6BFGNbyYwAI1HnQ=",
         "owner": "amarbel-llc",
         "repo": "ssh-agent-mux",
-        "rev": "95648400030e91ff84a419b9a847c68f6f909935",
+        "rev": "3f416432ad1bb62b6b0a23ec7bb5677989a822d7",
         "type": "github"
       },
       "original": {
