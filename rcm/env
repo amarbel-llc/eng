@@ -7,6 +7,7 @@ export CLAUDE_CODE_DISABLE_AUTO_MEMORY=0
 export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
 export EDITOR="$HOME/eng/result/bin/nvim"
 export LESS="-x4 -R"
+export PIVY_AUTH_SOCK="$HOME/.local/state/ssh/pivy-agent.sock"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh/mux-agent.sock"
 
 # XDG
