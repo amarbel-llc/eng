@@ -56,6 +56,9 @@ install-ssh-agent-mux:
   fi
   ssh-agent-mux --restart-service
 
+test-integration:
+  nix develop ./devenvs/integration-test --command just -f devenvs/integration-test/justfile test
+
 clean-nix:
   nix-store --gc
 

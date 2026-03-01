@@ -1,0 +1,22 @@
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+lib_dir := justfile_directory() + "/lib"
+
+# Run all integration tests
+test: test-ssh test-direnv test-crypto
+
+# SSH agent integration tests only
+test-ssh:
+  bats --tap tests/ssh.bats
+
+# direnv integration tests only
+test-direnv:
+  bats --tap tests/direnv.bats
+
+# systemd --user service tests only
+test-service:
+  bats --tap tests/service.bats
+
+# SoftHSM2 / signing round-trip tests only
+test-crypto:
+  bats --tap tests/crypto.bats

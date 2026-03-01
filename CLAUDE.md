@@ -98,6 +98,54 @@ Each layer may only depend on layers below it.
   dereference `sku.Transacted` pointers --- use `ResetWith`
 - **Rust**: `cargo fmt` + `cargo clippy`, 4-space indent
 
+## Planning Requirements
+
+A design doc + implementation plan (via `brainstorming` and `writing-plans`
+skills) is required when ANY of these apply:
+
+- **3+ files modified** --- changes spanning multiple packages or modules
+- **External integration** --- code calling CLI tools, OS services, hardware,
+  network protocols, or file formats consumed by other tools
+- **CLI surface area** --- adding, removing, or renaming user-facing commands,
+  flags, or output formats
+- **Cross-repo coordination** --- changes that must land in multiple repos/
+- **New project** --- creating a new flake, package, or devenv
+
+Not required: single-file bug fixes, documentation, dependency updates,
+formatting/linting, test additions for existing behavior.
+
+## Scope Discipline
+
+Prefer the smallest change that addresses the stated problem. Creative ideas
+that emerge during implementation should be captured as new FDRs in `exploring`
+state, not absorbed into the current task.
+
+When scope expands mid-task:
+1. **Pause** --- acknowledge the new idea explicitly
+2. **Capture** --- create an FDR in `exploring` state with the problem statement
+3. **Defer** --- return to the original task's scope
+4. **Review** --- after the current task is complete, decide whether to pursue
+   the new FDR
+
+Push back on "while we're here" additions. Each change should be independently
+verifiable and independently revertable.
+
+Exception: if the new idea reveals that the current approach is fundamentally
+wrong, stop and re-plan rather than bolting on fixes.
+
+## External Integration Verification
+
+Code interacting with external systems requires verification against the real
+system before committing. Unit tests alone are insufficient.
+
+What counts: CLI subprocesses, OS services, hardware/tokens, network protocols,
+file formats consumed by other tools, crypto round-trips.
+
+Required before commit:
+1. Run against the real system (or integration test environment), not a mock
+2. Verify the round-trip (sign AND verify, install AND uninstall+reinstall)
+3. Note what was verified in the commit message
+
 ## Key Projects in repos/
 
 - **dodder** --- Distributed zettelkasten-like blob store (Go). NATO-phonetic
@@ -121,6 +169,21 @@ Each subproject has its own test setup. Common patterns: - **Go**:
 `go test -v ./...` or `just test` - **Rust**: `cargo test` - **Nix**:
 `nix flake check` - **CLI integration**: `bats` framework (devenv at
 `devenvs/bats/`)
+
+## Feature Lifecycle
+
+Cross-cutting features (conventions, tools, infrastructure) that span multiple
+repos use FDR/ADR/RFC records with lifecycle tracking:
+
+- **FDR** documents what the feature does (always required)
+- **ADR** documents why a particular approach was chosen (when alternatives exist)
+- **RFC** specifies the interface contract (when multiple repos implement it)
+
+Status lifecycle: `exploring → proposed → experimental → testing → accepted`
+
+Start with an FDR in `exploring` state (problem statement only) before
+committing to a solution. Each record includes `promotion-criteria` in its YAML
+front matter defining when it advances to the next stage.
 
 ## Notes
 
