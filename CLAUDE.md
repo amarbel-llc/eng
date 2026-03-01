@@ -116,16 +116,9 @@ formatting/linting, test additions for existing behavior.
 
 ## Scope Discipline
 
-Prefer the smallest change that addresses the stated problem. Creative ideas
-that emerge during implementation should be captured as new FDRs in `exploring`
-state, not absorbed into the current task.
-
-When scope expands mid-task:
-1. **Pause** --- acknowledge the new idea explicitly
-2. **Capture** --- create an FDR in `exploring` state with the problem statement
-3. **Defer** --- return to the original task's scope
-4. **Review** --- after the current task is complete, decide whether to pursue
-   the new FDR
+Prefer the smallest change that addresses the stated problem. New ideas that
+emerge during implementation go to `TODO.md`, not into the current task (see
+Mid-Task Idea Capture in `~/.claude/CLAUDE.md`).
 
 Push back on "while we're here" additions. Each change should be independently
 verifiable and independently revertable.
