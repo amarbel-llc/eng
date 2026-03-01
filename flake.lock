@@ -239,11 +239,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772379382,
-        "narHash": "sha256-NBkQTEtz1j20zv3OFpkd20GvZRPP73qh1q+VJo7wMyg=",
+        "lastModified": 1772384639,
+        "narHash": "sha256-ZWy+CLaTxLb+Z2uXXXbc1YSUdSdKcYRPkvslOdQyFtw=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "bcf747d54bbd58c6c668353bec2afc84418eb4f4",
+        "rev": "5b9c0ace248e4143734c29a9aebac2051847ec2b",
         "type": "github"
       },
       "original": {
