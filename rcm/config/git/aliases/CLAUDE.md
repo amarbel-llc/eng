@@ -25,7 +25,7 @@ git <command> "$@"
 
 ## TAP-14 Output (Multi-Step Aliases)
 
-Aliases with multiple logical steps use the bash library from tap-dancer (`amarbel-llc/tap-dancer`) for structured TAP version 14 output. Currently used by: `cob`, `cobu`, `merge-and-cleanup`.
+Aliases with multiple logical steps use the bash library from tap-dancer (`purse-first/tap-dancer`) for structured TAP version 14 output. Currently used by: `cob`, `cobu`, `merge-and-cleanup`.
 
 ```bash
 # shellcheck disable=1091
