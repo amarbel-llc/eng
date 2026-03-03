@@ -54,7 +54,7 @@ install-ssh-agent-mux:
     gum log --level info "SSH_HOST set, skipping ssh-agent-mux install"
     exit 0
   fi
-  ssh-agent-mux --restart-service
+  ssh-agent-mux service install
 
 test-integration:
   nix develop ./devenvs/integration-test --command just -f devenvs/integration-test/justfile test
