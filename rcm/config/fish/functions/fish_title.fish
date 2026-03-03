@@ -5,8 +5,8 @@ function fish_title
     set prefix 🔒
   end
 
-  if set -q LC_SSH_ALIAS
-    set prefix $prefix"ssh/$LC_SSH_ALIAS"
+  if set -q SSH_ALIAS
+    set prefix $prefix"ssh/$SSH_ALIAS"
     echo $prefix
     return
   else if set -q SPINCLASS_SESSION

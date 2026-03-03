@@ -13,4 +13,3 @@ Host *
   ControlPath ~/.local/state/ssh/cm-%k
   ControlMaster auto
   ControlPersist 10m
-  SetEnv LC_SSH_ALIAS=%n

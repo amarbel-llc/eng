@@ -7,6 +7,11 @@ if test -z $SSH_CLIENT
   return
 end
 
+set -l ssh_alias_file $HOME/.config/ssh/alias
+if test -f $ssh_alias_file
+  set -gx SSH_ALIAS (string trim (cat $ssh_alias_file))
+end
+
 mkdir -p $HOME/.local/state/ssh
 set -l file_ssh_client_agent $HOME/.local/state/ssh/ssh_client-agent.sock
 
