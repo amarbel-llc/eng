@@ -1,0 +1,18 @@
+#! /usr/bin/env -S bash -e
+# @file branch-get-default
+# @brief print the default branch name (main or master)
+
+has_main=$(git branch --list main | tr -d '[:space:]')
+has_master=$(git branch --list master | tr -d '[:space:]')
+
+if [[ -n "$has_main" && -n "$has_master" ]]; then
+  echo "error: both 'main' and 'master' branches exist" >&2
+  exit 1
+elif [[ -n "$has_main" ]]; then
+  echo main
+elif [[ -n "$has_master" ]]; then
+  echo master
+else
+  echo "error: neither 'main' nor 'master' branch exists" >&2
+  exit 1
+fi
