@@ -266,9 +266,9 @@ Used by all non-devenv packages including:
 
 | Input | Source | Used By |
 |-------|--------|---------|
-| `go` | `github:friedenberg/eng?dir=devenvs/go` | Go projects |
-| `rust` | `github:friedenberg/eng?dir=devenvs/rust` | Rust projects |
-| `nix` | `github:friedenberg/eng?dir=devenvs/nix` | Nix projects |
+| `go` | `github:amarbel-llc/purse-first?dir=devenvs/go` | Go projects |
+| `rust` | `github:amarbel-llc/purse-first?dir=devenvs/rust` | Rust projects |
+| `nix` | `github:amarbel-llc/purse-first?dir=devenvs/nix` | Nix projects |
 | `rust-overlay` | `github:oxalica/rust-overlay` | Rust projects |
 | `gomod2nix` | `github:nix-community/gomod2nix` | Go projects |
 | `nix-darwin` | `github:LnL7/nix-darwin` | macOS system config |

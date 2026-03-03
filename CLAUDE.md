@@ -49,7 +49,7 @@ Pinned SHAs are stored in `nixpkgs-git-master.git-sha`,
 ### Direnv Integration
 
 The repo `.envrc` loads `devenvs/nix` and `devenvs/shell`. Subprojects reference
-devenvs similarly, e.g. `use flake "$HOME/eng/devenvs/go"`.
+devenvs via flake inputs, e.g. `go.url = "github:amarbel-llc/purse-first?dir=devenvs/go"`.
 
 ## Repository Layout
 
