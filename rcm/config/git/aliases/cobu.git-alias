@@ -8,8 +8,9 @@ source "${TAP_DANCER_LIB}/load.bash"
 
 branch="$USER-$(date +%Y-%m-%d)-${1:?usage: git cobu <suffix>}"
 default_branch="${2:-$(git branch-get-default)}"
+default_remote="$(git remote-get-default)"
 
 tap_plan 2
 
 tap_run "create branch ${branch}" git checkout -b "$branch"
-tap_run "set upstream to upstream/${default_branch}" git branch --set-upstream-to="upstream/$default_branch"
+tap_run "set upstream to ${default_remote}/${default_branch}" git branch --set-upstream-to="${default_remote}/${default_branch}"
