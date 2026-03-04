@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+is_markdown() {
+  local file="$1"
+  case "${file##*.}" in
+    md|markdown|mdx|mdown|mkd) return 0 ;;
+  esac
+  return 1
+}
+
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+real_less="$(type -ap less | grep -v "^${script_dir}/" | head -1)"
+
+if [[ $# -eq 1 ]] && [[ -f "$1" ]] && is_markdown "$1"; then
+  exec glow -p "$1"
+fi
+
+exec "$real_less" "$@"
