@@ -1,5 +1,6 @@
-from kitty.fast_data_types import Screen
-from kitty.tab_bar import DrawData, ExtraData, TabBarData, draw_title
+from kitty.fast_data_types import Screen, get_options
+from kitty.tab_bar import DrawData, ExtraData, TabBarData, as_rgb, draw_title
+from kitty.utils import color_as_int
 
 
 def draw_tab(
@@ -12,7 +13,7 @@ def draw_tab(
     is_last: bool,
     extra_data: ExtraData,
 ) -> int:
-    draw_title(draw_data, screen, tab, index, max_tab_length)
+    draw_title(draw_data, screen, tab, index)
     extra = screen.cursor.x - before - max_tab_length
     if extra > 0:
         screen.cursor.x -= extra + 1
@@ -21,5 +22,10 @@ def draw_tab(
     end = screen.cursor.x
     screen.cursor.bold = screen.cursor.italic = False
     screen.cursor.fg = 0
+
+    if not is_last:
+        screen.cursor.bg = as_rgb(color_as_int(draw_data.default_bg))
+        screen.draw("│")
+
     screen.cursor.bg = 0
     return end
