@@ -28,7 +28,7 @@ def draw_tab(
     screen.cursor.fg = 0
 
     if not is_last:
-        screen.cursor.bg = as_rgb(color_as_int(draw_data.default_bg))
+        screen.cursor.bg = as_rgb(int(draw_data.inactive_bg))
         screen.draw(separator)
 
     screen.cursor.bg = 0
