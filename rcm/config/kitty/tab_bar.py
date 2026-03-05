@@ -14,11 +14,6 @@ def draw_tab(
     extra_data: ExtraData,
 ) -> int:
     draw_title(draw_data, screen, tab, index)
-    extra = screen.cursor.x - before - max_tab_length
-    if extra > 0:
-        screen.cursor.x -= extra + 1
-        screen.draw("…")
-
     end = screen.cursor.x
     screen.cursor.bold = screen.cursor.italic = False
     screen.cursor.fg = 0
