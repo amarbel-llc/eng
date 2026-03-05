@@ -16,6 +16,13 @@ def draw_tab(
     separator = "│"
     sep_len = 0 if is_last else len(separator)
 
+    if extra_data.for_layout:
+        # Report true ideal width so kitty overflows instead of squishing
+        draw_title(draw_data, screen, tab, index)
+        if not is_last:
+            screen.draw(separator)
+        return screen.cursor.x
+
     title_budget = max_tab_length - sep_len
     draw_title(draw_data, screen, tab, index, title_budget)
     extra = screen.cursor.x - before - title_budget
@@ -28,7 +35,7 @@ def draw_tab(
     screen.cursor.fg = 0
 
     if not is_last:
-        screen.cursor.bg = as_rgb(color_as_int(draw_data.inactive_bg))
+        screen.cursor.bg = as_rgb(color_as_int(draw_data.default_bg))
         screen.draw(separator)
 
     screen.cursor.bg = 0
