@@ -10,7 +10,8 @@ default: \
     build-rcm \
     install-purse-first \
     install-pivy-agent-service \
-    install-ssh-agent-mux
+    install-ssh-agent-mux \
+    install-lux-service \
 
 # TODO implement a check that enforces no active claude sessions, worktrees, or
 # sweatshops open. This is because upgrading the entire environment can break
@@ -55,6 +56,9 @@ install-ssh-agent-mux:
     exit 0
   fi
   ssh-agent-mux service install
+
+install-lux-service:
+  lux service-install
 
 test-integration:
   nix develop ./devenvs/integration-test --command just -f devenvs/integration-test/justfile test
