@@ -1247,11 +1247,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772809731,
-        "narHash": "sha256-t9ssOy+jdnUJJM9cQhHC0sup7MtTs1E7xnF6/JlN8rg=",
+        "lastModified": 1772830718,
+        "narHash": "sha256-iSNP+C05SfK0A6mVcZ0uF6VmTPTPa3Gv44wO+0/tkQM=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "29823b1ebe17aa5cfae8e404c5fbab4750c15636",
+        "rev": "520c2f0ebba97e797fc320c285ef58a73f5db160",
         "type": "github"
       },
       "original": {
@@ -1670,11 +1670,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772731227,
-        "narHash": "sha256-msWetS+D3dMdizaWqfU5th1+I+bl5VFYozlJWubSEpw=",
+        "lastModified": 1772820897,
+        "narHash": "sha256-LDW8zF/W8Pzipk19D+PDFTnzuRFaXki+jJks+jjyXsE=",
         "owner": "amarbel-llc",
         "repo": "ssh-agent-mux",
-        "rev": "3c95190ebf7fe096ae61418265855b7c55d20ae0",
+        "rev": "2cd673ac3126627852438ae9ce0ef57bdf377b95",
         "type": "github"
       },
       "original": {
