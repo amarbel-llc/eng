@@ -33,6 +33,13 @@ The top-level `flake.nix` aggregates all subprojects into a single `symlinkJoin`
 package. It imports every repo as a flake input and collects their default
 packages plus platform-specific packages from `systems/{common,darwin,linux}`.
 
+### Adding Nix Packages
+
+Before adding a package to a flake.nix, verify it exists using `nix eval` or
+the `chix search` MCP tool. Do not guess attribute paths — if the first eval
+fails, check whether the tool should come from a language package manager (npm,
+cargo, pip) instead of nixpkgs.
+
 ### Stable-First Nixpkgs Convention
 
 Every flake uses this pattern --- do not deviate:
