@@ -9,7 +9,8 @@
 When a new idea, improvement, or tangent emerges mid-task — from me or from
 something you notice — do not explore it. Instead:
 
-1. Append one line to `TODO.md` in the nearest repo root: `- [ ] <idea>`
+1. Append one line to `TODO.md` in the repo the idea belongs to (not
+   necessarily the current one): `- [ ] <idea>`
 2. Say "captured" and continue the current task immediately
 
 Do not: create an FDR, research feasibility, estimate effort, discuss trade-offs,
