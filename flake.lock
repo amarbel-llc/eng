@@ -1670,11 +1670,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773073149,
-        "narHash": "sha256-M5KeNhxB9gd7cb3M55Z/PWDHug2YyJ0XBgDBGSzrEvg=",
+        "lastModified": 1773075929,
+        "narHash": "sha256-hiazg+lg/meXgX3n7D/eK7KgH68/ePZvV6+nQyRkHNw=",
         "owner": "amarbel-llc",
         "repo": "ssh-agent-mux",
-        "rev": "ca9d11693c8652e2557470cac1306ae136164470",
+        "rev": "7453ab88d94022601c53bd18c08de1c32b94250d",
         "type": "github"
       },
       "original": {
