@@ -11,6 +11,7 @@ default: \
     install-purse-first \
     install-pivy-agent-service \
     install-ssh-agent-mux \
+    install-gcloud-auth-proxy \
     install-lux-service \
 
 # TODO implement a check that enforces no active claude sessions, worktrees, or
@@ -60,6 +61,9 @@ install-ssh-agent-mux:
     exit 0
   fi
   ssh-agent-mux service install
+
+install-gcloud-auth-proxy:
+  gcloud-auth-proxy service-install
 
 install-lux-service:
   lux service-install
