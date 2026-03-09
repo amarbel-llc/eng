@@ -686,6 +686,26 @@
         "type": "github"
       }
     },
+    "gcloud-auth-proxy": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1773078342,
+        "narHash": "sha256-fVpUN4ZV4Mz9MiwnupT9eqLI6K+d9NSvtZykMiY/Krw=",
+        "owner": "amarbel-llc",
+        "repo": "gcloud-auth-proxy",
+        "rev": "064d9019201538a646dafb1de1c59a700256548c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "amarbel-llc",
+        "repo": "gcloud-auth-proxy",
+        "type": "github"
+      }
+    },
     "gomod2nix": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -1247,11 +1267,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773080254,
-        "narHash": "sha256-wkXll8iINXBRITjGa+o98Iqf8KmVxwX6YMVE8zvbvWM=",
+        "lastModified": 1773084185,
+        "narHash": "sha256-vtY+QKWB176zayk6leg1E45aYYs+7q2nNm+Kq+SfzU8=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "c1aaf3dbf39ae43dda32c95fb6193c76c95ce464",
+        "rev": "c1681152836c6d347689915789f87d1c63895457",
         "type": "github"
       },
       "original": {
@@ -1291,6 +1311,7 @@
       "inputs": {
         "dodder": "dodder",
         "ess-ess-hatch": "ess-ess-hatch",
+        "gcloud-auth-proxy": "gcloud-auth-proxy",
         "just-us": "just-us",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-master": "nixpkgs-master_4",
