@@ -23,52 +23,7 @@ update-git:
 
 # git syncs all repos in ~/eng/repos
 update-repos:
-  #!/usr/bin/env bash
-  set -euo pipefail
-
-  tmpdir="$(mktemp -d)"
-  trap 'rm -rf "$tmpdir"' EXIT
-
-  pids=()
-  names=()
-
-  for dir in repos/*/; do
-    if [[ ! -d "$dir/.git" ]]; then
-      continue
-    fi
-
-    abs_dir="$(realpath "$dir")"
-    name="$(basename "$abs_dir")"
-    log_file="$tmpdir/$name.log"
-
-    (
-      cd "$abs_dir"
-      git sync
-    ) > "$log_file" 2>&1 &
-
-    pids+=($!)
-    names+=("$name")
-  done
-
-  gum log --level info "syncing ${#pids[@]} repos in parallel"
-
-  failed=0
-  for i in "${!pids[@]}"; do
-    if wait "${pids[$i]}"; then
-      gum log --level info "${names[$i]}: synced"
-    else
-      gum log --level error "${names[$i]}: failed"
-      cat "$tmpdir/${names[$i]}.log" >&2
-      failed=$((failed + 1))
-    fi
-  done
-
-  if [[ $failed -gt 0 ]]; then
-    gum log --level error "$failed repo(s) failed to sync"
-    exit 1
-  fi
-
-  gum log --level info "all ${#pids[@]} repos synced"
+  tap-dancer exec-parallel "cd {} && git sync" ::: "$HOME/eng/repos/"*
 
 update-nix-flake:
   nix flake update
