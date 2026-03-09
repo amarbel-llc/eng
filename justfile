@@ -63,6 +63,12 @@ install-ssh-agent-mux:
   ssh-agent-mux service install
 
 install-gcloud-auth-proxy:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if [[ -n "${SSH_HOST:-}" ]]; then
+    gum log --level info "SSH_HOST set, skipping gcloud-auth-proxy install"
+    exit 0
+  fi
   gcloud-auth-proxy service-install
 
 install-lux-service:
