@@ -15,6 +15,10 @@ end
 mkdir -p $HOME/.local/state/ssh
 set -l file_ssh_client_agent $HOME/.local/state/ssh/ssh_client-agent.sock
 
+if test -L $file_ssh_client_agent; and not test -S $file_ssh_client_agent
+  rm -f $file_ssh_client_agent
+end
+
 if test -S $file_ssh_client_agent
   gum log -t info "ssh-agent reused from: "(prompt_pwd $file_ssh_client_agent)
   set -x SSH_AUTH_SOCK $file_ssh_client_agent
