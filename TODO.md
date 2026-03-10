@@ -13,6 +13,10 @@
 - [x] add instruction: verify nix package exists with `nix eval` or `chix search` BEFORE writing flake.nix; don't guess attribute paths
 - [ ] add instruction: run single test first to validate env setup; use `head`/`tail` to limit test output in context
 
+## SSH agent forwarding + ControlMaster stale socket issue
+
+- [ ] fix: ControlMaster reuses sessions where forwarded agent socket is dead (ControlPersist outlives the forwarding channel); evaluate `StreamLocalBindUnlink yes`, shorter `ControlPersist`, or refreshing agent forwarding on existing master
+
 ## Transcript analysis: ~/.claude/CLAUDE.md additions
 
 - [x] amend mid-task idea capture: cross-repo TODOs go in the relevant repo's TODO.md, not the current one
