@@ -1,6 +1,6 @@
 # vim: ft=toml
 
-git_excludes = [
+git-excludes = [
   ".claude/settings.local.json",
   ".direnv/",
   ".envrc",
@@ -9,7 +9,7 @@ git_excludes = [
 ]
 
 # keep sorted
-claude_allow = [
+claude-allow = [
   "Bash(bats:*)",
   "Bash(cargo build:*)",
   "Bash(cargo check:*)",

@@ -55,21 +55,31 @@ install-pivy-agent-service:
 
 install-ssh-agent-mux:
   #!/usr/bin/env bash
+
   set -euo pipefail
+
   if [[ -n "${SSH_HOST:-}" ]]; then
     gum log --level info "SSH_HOST set, skipping ssh-agent-mux install"
     exit 0
   fi
+
   ssh-agent-mux service install
 
 install-gcloud-auth-proxy:
   #!/usr/bin/env -S bash
+
   set -euo pipefail
+
   if ! command -v gcloud; then
     gum log --level info "gcloud not present, skipping gcloud-auth-proxy install"
     exit 0
   fi
-  gcloud-auth-proxy service-install
+
+  if [[ -n "${SSH_HOST:-}" ]]; then
+    gcloud-auth-proxy setup-remote
+  else
+    gcloud-auth-proxy service-install
+  fi
 
 install-lux-service:
   lux service-install
