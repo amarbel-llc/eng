@@ -14,7 +14,8 @@ export default {
   handlers: [
     {
       match: [
-        "https://etsy-hob.okta.com/oauth2/v1/authorize*",
+        "https://*.okta.com/oauth2/v1/authorize*",
+        "https://*.okta.com/sso/*",
         "https://accounts.google.com/o/oauth2/auth*",
       ],
       browser: {
