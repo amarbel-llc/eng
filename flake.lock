@@ -783,11 +783,11 @@
         "purse-first": "purse-first_2"
       },
       "locked": {
-        "lastModified": 1773084835,
-        "narHash": "sha256-RF9mRbDe2RHaSr3kCLoZi8cn6JFamBI6rNGvjPdlD/E=",
+        "lastModified": 1773243254,
+        "narHash": "sha256-o0CeYWUvyk4pIbm6h0TRt8RFyb6vODjIoEWnqM5ups4=",
         "owner": "amarbel-llc",
         "repo": "gcloud-auth-proxy",
-        "rev": "3ea04a1ee713aca62275084b2241db7479edbd12",
+        "rev": "7fce228cc223ee5d2c8c2563c800bb45cbd7da4b",
         "type": "github"
       },
       "original": {
@@ -1450,11 +1450,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773233852,
-        "narHash": "sha256-nSEInxMI6wSBYhOCbS4RCYYBmBssjM1wnCDCFV6g4Ww=",
+        "lastModified": 1773242593,
+        "narHash": "sha256-LBrsOdsdD/9swXc8LW71J9ltufEGyyC9Hxis2hUUX58=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "9759488cbff51955502eceb9bc059bdd494375a4",
+        "rev": "c41e2f1a4bbc29f6031fccf6d33346b0485c7b27",
         "type": "github"
       },
       "original": {
