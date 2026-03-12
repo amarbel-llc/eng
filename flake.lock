@@ -2306,11 +2306,11 @@
         "zig2nix": "zig2nix"
       },
       "locked": {
-        "lastModified": 1773318025,
-        "narHash": "sha256-uOjsSwNWm9YxZO3xgd121yiVPDbEL4i6kx6k6lKNby8=",
+        "lastModified": 1773318433,
+        "narHash": "sha256-+9vlKHNwC0hbw58l131Jv0Ql+GQ0WF+LaCLQ6EkPfJs=",
         "owner": "amarbel-llc",
         "repo": "zmx",
-        "rev": "143035203554244b882c8c447d3d3d3665e4832e",
+        "rev": "4a6f072f21e5ed67b9ef1ca37a62932f3bda9763",
         "type": "github"
       },
       "original": {
