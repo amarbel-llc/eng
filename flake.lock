@@ -1450,11 +1450,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773318113,
-        "narHash": "sha256-agSAW0LnXPAizc71K9IL1DxQ/RghrDW/p4qHfcdxQMA=",
+        "lastModified": 1773339167,
+        "narHash": "sha256-8hy9kovRiyUEJrxJiP3U/TAE2Fs6mCvEFDF23uaJOWQ=",
         "owner": "amarbel-llc",
         "repo": "purse-first",
-        "rev": "f4dfcac363fed3a71beebb89f2fe9d3c243d0c21",
+        "rev": "be27c013ebab3c6e8baf7845271e34775935feb0",
         "type": "github"
       },
       "original": {
