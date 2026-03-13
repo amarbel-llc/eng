@@ -21,3 +21,10 @@ If the idea is substantial enough for an FDR, note that in the TODO line
 
 This matters because divergent thinking mid-task is my biggest productivity risk.
 The capture must feel complete enough to let the thought go. One line is enough.
+
+**Exception — blocking bugs are not ideas.** If the discovered issue is a bug
+in code on the current call path that causes test failures or incorrect behavior
+in the task you're working on, fix it directly. A workaround that masks a root
+cause is not "continuing the task" — it's deferring the task. The test is: would
+you need to work around this bug to complete the current task? If yes, fix it
+now. If no (the bug is in unrelated code you happened to read), capture it.
