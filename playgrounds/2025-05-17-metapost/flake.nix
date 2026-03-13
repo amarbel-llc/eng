@@ -1,8 +1,8 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/6d41bc27aaf7b6a3ba6b169db3bd5d6159cfaa47";
+    nixpkgs.url = "github:NixOS/nixpkgs/0590cd39f728e129122770c029970378a79d076a";
     fh.url = "https://flakehub.com/f/DeterminateSystems/fh/0.1.22.tar.gz";
-    nixpkgs-master.url = "github:NixOS/nixpkgs/5b7e21f22978c4b740b3907f3251b470f466a9a2";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/e91b6d2274ad8a171dbae66723cd6d9afd36e508";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
 
