@@ -9,6 +9,7 @@ default: \
     deploy-flake-lock \
     build-rcm \
     install-purse-first \
+    install-bob \
     install-pivy-agent-service \
     install-ssh-agent-mux \
     install-gcloud-auth-proxy \
@@ -41,8 +42,21 @@ deploy-flake-lock:
   git commit -m "update flake.lock"
   git push
 
-install-purse-first:
-  purse-first install
+# build, validate, and install purse-first marketplace (framework skills)
+install-purse-first: validate-purse-first
+  purse-first install {{justfile_directory()}}/result-purse-first
+
+# build, validate, and install bob marketplace (MCP servers + workflow skills)
+install-bob: validate-bob
+  purse-first install {{justfile_directory()}}/result-bob
+
+validate-purse-first:
+  nix build .#purse-first-marketplace --out-link result-purse-first
+  purse-first validate {{justfile_directory()}}/result-purse-first/.claude-plugin/marketplace.json
+
+validate-bob:
+  nix build .#bob-marketplace --out-link result-bob
+  purse-first validate {{justfile_directory()}}/result-bob/.claude-plugin/marketplace.json
 
 install-pivy-agent-service:
   #!/usr/bin/env bash

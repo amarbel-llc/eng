@@ -17,6 +17,11 @@ just build              # Build Nix packages + install dotfiles via rcup
 just build-nix          # Nix packages only (nix build --show-trace)
 just build-rcm          # Dotfiles only via rcup
 
+just install-purse-first  # Build + validate + install purse-first marketplace
+just install-bob          # Build + validate + install bob marketplace
+just validate-purse-first # Build + validate only (no install)
+just validate-bob         # Build + validate only (no install)
+
 just update-nixpkgs     # Fetch latest stable/master commit SHAs
 just update-nix         # Update flake inputs in eng (excludes repos/)
 just update-nix-repos   # Update all repos/ flake inputs in parallel
@@ -57,6 +62,24 @@ Pinned SHAs are stored in `nixpkgs-git-master.git-sha`,
 
 The repo `.envrc` loads `devenvs/nix` and `devenvs/shell`. Subprojects reference
 devenvs via flake inputs, e.g. `go.url = "github:amarbel-llc/purse-first?dir=devenvs/go"`.
+
+### Multi-Marketplace Architecture
+
+Two marketplaces are built and installed separately to avoid
+`.claude-plugin/marketplace.json` collision in `symlinkJoin`:
+
+- **purse-first** --- framework library + CLI + 8 framework skills
+- **bob** --- MCP servers (grit, get-hubbed, lux, chix, mgp) + 26 workflow
+  skills
+
+Both are in `infraInputs` so their marketplace outputs are excluded from
+auto-import. The `symlinkJoin` includes `purse-first.packages.purse-first`
+(CLI only) and `bob.packages.default` (all packages without the marketplace
+wrapper). Each marketplace is built, validated, and installed independently via
+`just install-purse-first` and `just install-bob`.
+
+Update order: purse-first before bob (bob depends on purse-first via `follows`).
+Restart Claude Code sessions after install to pick up new plugin config.
 
 ## Repository Layout
 
@@ -155,6 +178,8 @@ Required before commit:
 - **nix-mcp-server** --- Nix CLI operations MCP (Rust). JSON-RPC 2.0 over
   stdin/stdout
 - **ssh-agent-mux** --- SSH agent multiplexer (Rust)
+- **bob** --- MCP servers, CLI tools, and 26 workflow skills. Marketplace via
+  purse-first's `mkMarketplace`
 
 ## rcm Dotfiles
 
