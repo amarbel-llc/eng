@@ -24,3 +24,7 @@
 ## Transcript analysis: ~/.claude/CLAUDE.md additions
 
 - [x] amend mid-task idea capture: cross-repo TODOs go in the relevant repo's TODO.md, not the current one
+
+## Multi-marketplace integration
+
+- [ ] FDR: integrated dev/test environment for multi-marketplace local development
