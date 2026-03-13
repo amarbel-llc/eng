@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+resolved="$(readlink -f "$HOME/eng/result/bin/niri-session")"
+
+cat <<EOF
+[Desktop Entry]
+Name=Niri
+Comment=Scrollable-tiling Wayland compositor
+Exec=${resolved}
+Type=Application
+DesktopNames=niri;
+EOF

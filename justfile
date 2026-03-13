@@ -84,6 +84,20 @@ install-gcloud-auth-proxy:
 install-lux-service:
   lux service-install
 
+install-niri-session:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if [[ "$(uname)" != "Linux" ]]; then
+    gum log --level info "not Linux, skipping niri session install"
+    exit 0
+  fi
+  src="$HOME/.local/share/wayland-sessions/niri.desktop"
+  if [[ ! -f "$src" ]]; then
+    gum log --level error "niri.desktop not found — run 'just build-rcm' first"
+    exit 1
+  fi
+  pkexec install -m 644 "$src" /usr/share/wayland-sessions/niri.desktop
+
 test-integration:
   nix develop ./devenvs/integration-test --command just -f devenvs/integration-test/justfile test
 
