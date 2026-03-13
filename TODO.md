@@ -17,6 +17,10 @@
 
 - [ ] fix: ControlMaster reuses sessions where forwarded agent socket is dead (ControlPersist outlives the forwarding channel); evaluate `StreamLocalBindUnlink yes`, shorter `ControlPersist`, or refreshing agent forwarding on existing master
 
+## Mako notifications
+
+- [ ] Per-session Claude Code notification grouping: use Notification hook to send custom `kitten notify` with session/cwd in title + `app-name=claude-code`, then hide the default kitty notification via mako criteria `invisible=1`
+
 ## Transcript analysis: ~/.claude/CLAUDE.md additions
 
 - [x] amend mid-task idea capture: cross-repo TODOs go in the relevant repo's TODO.md, not the current one
