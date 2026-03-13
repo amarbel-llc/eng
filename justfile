@@ -1,5 +1,3 @@
-set output-format := "tap"
-
 export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
 
 default: \
@@ -43,20 +41,34 @@ deploy-flake-lock:
   git push
 
 # build, validate, and install purse-first marketplace (framework skills)
-install-purse-first: validate-purse-first
-  purse-first install {{justfile_directory()}}/result-purse-first
+install-purse-first:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  store_path="$(nix build .#purse-first-marketplace --no-link --print-out-paths)"
+  purse-first validate "$store_path/.claude-plugin/marketplace.json"
+  purse-first install "$store_path"
 
 # build, validate, and install bob marketplace (MCP servers + workflow skills)
-install-bob: validate-bob
-  purse-first install {{justfile_directory()}}/result-bob
+install-bob:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  store_path="$(nix build .#bob-marketplace --no-link --print-out-paths)"
+  purse-first validate "$store_path/.claude-plugin/marketplace.json"
+  purse-first install "$store_path"
 
+# build and validate purse-first marketplace without installing
 validate-purse-first:
-  nix build .#purse-first-marketplace --out-link result-purse-first
-  purse-first validate {{justfile_directory()}}/result-purse-first/.claude-plugin/marketplace.json
+  #!/usr/bin/env bash
+  set -euo pipefail
+  store_path="$(nix build .#purse-first-marketplace --no-link --print-out-paths)"
+  purse-first validate "$store_path/.claude-plugin/marketplace.json"
 
+# build and validate bob marketplace without installing
 validate-bob:
-  nix build .#bob-marketplace --out-link result-bob
-  purse-first validate {{justfile_directory()}}/result-bob/.claude-plugin/marketplace.json
+  #!/usr/bin/env bash
+  set -euo pipefail
+  store_path="$(nix build .#bob-marketplace --no-link --print-out-paths)"
+  purse-first validate "$store_path/.claude-plugin/marketplace.json"
 
 install-pivy-agent-service:
   #!/usr/bin/env bash
