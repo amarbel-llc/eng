@@ -47,9 +47,19 @@ update_flake_recursive() {
 
   # Update current flake after dependencies (stable-first convention)
   echo "Updating: $abs_dir"
-  (cd "$abs_dir" && fh add "${stable_flake_path}")
-  (cd "$abs_dir" && fh add --input-name nixpkgs-master "${master_flake_path}")
-  (cd "$abs_dir" && fh add --input-name utils numtide/flake-utils)
+
+  if ! grep -q 'nixpkgs\.follows' "$abs_dir/flake.nix"; then
+    (cd "$abs_dir" && fh add "${stable_flake_path}")
+  fi
+
+  if grep -q 'nixpkgs-master' "$abs_dir/flake.nix" && \
+     ! grep -q 'nixpkgs-master\.follows' "$abs_dir/flake.nix"; then
+    (cd "$abs_dir" && fh add --input-name nixpkgs-master "${master_flake_path}")
+  fi
+
+  if ! grep -q 'utils\.follows' "$abs_dir/flake.nix"; then
+    (cd "$abs_dir" && fh add --input-name utils numtide/flake-utils)
+  fi
 
   # Check if flake.nix is tracked by git - if not, use path: prefix
   # This handles directories in untracked paths of parent repos
@@ -65,21 +75,22 @@ update_flake_recursive() {
 # Start from current directory or specified directory
 root_dir="${1:-.}"
 
-# Exclude pattern (default: exclude repos/ when starting from root)
-exclude_pattern="${UPDATE_FLAKES_EXCLUDE:-}"
+# Exclude patterns (space-separated, default: none)
+exclude_patterns="${UPDATE_FLAKES_EXCLUDE:-}"
+
+# Build find exclude args from space-separated patterns
+find_excludes=()
+set -f  # disable globbing for pattern splitting
+for pattern in $exclude_patterns; do
+  find_excludes+=(-not -path "$pattern")
+done
+set +f
 
 # Find all directories with flake.nix and update depth-first
 # TODO modify this to generate a list of all flakes first and then perform
 # updates on that expanded list. Then modify this to make running `nix flake
 # update` optional
-if [[ -n "$exclude_pattern" ]]; then
-  find "$root_dir" -name "flake.nix" -type f -not -path "$exclude_pattern" | while read -r flake_file; do
-    flake_dir=$(dirname "$flake_file")
-    update_flake_recursive "$flake_dir"
-  done
-else
-  find "$root_dir" -name "flake.nix" -type f | while read -r flake_file; do
-    flake_dir=$(dirname "$flake_file")
-    update_flake_recursive "$flake_dir"
-  done
-fi
+find "$root_dir" -name "flake.nix" -type f "${find_excludes[@]}" | while read -r flake_file; do
+  flake_dir=$(dirname "$flake_file")
+  update_flake_recursive "$flake_dir"
+done

@@ -165,13 +165,17 @@ update-nixpkgs:
 
   echo "Fetching nixpkgs stable_darwin git {{nix_nixpkgs_stable_darwin_git_branch}} digest..." >&2
   nix_nixpkgs_stable_darwin_git_digest="$(git ls-remote https://github.com/NixOS/nixpkgs refs/heads/{{nix_nixpkgs_stable_darwin_git_branch}} | awk '{print $1}')"
-  echo "Fetched nixpkgs stable_darwin git {{nix_nixpkgs_stable_darwin_git_branch}} digest: ${nix_nixpkgs_stable_darwin_git_digest}" >&2
-  echo ${nix_nixpkgs_stable_darwin_git_digest} > {{file_nixpkgs_stable_darwin_git_sha}}
+  if [[ -z "$nix_nixpkgs_stable_darwin_git_digest" ]]; then
+    echo "Warning: {{nix_nixpkgs_stable_darwin_git_branch}} branch not found, skipping" >&2
+  else
+    echo "Fetched nixpkgs stable_darwin git {{nix_nixpkgs_stable_darwin_git_branch}} digest: ${nix_nixpkgs_stable_darwin_git_digest}" >&2
+    echo ${nix_nixpkgs_stable_darwin_git_digest} > {{file_nixpkgs_stable_darwin_git_sha}}
+  fi
 
 
-# Update flakes in main eng repo (excludes repos/)
+# Update flakes in main eng repo (excludes repos/ and worktrees/)
 update-nix:
-  UPDATE_FLAKES_EXCLUDE="./repos/*" ./bin/update_flakes.bash
+  UPDATE_FLAKES_EXCLUDE="./repos/* ./worktrees/*" ./bin/update_flakes.bash
 
 # Update a single repo's flake inputs using top-level git SHAs
 [no-exit-message]
@@ -193,13 +197,18 @@ _update-repo-flake dir:
   gum log --level info "$name: updating flake inputs"
 
   cd "$dir"
-  fh add "github:NixOS/nixpkgs/${stable_sha}"
 
-  if grep -q 'nixpkgs-master' flake.nix; then
+  if ! grep -q 'nixpkgs\.follows' flake.nix; then
+    fh add "github:NixOS/nixpkgs/${stable_sha}"
+  fi
+
+  if grep -q 'nixpkgs-master' flake.nix && ! grep -q 'nixpkgs-master\.follows' flake.nix; then
     fh add --input-name nixpkgs-master "github:NixOS/nixpkgs/${master_sha}"
   fi
 
-  fh add --input-name utils numtide/flake-utils
+  if ! grep -q 'utils\.follows' flake.nix; then
+    fh add --input-name utils numtide/flake-utils
+  fi
   nix flake update
 
   gum log --level info "$name: done"
@@ -232,13 +241,18 @@ update-nix-repos:
     (
       cd "$abs_dir"
       echo "updating flake inputs"
-      fh add "$stable_ref"
 
-      if grep -q 'nixpkgs-master' flake.nix; then
+      if ! grep -q 'nixpkgs\.follows' flake.nix; then
+        fh add "$stable_ref"
+      fi
+
+      if grep -q 'nixpkgs-master' flake.nix && ! grep -q 'nixpkgs-master\.follows' flake.nix; then
         fh add --input-name nixpkgs-master "$master_ref"
       fi
 
-      fh add --input-name utils numtide/flake-utils
+      if ! grep -q 'utils\.follows' flake.nix; then
+        fh add --input-name utils numtide/flake-utils
+      fi
       nix flake update
       echo "done"
     ) > "$log_file" 2>&1 &
