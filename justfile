@@ -19,6 +19,8 @@ default: \
 # existing sessions
 check-active_sessions:
 
+update: update-git update-nixpkgs update-nix-flake update-repos
+
 update-git:
   git sync
 
@@ -232,11 +234,6 @@ _update-repo-full dir:
 # Update flakes in repos/ in parallel (separate git repositories)
 update-nix-repos:
   tap-dancer exec-parallel -j 1 "just _update-repo-full {}" ::: repos/*/
-
-# Update all flakes (main repo + repos/)
-update-nix-all: update-nix update-nix-repos
-
-update: update-nix
 
 build-nix:
   nix build --show-trace
