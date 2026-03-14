@@ -11,3 +11,4 @@
 TERMTABS_NAME
 gems.tags
 result
+.secrets.env

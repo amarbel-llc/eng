@@ -6,25 +6,14 @@
 
 ## Mid-Task Idea Capture
 
-When a new idea, improvement, or tangent emerges mid-task — from me or from
-something you notice — do not explore it. Instead:
+If I instruct you to create a todo, follow these instructions:
 
 1. Append one line to `TODO.md` in the repo the idea belongs to (not
    necessarily the current one): `- [ ] <idea>`
 2. Say "captured" and continue the current task immediately
 
 Do not: create an FDR, research feasibility, estimate effort, discuss trade-offs,
-or ask if I want to pursue it now. The answer is always no — capture and continue.
+or ask if I want to pursue it now. Just capture and continue.
 
 If the idea is substantial enough for an FDR, note that in the TODO line
 (`- [ ] FDR: <idea>`). Triage happens in a separate session, never mid-task.
-
-This matters because divergent thinking mid-task is my biggest productivity risk.
-The capture must feel complete enough to let the thought go. One line is enough.
-
-**Exception — blocking bugs are not ideas.** If the discovered issue is a bug
-in code on the current call path that causes test failures or incorrect behavior
-in the task you're working on, fix it directly. A workaround that masks a root
-cause is not "continuing the task" — it's deferring the task. The test is: would
-you need to work around this bug to complete the current task? If yes, fix it
-now. If no (the bug is in unrelated code you happened to read), capture it.

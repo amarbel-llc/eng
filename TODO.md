@@ -8,6 +8,10 @@
 - [ ] make purse-first's own transitive deps (fh, crane, gomod2nix) followable from top-level — eliminates ~8 nodes
 - [x] chrest/flake.nix: `devenv-js` still points to `amarbel-llc/eng?dir=devenvs/js` — purse-first has `devenvs/node` but no `devenvs/js`
 
+## Test assertion quality guard
+
+- [ ] add CLAUDE.md rule: when modifying test assertions, new assertions must validate at least as much structure as the originals. If a change reduces assertion specificity (e.g., structured YAML blocks → bare prefix matching), that's a red flag — the test is no longer verifying meaningful behavior. Never mechanically rewrite assertions to match new output without evaluating whether they still test something.
+
 ## Transcript analysis: eng CLAUDE.md additions
 
 - [x] add instruction: verify nix package exists with `nix eval` or `chix search` BEFORE writing flake.nix; don't guess attribute paths
