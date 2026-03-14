@@ -177,26 +177,29 @@ update-nixpkgs:
 update-nix:
   UPDATE_FLAKES_EXCLUDE="./repos/* ./worktrees/*" ./bin/update_flakes.bash
 
-# Update a single repo's flake inputs using top-level git SHAs
+# Full lifecycle update for a single repo (pull, update inputs, build, commit, push)
 [no-exit-message]
-_update-repo-flake dir:
+_update-repo-full dir:
   #!/usr/bin/env bash
   set -euo pipefail
 
   dir="$(realpath "{{dir}}")"
-  name="$(basename "$dir")"
+  eng_dir="{{justfile_directory()}}"
 
   if [[ ! -f "$dir/flake.nix" ]]; then
-    gum log --level warn "$name: no flake.nix, skipping"
     exit 0
   fi
 
-  stable_sha="$(cat "{{file_nixpkgs_stable_git_sha}}")"
-  master_sha="$(cat "{{file_nixpkgs_git_master_sha}}")"
-
-  gum log --level info "$name: updating flake inputs"
-
   cd "$dir"
+
+  if ! git remote -v | grep -qE 'friedenberg|amarbel-llc'; then
+    exit 0
+  fi
+
+  stable_sha="$(cat "$eng_dir/{{file_nixpkgs_stable_git_sha}}")"
+  master_sha="$(cat "$eng_dir/{{file_nixpkgs_git_master_sha}}")"
+
+  git pull --rebase
 
   if ! grep -q 'nixpkgs\.follows' flake.nix; then
     fh add "github:NixOS/nixpkgs/${stable_sha}"
@@ -209,77 +212,22 @@ _update-repo-flake dir:
   if ! grep -q 'utils\.follows' flake.nix; then
     fh add --input-name utils numtide/flake-utils
   fi
+
   nix flake update
 
-  gum log --level info "$name: done"
+  if [[ -f justfile ]]; then
+    just
+  fi
+
+  if ! git diff --quiet flake.nix flake.lock; then
+    git add flake.nix flake.lock
+    git commit -m "update flake.lock"
+    git push
+  fi
 
 # Update flakes in repos/ in parallel (separate git repositories)
 update-nix-repos:
-  #!/usr/bin/env bash
-  set -euo pipefail
-
-  stable_sha="$(cat "$file_nixpkgs_stable_git_sha")"
-  master_sha="$(cat "$file_nixpkgs_git_master_sha")"
-  stable_ref="github:NixOS/nixpkgs/${stable_sha}"
-  master_ref="github:NixOS/nixpkgs/${master_sha}"
-
-  tmpdir="$(mktemp -d)"
-  trap 'rm -rf "$tmpdir"' EXIT
-
-  pids=()
-  names=()
-
-  for dir in repos/*/; do
-    if [[ ! -f "$dir/flake.nix" ]]; then
-      continue
-    fi
-
-    abs_dir="$(realpath "$dir")"
-    name="$(basename "$abs_dir")"
-    log_file="$tmpdir/$name.log"
-
-    (
-      cd "$abs_dir"
-      echo "updating flake inputs"
-
-      if ! grep -q 'nixpkgs\.follows' flake.nix; then
-        fh add "$stable_ref"
-      fi
-
-      if grep -q 'nixpkgs-master' flake.nix && ! grep -q 'nixpkgs-master\.follows' flake.nix; then
-        fh add --input-name nixpkgs-master "$master_ref"
-      fi
-
-      if ! grep -q 'utils\.follows' flake.nix; then
-        fh add --input-name utils numtide/flake-utils
-      fi
-      nix flake update
-      echo "done"
-    ) > "$log_file" 2>&1 &
-
-    pids+=($!)
-    names+=("$name")
-  done
-
-  gum log --level info "updating ${#pids[@]} repos in parallel"
-
-  failed=0
-  for i in "${!pids[@]}"; do
-    if wait "${pids[$i]}"; then
-      gum log --level info "${names[$i]}: updated"
-    else
-      gum log --level error "${names[$i]}: failed"
-      cat "$tmpdir/${names[$i]}.log" >&2
-      failed=$((failed + 1))
-    fi
-  done
-
-  if [[ $failed -gt 0 ]]; then
-    gum log --level error "$failed repo(s) failed to update"
-    exit 1
-  fi
-
-  gum log --level info "all ${#pids[@]} repos updated"
+  tap-dancer exec-parallel "just _update-repo-full {}" ::: repos/*/
 
 # Update all flakes (main repo + repos/)
 update-nix-all: update-nix update-nix-repos
