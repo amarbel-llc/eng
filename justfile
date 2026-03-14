@@ -8,6 +8,7 @@ default: \
     build-rcm \
     install-purse-first \
     install-bob \
+    install-moxy \
     install-pivy-agent-service \
     install-ssh-agent-mux \
     install-gcloud-auth-proxy \
@@ -69,6 +70,9 @@ validate-bob:
   set -euo pipefail
   store_path="$(nix build .#bob-marketplace --no-link --print-out-paths)"
   purse-first validate "$store_path/.claude-plugin/marketplace.json"
+
+install-moxy:
+  moxy install-mcp
 
 install-pivy-agent-service:
   #!/usr/bin/env bash
