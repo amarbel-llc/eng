@@ -3,7 +3,7 @@
 }:
 
 let
-  result = import ./default.nix { inherit pkgs; };
+  result = import ./darwin { inherit pkgs; };
 in
 pkgs.mkShell {
   packages = builtins.attrValues result.packages;

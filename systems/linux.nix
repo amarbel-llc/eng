@@ -4,7 +4,7 @@
 }:
 
 let
-  result = import ./default.nix { inherit pkgs; };
+  result = import ./linux { inherit pkgs; };
 in
 pkgs-master.mkShell {
   packages = builtins.attrValues result.packages;
