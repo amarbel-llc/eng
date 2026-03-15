@@ -8,6 +8,7 @@ default: \
     build-rcm \
     install-purse-first \
     install-bob \
+    install-dodder \
     install-moxy \
     install-pivy-agent-service \
     install-ssh-agent-mux \
@@ -72,6 +73,9 @@ validate-bob:
   set -euo pipefail
   store_path="$(nix build .#bob-marketplace --no-link --print-out-paths)"
   purse-first validate "$store_path/.claude-plugin/marketplace.json"
+
+install-dodder:
+  dodder install-mcp
 
 install-moxy:
   moxy install-mcp
