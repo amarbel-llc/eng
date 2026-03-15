@@ -48,6 +48,12 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
+    nebulous = {
+      url = "github:amarbel-llc/nebulous";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
     pivy = {
       url = "github:amarbel-llc/pivy";
       inputs.nixpkgs.follows = "nixpkgs";

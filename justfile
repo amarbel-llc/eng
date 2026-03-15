@@ -10,6 +10,7 @@ default: \
     install-bob \
     install-dodder \
     install-moxy \
+    install-nebulous \
     install-pivy-agent-service \
     install-ssh-agent-mux \
     install-gcloud-auth-proxy \
@@ -79,6 +80,9 @@ install-dodder:
 
 install-moxy:
   moxy install-mcp
+
+install-nebulous:
+  nebulous install-mcp
 
 install-pivy-agent-service:
   #!/usr/bin/env bash
