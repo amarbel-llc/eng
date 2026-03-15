@@ -89,7 +89,9 @@ Restart Claude Code sessions after install to pick up new plugin config.
   `flake.nix`                                 Top-level aggregator of all
                                               packages
 
-  `devenvs/`                                  25 language-specific dev shells
+  `devenvs/`                                  Symlinks to purse-first devenvs
+                                              (`github:amarbel-llc/purse-first`).
+                                              25 language-specific dev shells
                                               (go, rust, python, nix, shell,
                                               etc.)
 
