@@ -17,3 +17,8 @@ or ask if I want to pursue it now. Just capture and continue.
 
 If the idea is substantial enough for an FDR, note that in the TODO line
 (`- [ ] FDR: <idea>`). Triage happens in a separate session, never mid-task.
+
+## JSON
+
+- use `jq` for parsing `JSON` files, data, or MCP responses. Do not use python
+  for this
