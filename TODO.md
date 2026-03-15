@@ -29,6 +29,10 @@
 
 - [x] amend mid-task idea capture: cross-repo TODOs go in the relevant repo's TODO.md, not the current one
 
+## Nix mkShell `env` doesn't expand shell variables
+
+- [ ] audit all devenvs for `env` attributes containing `$HOME`, `$USER`, or other shell variables — these are set as literal strings by `mkShell`, not shell-expanded. Move to `shellHook` with `export`. Fixed in `devenvs/go` (bob + purse-first), may exist elsewhere.
+
 ## Multi-marketplace integration
 
 - [ ] FDR: integrated dev/test environment for multi-marketplace local development
