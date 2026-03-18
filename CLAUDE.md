@@ -149,7 +149,7 @@ formatting/linting, test additions for existing behavior.
 ## Scope Discipline
 
 Prefer the smallest change that addresses the stated problem. New ideas that
-emerge during implementation go to `TODO.md`, not into the current task (see
+emerge during implementation go to GitHub Issues, not into the current task (see
 Mid-Task Idea Capture in `~/.claude/CLAUDE.md`).
 
 Push back on "while we're here" additions. Each change should be independently
