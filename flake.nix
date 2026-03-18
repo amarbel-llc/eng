@@ -77,6 +77,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "utils";
     };
+    tommy = {
+      url = "github:amarbel-llc/tommy";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "utils";
+    };
     zmx = {
       url = "github:amarbel-llc/zmx";
       inputs.nixpkgs.follows = "nixpkgs";
