@@ -148,7 +148,7 @@ clean: clean-nix
 
 update-kitty:
   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-  pkexec sh -c "ln -sf \"$(which kitty)\" /usr/bin/kitty && ln -sf \"$(which kitten)\" /usr/bin/kitten"
+  pkexec sh -c "ln -sf $HOME/.local/kitty.app/bin/kitty /usr/bin/kitty && ln -sf $HOME/.local/kitty.app/bin/kitten /usr/bin/kitten"
 
 nix_nixpkgs_stable_git_branch := "nixos-25.11"
 nix_nixpkgs_stable_darwin_git_branch := nix_nixpkgs_stable_git_branch + "-darwin"
