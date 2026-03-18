@@ -12,3 +12,6 @@ TERMTABS_NAME
 gems.tags
 result
 .secrets.env
+.dodder/
+.dodder-workspace
+moxyfile
