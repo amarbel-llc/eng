@@ -13,8 +13,7 @@ default: \
     install-nebulous \
     install-pivy-agent-service \
     install-ssh-agent-mux \
-    install-gcloud-auth-proxy \
-    install-lux-service \
+    install-gcloud-auth-proxy
 
 # TODO implement a check that enforces no active claude sessions, worktrees, or
 # sweatshops open. This is because upgrading the entire environment can break
@@ -120,9 +119,6 @@ install-gcloud-auth-proxy:
   else
     gcloud-auth-proxy service-install
   fi
-
-install-lux-service:
-  lux service-install
 
 install-niri-session:
   #!/usr/bin/env bash
