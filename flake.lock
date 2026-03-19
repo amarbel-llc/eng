@@ -24,11 +24,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773941974,
-        "narHash": "sha256-wDQNFJSl9KRM6gEW0PyOQ21NZdaXbzk1V1sg9YIiX3M=",
+        "lastModified": 1773945492,
+        "narHash": "sha256-bNMrcIXT9hktGq6r4GHBEymBYJNPWJn9hevm4frlQKc=",
         "owner": "amarbel-llc",
         "repo": "bob",
-        "rev": "3efdae7ef417e8b8a73d022d1ddceeb17377f7ce",
+        "rev": "f6273828e5b69d790984f99ed139bf10b47ecbd4",
         "type": "github"
       },
       "original": {
@@ -743,11 +743,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773941860,
-        "narHash": "sha256-Al3G099yrmjExEI3bNHdM5mALf/907jTVsd1cj8CGQs=",
+        "lastModified": 1773944699,
+        "narHash": "sha256-7/mrTA1vODqhxJaYhw+gkb+P9+PHSzqZaNY27q8mRhs=",
         "owner": "amarbel-llc",
         "repo": "crap",
-        "rev": "a6dd44facc1d9466de7a6998c15db23b7f25b0e8",
+        "rev": "5ac0410dd8f73ff59fdbd2ea9f65b587d11968ba",
         "type": "github"
       },
       "original": {
