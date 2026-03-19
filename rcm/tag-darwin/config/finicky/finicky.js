@@ -16,7 +16,9 @@ export default {
       match: [
         "https://*.okta.com/oauth2/v1/authorize*",
         "https://*.okta.com/sso/*",
+        "https://*.okta.com/sso/saml2/*",
         "https://accounts.google.com/o/oauth2/auth*",
+        "https://auth.kolide.com/device/verify",
       ],
       browser: {
         name: "Google Chrome",
