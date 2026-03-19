@@ -12,8 +12,7 @@ default: \
     install-moxy \
     install-nebulous \
     install-pivy-agent-service \
-    install-ssh-agent-mux \
-    install-gcloud-auth-proxy
+    install-ssh-agent-mux
 
 # TODO implement a check that enforces no active claude sessions, worktrees, or
 # sweatshops open. This is because upgrading the entire environment can break
@@ -103,22 +102,6 @@ install-ssh-agent-mux:
   fi
 
   ssh-agent-mux service install
-
-install-gcloud-auth-proxy:
-  #!/usr/bin/env -S bash
-
-  set -euo pipefail
-
-  if ! command -v gcloud; then
-    gum log --level info "gcloud not present, skipping gcloud-auth-proxy install"
-    exit 0
-  fi
-
-  if [[ -n "${SSH_HOST:-}" ]]; then
-    gcloud-auth-proxy setup-remote
-  else
-    gcloud-auth-proxy service-install
-  fi
 
 install-niri-session:
   #!/usr/bin/env bash

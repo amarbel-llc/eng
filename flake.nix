@@ -32,10 +32,6 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
-    gcloud-auth-proxy = {
-      url = "github:amarbel-llc/gcloud-auth-proxy";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     just-us = {
       url = "github:amarbel-llc/just-us";
       inputs.nixpkgs.follows = "nixpkgs";
