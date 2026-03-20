@@ -1,5 +1,6 @@
 
 **/.claude/settings.local.json
+**/.claude/.settings-snapshot.json
 *.old
 .DS_Store
 .claude/settings.local.json
