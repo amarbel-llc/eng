@@ -9,8 +9,30 @@
 
 # Tools
 
-- if the `lux` lsp is available, use it during coding and exploration in
-  addition to the builtin tools. Prefer `lux` before the builtin tools.
+- **Lux MCP:** The `lux` MCP server provides symbol lookup, type info, go-to
+  definition, find references, and incoming call analysis. **Do not use the
+  builtin `LSP` tool** (no plugins are installed for it). Use
+  `mcp__plugin_lux_lux__resource-read` and
+  `mcp__plugin_lux_lux__resource-templates` to access lux. These tools work in
+  both the main conversation and subagents.
+  - **Find a symbol by name:**
+    `lux://lsp/workspace-symbols?uri=file:///any/file.go&query=SymbolName` ---
+    always start here before falling back to Grep. Returns the symbol's file and
+    position (0-indexed line/character).
+  - **Get type info and docs:**
+    `lux://lsp/hover?uri=file:///path&line=0&character=0`
+  - **Jump to definition:**
+    `lux://lsp/definition?uri=file:///path&line=0&character=0`
+  - **Find all references:**
+    `lux://lsp/references?uri=file:///path&line=0&character=0`
+  - **Find callers:**
+    `lux://lsp/incoming-calls?uri=file:///path&line=0&character=0`
+  - When dispatching subagents, always include in the prompt: "Use
+    `mcp__plugin_lux_lux__resource-read` for symbol lookup, type info,
+    definitions, and references. Start with
+    `lux://lsp/workspace-symbols?uri=file:///any/file.go&query=SymbolName` to
+    locate symbols, then `lux://lsp/hover`, `lux://lsp/definition`,
+    `lux://lsp/references` for details. Do not use the builtin `LSP` tool."
 
 # Mid-Task Idea Capture
 
