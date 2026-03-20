@@ -40,8 +40,8 @@ packages plus platform-specific packages from `systems/{common,darwin,linux}`.
 
 ### Adding Nix Packages
 
-Before adding a package to a flake.nix, verify it exists using `nix eval` or
-the `chix search` MCP tool. Do not guess attribute paths — if the first eval
+Before adding a package to a flake.nix, verify it exists using `nix eval` or the
+`chix search` MCP tool. Do not guess attribute paths --- if the first eval
 fails, check whether the tool should come from a language package manager (npm,
 cargo, pip) instead of nixpkgs.
 
@@ -61,7 +61,8 @@ Pinned SHAs are stored in `nixpkgs-git-master.git-sha`,
 ### Direnv Integration
 
 The repo `.envrc` loads `devenvs/nix` and `devenvs/shell`. Subprojects reference
-devenvs via flake inputs, e.g. `go.url = "github:amarbel-llc/purse-first?dir=devenvs/go"`.
+devenvs via flake inputs,
+e.g. `go.url = "github:amarbel-llc/purse-first?dir=devenvs/go"`.
 
 ### Multi-Marketplace Architecture
 
@@ -73,9 +74,9 @@ Two marketplaces are built and installed separately to avoid
   skills
 
 Both are in `infraInputs` so their marketplace outputs are excluded from
-auto-import. The `symlinkJoin` includes `purse-first.packages.purse-first`
-(CLI only) and `bob.packages.default` (all packages without the marketplace
-wrapper). Each marketplace is built, validated, and installed independently via
+auto-import. The `symlinkJoin` includes `purse-first.packages.purse-first` (CLI
+only) and `bob.packages.default` (all packages without the marketplace wrapper).
+Each marketplace is built, validated, and installed independently via
 `just install-purse-first` and `just install-bob`.
 
 Update order: purse-first before bob (bob depends on purse-first via `follows`).
@@ -83,34 +84,31 @@ Restart Claude Code sessions after install to pick up new plugin config.
 
 ## Repository Layout
 
-  -------------------------------------------------------------------------------
-  Directory                                   Purpose
-  ------------------------------------------- -----------------------------------
-  `flake.nix`                                 Top-level aggregator of all
-                                              packages
+  --------------------------------------------------------------------------------
+  Directory                                  Purpose
+  ------------------------------------------ -------------------------------------
+  `flake.nix`                                Top-level aggregator of all packages
 
-  `devenvs/`                                  Symlinks to purse-first devenvs
-                                              (`github:amarbel-llc/purse-first`).
-                                              25 language-specific dev shells
-                                              (go, rust, python, nix, shell,
-                                              etc.)
+  `devenvs/`                                 Symlinks to purse-first devenvs
+                                             (`github:amarbel-llc/purse-first`).
+                                             25 language-specific dev shells (go,
+                                             rust, python, nix, shell, etc.)
 
-  `systems/{common,darwin,linux}/`            Platform-specific package
-                                              collections (\~70 tools)
+  `systems/{common,darwin,linux}/`           Platform-specific package collections
+                                             (\~70 tools)
 
-  `pkgs/alfa/`                                Core Nix packages (18 packages)
+  `pkgs/alfa/`                               Core Nix packages (18 packages)
 
-  `repos/`                                    30+ separate git repos (dodder,
-                                              lux, grit, nix-mcp-server, etc.)
+  `repos/`                                   30+ separate git repos (dodder, lux,
+                                             grit, nix-mcp-server, etc.)
 
-  `rcm/`                                      Dotfiles managed by rcup with
-                                              tag-based platform targeting
+  `rcm/`                                     Dotfiles managed by rcup with
+                                             tag-based platform targeting
 
-  `bin/`                                      Utility scripts
-                                              (update_flakes.bash)
+  `bin/`                                     Utility scripts (update_flakes.bash)
 
-  `docs/`                                     nix-patterns.md, system-patterns.md
-  -------------------------------------------------------------------------------
+  `docs/`                                    nix-patterns.md, system-patterns.md
+  --------------------------------------------------------------------------------
 
 ### NATO Phonetic Module Hierarchy
 
@@ -158,6 +156,18 @@ verifiable and independently revertable.
 Exception: if the new idea reveals that the current approach is fundamentally
 wrong, stop and re-plan rather than bolting on fixes.
 
+## Fix Ownership
+
+When a bug involves interaction between multiple components or repos, identify
+which component owns the fix **before writing code**. Present the diagnosis and
+ask which repo/component should change --- do not assume the fix belongs in the
+repo you're currently working in.
+
+Signs the fix belongs elsewhere: - The current repo's contract says "expect
+well-formed input from X" and X isn't providing it - The fix requires heuristic
+detection of another tool's output format - An awk fallback or adapter layer
+already exists for this kind of translation
+
 ## External Integration Verification
 
 Code interacting with external systems requires verification against the real
@@ -166,10 +176,9 @@ system before committing. Unit tests alone are insufficient.
 What counts: CLI subprocesses, OS services, hardware/tokens, network protocols,
 file formats consumed by other tools, crypto round-trips.
 
-Required before commit:
-1. Run against the real system (or integration test environment), not a mock
-2. Verify the round-trip (sign AND verify, install AND uninstall+reinstall)
-3. Note what was verified in the commit message
+Required before commit: 1. Run against the real system (or integration test
+environment), not a mock 2. Verify the round-trip (sign AND verify, install AND
+uninstall+reinstall) 3. Note what was verified in the commit message
 
 ## Key Projects in repos/
 
@@ -203,7 +212,8 @@ Cross-cutting features (conventions, tools, infrastructure) that span multiple
 repos use FDR/ADR/RFC records with lifecycle tracking:
 
 - **FDR** documents what the feature does (always required)
-- **ADR** documents why a particular approach was chosen (when alternatives exist)
+- **ADR** documents why a particular approach was chosen (when alternatives
+  exist)
 - **RFC** specifies the interface contract (when multiple repos implement it)
 
 Status lifecycle: `exploring → proposed → experimental → testing → accepted`
