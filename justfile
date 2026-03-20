@@ -4,6 +4,7 @@ default: \
     update-git \
     update-nix-flake \
     build-nix \
+    update-login-shell \
     deploy-flake-lock \
     build-rcm \
     install-purse-first \
@@ -124,6 +125,19 @@ clean-nix:
   nix-store --gc
 
 clean: clean-nix
+
+# update /bin/fish symlink to match the current nix-built fish
+update-login-shell:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  target="$(readlink -f result/bin/fish)"
+  current="$(readlink -f /bin/fish 2>/dev/null || true)"
+  if [[ "$target" == "$current" ]]; then
+    gum log --level info "/bin/fish already up to date"
+    exit 0
+  fi
+  gum log --level info "updating /bin/fish -> $target"
+  pkexec ln -sf "$target" /bin/fish
 
 update-kitty:
   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
