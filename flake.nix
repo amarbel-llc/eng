@@ -16,7 +16,6 @@
     };
     crap = {
       url = "github:amarbel-llc/crap";
-      inputs.purse-first.follows = "crap";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
