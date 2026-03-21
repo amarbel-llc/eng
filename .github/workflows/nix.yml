@@ -30,7 +30,7 @@ jobs:
           name: "friedenberg/eng"
           rolling: true
           visibility: "public"
-          include-output-paths: true
+          include-output-paths: false
           directory: ./
 
   build-nix-package:
