@@ -9,6 +9,7 @@ default: \
     build-rcm \
     install-purse-first \
     install-bob \
+    install-zmx \
     install-dodder \
     install-moxy \
     install-nebulous \
@@ -103,6 +104,15 @@ install-ssh-agent-mux:
   fi
 
   ssh-agent-mux service install
+
+# build zmx-libvterm outside the flake and link to ~/.local/bin
+# zmx uses zig2nix which can't cross-evaluate on CI runners (eng#13)
+install-zmx:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  store_path="$(nix build github:amarbel-llc/zmx#zmx-libvterm --no-link --print-out-paths)"
+  mkdir -p "$HOME/.local/bin"
+  ln -sf "$store_path/bin/zmx" "$HOME/.local/bin/zmx"
 
 install-niri-session:
   #!/usr/bin/env bash

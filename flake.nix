@@ -77,12 +77,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "utils";
     };
-    zmx = {
-      url = "github:amarbel-llc/zmx";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
   };
 
   outputs =
@@ -93,7 +87,6 @@
       utils,
       bob,
       purse-first,
-      zmx,
       ...
     }@inputs:
     (utils.lib.eachDefaultSystem (
@@ -113,7 +106,6 @@
           "utils"
           "bob"
           "purse-first"
-          "zmx"
         ];
 
         # Repos whose default package isn't named "default"
@@ -170,7 +162,6 @@
             ++ [
               purse-first.packages.${system}.purse-first
               bob.packages.${system}.default
-              zmx.packages.${system}.zmx-libvterm
             ];
         };
 
