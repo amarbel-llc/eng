@@ -27,7 +27,7 @@ jobs:
           determinate: true
       - uses: "DeterminateSystems/flakehub-push@main"
         with:
-          name: "friedenberg/eng"
+          name: "amarbel-llc/eng"
           rolling: true
           visibility: "public"
           include-output-paths: true
