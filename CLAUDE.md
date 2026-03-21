@@ -7,8 +7,7 @@ code in this repository.
 
 Nix-based monorepo aggregating devenv templates, system packages, dotfiles
 (rcm), and 30+ project repos. Published to FlakeHub as `friedenberg/eng` on
-every push to master. CI builds on x86_64-linux, x86_64-darwin, and
-aarch64-darwin.
+every push to master. CI builds on x86_64-linux and aarch64-darwin.
 
 ## Build & Update Commands
 
@@ -84,31 +83,31 @@ Restart Claude Code sessions after install to pick up new plugin config.
 
 ## Repository Layout
 
-  --------------------------------------------------------------------------------
-  Directory                                  Purpose
-  ------------------------------------------ -------------------------------------
-  `flake.nix`                                Top-level aggregator of all packages
+  -----------------------------------------------------------------------------
+  Directory                               Purpose
+  --------------------------------------- -------------------------------------
+  `flake.nix`                             Top-level aggregator of all packages
 
-  `devenvs/`                                 Symlinks to purse-first devenvs
-                                             (`github:amarbel-llc/purse-first`).
-                                             25 language-specific dev shells (go,
-                                             rust, python, nix, shell, etc.)
+  `devenvs/`                              Symlinks to purse-first devenvs
+                                          (`github:amarbel-llc/purse-first`).
+                                          25 language-specific dev shells (go,
+                                          rust, python, nix, shell, etc.)
 
-  `systems/{common,darwin,linux}/`           Platform-specific package collections
-                                             (\~70 tools)
+  `systems/{common,darwin,linux}/`        Platform-specific package collections
+                                          (\~70 tools)
 
-  `pkgs/alfa/`                               Core Nix packages (18 packages)
+  `pkgs/alfa/`                            Core Nix packages (18 packages)
 
-  `repos/`                                   30+ separate git repos (dodder, lux,
-                                             grit, nix-mcp-server, etc.)
+  `repos/`                                30+ separate git repos (dodder, lux,
+                                          grit, nix-mcp-server, etc.)
 
-  `rcm/`                                     Dotfiles managed by rcup with
-                                             tag-based platform targeting
+  `rcm/`                                  Dotfiles managed by rcup with
+                                          tag-based platform targeting
 
-  `bin/`                                     Utility scripts (update_flakes.bash)
+  `bin/`                                  Utility scripts (update_flakes.bash)
 
-  `docs/`                                    nix-patterns.md, system-patterns.md
-  --------------------------------------------------------------------------------
+  `docs/`                                 nix-patterns.md, system-patterns.md
+  -----------------------------------------------------------------------------
 
 ### NATO Phonetic Module Hierarchy
 
@@ -205,6 +204,16 @@ Each subproject has its own test setup. Common patterns: - **Go**:
 `go test -v ./...` or `just test` - **Rust**: `cargo test` - **Nix**:
 `nix flake check` - **CLI integration**: `bats` framework (devenv at
 `devenvs/bats/`)
+
+**Run a single test first** to validate the environment before running the full
+suite. Use `head`/`tail` to limit test output in context --- don't paste
+hundreds of lines of test output.
+
+**Assertion quality guard:** When modifying test assertions, new assertions must
+validate at least as much structure as the originals. Never mechanically rewrite
+assertions to match new output without evaluating whether they still test
+meaningful behavior. If a change reduces assertion specificity (e.g. structured
+YAML blocks to bare prefix matching), that's a red flag.
 
 ## Feature Lifecycle
 
