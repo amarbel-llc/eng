@@ -31,5 +31,5 @@ mode = "stdin"
 [[formatter]]
 name = "pandoc"
 flake = "nixpkgs#pandoc"
-args = ["--columns=80", "-f", "markdown", "-t", "markdown"]
+args = ["--columns=80", "-f", "markdown", "-t", "markdown", "--standalone"]
 mode = "stdin"

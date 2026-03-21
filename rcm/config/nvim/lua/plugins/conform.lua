@@ -20,7 +20,7 @@ return {
 				end,
 				pandoc = {
 					command = "pandoc",
-					args = { "--columns=80", "-f", "markdown", "-t", "markdown" },
+					args = { "--columns=80", "-f", "markdown", "-t", "markdown", "--standalone" },
 					stdin = true,
 				},
 				php_cs_fixer = {
