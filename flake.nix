@@ -94,6 +94,7 @@
       utils,
       bob,
       purse-first,
+      zmx,
       ...
     }@inputs:
     (utils.lib.eachDefaultSystem (
@@ -113,12 +114,11 @@
           "utils"
           "bob"
           "purse-first"
+          "zmx"
         ];
 
         # Repos whose default package isn't named "default"
-        repoPackageOverrides = {
-          zmx = "zmx-libvterm";
-        };
+        repoPackageOverrides = { };
 
         # Import system packages directly from default.nix
         buildSystems =
@@ -171,6 +171,7 @@
             ++ [
               purse-first.packages.${system}.purse-first
               bob.packages.${system}.default
+              zmx.packages.${system}.zmx-libvterm
             ];
         };
 
