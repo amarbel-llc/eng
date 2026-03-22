@@ -55,6 +55,17 @@ Repos under friedenberg/ and amarbel-llc/ are migrating from `TODO.md` files to
 GitHub Issues for task management. When working in a repo that still has a
 `TODO.md`, offer to migrate its contents to GitHub Issues and remove the file.
 
+# Debugging
+
+- **Signs you are flailing:** you have tried 2+ hypotheses without confirming
+  any, you are surprised by a result but immediately jump to the next theory,
+  you are reading code 3+ layers deep without checking intermediate assumptions,
+  or you are writing fixes before understanding the root cause.
+- **When any of those signs appear:** STOP. Summarize what you know, what is
+  surprising, and what assumptions remain untested. Present this to the user and
+  wait for direction before continuing. Do not chain hypotheses without checking
+  in.
+
 # JSON
 
 - use `jq` for parsing `JSON` files, data, or MCP responses. Do not use python
