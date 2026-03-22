@@ -38,9 +38,9 @@
 
 If I instruct you to create a todo, follow these instructions:
 
-1.  Create a GitHub issue in the repo the idea belongs to (for friedenberg or
-    amarbel-llc repos). Use the `get-hubbed issue_create` MCP tool. Keep the
-    title concise and the body minimal --- just enough context to act on later.
+1.  Create a GitHub issue in the repo the idea belongs to. Use the
+    `get-hubbed issue_create` MCP tool. Keep the title concise and the body
+    minimal --- just enough context to act on later.
 2.  Say "captured" and continue the current task immediately
 
 Do not: create an FDR, research feasibility, estimate effort, discuss

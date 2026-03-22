@@ -6,7 +6,7 @@ code in this repository.
 ## Overview
 
 Nix-based monorepo aggregating devenv templates, system packages, dotfiles
-(rcm), and 30+ project repos. Published to FlakeHub as `friedenberg/eng` on
+(rcm), and 30+ project repos. Published to FlakeHub as `amarbel-llc/eng` on
 every push to master. CI builds on x86_64-linux and aarch64-darwin.
 
 ## Build & Update Commands
