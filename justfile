@@ -109,7 +109,7 @@ install-ssh-agent-mux:
 install-zmx:
   #!/usr/bin/env bash
   set -euo pipefail
-  store_path="$(nix build github:amarbel-llc/zmx#default --no-link --print-out-paths)"
+  store_path="$(nix build github:amarbel-llc/zmx#default --refresh --no-link --print-out-paths)"
   mkdir -p "$HOME/.local/bin"
   ln -sf "$store_path/bin/zmx" "$HOME/.local/bin/zmx"
 
