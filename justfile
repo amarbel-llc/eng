@@ -105,12 +105,11 @@ install-ssh-agent-mux:
 
   ssh-agent-mux service install
 
-# build zmx-libvterm outside the flake and link to ~/.local/bin
-# zmx uses zig2nix which can't cross-evaluate on CI runners (eng#13)
+# build zmx outside the flake and link to ~/.local/bin
 install-zmx:
   #!/usr/bin/env bash
   set -euo pipefail
-  store_path="$(nix build github:amarbel-llc/zmx#zmx-libvterm --no-link --print-out-paths)"
+  store_path="$(nix build github:amarbel-llc/zmx#default --no-link --print-out-paths)"
   mkdir -p "$HOME/.local/bin"
   ln -sf "$store_path/bin/zmx" "$HOME/.local/bin/zmx"
 
@@ -140,6 +139,11 @@ clean: clean-nix
 update-login-shell:
   #!/usr/bin/env bash
   set -euo pipefail
+  if [[ "$(uname)" != "Linux" ]]; then
+    # TODO add support for updating darwin shell
+    gum log --level info "not Linux, skipping fish login shell update"
+    exit 0
+  fi
   target="$(readlink -f result/bin/fish)"
   current="$(readlink -f /bin/fish 2>/dev/null || true)"
   if [[ "$target" == "$current" ]]; then
