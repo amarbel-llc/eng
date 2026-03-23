@@ -151,7 +151,11 @@ update-login-shell:
     exit 0
   fi
   gum log --level info "updating /bin/fish -> $target"
-  pkexec ln -sf "$target" /bin/fish
+  if [[ -n "${DISPLAY:-}" || -n "${WAYLAND_DISPLAY:-}" ]]; then
+    pkexec ln -sf "$target" /bin/fish
+  else
+    sudo ln -sf "$target" /bin/fish
+  fi
 
 update-kitty:
   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
