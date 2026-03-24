@@ -4,7 +4,11 @@ html {
   font-size: inherit;
 }
 
-pre > code.sourceCode > span { 
-  display: inline-block; 
-  line-height: 1; 
+pre > code.sourceCode > span {
+  display: inline-block;
+  line-height: 1;
+}
+
+ol ol {
+  list-style-type: lower-alpha;
 }
