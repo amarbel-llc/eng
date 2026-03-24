@@ -137,15 +137,15 @@ clean-nix:
 clean-direnv-cache:
   rm -rf ~/.cache/direnv/layouts/*
 
-# remove .direnv profiles from worktrees across all repos
-clean-worktree-direnv:
-  find ~/eng -path '*/.worktrees/*/.direnv' -type d -exec rm -rf {} +
+# remove stale .direnv flake profiles across all projects (regenerate on next cd)
+clean-direnv:
+  find ~/eng -name .direnv -type d -exec rm -rf {} +
 
 # remove result symlinks left by nix build (not included in clean by default)
 clean-result-symlinks:
   find ~/eng -name result -type l -not -path ~/eng/result -delete
 
-clean: clean-result-symlinks clean-direnv-cache clean-worktree-direnv clean-nix
+clean: clean-result-symlinks clean-direnv-cache clean-direnv clean-nix
 
 # update /bin/fish symlink to match the current nix-built fish
 update-login-shell:
