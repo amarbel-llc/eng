@@ -112,6 +112,7 @@
           "utils"
           "bob"
           "purse-first"
+          "tacky"
         ];
 
         # Repos whose default package isn't named "default"
@@ -168,6 +169,9 @@
             ++ [
               purse-first.packages.${system}.purse-first
               bob.packages.${system}.default
+            ]
+            ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+              inputs.tacky.packages.${system}.default
             ];
         };
 
