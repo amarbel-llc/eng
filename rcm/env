@@ -10,6 +10,7 @@ export HOMEBREW_NO_INSTALL_CLEANUP=1
 export LESS="-x4 -R"
 export PIVY_AUTH_SOCK="$HOME/.local/state/ssh/pivy-agent.sock"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh/mux-agent.sock"
+export TAP_DANCER_LIB="$HOME/eng/result/share/tap-dancer/lib"
 
 # XDG
 # keep sorted

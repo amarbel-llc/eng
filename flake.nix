@@ -169,6 +169,7 @@
             ++ [
               purse-first.packages.${system}.purse-first
               bob.packages.${system}.default
+              bob.packages.${system}.tap-dancer-bash
             ]
             ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
               inputs.tacky.packages.${system}.default
