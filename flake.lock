@@ -1017,11 +1017,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1774454160,
-        "narHash": "sha256-ar0nws2Dx09W1ihMLcCjtgCVLBEbI3hLVuunNr1apAg=",
+        "lastModified": 1774525341,
+        "narHash": "sha256-puPTdWgv30o5/OLVU2KATkXb7pmVA7pcMiTgaWql4W8=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "3e220094e7e5c7120ffa80f9a5f0e0f5e486422c",
+        "rev": "ae6becd1fa8edc505a9bb8f29ad059a935861e5e",
         "type": "github"
       },
       "original": {
@@ -6238,11 +6238,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1774444726,
-        "narHash": "sha256-VBlUjvyUuvQNRjYMT3SmmECSswnL6SWdV3O1jTGPLnI=",
+        "lastModified": 1774466874,
+        "narHash": "sha256-V2vVoSvxi3VTKEqPBCMSoFhBZ9F1GyD5qIm+HQydq10=",
         "owner": "amarbel-llc",
         "repo": "tommy",
-        "rev": "0ed62796f43c23adbd90017d22312473bb73e731",
+        "rev": "427b499acec182ffadc702a9a3d4e97ccc43d91f",
         "type": "github"
       },
       "original": {
@@ -6295,11 +6295,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1774463963,
-        "narHash": "sha256-MlpoO4yrAbzMeKvYREVsfClcLYvzUclkNDI1yrqkKBw=",
+        "lastModified": 1774524642,
+        "narHash": "sha256-hhJ45kmrcWyUUODcIQv1Cp0FfswiKZu1Sw4wK9vjPQk=",
         "owner": "amarbel-llc",
         "repo": "tommy",
-        "rev": "8afd6356e59d3980b2e8f0d318aaea8ed2f211c1",
+        "rev": "26879f9871075ca855d753377a2077c155195632",
         "type": "github"
       },
       "original": {
