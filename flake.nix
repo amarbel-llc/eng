@@ -24,6 +24,7 @@
       url = "github:amarbel-llc/dodder";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.tommy.follows = "tommy";
       inputs.utils.follows = "utils";
     };
     ess-ess-hatch = {
