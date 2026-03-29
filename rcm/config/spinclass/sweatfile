@@ -1,15 +1,15 @@
 # vim: ft=toml
 
-git-excludes = [
-  ".claude/settings.local.json",
-  ".direnv/",
-  ".envrc",
-  ".sweatshop-env",
-  ".sweatshop-env.snapshot",
-]
+disallow-main-worktree = true
+
+[session-entry]
+start = ["zmx", "-g", "sc-dev", "attach", "$SPINCLASS_SESSION"]
+resume = ["zmx", "-g", "sc-dev", "attach", "$SPINCLASS_SESSION"]
+
+[claude]
 
 # keep sorted
-claude-allow = [
+allow = [
   "Bash(bats:*)",
   "Bash(cargo build:*)",
   "Bash(cargo check:*)",

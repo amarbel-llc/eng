@@ -36,18 +36,10 @@
 
 # Mid-Task Idea Capture
 
-If I instruct you to create a todo, follow these instructions:
-
-1.  Create a GitHub issue in the repo the idea belongs to. Use the
-    `get-hubbed issue_create` MCP tool. Keep the title concise and the body
-    minimal --- just enough context to act on later.
-2.  Say "captured" and continue the current task immediately
-
-Do not: create an FDR, research feasibility, estimate effort, discuss
-trade-offs, or ask if I want to pursue it now. Just capture and continue.
-
-If the idea is substantial enough for an FDR, note that in the issue body.
-Triage happens in a separate session, never mid-task.
+If I instruct you to create a todo, use the `/file-issue` skill. Also use
+`/file-issue` when you encounter a blocking issue in one of my repositories
+during work --- file it and continue rather than trying to fix it in the current
+task. If I give you a GitHub issue to fix, use the `/fix-issue` skill.
 
 ## TODO.md Migration
 
@@ -65,6 +57,14 @@ GitHub Issues for task management. When working in a repo that still has a
   surprising, and what assumptions remain untested. Present this to the user and
   wait for direction before continuing. Do not chain hypotheses without checking
   in.
+- **Verify before declaring "already fixed":** when investigating a bug, check
+  edge cases (type aliases, qualified names, primitive wrappers, cross-package
+  references) that may not be covered by the obvious code path. Do not conclude
+  an issue is resolved until the specific reproduction case passes.
+- **Front-load constraints:** before proposing an approach, state what is
+  unavailable in the environment (e.g. no glibc-static, no GNOME on Sway) and
+  what has already been tried. This avoids wasting cycles on dead-end
+  approaches.
 
 # JSON
 
