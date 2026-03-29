@@ -109,9 +109,10 @@ install-ssh-agent-mux:
 install-zmx:
   #!/usr/bin/env bash
   set -euo pipefail
-  store_path="$(nix build github:amarbel-llc/zmx#default --refresh --no-link --print-out-paths)"
-  mkdir -p "$HOME/.local/bin"
-  ln -sf "$store_path/bin/zmx" "$HOME/.local/bin/zmx"
+  gcroot="$HOME/.local/share/nix/gcroots/zmx"
+  mkdir -p "$(dirname "$gcroot")" "$HOME/.local/bin"
+  nix build github:amarbel-llc/zmx#default --refresh --out-link "$gcroot"
+  ln -sf "$gcroot/bin/zmx" "$HOME/.local/bin/zmx"
 
 install-niri-session:
   #!/usr/bin/env bash
