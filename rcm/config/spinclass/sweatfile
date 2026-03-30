@@ -3,8 +3,8 @@
 disallow-main-worktree = true
 
 [session-entry]
-start = ["zmx", "-g", "sc-dev", "attach", "$SPINCLASS_SESSION"]
-resume = ["zmx", "-g", "sc-dev", "attach", "$SPINCLASS_SESSION"]
+start = ["zmx", "-g", "sc-dev", "attach", "$SPINCLASS_SESSION_ID"]
+resume = ["zmx", "-g", "sc-dev", "attach", "$SPINCLASS_SESSION_ID"]
 
 [claude]
 

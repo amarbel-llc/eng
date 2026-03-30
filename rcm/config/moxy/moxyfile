@@ -1,4 +1,21 @@
+# vim: set ft=toml
 
 [[servers]]
-name = "just-us-agents"
-command = "just-us-agents"
+name = "git"
+command = "grit"
+
+[[servers]]
+name = "gh"
+command = "get-hubbed"
+
+[[servers]]
+name = "lsp"
+command = "lux mcp stdio"
+
+[[servers]]
+name = "dodder"
+command = "dodder mcp"
+
+[[servers]]
+name = "man"
+command = "manpages"
