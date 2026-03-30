@@ -1,4 +1,8 @@
 
+if test -n "$SSH_CLIENT"
+  return
+end
+
 mkdir -p $HOME/.local/state/ssh
 
 set -l SSH_OLD_AUTH_SOCK $SSH_AUTH_SOCK
