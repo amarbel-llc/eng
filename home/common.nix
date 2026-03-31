@@ -35,7 +35,6 @@
       freeze
       gawk
       gh
-      git
       git-secret
       glow
       gnumake

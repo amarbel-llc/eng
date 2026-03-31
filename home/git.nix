@@ -2,6 +2,7 @@
   identity,
   lib,
   pkgs,
+  pkgs-master,
   ...
 }:
 let
@@ -44,6 +45,7 @@ in
 {
   programs.git = {
     enable = true;
+    package = pkgs-master.git;
 
     ignores = [
       "**/.claude/settings.local.json"
