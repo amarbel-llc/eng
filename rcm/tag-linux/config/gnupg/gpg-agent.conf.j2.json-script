@@ -1,9 +1,0 @@
-#! /usr/bin/env -S bash -e
-# vim: ft=bash
-
-# use `/usr/sbin/ldconfig` to avoid nix
-cat - <<-EOM
-{
-  "pinentry_program": "$HOME/eng/result/bin/pinentry-gnome3"
-}
-EOM
