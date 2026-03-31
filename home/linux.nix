@@ -178,7 +178,7 @@ in
   };
 
   # Custom kitty tab bar renderer
-  xdg.configFile."kitty/tab_bar.py".source = ../rcm/config/kitty/tab_bar.py;
+  xdg.configFile."kitty/tab_bar.py".source = ./kitty-tab_bar.py;
 
   # Direnv with nix-direnv integration
   programs.direnv = {
