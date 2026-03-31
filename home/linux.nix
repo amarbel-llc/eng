@@ -141,10 +141,10 @@ in
       name = "Input Mono";
       size = 18.0;
     };
+    shellIntegration.mode = "no-title";
     settings = {
-      shell_integration = "no-title";
       tab_bar_style = "custom";
-      tab_title_template = " {index}: {title} ";
+      tab_title_template = "\" {index}: {title} \"";
       tab_bar_edge = "top";
       text_composition_strategy = "legacy";
       window_padding_width = 1;
