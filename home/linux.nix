@@ -13,6 +13,8 @@ in
 
   programs.home-manager.enable = true;
 
+  news.display = "silent";
+
   home.packages =
     # Common packages (from nixpkgs-master)
     (with pkgs-master; [
