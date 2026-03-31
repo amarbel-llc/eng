@@ -1,17 +1,1 @@
-
 **/.claude/settings.local.json
-**/.claude/.settings-snapshot.json
-*.old
-.DS_Store
-.claude/settings.local.json
-.direnv/
-.envrc
-.projections.json
-.tmp/
-TERMTABS_NAME
-result
-.secrets.env
-.dodder/
-.dodder-workspace
-moxyfile
-.spinclass/

@@ -260,7 +260,7 @@ build-home: build-nix
     fi
     sudo darwin-rebuild switch --impure --flake .
   else
-    nix run home-manager -- switch --impure --flake .#linux
+    nix run home-manager -- switch -b backup --impure --flake .#linux
   fi
 
 build-nix:
