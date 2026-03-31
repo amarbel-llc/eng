@@ -18,4 +18,4 @@ command = "dodder mcp"
 
 [[servers]]
 name = "man"
-command = "manpages"
+command = "manpage"

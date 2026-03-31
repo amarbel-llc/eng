@@ -13,4 +13,5 @@ result
 .secrets.env
 .dodder/
 .dodder-workspace
+moxyfile
 .spinclass/
