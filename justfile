@@ -11,9 +11,7 @@ default: \
     install-zmx \
     install-dodder \
     install-moxy \
-    install-nebulous \
-    install-pivy-agent-service \
-    install-ssh-agent-mux
+    install-nebulous
 
 # TODO implement a check that enforces no active claude sessions, worktrees, or
 # sweatshops open. This is because upgrading the entire environment can break
@@ -82,27 +80,6 @@ install-moxy:
 
 install-nebulous:
   nebulous install-mcp
-
-install-pivy-agent-service:
-  #!/usr/bin/env bash
-  set -euo pipefail
-  if [[ -n "${SSH_HOST:-}" ]]; then
-    gum log --level info "SSH_HOST set, skipping pivy-agent service install"
-    exit 0
-  fi
-  pivy-agent install-service -A
-
-install-ssh-agent-mux:
-  #!/usr/bin/env bash
-
-  set -euo pipefail
-
-  if [[ -n "${SSH_HOST:-}" ]]; then
-    gum log --level info "SSH_HOST set, skipping ssh-agent-mux install"
-    exit 0
-  fi
-
-  ssh-agent-mux service install
 
 # build zmx outside the flake and link to ~/.local/bin
 install-zmx:

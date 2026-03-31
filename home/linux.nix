@@ -8,7 +8,9 @@
 {
   imports = [
     ./common.nix
+    ./pivy-agent.nix
     ./repo-packages.nix
+    ./ssh-agent-mux.nix
   ];
 
   home.stateVersion = "24.11";
