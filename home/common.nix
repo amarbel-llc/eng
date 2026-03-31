@@ -6,6 +6,10 @@
   ...
 }:
 {
+  imports = [
+    ./fish.nix
+  ];
+
   programs.home-manager.enable = true;
 
   news.display = "silent";
