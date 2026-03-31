@@ -12,8 +12,10 @@ every push to master. CI builds on x86_64-linux and aarch64-darwin.
 ## Build & Update Commands
 
 ``` sh
-just build              # Build Nix packages + install dotfiles via rcup
+just build              # Build all: nix packages + home-manager/darwin + rcm dotfiles
 just build-nix          # Nix packages only (nix build --show-trace)
+just build-home         # Home-manager / nix-darwin switch (see below)
+just build-nix-darwin   # sudo darwin-rebuild switch --impure --flake .
 just build-rcm          # Dotfiles only via rcup
 
 just install-purse-first  # Build + validate + install purse-first marketplace
@@ -63,6 +65,50 @@ The repo `.envrc` loads `devenvs/nix` and `devenvs/shell`. Subprojects reference
 devenvs via flake inputs,
 e.g. `go.url = "github:amarbel-llc/purse-first?dir=devenvs/go"`.
 
+### Home-Manager & Nix-Darwin
+
+User environment and macOS system settings are managed declaratively via
+home-manager and nix-darwin. Configs live in `home/` and
+`rcm/tag-darwin/config/nix-darwin/modules/`.
+
+**Two platform paths:**
+
+- **macOS**: `darwinConfigurations.${hostname}` --- nix-darwin manages system
+  defaults (dock, finder, touchID, fish shell) + Homebrew (casks, brews, App
+  Store apps). Home-manager is integrated as a nix-darwin module.
+- **Linux**: `homeConfigurations.linux` --- standalone home-manager
+  configuration.
+
+**Home-manager modules** (`home/`):
+
+- `identity.nix` --- username, home directory (macOS reads
+  `/etc/nix-darwin/identity.json`, Linux uses env vars)
+- `common.nix` --- shared packages, fish, direnv, kitty
+- `darwin.nix` / `linux.nix` --- platform-specific entry points (import common +
+  repo-packages)
+- `git.nix` --- git config with dynamic alias generation from
+  `home/git/aliases/*.git-alias`
+- `repo-packages.nix` --- aggregates default packages from all repo flake inputs
+
+**Nix-darwin modules** (`rcm/tag-darwin/config/nix-darwin/modules/`):
+
+- `system.nix` --- macOS system defaults, TouchID sudo, fish shell
+- `apps.nix` --- Homebrew taps, brews, casks, Mac App Store apps
+- `home-manager.nix` --- wires home-manager into nix-darwin
+
+**Build commands:**
+
+- `just build-home` --- on macOS runs `darwin-rebuild switch --impure`, on Linux
+  runs `home-manager switch --impure`. Creates `/etc/nix-darwin/identity.json`
+  on first run (prompts for git identity).
+- `just build-nix-darwin` --- macOS system rebuild only.
+- `just build` includes `build-home` in its sequence.
+
+**RCM migration:** user-level dotfiles (fish, direnv, git, kitty) have migrated
+to home-manager. Old rcm versions archived in `rcm/tag-home_manager-obsolete/`.
+RCM still manages platform-specific app configs (aerospace, karabiner,
+hammerspoon, etc.) and SSH/vim configs.
+
 ### Multi-Marketplace Architecture
 
 Two marketplaces are built and installed separately to avoid
@@ -84,29 +130,32 @@ Restart Claude Code sessions after install to pick up new plugin config.
 ## Repository Layout
 
   -----------------------------------------------------------------------------
-  Directory                               Purpose
-  --------------------------------------- -------------------------------------
-  `flake.nix`                             Top-level aggregator of all packages
+  Directory                              Purpose
+  -------------------------------------- --------------------------------------
+  `flake.nix`                            Top-level aggregator of all packages
 
-  `devenvs/`                              Symlinks to purse-first devenvs
-                                          (`github:amarbel-llc/purse-first`).
-                                          25 language-specific dev shells (go,
-                                          rust, python, nix, shell, etc.)
+  `devenvs/`                             Symlinks to purse-first devenvs
+                                         (`github:amarbel-llc/purse-first`). 25
+                                         language-specific dev shells (go,
+                                         rust, python, nix, shell, etc.)
 
-  `systems/{common,darwin,linux}/`        Platform-specific package collections
-                                          (\~70 tools)
+  `systems/{common,darwin,linux}/`       Platform-specific package collections
+                                         (\~70 tools)
 
-  `pkgs/alfa/`                            Core Nix packages (18 packages)
+  `home/`                                Home-manager modules (fish, git,
+                                         direnv, kitty, packages)
 
-  `repos/`                                30+ separate git repos (dodder, lux,
-                                          grit, nix-mcp-server, etc.)
+  `pkgs/alfa/`                           Core Nix packages (18 packages)
 
-  `rcm/`                                  Dotfiles managed by rcup with
-                                          tag-based platform targeting
+  `repos/`                               30+ separate git repos (dodder, lux,
+                                         grit, nix-mcp-server, etc.)
 
-  `bin/`                                  Utility scripts (update_flakes.bash)
+  `rcm/`                                 Dotfiles managed by rcup with
+                                         tag-based platform targeting
 
-  `docs/`                                 nix-patterns.md, system-patterns.md
+  `bin/`                                 Utility scripts (update_flakes.bash)
+
+  `docs/`                                nix-patterns.md, system-patterns.md
   -----------------------------------------------------------------------------
 
 ### NATO Phonetic Module Hierarchy
