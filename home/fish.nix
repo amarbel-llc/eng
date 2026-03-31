@@ -43,8 +43,7 @@ in
       fish_add_path $HOME/.local/bin
       fish_add_path -a /opt/homebrew/bin
 
-      # Editor
-      set -Ux EDITOR $HOME/.local/bin/vim
+      # EDITOR is set via home.sessionVariables
 
       # XDG completions watcher
       function __update_fish_complete_path_from_xdg --on-variable XDG_DATA_DIRS

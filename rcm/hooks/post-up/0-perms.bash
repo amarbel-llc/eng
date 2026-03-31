@@ -3,8 +3,6 @@
 
 # /usr/bin/find ~/.* -xtype l -delete
 
-export PATH="$HOME/eng/result/bin:$PATH"
-
 gum log -l info "updating directory permissions"
 
 chmod 700 "$HOME"/.config/ssh

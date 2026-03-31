@@ -1,5 +1,3 @@
-export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PATH')
-
 default: \
     update-git \
     update-nix-flake \
@@ -158,7 +156,7 @@ update-login-shell:
     gum log --level info "not Linux, skipping fish login shell update"
     exit 0
   fi
-  target="$(readlink -f result/bin/fish)"
+  target="$(readlink -f "$(which fish)")"
   current="$(readlink -f /bin/fish 2>/dev/null || true)"
   if [[ "$target" == "$current" ]]; then
     gum log --level info "/bin/fish already up to date"

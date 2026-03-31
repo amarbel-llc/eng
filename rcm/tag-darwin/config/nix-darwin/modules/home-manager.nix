@@ -6,7 +6,7 @@
   ...
 }:
 {
-  imports = [ ../../../../../home/common.nix ];
+  imports = [ ../../../../../home/darwin.nix ];
 
   home.stateVersion = "24.11";
 }

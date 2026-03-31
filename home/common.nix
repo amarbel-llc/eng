@@ -5,10 +5,14 @@
   inputs,
   ...
 }:
+let
+  system = pkgs.stdenv.hostPlatform.system;
+in
 {
   imports = [
     ./fish.nix
     ./git.nix
+    ./wrappers.nix
   ];
 
   programs.home-manager.enable = true;
@@ -20,7 +24,6 @@
       age
       asdf
       asdf-vm
-      claude-code
       coreutils
       crush
       curl
@@ -36,7 +39,6 @@
       gawk
       gh
       git-secret
-      glow
       gnumake
       gnuplot
       gopls
@@ -50,6 +52,7 @@
       j2cli
       jinja2-cli
       jq
+      lftp
       markscribe
       melt
       mods
@@ -85,6 +88,12 @@
     ++ (with pkgs; [
       csvkit
     ]);
+
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    SHELL = "${pkgs-master.fish}/bin/fish";
+    TAP_DANCER_LIB = "${inputs.bob.packages.${system}.tap-dancer-bash}/share/tap-dancer/lib";
+  };
 
   # Kitty terminal
   programs.kitty = {

@@ -1,14 +1,11 @@
 # vim: ft=sh
 
 # keep sorted
-# export EDITOR="$HOME/eng/result/bin/hx"
 export AND_SO_CAN_YOU_REPO_DIR="$HOME/eng/repos"
-export EDITOR="$HOME/eng/result/bin/nvim"
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export LESS="-x4 -R"
 export PIVY_AUTH_SOCK="$HOME/.local/state/ssh/pivy-agent.sock"
 export SSH_AUTH_SOCK="$HOME/.local/state/ssh/mux-agent.sock"
-export TAP_DANCER_LIB="$HOME/eng/result/share/tap-dancer/lib"
 
 # Claude Code
 # keep sorted
@@ -18,10 +15,8 @@ export ENABLE_TOOL_SEARCH=false
 
 # XDG
 # keep sorted
-export GIT_CONFIG_GLOBAL="$HOME/.config/git/config-user"
 export GOPATH="$HOME/.cache/go"
 export SSH_HOME="$HOME/.config/ssh"
 export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_DIRS="$HOME/eng/result/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
 export XDG_RUNTIME_HOME="$HOME/.local/runtime"
 export ZIG_GLOBAL_CACHE_DIR=$HOME/.cache/zig

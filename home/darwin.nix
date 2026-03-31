@@ -6,9 +6,15 @@
   ...
 }:
 {
-  imports = [ ./common.nix ];
+  imports = [
+    ./common.nix
+    ./repo-packages.nix
+  ];
 
   home.stateVersion = "24.11";
-  home.username = "sfriedenberg";
-  home.homeDirectory = "/Users/sfriedenberg";
+
+  home.packages = with pkgs; [
+    pinentry_mac
+    reattach-to-user-namespace
+  ];
 }

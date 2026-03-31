@@ -7,9 +7,9 @@ code in this repository.
 
 Git aliases implemented as standalone bash scripts with a `.git-alias`
 extension. The filename minus the extension becomes the git alias name (e.g.,
-`status.git-alias` → `git status`). The `config-aliases.rcm-script` dynamically
-discovers all `*.git-alias` symlinks in `~/.config/git/aliases/` and generates a
-`[alias]` gitconfig section with `! /path/to/script` entries.
+`status.git-alias` → `git status`). The `home/git.nix` module discovers all
+`*.git-alias` files at nix eval time and generates a `[alias]` gitconfig section
+deployed via `xdg.configFile."git/config-aliases"`.
 
 ## Script Conventions
 
@@ -43,9 +43,9 @@ tap_run "description" command arg1 arg2
 tap_skip "description" "reason"
 ```
 
-`TAP_DANCER_LIB` is set in `~/.env` and points to
-`~/eng/result/share/tap-dancer/lib`. The `tap-dancer-bash` package is included
-in the top-level eng `symlinkJoin` via bob's `tap-dancer-bash` output.
+`TAP_DANCER_LIB` is set via `home.sessionVariables` in `home/common.nix` and
+points to the `tap-dancer-bash` nix store path. The package is included via
+`home/repo-packages.nix`.
 
 `tap_run` automatically emits `ok`/`not ok` based on exit code and bails out on
 failure by default. Use `tap_run --no-bail` to continue after failure.
@@ -58,5 +58,4 @@ Single-command aliases (the majority) do not use tap-dancer.
     the script conventions above
 2.  The filename (minus `.git-alias`) becomes the alias name --- use descriptive
     hyphenated names (not abbreviations)
-3.  `rcup` will symlink it; `config-aliases.rcm-script` will pick it up
-    automatically
+3.  `home/git.nix` will pick it up automatically on next `darwin-rebuild switch`

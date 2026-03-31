@@ -5,7 +5,6 @@
 # extra dotfiles
 
 : "${XDG_STATE_HOME:=$HOME/.local/state}"
-export PATH="$HOME/eng/result/bin:$PATH"
 
 dir_log="$XDG_STATE_HOME/rcm"
 mkdir -p "$dir_log"
