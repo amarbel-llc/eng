@@ -43,10 +43,6 @@ let
   signingKey = identity.gitSigningKey or "";
 in
 {
-  home.activation.removeChefGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
-    rm -f "$HOME/.gitconfig"
-  '';
-
   programs.git = {
     enable = true;
     package = pkgs-master.git;
