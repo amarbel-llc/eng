@@ -135,11 +135,7 @@
             inherit system;
             config.allowUnfree = true;
           };
-          linuxIdentity = {
-            gitUserName = builtins.getEnv "GIT_USER_NAME";
-            gitUserEmail = builtins.getEnv "GIT_USER_EMAIL";
-            gitSigningKey = builtins.getEnv "GIT_SIGNING_KEY";
-          };
+          linuxIdentity = import (builtins.toPath (builtins.getEnv "HOME" + "/.config/identity.nix"));
         in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;

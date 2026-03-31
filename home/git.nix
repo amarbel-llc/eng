@@ -6,6 +6,26 @@
   ...
 }:
 let
+  isLinux = pkgs.stdenv.isLinux;
+
+  gitWithNss =
+    if isLinux then
+      pkgs-master.symlinkJoin {
+        name = "git-with-nss";
+        paths = [ pkgs-master.git ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          for bin in $out/bin/git $out/libexec/git-core/git; do
+            if [ -f "$bin" ]; then
+              wrapProgram "$bin" \
+                --set LD_PRELOAD "${pkgs-master.sssd}/lib/libnss_sss.so.2"
+            fi
+          done
+        '';
+      }
+    else
+      pkgs-master.git;
+
   gitDir = ./git;
 
   aliasFiles = builtins.filter (f: lib.hasSuffix ".git-alias" f) (
@@ -43,9 +63,13 @@ let
   signingKey = identity.gitSigningKey or "";
 in
 {
+  home.activation.removeChefGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+    rm -f "$HOME/.gitconfig"
+  '';
+
   programs.git = {
     enable = true;
-    package = pkgs-master.git;
+    package = gitWithNss;
 
     ignores = [
       "**/.claude/settings.local.json"
@@ -71,7 +95,10 @@ in
         name = identity.gitUserName;
         email = identity.gitUserEmail;
       };
-      core.whitespace = "nowarn";
+      core = {
+        whitespace = "nowarn";
+        excludesFile = "~/.config/git/ignore";
+      };
       diff = {
         colormoved = "default";
         colormovedws = "allow-indentation-change";
