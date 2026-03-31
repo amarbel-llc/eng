@@ -6,26 +6,6 @@
   ...
 }:
 let
-  isLinux = pkgs.stdenv.isLinux;
-
-  gitWithNss =
-    if isLinux then
-      pkgs-master.symlinkJoin {
-        name = "git-with-nss";
-        paths = [ pkgs-master.git ];
-        nativeBuildInputs = [ pkgs.makeWrapper ];
-        postBuild = ''
-          for bin in $out/bin/git $out/libexec/git-core/git; do
-            if [ -f "$bin" ]; then
-              wrapProgram "$bin" \
-                --set LD_PRELOAD "${pkgs-master.sssd}/lib/libnss_sss.so.2"
-            fi
-          done
-        '';
-      }
-    else
-      pkgs-master.git;
-
   gitDir = ./git;
 
   aliasFiles = builtins.filter (f: lib.hasSuffix ".git-alias" f) (
@@ -69,7 +49,7 @@ in
 
   programs.git = {
     enable = true;
-    package = gitWithNss;
+    package = pkgs-master.git;
 
     ignores = [
       "**/.claude/settings.local.json"

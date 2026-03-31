@@ -135,7 +135,10 @@
             inherit system;
             config.allowUnfree = true;
           };
-          linuxIdentity = import (builtins.toPath (builtins.getEnv "HOME" + "/.config/identity.nix"));
+          homeDir = builtins.getEnv "HOME";
+          linuxIdentity = import (builtins.toPath (homeDir + "/.config/identity.nix"));
+          nssSessionPath = builtins.toPath (homeDir + "/.config/nix/nss-session.nix");
+          optionalNssModule = if builtins.pathExists nssSessionPath then [ nssSessionPath ] else [ ];
         in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
@@ -146,7 +149,8 @@
           modules = [
             ./home/identity.nix
             ./home/linux.nix
-          ];
+          ]
+          ++ optionalNssModule;
         };
 
       darwinConfigurations.${darwinIdentity.hostname} = nix-darwin.lib.darwinSystem {

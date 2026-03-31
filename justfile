@@ -286,4 +286,4 @@ build-rcm-rcrc:
 @build-rcm-hooks-post-up:
   chmod +x *
 
-build: build-nix build-rcm
+build: build-nix build-rcm build-home
