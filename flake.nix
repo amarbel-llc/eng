@@ -6,6 +6,11 @@
     nixpkgs-master.url = "github:NixOS/nixpkgs/e2dde111aea2c0699531dc616112a96cd55ab8b5";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
+    home-manager = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # keep sorted
     bob = {
       url = "github:amarbel-llc/bob";
@@ -92,11 +97,36 @@
       nixpkgs,
       nixpkgs-master,
       utils,
+      home-manager,
       bob,
       purse-first,
       ...
     }@inputs:
-    (utils.lib.eachDefaultSystem (
+    {
+      homeConfigurations.linux =
+        let
+          system = "x86_64-linux";
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          pkgs-master = import nixpkgs-master {
+            inherit system;
+            config.allowUnfree = true;
+          };
+        in
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit inputs pkgs-master;
+          };
+          modules = [
+            ./home/identity.nix
+            ./home/linux.nix
+          ];
+        };
+    }
+    // (utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -111,6 +141,7 @@
           "nixpkgs"
           "nixpkgs-master"
           "utils"
+          "home-manager"
           "bob"
           "purse-first"
           "tacky"

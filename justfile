@@ -3,7 +3,7 @@ export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PA
 default: \
     update-git \
     update-nix-flake \
-    build-nix \
+    build-home \
     update-login-shell \
     deploy-flake-lock \
     build-rcm \
@@ -265,6 +265,9 @@ _update-repo-full dir:
 # Update flakes in repos/ in parallel (separate git repositories)
 update-nix-repos:
   tap-dancer exec-parallel -j 1 "just _update-repo-full {}" ::: repos/*/
+
+build-home:
+  home-manager switch --impure --flake .#linux
 
 build-nix:
   nix build --show-trace

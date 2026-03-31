@@ -2769,6 +2769,27 @@
         "type": "github"
       }
     },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1774875830,
+        "narHash": "sha256-WPYlTmZvVa9dWlAziFkVjBdv1Z6giNIq40O1DxsBmiI=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "7afd8cebb99e25a64a745765920e663478eb8830",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-25.11",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "just-us": {
       "inputs": {
         "bob": [
@@ -3817,6 +3838,7 @@
         "crap": "crap",
         "dodder": "dodder",
         "ess-ess-hatch": "ess-ess-hatch",
+        "home-manager": "home-manager",
         "just-us": "just-us_2",
         "moxy": "moxy",
         "nebulous": "nebulous",
