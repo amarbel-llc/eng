@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file set-signed
+# @brief configure local repo to use signed commits
+
+git config --local include.path ~/.config/git/config-signed

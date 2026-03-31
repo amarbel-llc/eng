@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file show-rev
+# @brief show a specific stash revision
+
+git show -p "stash@{$1}"

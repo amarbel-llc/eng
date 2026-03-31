@@ -1,0 +1,11 @@
+# vim: ft=gitconfig
+
+[user]
+  name = Sasha F
+  email = cornflake.matchbox397@icantbelieveitsnotgmail.com
+[gpg "ssh"]
+	allowedSignersFile = ~/.config/ssh/keys-allowed_signers-user
+[include]
+  path = ~/.config/git/config-common
+[include]
+  path = ~/.config/git/config-aliases

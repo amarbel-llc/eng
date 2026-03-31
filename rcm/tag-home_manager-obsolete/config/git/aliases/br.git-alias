@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file br
+# @brief branch shorthand
+
+git branch "$@"

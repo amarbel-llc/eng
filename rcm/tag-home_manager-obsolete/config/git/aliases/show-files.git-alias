@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file show-files
+# @brief show files changed in a commit
+
+git show --pretty='' --name-only "$1"

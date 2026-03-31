@@ -135,11 +135,17 @@
             inherit system;
             config.allowUnfree = true;
           };
+          linuxIdentity = {
+            gitUserName = builtins.getEnv "GIT_USER_NAME";
+            gitUserEmail = builtins.getEnv "GIT_USER_EMAIL";
+            gitSigningKey = builtins.getEnv "GIT_SIGNING_KEY";
+          };
         in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
             inherit inputs pkgs-master;
+            identity = linuxIdentity;
           };
           modules = [
             ./home/identity.nix
@@ -171,6 +177,7 @@
             home-manager.backupFileExtension = "hm-backup";
             home-manager.extraSpecialArgs = {
               inherit inputs;
+              identity = darwinIdentity;
               pkgs-master = darwinPkgsMaster;
             };
             home-manager.users.${darwinIdentity.username} =

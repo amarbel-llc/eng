@@ -274,9 +274,14 @@ build-home: build-nix
     identity_file="/etc/nix-darwin/identity.json"
     if [[ ! -f "$identity_file" ]]; then
       hostname="$(scutil --get LocalHostName)"
+      git_name="$(git config --global user.name 2>/dev/null || echo '')"
+      git_email="$(git config --global user.email 2>/dev/null || echo '')"
+      git_signing_key="$(git config --global user.signingKey 2>/dev/null || echo '')"
       gum log --level info "creating $identity_file"
       sudo mkdir -p "$(dirname "$identity_file")"
-      printf '{"username": "%s", "homeDirectory": "%s", "hostname": "%s"}\n' "$USER" "$HOME" "$hostname" | sudo tee "$identity_file" > /dev/null
+      printf '{"username":"%s","homeDirectory":"%s","hostname":"%s","gitUserName":"%s","gitUserEmail":"%s","gitSigningKey":"%s"}\n' \
+        "$USER" "$HOME" "$hostname" "$git_name" "$git_email" "$git_signing_key" \
+        | sudo tee "$identity_file" > /dev/null
     fi
     sudo darwin-rebuild switch --impure --flake .
   else

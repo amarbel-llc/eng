@@ -1,0 +1,6 @@
+#! /usr/bin/env -S bash -e
+# @file sync
+# @brief pull and then push
+
+git pull
+git push

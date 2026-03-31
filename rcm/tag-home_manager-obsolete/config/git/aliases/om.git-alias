@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file om
+# @brief show only modified and added filenames
+
+git status --short | ag '(?<=.[MA?] )(.*)$' --no-color --only-matching

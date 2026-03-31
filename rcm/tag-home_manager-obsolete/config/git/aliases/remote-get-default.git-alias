@@ -1,0 +1,5 @@
+#! /usr/bin/env -S bash -e
+# @file remote-get-default
+# @brief the default remote for the default branch
+
+git config --get "branch.$(git branch-get-default).remote"
