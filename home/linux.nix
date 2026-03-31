@@ -13,6 +13,19 @@
 
   home.stateVersion = "24.11";
 
+  # Mako notification daemon
+  services.mako = {
+    enable = true;
+    settings = {
+      "" = {
+        group-by = "app-name,summary";
+      };
+      "app-name=kitty summary=\"Claude Code\"" = {
+        default-timeout = 5000;
+      };
+    };
+  };
+
   home.packages =
     (with pkgs-master; [
       curlftpfs
@@ -31,7 +44,6 @@
       espanso-wayland
       fuzzel
       keyd
-      mako
       niri
       pcsclite
       pinentry-gnome3

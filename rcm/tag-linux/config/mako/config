@@ -1,7 +1,0 @@
-# Group notifications sharing the same app-name and summary.
-# Collapses repeated "Claude Code" notifications into "(N) Claude Code".
-group-by=app-name,summary
-
-# Auto-dismiss Claude Code notifications after 5 seconds.
-[app-name=kitty summary="Claude Code"]
-default-timeout=5000
