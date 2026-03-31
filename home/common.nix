@@ -58,7 +58,6 @@
       pandoc
       paperkey
       parallel
-      pay-respects
       plantuml
       pop
       rcm

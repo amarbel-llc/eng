@@ -76,9 +76,6 @@ in
         __cow-bell $postexec_status
       end
 
-      # Pay respects
-      $HOME/eng/result/bin/pay-respects fish | source
-
       # Hush MOTD unless it has changed
       if test -f /etc/motd
         mkdir -p ~/.local/state
