@@ -28,7 +28,6 @@
       expect
       ffmpeg
       figlet
-      fish
       fontconfig
       fswatch
       fh
@@ -137,6 +136,7 @@
   # Direnv with nix-direnv integration
   programs.direnv = {
     enable = true;
+    package = pkgs-master.direnv;
     nix-direnv.enable = true;
     config = {
       whitelist.prefix = [ "$HOME/eng" ];
