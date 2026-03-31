@@ -11,6 +11,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-plist-manager = {
+      url = "github:sushydev/nix-plist-manager";
+    };
+
     # keep sorted
     bob = {
       url = "github:amarbel-llc/bob";
@@ -98,10 +107,22 @@
       nixpkgs-master,
       utils,
       home-manager,
+      nix-darwin,
+      nix-plist-manager,
       bob,
       purse-first,
       ...
     }@inputs:
+    let
+      # Read identity from /etc/nix-darwin/identity.json (requires --impure).
+      # Create the file with: { "username": "...", "homeDirectory": "/Users/...", "hostname": "..." }
+      darwinIdentity = builtins.fromJSON (builtins.readFile /etc/nix-darwin/identity.json);
+
+      darwinPkgsMaster = import nixpkgs-master {
+        system = "aarch64-darwin";
+        config.allowUnfree = true;
+      };
+    in
     {
       homeConfigurations.linux =
         let
@@ -125,6 +146,38 @@
             ./home/linux.nix
           ];
         };
+
+      darwinConfigurations.${darwinIdentity.hostname} = nix-darwin.lib.darwinSystem {
+        specialArgs = {
+          identity = darwinIdentity;
+          inherit inputs;
+          pkgs-master = darwinPkgsMaster;
+        };
+
+        modules = [
+          ./rcm/tag-darwin/config/nix-darwin/modules/system.nix
+          ./rcm/tag-darwin/config/nix-darwin/modules/apps.nix
+          nix-plist-manager.darwinModules.default
+
+          home-manager.darwinModules.home-manager
+          {
+            users.users.${darwinIdentity.username} = {
+              name = darwinIdentity.username;
+              home = darwinIdentity.homeDirectory;
+            };
+
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-backup";
+            home-manager.extraSpecialArgs = {
+              inherit inputs;
+              pkgs-master = darwinPkgsMaster;
+            };
+            home-manager.users.${darwinIdentity.username} =
+              import ./rcm/tag-darwin/config/nix-darwin/modules/home-manager.nix;
+          }
+        ];
+      };
     }
     // (utils.lib.eachDefaultSystem (
       system:
@@ -142,6 +195,8 @@
           "nixpkgs-master"
           "utils"
           "home-manager"
+          "nix-darwin"
+          "nix-plist-manager"
           "bob"
           "purse-first"
           "tacky"

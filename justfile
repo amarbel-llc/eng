@@ -277,7 +277,7 @@ build-home:
       sudo mkdir -p "$(dirname "$identity_file")"
       printf '{"username": "%s", "homeDirectory": "%s", "hostname": "%s"}\n' "$USER" "$HOME" "$hostname" | sudo tee "$identity_file" > /dev/null
     fi
-    sudo darwin-rebuild switch --impure --flake ./rcm/tag-darwin/config/nix-darwin
+    sudo darwin-rebuild switch --impure --flake .
   else
     nix run home-manager -- switch --impure --flake .#linux
   fi
@@ -286,8 +286,7 @@ build-nix:
   nix build --show-trace
 
 build-nix-darwin:
-  sudo darwin-rebuild switch --flake ./rcm/tag-darwin/config/nix-darwin
-  # sudo nix run nix-darwin/master -- switch --flake "$(readlink "$HOME/.config/nix-darwin")"
+  sudo darwin-rebuild switch --impure --flake .
 
 [working-directory: "rcm"]
 build-rcm: build-rcm-hooks-pre-up build-rcm-hooks-post-up
