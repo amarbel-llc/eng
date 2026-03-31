@@ -267,7 +267,20 @@ update-nix-repos:
   tap-dancer exec-parallel -j 1 "just _update-repo-full {}" ::: repos/*/
 
 build-home:
-  home-manager switch --impure --flake .#linux
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if [[ "$(uname)" == "Darwin" ]]; then
+    identity_file="/etc/nix-darwin/identity.json"
+    if [[ ! -f "$identity_file" ]]; then
+      hostname="$(scutil --get LocalHostName)"
+      gum log --level info "creating $identity_file"
+      sudo mkdir -p "$(dirname "$identity_file")"
+      printf '{"username": "%s", "homeDirectory": "%s", "hostname": "%s"}\n' "$USER" "$HOME" "$hostname" | sudo tee "$identity_file" > /dev/null
+    fi
+    sudo darwin-rebuild switch --impure --flake ./rcm/tag-darwin/config/nix-darwin
+  else
+    nix run home-manager -- switch --impure --flake .#linux
+  fi
 
 build-nix:
   nix build --show-trace

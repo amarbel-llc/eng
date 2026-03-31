@@ -44,14 +44,19 @@
     casks = [
       "alfred"
       "bartender"
+      "discord"
       "espanso"
       "finicky"
       "font-hack-nerd-font"
       "gcloud-cli"
       "hammerspoon"
+      "iterm2"
       "karabiner-elements"
       "kitty"
+      "rectangle"
+      "spotify"
       "tailscale-app"
+      "visual-studio-code"
     ];
 
     # Mac App Store apps (mas search <app name> to find the ID)

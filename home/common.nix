@@ -6,8 +6,6 @@
   ...
 }:
 {
-  home.stateVersion = "24.11";
-
   programs.home-manager.enable = true;
 
   news.display = "silent";
@@ -129,8 +127,8 @@
     themeFile = "Solarized_Dark";
   };
 
-  # Custom kitty tab bar renderer — managed via rcm on darwin
-  # (the source file lives in home/kitty-tab_bar.py, outside the nix-darwin flake boundary)
+  # Custom kitty tab bar renderer
+  xdg.configFile."kitty/tab_bar.py".source = ./kitty-tab_bar.py;
 
   # Direnv with nix-direnv integration
   programs.direnv = {
