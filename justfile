@@ -3,6 +3,7 @@ export PATH := join(env_var('HOME'), "eng", "result", "bin") + ":" + env_var('PA
 default: \
     update-git \
     update-nix-flake \
+    build-nix \
     build-home \
     update-login-shell \
     deploy-flake-lock \
@@ -266,7 +267,7 @@ _update-repo-full dir:
 update-nix-repos:
   tap-dancer exec-parallel -j 1 "just _update-repo-full {}" ::: repos/*/
 
-build-home:
+build-home: build-nix
   #!/usr/bin/env bash
   set -euo pipefail
   if [[ "$(uname)" == "Darwin" ]]; then
