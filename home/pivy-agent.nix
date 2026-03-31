@@ -19,7 +19,7 @@ in
         "-A"
         "-i"
         "-a"
-        "${config.home.homeDirectory}/.ssh/pivy-agent.sock"
+        "${config.home.homeDirectory}/.local/state/ssh/pivy-agent.sock"
       ];
       EnvironmentVariables = {
         SSH_ASKPASS = "${pivy}/libexec/pivy/pivy-askpass";
