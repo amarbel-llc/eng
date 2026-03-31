@@ -2,14 +2,20 @@
   pkgs,
   lib,
   pkgs-master,
+  identity,
   inputs,
   ...
 }:
+let
+  isSshHost = identity.isSshHost or false;
+in
 {
   imports = [
     ./common.nix
-    ./pivy-agent.nix
     ./repo-packages.nix
+  ]
+  ++ lib.optionals (!isSshHost) [
+    ./pivy-agent.nix
     ./ssh-agent-mux.nix
   ];
 
