@@ -137,6 +137,13 @@
           };
           homeDir = builtins.getEnv "HOME";
           linuxIdentity = import (builtins.toPath (homeDir + "/.config/identity.nix"));
+          # On non-NixOS Linux, nix-built binaries use nix's glibc which
+          # can't find system NSS modules (step_ssh, sss, systemd) for
+          # user/group resolution. The nss-session.nix module creates an
+          # isolated symlink directory pointing to the system's NSS libraries
+          # and sets LD_LIBRARY_PATH to it. Deployed via rcm on hosts that
+          # need it; absent on NixOS and macOS.
+          # See CLAUDE.md "NSS on Non-NixOS Linux".
           nssSessionPath = builtins.toPath (homeDir + "/.config/nix/nss-session.nix");
           optionalNssModule = if builtins.pathExists nssSessionPath then [ nssSessionPath ] else [ ];
         in

@@ -116,6 +116,12 @@ to home-manager. Old rcm versions archived in `rcm/tag-home_manager-obsolete/`.
 RCM still manages platform-specific app configs (aerospace, karabiner,
 hammerspoon, etc.) and SSH/vim configs.
 
+### NSS on Non-NixOS Linux
+
+Nix-built binaries can't resolve user/group IDs on non-NixOS Linux because
+nix's glibc can't find system NSS modules. See `home/README.md` for the full
+explanation and the symlink-based fix in `~/.config/nix/nss-session.nix`.
+
 ### Multi-Marketplace Architecture
 
 Two marketplaces are built and installed separately to avoid
