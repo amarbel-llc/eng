@@ -28,6 +28,7 @@ in
   systemd.user.services.ssh-agent-mux = lib.mkIf pkgs.stdenv.isLinux {
     Unit.Description = "SSH agent multiplexer";
     Service = {
+      ExecStartPre = "/bin/rm -f %h/.local/state/ssh/mux-agent.sock";
       ExecStart = "${ssh-agent-mux}/bin/ssh-agent-mux --config %h/.config/ssh-agent-mux/ssh-agent-mux.toml";
       Restart = "on-failure";
     };
