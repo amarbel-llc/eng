@@ -1,6 +1,7 @@
 # vim: ft=toml
 
 disallow-main-worktree = true
+tool-use-log = true
 
 [session-entry]
 start = ["zmx", "-g", "sc-dev", "attach", "$SPINCLASS_SESSION_ID"]
