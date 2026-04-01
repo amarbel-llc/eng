@@ -1,40 +1,43 @@
-#! /bin/bash -xe
+#!/usr/bin/env bash
+set -euo pipefail
 
-# TODO make platform agnostic
+eng_dir="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$eng_dir"
 
-PATH="/nix/var/nix/profiles/default/bin:$PATH"
-PATH="$(pwd)/result/bin:$PATH"
-export PATH
+# Step 1: nix build (get tools like gum, rcm, etc. into result/bin)
+echo "Building nix packages..."
+nix build --show-trace
+export PATH="$eng_dir/result/bin:$PATH"
 
-. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-nix flake update
-nix build
+# Step 2: identity bootstrap
+if [[ "$(uname)" == "Darwin" ]]; then
+  identity_file="/etc/nix-darwin/identity.json"
+else
+  identity_file="$HOME/.config/identity.nix"
+fi
+if [[ ! -f "$identity_file" ]]; then
+  gum log --level info "identity file not found, running bootstrap..."
+  "$eng_dir/bin/bootstrap-identity.bash"
+fi
 
-bin_fish="$(readlink "$(which fish)")"
+# Step 3: rcm setup
+cp "$eng_dir/rcm/rcrc" ~/.rcrc
+printf '\nDOTFILES_DIRS="%s/rcm"\n' "$eng_dir" >> ~/.rcrc
 
-os="$(uname -s | tr \[:upper:\] \[:lower:\])"
-arch="$(arch)"
+os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+sed -i "s/^TAGS=\"/TAGS=\"\n  $os/" ~/.rcrc
 
-cp rcm/rcrc ~/.rcrc
-printf "DOTFILES_DIRS=\"%s\"" "$(pwd)/rcm" >> ~/.rcrc
+rcup -f
 
-function add_one () {
-  dir="$1"
+# Step 4: home-manager
+if [[ "$(uname)" == "Darwin" ]]; then
+  sudo darwin-rebuild switch --impure --flake .
+else
+  nix run home-manager -- switch -b backup --impure --flake .#linux
+fi
 
-  if [[ ! -d "$dir" ]]; then
-    return 0
-  fi
-
-  printf "TAGS=\"%s\"" "$dir" >> ~/.rcrc
-}
-
-add_one "tag-${os}"
-add_one "tag-${arch}"
-add_one "tag-${os}_${arch}"
-
-"rcup" -f
-
-# sudo bash -c "echo '$bin_fish' >> /etc/shells"
-# sudo chsh -s "$bin_fish"
-
-echo "You should run \`exec fish\` to switch to the installed shell" >&2
+gum log --level info "bootstrap complete"
+echo ""
+echo "Next steps:"
+echo "  exec fish                                    # switch to fish shell"
+echo "  just install-purse-first && just install-bob # Claude marketplaces"
