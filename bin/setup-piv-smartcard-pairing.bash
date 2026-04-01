@@ -1,4 +1,34 @@
 #!/usr/bin/env bash
+#
+# Provision YubiKey PIV slots for macOS smart card login/sudo and pair with
+# the local user account via sc_auth.
+#
+# Prerequisites:
+#   - YubiKey with PIV applet (slot 9a already provisioned via pivy)
+#   - pivy-tool, ykman, openssl, gum on PATH
+#   - The 9a certificate must match the 9a private key (if sc_auth pair fails
+#     with "EC signature verification failed", regenerate the 9a cert:
+#       ykman piv certificates generate --subject "CN=$(whoami)" 9a <(pivy-tool pubkey 9a | ssh-keygen -f /dev/stdin -e -m PKCS8)
+#
+# What this script does:
+#   1. Ensures slot 9d (Key Management) has an ECCP256 key and self-signed cert.
+#      The 9d key is used by macOS to wrap the login keychain password via ECDH.
+#      Without it, login works but you get repeated keychain password prompts.
+#   2. Prompts you to physically remove and reinsert the YubiKey. This is
+#      required because CryptoTokenKit caches slot contents on insertion and
+#      does not re-read them after cert changes. Killing ctkd is not sufficient.
+#   3. Pairs the 9a identity with the local macOS user via sc_auth.
+#
+# PAM configuration:
+#   nix-darwin manages /etc/pam.d/sudo_local with pam_tid.so (TouchID) and
+#   pam_smartcard.so (YubiKey PIV). See:
+#     rcm/tag-darwin/config/nix-darwin/modules/system.nix
+#
+# pivy-tool CLI notes:
+#   - Global options (-n, -g, -P, etc.) go BEFORE the subcommand
+#   - The -n flag takes a bare CN value, not "CN=..." (pivy adds the prefix)
+#   - req-cert and write-cert prompt for PIN interactively
+#
 set -euo pipefail
 
 tmp="$(mktemp -d)"

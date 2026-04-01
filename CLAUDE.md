@@ -92,7 +92,7 @@ home-manager and nix-darwin. Configs live in `home/` and
 
 **Nix-darwin modules** (`rcm/tag-darwin/config/nix-darwin/modules/`):
 
-- `system.nix` --- macOS system defaults, TouchID sudo, fish shell
+- `system.nix` --- macOS system defaults, TouchID + YubiKey PIV sudo, fish shell
 - `apps.nix` --- Homebrew taps, brews, casks, Mac App Store apps
 - `home-manager.nix` --- wires home-manager into nix-darwin
 
@@ -103,6 +103,13 @@ home-manager and nix-darwin. Configs live in `home/` and
   on first run (prompts for git identity).
 - `just build-nix-darwin` --- macOS system rebuild only.
 - `just build` includes `build-home` in its sequence.
+
+**YubiKey PIV smart card:** macOS login and sudo are configured to accept
+YubiKey PIV authentication alongside TouchID. PAM is managed in `system.nix`
+(`pam_smartcard.so`). Initial setup and re-pairing use
+`bin/setup-piv-smartcard-pairing.bash` (see script header for troubleshooting).
+The pivy-agent for SSH (`home/pivy-agent.nix`) is separate from macOS smart card
+login.
 
 **RCM migration:** user-level dotfiles (fish, direnv, git, kitty) have migrated
 to home-manager. Old rcm versions archived in `rcm/tag-home_manager-obsolete/`.
