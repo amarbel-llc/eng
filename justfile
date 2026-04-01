@@ -247,17 +247,15 @@ build-home: build-nix
   set -euo pipefail
   if [[ "$(uname)" == "Darwin" ]]; then
     identity_file="/etc/nix-darwin/identity.json"
-    if [[ ! -f "$identity_file" ]]; then
-      hostname="$(scutil --get LocalHostName)"
-      git_name="$(git config --global user.name 2>/dev/null || echo '')"
-      git_email="$(git config --global user.email 2>/dev/null || echo '')"
-      git_signing_key="$(git config --global user.signingKey 2>/dev/null || echo '')"
-      gum log --level info "creating $identity_file"
-      sudo mkdir -p "$(dirname "$identity_file")"
-      printf '{"username":"%s","homeDirectory":"%s","hostname":"%s","gitUserName":"%s","gitUserEmail":"%s","gitSigningKey":"%s"}\n' \
-        "$USER" "$HOME" "$hostname" "$git_name" "$git_email" "$git_signing_key" \
-        | sudo tee "$identity_file" > /dev/null
-    fi
+  else
+    identity_file="$HOME/.config/identity.nix"
+  fi
+  if [[ ! -f "$identity_file" ]]; then
+    gum log --level error "$identity_file not found"
+    gum log --level info "run 'bin/bootstrap-identity.bash' to create it"
+    exit 1
+  fi
+  if [[ "$(uname)" == "Darwin" ]]; then
     sudo darwin-rebuild switch --impure --flake .
   else
     nix run home-manager -- switch -b backup --impure --flake .#linux
