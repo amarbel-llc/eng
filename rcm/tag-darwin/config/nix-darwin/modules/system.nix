@@ -26,8 +26,11 @@
   #   vim
   # ];
 
-  # Enable TouchID for sudo
-  security.pam.services.sudo_local.touchIdAuth = true;
+  # Enable TouchID and YubiKey PIV smart card for sudo
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    text = lib.mkAfter "auth       sufficient     pam_smartcard.so";
+  };
 
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
