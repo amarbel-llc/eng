@@ -1,0 +1,3 @@
+extensions = ["yaml", "yml"]
+formatters = ["prettier"]
+lsp_format = "never"

@@ -1,0 +1,3 @@
+extensions = ["zig"]
+language_ids = ["zig"]
+formatters = ["zig-fmt"]

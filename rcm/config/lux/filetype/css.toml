@@ -1,0 +1,4 @@
+extensions = ["css", "scss"]
+language_ids = ["css", "scss"]
+formatters = ["prettier"]
+lsp_format = "never"

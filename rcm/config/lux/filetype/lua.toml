@@ -1,0 +1,4 @@
+extensions = ["lua"]
+language_ids = ["lua"]
+lsp = "lua-language-server"
+formatters = ["stylua"]

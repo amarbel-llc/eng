@@ -1,0 +1,3 @@
+extensions = ["swift"]
+language_ids = ["swift"]
+formatters = ["swift-format"]

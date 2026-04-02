@@ -1,0 +1,3 @@
+extensions = ["c", "h", "cc", "cpp", "hpp", "cxx", "hxx"]
+language_ids = ["c", "cpp"]
+formatters = ["clang-format"]

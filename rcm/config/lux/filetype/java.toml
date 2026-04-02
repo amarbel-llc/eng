@@ -1,0 +1,3 @@
+extensions = ["java"]
+language_ids = ["java"]
+formatters = ["google-java-format"]

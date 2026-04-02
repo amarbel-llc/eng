@@ -1,0 +1,2 @@
+extensions = ["bats"]
+formatters = ["shfmt"]

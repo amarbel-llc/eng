@@ -40,6 +40,36 @@ args = ["fmt", "-"]
 mode = "stdin"
 
 [[formatter]]
+name = "stylua"
+flake = "nixpkgs#stylua"
+args = ["-"]
+mode = "stdin"
+
+[[formatter]]
+name = "zig-fmt"
+flake = "nixpkgs#zig"
+binary = "zig"
+args = ["fmt", "--stdin"]
+mode = "stdin"
+
+[[formatter]]
+name = "clang-format"
+flake = "nixpkgs#clang-tools"
+binary = "clang-format"
+mode = "stdin"
+
+[[formatter]]
+name = "google-java-format"
+flake = "nixpkgs#google-java-format"
+args = ["-"]
+mode = "stdin"
+
+[[formatter]]
+name = "swift-format"
+flake = "nixpkgs#swift-format"
+mode = "stdin"
+
+[[formatter]]
 name = "pandoc"
 flake = "nixpkgs#pandoc"
 args = ["--columns=80", "-f", "markdown", "-t", "markdown", "--standalone"]
