@@ -29,6 +29,17 @@ args = ["."]
 mode = "stdin"
 
 [[formatter]]
+name = "rustfmt"
+flake = "nixpkgs#rustfmt"
+mode = "stdin"
+
+[[formatter]]
+name = "tommy"
+flake = "github:amarbel-llc/tommy"
+args = ["fmt", "-"]
+mode = "stdin"
+
+[[formatter]]
 name = "pandoc"
 flake = "nixpkgs#pandoc"
 args = ["--columns=80", "-f", "markdown", "-t", "markdown", "--standalone"]

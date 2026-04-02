@@ -1,3 +1,4 @@
 extensions = ["php", "phtml"]
 language_ids = ["php"]
 lsp = "intelephense"
+lsp_format = "prefer"

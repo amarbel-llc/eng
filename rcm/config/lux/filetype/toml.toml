@@ -1,0 +1,4 @@
+extensions = ["toml"]
+formatters = ["tommy"]
+formatter_mode = "chain"
+lsp_format = "never"
