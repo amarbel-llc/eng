@@ -93,6 +93,7 @@ in
     EDITOR = "nvim";
     SHELL = "${pkgs-master.fish}/bin/fish";
     TAP_DANCER_LIB = "${inputs.bob.packages.${system}.tap-dancer-bash}/share/tap-dancer/lib";
+    ZIG_GLOBAL_CACHE_DIR = "${config.xdg.cacheHome}/zig";
   };
 
   # Kitty terminal
