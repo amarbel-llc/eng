@@ -269,7 +269,7 @@ build-nix-darwin:
 
 [working-directory: "rcm"]
 build-rcm: build-rcm-hooks-pre-up build-rcm-hooks-post-up
-  env PATH="/usr/bin:$PATH" rcup
+  env PATH="/usr/bin:$PATH" rcup < /dev/null
 
 [working-directory: "rcm"]
 build-rcm-rcrc:
