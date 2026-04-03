@@ -5,7 +5,8 @@
   - when deciding where to research the repo, agents MUST use the worktree
 - use function names that are descriptive-enough to avoid redundant comments
 - if git committing fails due to gpg-signing, DO NOT try to commit without a
-  signature, instead ask the user to unlock the agent
+  signature, instead ask the user to unlock pivy-agent (the SSH agent that also
+  serves as the GPG signing agent)
 - when debugging or exploring, DO NOT use ad hoc bash scripts or python scripts,
   instead use ad-hoc justfile recipes. mark them with debug or explore groups
 
