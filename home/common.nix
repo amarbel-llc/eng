@@ -14,6 +14,7 @@ in
     ./fish.nix
     ./git.nix
     ./npm.nix
+    ./xdg.nix
     ./wrappers.nix
   ];
 
