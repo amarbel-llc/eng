@@ -13,6 +13,7 @@ in
   imports = [
     ./fish.nix
     ./git.nix
+    ./npm.nix
     ./wrappers.nix
   ];
 
