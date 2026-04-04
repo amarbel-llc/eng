@@ -76,7 +76,7 @@ in
       sshpass
       termdown
       timg
-      tldr
+      tealdeer
       tmux
       tree
       uv
