@@ -17,5 +17,5 @@ name = "dodder"
 command = "dodder mcp"
 
 [[servers]]
-name = "maneater serve mcp"
+name = "maneater"
 command = "maneater serve mcp"
