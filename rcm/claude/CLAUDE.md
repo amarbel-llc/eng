@@ -50,6 +50,13 @@ Repos under friedenberg/ and amarbel-llc/ are migrating from `TODO.md` files to
 GitHub Issues for task management. When working in a repo that still has a
 `TODO.md`, offer to migrate its contents to GitHub Issues and remove the file.
 
+# Environment
+
+- `direnv reload` within Claude sessions NEVER works as expected. If the
+  devshell needs to change (new packages, updated flake inputs), ask the user to
+  restart the session with a `direnv reload` in between. Do not attempt to run
+  `direnv reload` or `direnv allow` from within the session.
+
 # Debugging
 
 - **Signs you are flailing:** you have tried 2+ hypotheses without confirming
