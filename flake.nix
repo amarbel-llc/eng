@@ -89,6 +89,13 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
+    spinclass = {
+      url = "github:amarbel-llc/spinclass";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+      inputs.bob.follows = "bob";
+    };
     ssh-agent-mux = {
       url = "github:amarbel-llc/ssh-agent-mux";
       inputs.nixpkgs.follows = "nixpkgs";
