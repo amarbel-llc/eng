@@ -29,7 +29,7 @@ high-impact patterns that waste development effort:
 
 Five interventions implemented:
 
-1. **Integration test environment** (`devenvs/integration-test/`) --- `nix
+1. **Integration test environment** (`envs/integration-test/`) --- `nix
    develop` shell with SoftHSM2, direnv, ssh-agent, and BATS helpers for
    automated boundary testing
 2. **Rollback/dual-architecture strategies** --- built into brainstorming and
@@ -75,4 +75,4 @@ Every 2 weeks, starting 2026-03-15:
 
 - Evidence: ~300 commits across 33 repos, Feb 14-28, 2026
 - First exploring FDR: `repos/purse-first/docs/features/0002-semver-fdr-integration.md`
-- Integration test environment: `devenvs/integration-test/`
+- Integration test environment: `envs/integration-test/`

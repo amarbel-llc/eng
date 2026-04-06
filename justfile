@@ -105,7 +105,7 @@ install-niri-session:
   pkexec install -m 644 "$src" /usr/share/wayland-sessions/niri.desktop
 
 test-integration:
-  nix develop ./devenvs/integration-test --command just -f devenvs/integration-test/justfile test
+  nix develop ./envs/integration-test --command just -f envs/integration-test/justfile test
 
 clean-nix:
   nix-store --gc
