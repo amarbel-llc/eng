@@ -3,9 +3,6 @@
 # Controls how `lux fmt-all` walks the filesystem and which files it skips.
 # This file is read by lux at runtime; it does not affect `lux fmt <file>`.
 #
-# NOTE: written ahead of the `lux fmt-all` feature landing. Until the
-# subcommand exists this file is inert.
-
 # Walk strategy.
 #   "git" → use git's view of the tree (tracked + untracked-not-ignored).
 #           Falls back to "all" outside a git repository.
@@ -18,6 +15,10 @@ walk = "git"
 exclude_globs = [
   "flake.lock",
   "**/flake.lock",
+  "go.sum",
   "**/go.sum",
+  "Cargo.lock",
   "**/Cargo.lock",
+  "vendor/**",
+  "node_modules/**",
 ]
