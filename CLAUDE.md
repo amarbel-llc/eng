@@ -5,9 +5,9 @@ code in this repository.
 
 ## Overview
 
-Nix-based monorepo aggregating devenv templates, system packages, dotfiles
-(rcm), and 30+ project repos. Published to FlakeHub as `amarbel-llc/eng` on
-every push to master. CI builds on x86_64-linux and aarch64-darwin.
+Nix-based monorepo aggregating system packages, dotfiles (rcm), and 30+ project
+repos. Published to FlakeHub as `amarbel-llc/eng` on every push to master. CI
+builds on x86_64-linux and aarch64-darwin.
 
 ## Build & Update Commands
 
@@ -31,7 +31,7 @@ just update-nix-all     # Both of the above
 just clean              # nix-store --gc
 ```
 
-Format nix files: `nix run ./devenvs/nix#fmt -- path/to/flake.nix`
+Format nix files: `lux fmt path/to/flake.nix`
 
 ## Nix Flake Architecture
 
@@ -61,9 +61,8 @@ Pinned SHAs are stored in `nixpkgs-git-master.git-sha`,
 
 ### Direnv Integration
 
-The repo `.envrc` loads `devenvs/nix` and `devenvs/shell`. Subprojects reference
-devenvs via flake inputs,
-e.g. `go.url = "github:amarbel-llc/purse-first?dir=devenvs/go"`.
+Subprojects reference dev shells via purse-first flake inputs,
+e.g. `go.url = "github:amarbel-llc/purse-first?dir=devenvs/go"`.
 
 ### Home-Manager & Nix-Darwin
 
@@ -147,18 +146,13 @@ Restart Claude Code sessions after install to pick up new plugin config.
   -------------------------------------- --------------------------------------
   `flake.nix`                            Top-level aggregator of all packages
 
-  `devenvs/`                             Symlinks to purse-first devenvs
-                                         (`github:amarbel-llc/purse-first`). 25
-                                         language-specific dev shells (go,
-                                         rust, python, nix, shell, etc.)
+  `envs/`                                Nix dev shells (integration-test)
 
   `systems/{common,darwin,linux}/`       Platform-specific package collections
                                          (\~70 tools)
 
   `home/`                                Home-manager modules (fish, git,
                                          direnv, kitty, packages)
-
-  `pkgs/alfa/`                           Core Nix packages (18 packages)
 
   `repos/`                               30+ separate git repos (dodder, lux,
                                          grit, nix-mcp-server, etc.)
@@ -173,7 +167,7 @@ Restart Claude Code sessions after install to pick up new plugin config.
 
 ### NATO Phonetic Module Hierarchy
 
-Used in dodder and pkgs/ to enforce dependency direction and prevent cycles:
+Used in dodder to enforce dependency direction and prevent cycles:
 
 `alfa` (foundational, no deps) → `bravo` → `charlie` → ... → `india` (top-level)
 
@@ -181,8 +175,7 @@ Each layer may only depend on layers below it.
 
 ## Code Style
 
-- **Nix**: Format with `nixfmt-rfc-style` (available via
-  `nix run ./devenvs/nix#fmt`)
+- **Nix**: Format with `nixfmt-rfc-style` (via `lux fmt`)
 - **Shell**: `set -euo pipefail`, 2-space indent, `[[ ]]` conditionals, quote
   all vars. Format with `shfmt -s -i=2`
 - **Go**: `goimports` + `gofumpt`. Follow NATO module hierarchy. Never
@@ -200,7 +193,7 @@ skills) is required when ANY of these apply:
 - **CLI surface area** --- adding, removing, or renaming user-facing commands,
   flags, or output formats
 - **Cross-repo coordination** --- changes that must land in multiple repos/
-- **New project** --- creating a new flake, package, or devenv
+- **New project** --- creating a new flake or package
 
 Not required: single-file bug fixes, documentation, dependency updates,
 formatting/linting, test additions for existing behavior.
@@ -264,8 +257,7 @@ aliases split into individual files under `config/git/aliases/`.
 
 Each subproject has its own test setup. Common patterns: - **Go**:
 `go test -v ./...` or `just test` - **Rust**: `cargo test` - **Nix**:
-`nix flake check` - **CLI integration**: `bats` framework (devenv at
-`devenvs/bats/`)
+`nix flake check` - **CLI integration**: `bats` framework
 
 **Run a single test first** to validate the environment before running the full
 suite. Use `head`/`tail` to limit test output in context --- don't paste

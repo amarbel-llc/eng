@@ -1,5 +1,5 @@
 {
-  description = "Monorepo containing devenv templates and system packages";
+  description = "Monorepo containing system packages and project repos";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/4590696c8693fea477850fe379a01544293ca4e2";
