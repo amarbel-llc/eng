@@ -162,7 +162,7 @@ Restart Claude Code sessions after install to pick up new plugin config.
 
   `bin/`                                 Utility scripts (update_flakes.bash)
 
-  `docs/`                                nix-patterns.md, system-patterns.md
+  `docs/`                                Plans, features, and decision records
   -----------------------------------------------------------------------------
 
 ### NATO Phonetic Module Hierarchy
