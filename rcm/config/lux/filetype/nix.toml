@@ -1,3 +1,6 @@
 extensions = ["nix"]
 language_ids = ["nix"]
 lsp = "nil"
+formatters = ["nixfmt"]
+formatter_mode = "chain"
+lsp_format = "never"

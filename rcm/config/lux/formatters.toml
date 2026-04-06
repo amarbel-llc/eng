@@ -74,3 +74,8 @@ name = "pandoc"
 flake = "nixpkgs#pandoc"
 args = ["--columns=80", "-f", "markdown", "-t", "markdown", "--standalone"]
 mode = "stdin"
+
+[[formatter]]
+name = "nixfmt"
+flake = "nixpkgs#nixfmt-rfc-style"
+mode = "stdin"

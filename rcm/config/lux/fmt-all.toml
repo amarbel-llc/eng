@@ -1,0 +1,23 @@
+# lux fmt-all configuration
+#
+# Controls how `lux fmt-all` walks the filesystem and which files it skips.
+# This file is read by lux at runtime; it does not affect `lux fmt <file>`.
+#
+# NOTE: written ahead of the `lux fmt-all` feature landing. Until the
+# subcommand exists this file is inert.
+
+# Walk strategy.
+#   "git" → use git's view of the tree (tracked + untracked-not-ignored).
+#           Falls back to "all" outside a git repository.
+#   "all" → walk every file under the root, skipping only .git/ and symlinks.
+walk = "git"
+
+# Glob patterns (relative to the walk root) to skip even when git would
+# include them. Use this for committed-but-generated files where running a
+# formatter would cause spurious churn.
+exclude_globs = [
+  "flake.lock",
+  "**/flake.lock",
+  "**/go.sum",
+  "**/Cargo.lock",
+]
