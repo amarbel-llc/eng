@@ -59,11 +59,6 @@ Every flake uses this pattern --- do not deviate:
 Pinned SHAs are stored in `nixpkgs-git-master.git-sha`,
 `nixpkgs-stable-git.git-sha`, and `nixpkgs-stable-darwin-git.git-sha`.
 
-### Direnv Integration
-
-Subprojects reference dev shells via purse-first flake inputs,
-e.g. `go.url = "github:amarbel-llc/purse-first?dir=devenvs/go"`.
-
 ### Home-Manager & Nix-Darwin
 
 User environment and macOS system settings are managed declaratively via
