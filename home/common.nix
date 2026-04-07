@@ -88,7 +88,6 @@ in
       zstd
     ])
     ++ (with pkgs; [
-      crush
       csvkit
     ]);
 

@@ -83,7 +83,6 @@
       ;
 
     inherit (pkgs)
-      crush
       csvkit
       fh
       gftp
