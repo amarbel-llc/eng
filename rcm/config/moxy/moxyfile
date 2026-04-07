@@ -19,3 +19,7 @@ command = "dodder mcp"
 [[servers]]
 name = "maneater"
 command = "maneater serve mcp"
+
+[[servers]]
+name = "folio"
+command = "folio serve mcp"
