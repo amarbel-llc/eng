@@ -10,6 +10,11 @@ let
   pivy = inputs.pivy.packages.${system}.default;
 in
 {
+  home.sessionVariables = {
+    SSH_ASKPASS = "${pivy}/libexec/pivy/pivy-askpass";
+    SSH_ASKPASS_REQUIRE = "force";
+  };
+
   launchd.agents.pivy-agent = lib.mkIf pkgs.stdenv.isDarwin {
     enable = true;
     config = {
