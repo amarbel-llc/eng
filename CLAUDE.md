@@ -23,10 +23,13 @@ just install-bob          # Build + validate + install bob marketplace
 just validate-purse-first # Build + validate only (no install)
 just validate-bob         # Build + validate only (no install)
 
-just update-nixpkgs     # Fetch latest stable/master commit SHAs
-just update-nix         # Update flake inputs in eng (excludes repos/)
-just update-nix-repos   # Update all repos/ flake inputs in parallel
-just update-nix-all     # Both of the above
+just bump-nixpkgs       # Bump nixpkgs-master pin to upstream HEAD,
+                        # refresh flake.lock, build to verify, print
+                        # version diff, and commit. Canonical entry
+                        # point for moving the master pin.
+just update-nix-flake   # nix flake update (refreshes lockfile only;
+                        # SHA-pinned inputs like nixpkgs-master unaffected)
+just update-nix-repos   # Cascade master SHA to repos/* flakes (no commit)
 
 just clean              # nix-store --gc
 ```
@@ -56,8 +59,25 @@ Every flake uses this pattern --- do not deviate:
 - `utils` → `flake-utils` from FlakeHub
 - Variables: `pkgs = import nixpkgs`, `pkgs-master = import nixpkgs-master`
 
-Pinned SHAs are stored in `nixpkgs-git-master.git-sha`,
-`nixpkgs-stable-git.git-sha`, and `nixpkgs-stable-darwin-git.git-sha`.
+**Pin form (eng's top-level `flake.nix`):**
+
+- `nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11"` --- branch ref. Bumps
+  happen automatically via `nix flake update` (or `just update-nix-flake`)
+  whenever the release branch advances.
+- `nixpkgs-master.url = "github:NixOS/nixpkgs/<sha>"` --- SHA literal,
+  mirrored in `nixpkgs-git-master.git-sha`. Only moves via
+  `just bump-nixpkgs`, which fetches the new SHA, edits the literal,
+  refreshes the lockfile, builds to verify, prints a sentinel-package
+  version diff, and stages the changes for review. Rolling back to a
+  previous SHA is a one-line edit to `flake.nix` followed by
+  `nix flake update nixpkgs-master`.
+
+Sub-repo flakes in `repos/` still use SHA literals for both inputs
+today; `just update-nix-repos` cascades the master SHA into them via a
+line-anchored `sed` (no `fh add`, no FlakeHub round-trip) and stages
+each repo's changes for review. Their stable pin is unaffected by the
+cascade — bump it standalone with `nix flake update nixpkgs` per
+sub-repo if needed.
 
 ### Home-Manager & Nix-Darwin
 

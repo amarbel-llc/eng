@@ -18,7 +18,7 @@ default: \
 # existing sessions
 check-active_sessions:
 
-update: update-git update-nixpkgs update-nix-flake update-repos
+update: update-git bump-nixpkgs update-repos
 
 update-git:
   git sync
@@ -27,6 +27,9 @@ update-git:
 update-repos:
   tap-dancer exec-parallel "cd {} && git pull" ::: "$HOME/eng/repos/"*
 
+# Refresh flake.lock to pick up upstream movement on branch-ref inputs
+# (e.g. nixpkgs stable on nixos-25.11). SHA-pinned inputs like
+# nixpkgs-master are unaffected — those only move via `just bump-nixpkgs`.
 update-nix-flake:
   nix flake update
 
@@ -185,47 +188,92 @@ update-kitty:
   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
   pkexec sh -c "ln -sf $HOME/.local/kitty.app/bin/kitty /usr/bin/kitty && ln -sf $HOME/.local/kitty.app/bin/kitten /usr/bin/kitten"
 
-nix_nixpkgs_stable_git_branch := "nixos-25.11"
-nix_nixpkgs_stable_darwin_git_branch := nix_nixpkgs_stable_git_branch + "-darwin"
-
 export file_nixpkgs_git_master_sha := "nixpkgs-git-master.git-sha"
-export file_nixpkgs_stable_git_sha := "nixpkgs-stable-git.git-sha"
-export file_nixpkgs_stable_darwin_git_sha := "nixpkgs-stable-darwin-git.git-sha"
 
-# TODO add flake-utils
-update-nixpkgs:
+# Fetch the latest nixpkgs master SHA and write it to the pin file.
+# Implementation detail of `bump-nixpkgs` — not meant to be invoked directly.
+_fetch-nixpkgs-master-sha:
   #!/usr/bin/env bash
+  set -euo pipefail
+  gum log --level info "fetching nixpkgs master HEAD"
+  sha="$(git ls-remote https://github.com/NixOS/nixpkgs refs/heads/master | awk '{print $1}')"
+  if [[ -z "$sha" ]]; then
+    gum log --level error "failed to resolve nixpkgs master"
+    exit 1
+  fi
+  gum log --level info "nixpkgs master = $sha"
+  echo "$sha" > {{file_nixpkgs_git_master_sha}}
 
+# Bump nixpkgs-master to the latest upstream HEAD: rewrites the SHA literal
+# in flake.nix, refreshes flake.lock, builds to verify, prints a sentinel
+# package version diff, and commits the result. The commit only touches
+# flake.nix, flake.lock, and the SHA pin file — any unrelated staged
+# changes are left alone.
+bump-nixpkgs:
+  #!/usr/bin/env bash
   set -euo pipefail
 
-  # Track visited flakes to avoid cycles
-  declare -A visited
-
-  echo "Fetching nixpkgs unstable git master digest..." >&2
-  nix_nixpkgs_git_master_digest="$(git ls-remote https://github.com/NixOS/nixpkgs refs/heads/master | awk '{print $1}')"
-  echo "Fetched nixpkgs unstable git master digest: ${nix_nixpkgs_git_master_digest}" >&2
-  echo ${nix_nixpkgs_git_master_digest} > {{file_nixpkgs_git_master_sha}}
-
-  echo "Fetching nixpkgs stable git {{nix_nixpkgs_stable_git_branch}} digest..." >&2
-  nix_nixpkgs_stable_git_digest="$(git ls-remote https://github.com/NixOS/nixpkgs refs/heads/{{nix_nixpkgs_stable_git_branch}} | awk '{print $1}')"
-  echo "Fetched nixpkgs stable git {{nix_nixpkgs_stable_git_branch}} digest: ${nix_nixpkgs_stable_git_digest}" >&2
-  echo ${nix_nixpkgs_stable_git_digest} > {{file_nixpkgs_stable_git_sha}}
-
-  echo "Fetching nixpkgs stable_darwin git {{nix_nixpkgs_stable_darwin_git_branch}} digest..." >&2
-  nix_nixpkgs_stable_darwin_git_digest="$(git ls-remote https://github.com/NixOS/nixpkgs refs/heads/{{nix_nixpkgs_stable_darwin_git_branch}} | awk '{print $1}')"
-  if [[ -z "$nix_nixpkgs_stable_darwin_git_digest" ]]; then
-    echo "Warning: {{nix_nixpkgs_stable_darwin_git_branch}} branch not found, skipping" >&2
-  else
-    echo "Fetched nixpkgs stable_darwin git {{nix_nixpkgs_stable_darwin_git_branch}} digest: ${nix_nixpkgs_stable_darwin_git_digest}" >&2
-    echo ${nix_nixpkgs_stable_darwin_git_digest} > {{file_nixpkgs_stable_darwin_git_sha}}
+  # Capture the current pin so we can diff versions after the bump.
+  old_sha="$(grep -oE 'nixpkgs-master\.url = "github:NixOS/nixpkgs/[0-9a-f]{40}"' flake.nix | grep -oE '[0-9a-f]{40}')"
+  if [[ -z "$old_sha" ]]; then
+    gum log --level error "could not find nixpkgs-master SHA literal in flake.nix"
+    exit 1
   fi
 
+  just _fetch-nixpkgs-master-sha
+  new_sha="$(cat {{file_nixpkgs_git_master_sha}})"
+
+  if [[ "$old_sha" == "$new_sha" ]]; then
+    gum log --level info "nixpkgs-master already at $new_sha — no-op"
+    exit 0
+  fi
+
+  gum log --level info "bumping nixpkgs-master: $old_sha → $new_sha"
+  sed -i -E "/nixpkgs-master\.url/ s|(github:NixOS/nixpkgs/)[0-9a-f]{40}|\\1${new_sha}|" flake.nix
+
+  gum log --level info "refreshing flake.lock"
+  nix flake update nixpkgs-master
+
+  gum log --level info "building eng to verify"
+  nix build --show-trace
+
+  # Sentinel package version diff. Each side is one eval over the
+  # nixpkgs ref; if the eval fails (e.g. attribute renamed), we just
+  # skip that sentinel rather than failing the whole bump. The rendered
+  # diff is captured into $version_diff so it can go into the commit
+  # body.
+  gum log --level info "computing version diff"
+  versions_expr='p: { fish = p.fish.version or "?"; git = p.git.version or "?"; claude-code = p.claude-code.version or "?"; gopls = p.gopls.version or "?"; }'
+  version_diff=""
+  if old_versions="$(nix eval --json --apply "$versions_expr" "github:NixOS/nixpkgs/${old_sha}#legacyPackages.x86_64-linux" 2>/dev/null)" \
+    && new_versions="$(nix eval --json --apply "$versions_expr" "github:NixOS/nixpkgs/${new_sha}#legacyPackages.x86_64-linux" 2>/dev/null)"; then
+    version_diff="$(jq -nr --argjson old "$old_versions" --argjson new "$new_versions" '
+      ($old | keys) as $names
+      | $names[]
+      | "  \(.): \($old[.]) → \($new[.])"
+    ')"
+    echo "$version_diff"
+  else
+    gum log --level warn "version diff eval failed — skipping"
+  fi
+
+  # Commit only the bump-related paths so unrelated staged changes in
+  # the index are not swept into this commit.
+  gum log --level info "committing bump"
+  commit_msg="bump nixpkgs-master: ${old_sha:0:7} → ${new_sha:0:7}"
+  if [[ -n "$version_diff" ]]; then
+    commit_msg="$(printf '%s\n\n%s\n' "$commit_msg" "$version_diff")"
+  fi
+  git commit flake.nix flake.lock {{file_nixpkgs_git_master_sha}} -m "$commit_msg"
 
 # Update flakes in main eng repo (excludes repos/ and worktrees/)
 update-nix:
   UPDATE_FLAKES_EXCLUDE="./repos/* ./worktrees/*" ./bin/update_flakes.bash
 
-# Full lifecycle update for a single repo (pull, update inputs, build, commit, push)
+# Pull a sub-repo, cascade eng's nixpkgs-master SHA into its flake.nix,
+# refresh its flake.lock, and stage the changes for human review. Does
+# NOT auto-commit, push, or run the sub-repo's default just recipe —
+# those are footguns when fanned out across 30+ repos.
 [no-exit-message]
 _update-repo-full dir:
   #!/usr/bin/env bash
@@ -244,33 +292,19 @@ _update-repo-full dir:
     exit 0
   fi
 
-  stable_sha="$(cat "$eng_dir/{{file_nixpkgs_stable_git_sha}}")"
   master_sha="$(cat "$eng_dir/{{file_nixpkgs_git_master_sha}}")"
 
   git pull --rebase
 
-  if ! grep -q 'nixpkgs\.follows' flake.nix; then
-    fh add "github:NixOS/nixpkgs/${stable_sha}"
-  fi
-
-  if grep -q 'nixpkgs-master' flake.nix && ! grep -q 'nixpkgs-master\.follows' flake.nix; then
-    fh add --input-name nixpkgs-master "github:NixOS/nixpkgs/${master_sha}"
-  fi
-
-  if ! grep -q 'utils\.follows' flake.nix; then
-    fh add --input-name utils numtide/flake-utils
+  if grep -q 'nixpkgs-master\.url' flake.nix; then
+    sed -i -E "/nixpkgs-master\.url/ s|(github:NixOS/nixpkgs/)[0-9a-f]{40}|\\1${master_sha}|" flake.nix
   fi
 
   nix flake update
 
-  if [[ -f justfile ]]; then
-    just
-  fi
-
   if ! git diff --quiet flake.nix flake.lock; then
     git add flake.nix flake.lock
-    git commit -m "update flake.lock"
-    git push
+    gum log --level info "$(basename "$dir"): staged flake.nix + flake.lock"
   fi
 
 # Update flakes in repos/ in parallel (separate git repositories)

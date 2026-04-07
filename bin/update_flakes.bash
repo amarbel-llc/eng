@@ -32,33 +32,24 @@ update_flake_recursive() {
 
     for dep in $deps; do
       # Convert relative to absolute path
-      if [[ ! $dep == /* ]]; then
+      if [[ $dep != /* ]]; then
         dep="$abs_dir/$dep"
       fi
       update_flake_recursive "$dep"
     done
   fi
 
-  local master_flake_path
-  local stable_flake_path
+  local master_sha
+  master_sha="$(cat "$file_nixpkgs_git_master_sha")"
 
-  stable_flake_path="github:NixOS/nixpkgs/$(cat "$file_nixpkgs_stable_git_sha")"
-  master_flake_path="github:NixOS/nixpkgs/$(cat "$file_nixpkgs_git_master_sha")"
-
-  # Update current flake after dependencies (stable-first convention)
+  # Cascade eng's nixpkgs-master pin into this flake's nixpkgs-master
+  # input via a line-anchored sed. The /nixpkgs-master\.url/ address
+  # ensures we only touch the master SHA literal even when the flake
+  # also has a stable nixpkgs SHA literal on a separate line.
   echo "Updating: $abs_dir"
 
-  if ! grep -q 'nixpkgs\.follows' "$abs_dir/flake.nix"; then
-    (cd "$abs_dir" && fh add "${stable_flake_path}")
-  fi
-
-  if grep -q 'nixpkgs-master' "$abs_dir/flake.nix" && \
-     ! grep -q 'nixpkgs-master\.follows' "$abs_dir/flake.nix"; then
-    (cd "$abs_dir" && fh add --input-name nixpkgs-master "${master_flake_path}")
-  fi
-
-  if ! grep -q 'utils\.follows' "$abs_dir/flake.nix"; then
-    (cd "$abs_dir" && fh add --input-name utils numtide/flake-utils)
+  if grep -q 'nixpkgs-master\.url' "$abs_dir/flake.nix"; then
+    sed -i -E "/nixpkgs-master\.url/ s|(github:NixOS/nixpkgs/)[0-9a-f]{40}|\\1${master_sha}|" "$abs_dir/flake.nix"
   fi
 
   # Check if flake.nix is tracked by git - if not, use path: prefix
@@ -80,7 +71,7 @@ exclude_patterns="${UPDATE_FLAKES_EXCLUDE:-}"
 
 # Build find exclude args from space-separated patterns
 find_excludes=()
-set -f  # disable globbing for pattern splitting
+set -f # disable globbing for pattern splitting
 for pattern in $exclude_patterns; do
   find_excludes+=(-not -path "$pattern")
 done
