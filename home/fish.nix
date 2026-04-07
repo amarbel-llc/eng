@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs-master,
   lib,
   ...
 }:
@@ -26,6 +27,7 @@ in
 {
   programs.fish = {
     enable = true;
+    package = pkgs-master.fish;
 
     shellInit = ''
       # Nix setup
