@@ -21,7 +21,6 @@
       fish
       fontconfig
       fswatch
-      fh
       freeze
       gawk
       gh
@@ -86,6 +85,7 @@
 
     inherit (pkgs)
       csvkit
+      fh
       gftp
       ;
   };
