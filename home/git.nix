@@ -40,7 +40,6 @@ let
     }) aliasFiles
   );
 
-  signingKey = identity.gitSigningKey or "";
 in
 {
   programs.git = {
@@ -70,7 +69,9 @@ in
       user = {
         name = identity.gitUserName;
         email = identity.gitUserEmail;
+        signingKey = identity.gitSigningKey;
       };
+      commit.gpgsign = true;
       core = {
         whitespace = "nowarn";
         excludesFile = "~/.config/git/ignore";
@@ -122,19 +123,5 @@ in
   xdg.configFile = aliasXdgFiles // {
     # Generated alias config (replaces config-aliases.rcm-script)
     "git/config-aliases".text = aliasConfigText;
-
-    # Signing config for opt-in per-repo (git set-signed)
-    "git/config-signed".text = ''
-      # vim: ft=gitconfig
-
-      [commit]
-      	gpgsign = true
-      [gpg]
-        format = ssh
-      [user]
-      	signingKey = ${signingKey}
-      [gpg "ssh"]
-      	program = ssh-keygen
-    '';
   };
 }
