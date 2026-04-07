@@ -26,34 +26,34 @@ const gitEmail = (await gum`gum input --prompt 'Git email: '`).stdout.trim();
 
 let signingKey = "";
 
-const pivySocket = process.env.PIVY_AUTH_SOCK || "";
-if (pivySocket) {
+const sshSocket = process.env.SSH_AUTH_SOCK || "";
+if (sshSocket) {
   try {
-    const keys = execSync(`SSH_AUTH_SOCK=${pivySocket} ssh-add -L`, {
+    const keys = execSync("ssh-add -L", {
       encoding: "utf-8",
     }).trim();
 
     const keyLines = keys.split("\n").filter((l) => l.length > 0);
 
     if (keyLines.length === 0) {
-      await $({ stdio: "inherit" })`gum log --level warn "no keys found on pivy-agent, skipping signing key"`;
+      await $({ stdio: "inherit" })`gum log --level warn "no keys found on SSH agent, skipping signing key"`;
     } else {
       let chosen;
       if (keyLines.length === 1) {
         chosen = keyLines[0];
       } else {
         chosen = (
-          await gum`echo ${keyLines.join("\n")} | gum choose --header 'Select signing key from pivy-agent:'`
+          await gum`echo ${keyLines.join("\n")} | gum choose --header 'Select signing key from SSH agent:'`
         ).stdout.trim();
       }
       const parts = chosen.split(" ");
       signingKey = `key::${parts[0]} ${parts[1]}`;
     }
   } catch {
-    await $({ stdio: "inherit" })`gum log --level warn "no keys found on pivy-agent, skipping signing key"`;
+    await $({ stdio: "inherit" })`gum log --level warn "no keys found on SSH agent, skipping signing key"`;
   }
 } else {
-  await $({ stdio: "inherit" })`gum log --level warn "PIVY_AUTH_SOCK not set, skipping signing key"`;
+  await $({ stdio: "inherit" })`gum log --level warn "SSH_AUTH_SOCK not set, skipping signing key"`;
 }
 
 if (isDarwin) {
