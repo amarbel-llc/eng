@@ -19,6 +19,10 @@ in
   ];
 
   programs.home-manager.enable = true;
+  programs.man = {
+    enable = true;
+    generateCaches = true;
+  };
 
   news.display = "silent";
 
