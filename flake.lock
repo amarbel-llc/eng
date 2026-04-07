@@ -5838,11 +5838,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775482488,
-        "narHash": "sha256-iolx4EsIpBu6cgHFqG97/1/r/lRQSM7bLlwmM9I9fKo=",
+        "lastModified": 1775559559,
+        "narHash": "sha256-mQ6+u3mjx8dtlS4Odwlrje4vbWQjQQf9kgMaDCtEOyA=",
         "owner": "amarbel-llc",
         "repo": "spinclass",
-        "rev": "8594c96b8f578493be59b2659b3efe594f65866f",
+        "rev": "3a3ad3c6fe5b50710c076a4b770ca68bd32c425b",
         "type": "github"
       },
       "original": {
