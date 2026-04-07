@@ -70,6 +70,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
+      inputs.pivy.follows = "pivy";
     };
     pivy = {
       url = "github:amarbel-llc/pivy";
