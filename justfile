@@ -124,7 +124,13 @@ clean-result-symlinks:
 
 clean: clean-result-symlinks clean-direnv-cache clean-direnv clean-nix
 
-# update /bin/fish symlink to match the current nix-built fish
+# update /bin/fish symlink and /etc/shells to match the current nix-built fish
+#
+# When fish is upgraded via home-manager, $SHELL ends up pointing at the new
+# nix store path. sudo validates inherited $SHELL against /etc/shells and
+# refuses to run if it's not listed ("incident has been reported"), so this
+# recipe both registers the store path in /etc/shells and strips $SHELL when
+# invoking sudo so the command can run from the just-upgraded environment.
 update-login-shell:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -133,18 +139,31 @@ update-login-shell:
     gum log --level info "not Linux, skipping fish login shell update"
     exit 0
   fi
+
   target="$(readlink -f "$(which fish)")"
+
+  # pkexec resets env (including SHELL); plain sudo inherits it and refuses
+  # if SHELL isn't in /etc/shells, so we strip SHELL when using sudo.
+  if [[ -n "${DISPLAY:-}" || -n "${WAYLAND_DISPLAY:-}" ]]; then
+    privesc=(pkexec)
+  else
+    privesc=(env -u SHELL sudo)
+  fi
+
+  # Step 1: register the resolved fish path in /etc/shells (idempotent).
+  if ! grep -Fxq "$target" /etc/shells; then
+    gum log --level info "adding $target to /etc/shells"
+    "${privesc[@]}" tee -a /etc/shells > /dev/null <<<"$target"
+  fi
+
+  # Step 2: update /bin/fish symlink to point at the resolved fish path.
   current="$(readlink -f /bin/fish 2>/dev/null || true)"
   if [[ "$target" == "$current" ]]; then
     gum log --level info "/bin/fish already up to date"
     exit 0
   fi
   gum log --level info "updating /bin/fish -> $target"
-  if [[ -n "${DISPLAY:-}" || -n "${WAYLAND_DISPLAY:-}" ]]; then
-    pkexec ln -sf "$target" /bin/fish
-  else
-    sudo ln -sf "$target" /bin/fish
-  fi
+  "${privesc[@]}" ln -sf "$target" /bin/fish
 
 update-kitty:
   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
