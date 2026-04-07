@@ -81,6 +81,7 @@
       yubico-piv-tool
       yt-dlp
       zstd
+      zx
       ;
 
     inherit (pkgs)
