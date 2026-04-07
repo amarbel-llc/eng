@@ -13,6 +13,7 @@ walk = "git"
 # include them. Use this for committed-but-generated files where running a
 # formatter would cause spurious churn.
 exclude_globs = [
+  "**",
   "flake.lock",
   "**/flake.lock",
   "go.sum",
