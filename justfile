@@ -124,13 +124,19 @@ clean-result-symlinks:
 
 clean: clean-result-symlinks clean-direnv-cache clean-direnv clean-nix
 
-# update /bin/fish symlink and /etc/shells to match the current nix-built fish
+# update /bin/fish symlink, /etc/shells, and the fish GC root
 #
 # When fish is upgraded via home-manager, $SHELL ends up pointing at the new
 # nix store path. sudo validates inherited $SHELL against /etc/shells and
 # refuses to run if it's not listed ("incident has been reported"), so this
 # recipe both registers the store path in /etc/shells and strips $SHELL when
 # invoking sudo so the command can run from the just-upgraded environment.
+#
+# The /bin/fish symlink is not itself a GC root — the fish store path it
+# points to is only protected as long as it's reachable from the active
+# home-manager profile. To keep /bin/fish from going dangling after a stale
+# generation gets GC'd, we also pin the fish store path via an indirect GC
+# root under ~/.local/share/nix/gcroots.
 update-login-shell:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -141,6 +147,9 @@ update-login-shell:
   fi
 
   target="$(readlink -f "$(which fish)")"
+  # Walk up from .../bin/fish to the package store path itself so the GC
+  # root protects the whole package, not just the binary path inside it.
+  fish_store_path="${target%/bin/fish}"
 
   # pkexec resets env (including SHELL); plain sudo inherits it and refuses
   # if SHELL isn't in /etc/shells, so we strip SHELL when using sudo.
@@ -156,7 +165,14 @@ update-login-shell:
     "${privesc[@]}" tee -a /etc/shells > /dev/null <<<"$target"
   fi
 
-  # Step 2: update /bin/fish symlink to point at the resolved fish path.
+  # Step 2: pin the fish store path as an indirect GC root so /bin/fish
+  # can't be orphaned by `nix-store --gc`. Idempotent — re-running with a
+  # new store path just repoints the existing gcroot.
+  gcroot="$HOME/.local/share/nix/gcroots/login-shell-fish"
+  mkdir -p "$(dirname "$gcroot")"
+  nix-store --add-root "$gcroot" --indirect --realise "$fish_store_path" > /dev/null
+
+  # Step 3: update /bin/fish symlink to point at the resolved fish path.
   current="$(readlink -f /bin/fish 2>/dev/null || true)"
   if [[ "$target" == "$current" ]]; then
     gum log --level info "/bin/fish already up to date"
