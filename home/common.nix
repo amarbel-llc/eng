@@ -28,7 +28,6 @@ in
       asdf
       asdf-vm
       coreutils
-      crush
       curl
       dash
       eternal-terminal
@@ -89,6 +88,7 @@ in
       zstd
     ])
     ++ (with pkgs; [
+      crush
       csvkit
     ]);
 

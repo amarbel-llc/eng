@@ -8,7 +8,6 @@
       asdf-vm
       claude-code
       coreutils
-      crush
       curl
       curlftpfs
       dash
@@ -84,6 +83,7 @@
       ;
 
     inherit (pkgs)
+      crush
       csvkit
       fh
       gftp
