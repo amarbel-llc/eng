@@ -154,10 +154,12 @@ update-login-shell:
   # root protects the whole package, not just the binary path inside it.
   fish_store_path="${target%/bin/fish}"
 
-  # pkexec resets env (including SHELL); plain sudo inherits it and refuses
-  # if SHELL isn't in /etc/shells, so we strip SHELL when using sudo.
+  # Both pkexec and sudo check the caller's $SHELL against /etc/shells and
+  # refuse (pkexec exits 127 with "This incident has been reported.") if the
+  # current fish store path has been GC'd out. Strip SHELL in both branches
+  # so the recipe can bootstrap after a nixpkgs bump.
   if [[ -n "${DISPLAY:-}" || -n "${WAYLAND_DISPLAY:-}" ]]; then
-    privesc=(pkexec)
+    privesc=(env -u SHELL pkexec)
   else
     privesc=(env -u SHELL sudo)
   fi
