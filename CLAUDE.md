@@ -120,14 +120,9 @@ and restore any removed sentinel entries. One commit.
 
 Current wrapper pins:
 
-- `claude-code` → 2.1.87 (nixpkgs `9a7bc070e6`) — held back from 2.1.89+
-  due to alternate-screen buffer regression that corrupts terminal
-  scrollback and leaves text overlapping on exit
-  (anthropics/claude-code#42670, #42340). 2.1.88 would be a tighter pin
-  but anthropic has unpublished its npm tarball and the claude-code-bin
-  mirror 404s, so 2.1.87 is the closest fetchable version. Spinclass
-  sessions call `exec.Command("claude", ...)` from PATH, so the wrapper
-  is what spinclass actually runs.
+- `claude-code` → 2.1.86 (nixpkgs `5844564e81`) — Spinclass sessions call
+  `exec.Command("claude", ...)` from PATH, so the wrapper is what
+  spinclass actually runs.
 
 ### Home-Manager & Nix-Darwin
 

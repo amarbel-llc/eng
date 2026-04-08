@@ -5,15 +5,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/ae921939fcbd44874664477bd1d22543c10a8306";
     # Frozen tree used only by the claude wrapper in home/wrappers.nix to pin
-    # claude-code to 2.1.87 — the last release before the v2.1.89+ alternate-
-    # screen buffer regression (anthropics/claude-code#42670, #42340) whose
-    # source and binary tarballs are still available. 2.1.88 was originally
-    # targeted but anthropic unpublished its npm tarball (and its claude-code-bin
-    # mirror returns 404), making it unbuildable from source or binary.
-    # Not followed by anything — bump-nixpkgs leaves it alone because its sed
-    # is anchored to `nixpkgs-master.url`. Unpin by removing this input and
-    # reverting home/wrappers.nix + systems/common.
-    nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/9a7bc070e6fd7e4d001881241dffa07f488db87f";
+    # claude-code to 2.1.86. Not followed by anything — bump-nixpkgs leaves it
+    # alone because its sed is anchored to `nixpkgs-master.url`. Unpin by
+    # removing this input and reverting home/wrappers.nix + systems/common.
+    nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/5844564e81fb318c6d12f6cd68e73208bdf54e72";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     home-manager = {
