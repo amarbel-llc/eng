@@ -93,10 +93,14 @@ Pattern:
    last known-good nixpkgs revision, e.g.
    `nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/<sha>"`.
    Do not `follows` anything — it must stay frozen.
-2. Import it for each system and thread it through `extraSpecialArgs`
-   (and `specialArgs` on darwin) as `pkgs-<name>-pinned`. Must be wired
-   into BOTH `homeConfigurations.linux` and the darwin block — see the
-   `TODO(dry)` at the top of `flake.nix` `let` block.
+2. Add the import to `home/special-args.nix` as `pkgs-<name>-pinned`.
+   This is the ONLY place the pinned tree needs to be wired into
+   home-manager plumbing — the helper returned by that file is shared
+   by both `homeConfigurations.linux` and the nested home-manager block
+   inside `darwinConfigurations.${hostname}`, so a single line here
+   reaches both platforms. Do not thread it directly through
+   `flake.nix` — that's the pre-consolidation pattern (see #18) and
+   guarantees drift between the two branches.
 3. In `home/wrappers.nix`, define a `writeShellScriptBin` wrapper that
    `exec`s the binary from the pinned tree. This wrapper becomes the
    sole authoritative `$PATH` entry for that command.

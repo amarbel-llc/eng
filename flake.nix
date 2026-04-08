@@ -142,34 +142,18 @@
       # Create the file with: { "username": "...", "homeDirectory": "/Users/...", "hostname": "..." }
       darwinIdentity = builtins.fromJSON (builtins.readFile /etc/nix-darwin/identity.json);
 
-      darwinPkgsMaster = import nixpkgs-master {
-        system = "aarch64-darwin";
-        config.allowUnfree = true;
-      };
-
-      # TODO(dry): the linux and darwin home-manager blocks both construct
-      # the same set of pkgs/pkgs-master/pkgs-claude-code-pinned imports and
-      # thread them through extraSpecialArgs. Consolidate into a single
-      # helper that takes `system` and returns the specialArgs set. Until
-      # then, any new pinned-tree input needs to be wired into BOTH blocks.
-      darwinPkgsClaudeCodePinned = import inputs.nixpkgs-claude-code-pinned {
-        system = "aarch64-darwin";
-        config.allowUnfree = true;
-      };
+      # Builder for home-manager (extra)specialArgs, shared by the Linux
+      # and darwin branches below. See ./home/special-args.nix for the
+      # full rationale — short version: adding a new pinned-tree input
+      # (CLAUDE.md → "Wrapper-Pinned Packages") should be a one-line
+      # change in that file, not a three-site edit here.
+      mkHomeSpecialArgs = import ./home/special-args.nix { inherit inputs; };
     in
     {
       homeConfigurations.linux =
         let
           system = "x86_64-linux";
           pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
-          pkgs-master = import nixpkgs-master {
-            inherit system;
-            config.allowUnfree = true;
-          };
-          pkgs-claude-code-pinned = import inputs.nixpkgs-claude-code-pinned {
             inherit system;
             config.allowUnfree = true;
           };
@@ -187,8 +171,7 @@
         in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = {
-            inherit inputs pkgs-master pkgs-claude-code-pinned;
+          extraSpecialArgs = (mkHomeSpecialArgs system) // {
             identity = linuxIdentity;
           };
           modules = [
@@ -198,40 +181,42 @@
           ++ optionalNssModule;
         };
 
-      darwinConfigurations.${darwinIdentity.hostname} = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          identity = darwinIdentity;
-          inherit inputs;
-          pkgs-master = darwinPkgsMaster;
-          pkgs-claude-code-pinned = darwinPkgsClaudeCodePinned;
+      darwinConfigurations.${darwinIdentity.hostname} =
+        let
+          # darwinSpecialArgs is reused in two places below:
+          #   1. nix-darwin's top-level `specialArgs`
+          #   2. the nested `home-manager.extraSpecialArgs`
+          # Both sets are intentionally identical. If you ever need them
+          # to diverge, split this binding rather than duplicating the
+          # mkHomeSpecialArgs call.
+          darwinSpecialArgs = (mkHomeSpecialArgs "aarch64-darwin") // {
+            identity = darwinIdentity;
+          };
+        in
+        nix-darwin.lib.darwinSystem {
+          specialArgs = darwinSpecialArgs;
+
+          modules = [
+            ./rcm/tag-darwin/config/nix-darwin/modules/system.nix
+            ./rcm/tag-darwin/config/nix-darwin/modules/apps.nix
+            nix-plist-manager.darwinModules.default
+
+            home-manager.darwinModules.home-manager
+            {
+              users.users.${darwinIdentity.username} = {
+                name = darwinIdentity.username;
+                home = darwinIdentity.homeDirectory;
+              };
+
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "hm-backup";
+              home-manager.extraSpecialArgs = darwinSpecialArgs;
+              home-manager.users.${darwinIdentity.username} =
+                import ./rcm/tag-darwin/config/nix-darwin/modules/home-manager.nix;
+            }
+          ];
         };
-
-        modules = [
-          ./rcm/tag-darwin/config/nix-darwin/modules/system.nix
-          ./rcm/tag-darwin/config/nix-darwin/modules/apps.nix
-          nix-plist-manager.darwinModules.default
-
-          home-manager.darwinModules.home-manager
-          {
-            users.users.${darwinIdentity.username} = {
-              name = darwinIdentity.username;
-              home = darwinIdentity.homeDirectory;
-            };
-
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "hm-backup";
-            home-manager.extraSpecialArgs = {
-              inherit inputs;
-              identity = darwinIdentity;
-              pkgs-master = darwinPkgsMaster;
-              pkgs-claude-code-pinned = darwinPkgsClaudeCodePinned;
-            };
-            home-manager.users.${darwinIdentity.username} =
-              import ./rcm/tag-darwin/config/nix-darwin/modules/home-manager.nix;
-          }
-        ];
-      };
     }
     // (utils.lib.eachDefaultSystem (
       system:
