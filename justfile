@@ -357,4 +357,24 @@ build-rcm-rcrc:
 @build-rcm-hooks-post-up:
   chmod +x *
 
-build: build-nix build-rcm build-home
+# reload launchd agents that home-manager manages (macOS only).
+# launchctl load is a no-op for already-loaded services, so this is
+# safe to run unconditionally after build-home.
+[macos]
+load-agents:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  for plist in \
+    ~/Library/LaunchAgents/net.ross-williams.ssh-agent-mux.plist \
+    ~/Library/LaunchAgents/net.cooperi.pivy-agent.plist; do
+    if [[ -f "$plist" ]]; then
+      launchctl load "$plist" 2>/dev/null || true
+      gum log --level info "loaded $(basename "$plist")"
+    fi
+  done
+
+[linux]
+load-agents:
+  @true
+
+build: build-nix build-rcm build-home load-agents
