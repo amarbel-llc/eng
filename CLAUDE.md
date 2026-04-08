@@ -79,6 +79,52 @@ each repo's changes for review. Their stable pin is unaffected by the
 cascade — bump it standalone with `nix flake update nixpkgs` per
 sub-repo if needed.
 
+### Wrapper-Pinned Packages
+
+When a specific package needs to be held back at an older version while
+the rest of `nixpkgs-master` continues to move (e.g. a regression in the
+latest release that we can't work around), pin it via a **dedicated
+frozen flake input** consumed only by a home-manager wrapper — not by
+overriding `nixpkgs-master` itself.
+
+Pattern:
+
+1. Add a new input in `flake.nix` with a SHA literal pointing at the
+   last known-good nixpkgs revision, e.g.
+   `nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/<sha>"`.
+   Do not `follows` anything — it must stay frozen.
+2. Import it for each system and thread it through `extraSpecialArgs`
+   (and `specialArgs` on darwin) as `pkgs-<name>-pinned`. Must be wired
+   into BOTH `homeConfigurations.linux` and the darwin block — see the
+   `TODO(dry)` at the top of `flake.nix` `let` block.
+3. In `home/wrappers.nix`, define a `writeShellScriptBin` wrapper that
+   `exec`s the binary from the pinned tree. This wrapper becomes the
+   sole authoritative `$PATH` entry for that command.
+4. Remove the package from `systems/common/default.nix` (and anywhere
+   else in the flake that would otherwise place an unpinned copy into
+   a user-visible profile). Two sources of the same command on PATH is
+   a footgun.
+5. `just bump-nixpkgs` leaves the pinned input alone — its `sed` is
+   anchored to `nixpkgs-master.url` specifically. Verify that the
+   sentinel `versions_expr` in the bump recipe does not reference the
+   pinned package (it would just report master's version, which is
+   misleading).
+
+Rolling back the pin: delete the input, revert `home/wrappers.nix` to
+use `pkgs-master.<package>`, re-add the package to `systems/common`,
+and restore any removed sentinel entries. One commit.
+
+Current wrapper pins:
+
+- `claude-code` → 2.1.87 (nixpkgs `9a7bc070e6`) — held back from 2.1.89+
+  due to alternate-screen buffer regression that corrupts terminal
+  scrollback and leaves text overlapping on exit
+  (anthropics/claude-code#42670, #42340). 2.1.88 would be a tighter pin
+  but anthropic has unpublished its npm tarball and the claude-code-bin
+  mirror 404s, so 2.1.87 is the closest fetchable version. Spinclass
+  sessions call `exec.Command("claude", ...)` from PATH, so the wrapper
+  is what spinclass actually runs.
+
 ### Home-Manager & Nix-Darwin
 
 User environment and macOS system settings are managed declaratively via

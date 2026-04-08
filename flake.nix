@@ -4,6 +4,16 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/ae921939fcbd44874664477bd1d22543c10a8306";
+    # Frozen tree used only by the claude wrapper in home/wrappers.nix to pin
+    # claude-code to 2.1.87 — the last release before the v2.1.89+ alternate-
+    # screen buffer regression (anthropics/claude-code#42670, #42340) whose
+    # source and binary tarballs are still available. 2.1.88 was originally
+    # targeted but anthropic unpublished its npm tarball (and its claude-code-bin
+    # mirror returns 404), making it unbuildable from source or binary.
+    # Not followed by anything — bump-nixpkgs leaves it alone because its sed
+    # is anchored to `nixpkgs-master.url`. Unpin by removing this input and
+    # reverting home/wrappers.nix + systems/common.
+    nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/9a7bc070e6fd7e4d001881241dffa07f488db87f";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     home-manager = {
@@ -136,6 +146,16 @@
         system = "aarch64-darwin";
         config.allowUnfree = true;
       };
+
+      # TODO(dry): the linux and darwin home-manager blocks both construct
+      # the same set of pkgs/pkgs-master/pkgs-claude-code-pinned imports and
+      # thread them through extraSpecialArgs. Consolidate into a single
+      # helper that takes `system` and returns the specialArgs set. Until
+      # then, any new pinned-tree input needs to be wired into BOTH blocks.
+      darwinPkgsClaudeCodePinned = import inputs.nixpkgs-claude-code-pinned {
+        system = "aarch64-darwin";
+        config.allowUnfree = true;
+      };
     in
     {
       homeConfigurations.linux =
@@ -146,6 +166,10 @@
             config.allowUnfree = true;
           };
           pkgs-master = import nixpkgs-master {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          pkgs-claude-code-pinned = import inputs.nixpkgs-claude-code-pinned {
             inherit system;
             config.allowUnfree = true;
           };
@@ -164,7 +188,7 @@
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
-            inherit inputs pkgs-master;
+            inherit inputs pkgs-master pkgs-claude-code-pinned;
             identity = linuxIdentity;
           };
           modules = [
@@ -179,6 +203,7 @@
           identity = darwinIdentity;
           inherit inputs;
           pkgs-master = darwinPkgsMaster;
+          pkgs-claude-code-pinned = darwinPkgsClaudeCodePinned;
         };
 
         modules = [
@@ -200,6 +225,7 @@
               inherit inputs;
               identity = darwinIdentity;
               pkgs-master = darwinPkgsMaster;
+              pkgs-claude-code-pinned = darwinPkgsClaudeCodePinned;
             };
             home-manager.users.${darwinIdentity.username} =
               import ./rcm/tag-darwin/config/nix-darwin/modules/home-manager.nix;
@@ -212,16 +238,32 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        # Infrastructure inputs excluded from auto-import.
-        # bob and purse-first produce marketplace outputs whose
-        # .claude-plugin/marketplace.json would collide in symlinkJoin.
-        # Instead, we add the purse-first CLI and bob's full package
-        # set to the symlinkJoin manually below.
-        infraInputs = [
+        # Inputs intentionally excluded from the auto-imported repo set,
+        # even though they MAY expose a `packages.<system>.default`
+        # attribute on some systems. The shape filter in `repoPackages`
+        # catches inputs with no default package at all (nixpkgs forks,
+        # flake-utils, etc.) automatically — only list things here when
+        # they have a real default package that we want to keep out of
+        # the symlinkJoin:
+        #
+        # - `self` is the top-level flake itself; auto-importing would
+        #   recurse.
+        # - `home-manager` exposes a CLI as `packages.<system>.default`.
+        #   It is consumed as `.lib` / `.darwinModules` instead.
+        # - `nix-darwin` exposes `darwin-rebuild` as `packages.<darwin>.default`.
+        # - `nix-plist-manager` likewise exposes a darwin-side package
+        #   used only as a darwin module.
+        # - `bob` and `purse-first` produce marketplace outputs whose
+        #   `.claude-plugin/marketplace.json` would collide in symlinkJoin.
+        #   Their non-marketplace packages are spliced in manually below.
+        # - `tacky` is darwin-only; it is added manually under the
+        #   darwin branch of the symlinkJoin.
+        #
+        # Adding a new nixpkgs-style frozen input for wrapper-pinning
+        # (see CLAUDE.md → "Wrapper-Pinned Packages") requires zero
+        # bookkeeping at this list — the shape filter handles it.
+        nonRepoInputs = [
           "self"
-          "nixpkgs"
-          "nixpkgs-master"
-          "utils"
           "home-manager"
           "nix-darwin"
           "nix-plist-manager"
@@ -272,9 +314,25 @@
           builtins.attrValues buildSystems
         );
 
-        repoPackages = builtins.mapAttrs (
-          name: input: input.packages.${system}.${repoPackageOverrides.${name} or "default"}
-        ) (builtins.removeAttrs inputs infraInputs);
+        # Shape-filter survivors of the nonRepoInputs exclusion so that
+        # any input lacking `packages.<system>.<key>` (typically nixpkgs
+        # forks, flake-utils, home-manager, etc.) is silently skipped
+        # rather than raising `attribute 'packages' missing`. This makes
+        # the flake tolerant of new nixpkgs-style inputs — e.g. frozen
+        # trees added for the wrapper-pinning strategy in CLAUDE.md.
+        repoPackages =
+          let
+            candidates = builtins.removeAttrs inputs nonRepoInputs;
+            hasDefaultPackage =
+              name: input:
+              let
+                key = repoPackageOverrides.${name} or "default";
+              in
+              (input ? packages) && (input.packages ? ${system}) && (input.packages.${system} ? ${key});
+          in
+          builtins.mapAttrs (
+            name: input: input.packages.${system}.${repoPackageOverrides.${name} or "default"}
+          ) (pkgs.lib.filterAttrs hasDefaultPackage candidates);
 
         packages = pkgs.symlinkJoin {
           name = "eng";

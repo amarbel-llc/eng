@@ -7,14 +7,15 @@
 let
   system = pkgs.stdenv.hostPlatform.system;
 
-  # Infrastructure inputs excluded from auto-import.
-  # bob and purse-first produce marketplace outputs whose
-  # .claude-plugin/marketplace.json would collide in symlinkJoin.
-  infraInputs = [
+  # Inputs intentionally excluded from the auto-imported repo set,
+  # even though they MAY expose a `packages.<system>.default`.
+  # Mirrors `nonRepoInputs` in ../flake.nix — keep in sync.
+  # Inputs without a default package at all (nixpkgs forks, flake-utils,
+  # nixpkgs-claude-code-pinned wrapper-pin trees) are filtered by shape
+  # below and do NOT need to be listed here. See CLAUDE.md →
+  # "Wrapper-Pinned Packages".
+  nonRepoInputs = [
     "self"
-    "nixpkgs"
-    "nixpkgs-master"
-    "utils"
     "home-manager"
     "nix-darwin"
     "nix-plist-manager"
@@ -23,7 +24,11 @@ let
     "tacky"
   ];
 
-  repoInputs = builtins.removeAttrs inputs infraInputs;
+  hasDefaultPackage =
+    _: input:
+    (input ? packages) && (input.packages ? ${system}) && (input.packages.${system} ? default);
+
+  repoInputs = lib.filterAttrs hasDefaultPackage (builtins.removeAttrs inputs nonRepoInputs);
 
   repoPackages = builtins.mapAttrs (_: input: input.packages.${system}.default) repoInputs;
 in

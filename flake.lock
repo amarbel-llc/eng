@@ -3263,6 +3263,22 @@
         "url": "https://flakehub.com/f/NixOS/nixpkgs/0"
       }
     },
+    "nixpkgs-claude-code-pinned": {
+      "locked": {
+        "lastModified": 1774988521,
+        "narHash": "sha256-oKS1qQFZeCFe9lnDJn3oMWWBWh84yfJcxgIOnjFIShQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9a7bc070e6fd7e4d001881241dffa07f488db87f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9a7bc070e6fd7e4d001881241dffa07f488db87f",
+        "type": "github"
+      }
+    },
     "nixpkgs-master": {
       "locked": {
         "lastModified": 1774011334,
@@ -4323,6 +4339,7 @@
         "nix-darwin": "nix-darwin",
         "nix-plist-manager": "nix-plist-manager",
         "nixpkgs": "nixpkgs_21",
+        "nixpkgs-claude-code-pinned": "nixpkgs-claude-code-pinned",
         "nixpkgs-master": "nixpkgs-master_6",
         "piggy": "piggy",
         "pivy": "pivy",
