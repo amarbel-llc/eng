@@ -23,3 +23,7 @@ command = "maneater serve mcp"
 [[servers]]
 name = "folio"
 command = "folio serve mcp"
+
+[[servers]]
+name = "freud"
+command = "freud serve mcp"
