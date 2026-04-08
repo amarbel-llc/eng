@@ -5,10 +5,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/ae921939fcbd44874664477bd1d22543c10a8306";
     # Frozen tree used only by the claude wrapper in home/wrappers.nix to pin
-    # claude-code to 2.1.86. Not followed by anything — bump-nixpkgs leaves it
+    # claude-code to 2.1.84. Not followed by anything — bump-nixpkgs leaves it
     # alone because its sed is anchored to `nixpkgs-master.url`. Unpin by
     # removing this input and reverting home/wrappers.nix + systems/common.
-    nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/5844564e81fb318c6d12f6cd68e73208bdf54e72";
+    nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/2405febe88fb2652c8bb7b9861f20256c208ac96";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     home-manager = {

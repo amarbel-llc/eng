@@ -120,7 +120,7 @@ and restore any removed sentinel entries. One commit.
 
 Current wrapper pins:
 
-- `claude-code` → 2.1.86 (nixpkgs `5844564e81`) — Spinclass sessions call
+- `claude-code` → 2.1.84 (nixpkgs `2405febe88`) — Spinclass sessions call
   `exec.Command("claude", ...)` from PATH, so the wrapper is what
   spinclass actually runs.
 

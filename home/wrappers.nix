@@ -5,7 +5,7 @@
   ...
 }:
 let
-  # claude-code is pinned to 2.1.86 via a dedicated frozen nixpkgs input
+  # claude-code is pinned to 2.1.84 via a dedicated frozen nixpkgs input
   # (`nixpkgs-claude-code-pinned` in ../flake.nix), not tracked by
   # `nixpkgs-master`. This wrapper is the single source of the `claude`
   # entry on $PATH — systems/common.nix intentionally does not include

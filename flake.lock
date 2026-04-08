@@ -3265,17 +3265,17 @@
     },
     "nixpkgs-claude-code-pinned": {
       "locked": {
-        "lastModified": 1774995886,
-        "narHash": "sha256-BScsRcffT9OnQxbAwd0U+6/NgXuQJ6zK+p++XNNhXH0=",
+        "lastModified": 1774508038,
+        "narHash": "sha256-EshR7NpbbUrnn25qhrllq186Qjw5QKqv+FglqnAWGIk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5844564e81fb318c6d12f6cd68e73208bdf54e72",
+        "rev": "2405febe88fb2652c8bb7b9861f20256c208ac96",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5844564e81fb318c6d12f6cd68e73208bdf54e72",
+        "rev": "2405febe88fb2652c8bb7b9861f20256c208ac96",
         "type": "github"
       }
     },
