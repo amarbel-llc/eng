@@ -4001,11 +4001,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775596170,
-        "narHash": "sha256-OjM1hUhVzCvUOJtKaRKTghq2NuBXzssqMOm1AVzFdTg=",
+        "lastModified": 1775739816,
+        "narHash": "sha256-WQpJITFZbiwZw6kvCip2zMateOeSNKLaD8Cycw00oIc=",
         "owner": "amarbel-llc",
         "repo": "pivy",
-        "rev": "34e50ee8f48a70f29d6b53abb2239d5592b442f3",
+        "rev": "41ae162ce8630d6842b44eb10efcd78e0c316a73",
         "type": "github"
       },
       "original": {
