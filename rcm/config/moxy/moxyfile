@@ -1,29 +1,9 @@
 # vim: set ft=toml
 
 [[servers]]
-name = "git"
-command = "grit"
-
-[[servers]]
-name = "gh"
-command = "get-hubbed"
-
-[[servers]]
 name = "lsp"
 command = "lux mcp stdio"
 
 [[servers]]
 name = "dodder"
 command = "dodder mcp"
-
-# [[servers]]
-# name = "maneater"
-# command = "maneater serve mcp"
-
-# [[servers]]
-# name = "folio"
-# command = "folio serve mcp"
-
-# [[servers]]
-# name = "freud"
-# command = "freud serve mcp"
