@@ -5430,11 +5430,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775682861,
-        "narHash": "sha256-OWqDKLsj0CnsFJmt6WY9huAma3Jz0Odw9paXZIS2ozc=",
+        "lastModified": 1775752158,
+        "narHash": "sha256-32xrjj7RVYmjP5wCGZm3d+/muf6EUHiaEOTeLGJwJhE=",
         "owner": "amarbel-llc",
         "repo": "ssh-agent-mux",
-        "rev": "2bed7b3470b471b64777d2c4a969e7b6dfae2193",
+        "rev": "4d00da3cde324b95662876350e1dbfbd7c705540",
         "type": "github"
       },
       "original": {
