@@ -5404,11 +5404,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775754834,
-        "narHash": "sha256-yWtsUf57FOxwG6J9U5b9Yaq+hsWaCMSX+9Ib3KJ1HKA=",
+        "lastModified": 1775756874,
+        "narHash": "sha256-Ti4/HAoSssdBGuUfk7d1ZqNvgD9FWc3JK/794v3Zuw0=",
         "owner": "amarbel-llc",
         "repo": "spinclass",
-        "rev": "331e24f13750ec96202470d52b946a160326c11c",
+        "rev": "770eccc0c2eff850981ffb2423ad3f730566277b",
         "type": "github"
       },
       "original": {
@@ -5430,11 +5430,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775752158,
-        "narHash": "sha256-32xrjj7RVYmjP5wCGZm3d+/muf6EUHiaEOTeLGJwJhE=",
+        "lastModified": 1775756884,
+        "narHash": "sha256-EI0PCaerKv/Wg7l0mpoFlpioDkTpr7iQ6pLCfhTW718=",
         "owner": "amarbel-llc",
         "repo": "ssh-agent-mux",
-        "rev": "4d00da3cde324b95662876350e1dbfbd7c705540",
+        "rev": "600dc000c5773243e38b962141bd0472e71d5ee4",
         "type": "github"
       },
       "original": {
