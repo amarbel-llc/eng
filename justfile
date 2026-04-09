@@ -7,7 +7,6 @@ default: \
     deploy-flake-lock \
     build-rcm \
     install-purse-first \
-    install-bob \
     install-zmx \
     install-dodder \
     install-moxy \
