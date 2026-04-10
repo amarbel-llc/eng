@@ -4001,16 +4001,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1775786987,
-        "narHash": "sha256-K71b2dyZTeaQqXsP+nUth6ju/jyCEYmAG/6sfXxLXY0=",
+        "lastModified": 1775764529,
+        "narHash": "sha256-RZ8XAN9UTYa+upmRbV4gOlth0JKvIwvEUNHtZKYDoUg=",
         "owner": "amarbel-llc",
         "repo": "pivy",
-        "rev": "2d09bdd173c0dc07c387318ece9a1ad9571da017",
+        "rev": "6a47a76e1a96a0426d839b028ca7d59516e8b6d1",
         "type": "github"
       },
       "original": {
         "owner": "amarbel-llc",
         "repo": "pivy",
+        "rev": "6a47a76e1a96a0426d839b028ca7d59516e8b6d1",
         "type": "github"
       }
     },
@@ -5430,16 +5431,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1775756884,
-        "narHash": "sha256-EI0PCaerKv/Wg7l0mpoFlpioDkTpr7iQ6pLCfhTW718=",
+        "lastModified": 1775504776,
+        "narHash": "sha256-bnXn2K1KPXIW8YDpBRntY+eV6U/rjl+KGgUvtYNJmjE=",
         "owner": "amarbel-llc",
         "repo": "ssh-agent-mux",
-        "rev": "600dc000c5773243e38b962141bd0472e71d5ee4",
+        "rev": "a4b915cbf828e3be1ddc5aea86303f1b3506ba76",
         "type": "github"
       },
       "original": {
         "owner": "amarbel-llc",
         "repo": "ssh-agent-mux",
+        "rev": "a4b915cbf828e3be1ddc5aea86303f1b3506ba76",
         "type": "github"
       }
     },

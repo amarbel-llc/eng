@@ -78,7 +78,7 @@
       inputs.pivy.follows = "pivy";
     };
     pivy = {
-      url = "github:amarbel-llc/pivy";
+      url = "github:amarbel-llc/pivy/6a47a76e1a96a0426d839b028ca7d59516e8b6d1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
@@ -103,7 +103,7 @@
       inputs.bob.follows = "bob";
     };
     ssh-agent-mux = {
-      url = "github:amarbel-llc/ssh-agent-mux";
+      url = "github:amarbel-llc/ssh-agent-mux/a4b915cbf828e3be1ddc5aea86303f1b3506ba76";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "utils";
     };
