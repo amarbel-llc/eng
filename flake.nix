@@ -78,7 +78,7 @@
       inputs.pivy.follows = "pivy";
     };
     pivy = {
-      url = "github:amarbel-llc/pivy/6a47a76e1a96a0426d839b028ca7d59516e8b6d1";
+      url = "github:amarbel-llc/pivy";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
