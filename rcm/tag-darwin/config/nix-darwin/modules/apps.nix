@@ -39,7 +39,7 @@
         restart_service = true;
       }
 
-      "acli"
+      "atlassian/acli/acli"
       "ykman"
     ];
 
