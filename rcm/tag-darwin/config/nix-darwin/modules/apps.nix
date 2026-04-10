@@ -22,6 +22,7 @@
     };
 
     taps = [
+      "atlassian/homebrew-acli"
       "FelixKratz/formulae"
     ];
 
@@ -38,6 +39,7 @@
         restart_service = true;
       }
 
+      "acli"
       "ykman"
     ];
 
