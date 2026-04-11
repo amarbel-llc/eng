@@ -5020,7 +5020,8 @@
         "ssh-agent-mux": "ssh-agent-mux",
         "tacky": "tacky",
         "tommy": "tommy_3",
-        "utils": "utils_12"
+        "utils": "utils_12",
+        "xdg": "xdg"
       }
     },
     "rust-analyzer-src": {
@@ -7127,6 +7128,32 @@
       "original": {
         "type": "tarball",
         "url": "https://flakehub.com/f/numtide/flake-utils/0.1.102"
+      }
+    },
+    "xdg": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-master": [
+          "nixpkgs-master"
+        ],
+        "utils": [
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775927765,
+        "narHash": "sha256-M3Tc1mTEzPi9H52gQ0sKxY1FBsP5LoUOfDUKvaRdzkc=",
+        "owner": "amarbel-llc",
+        "repo": "xdg",
+        "rev": "b5d21b10c30a3b6415d2208f0453e4d5bdbc90bd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "amarbel-llc",
+        "repo": "xdg",
+        "type": "github"
       }
     }
   },
