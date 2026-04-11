@@ -3113,11 +3113,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775916281,
-        "narHash": "sha256-5mF5t0AbTe7qDy8RRhgOstesqpVsrG877smK21GpDjU=",
+        "lastModified": 1775916491,
+        "narHash": "sha256-y6CG5oMf1YAICWULnUVcqUIfmG9pHZuyF5K3IRo2rnE=",
         "owner": "amarbel-llc",
         "repo": "moxy",
-        "rev": "2f1a24d013390f4f0950dd1dead5ad5c321d72dd",
+        "rev": "b3849c5feea46ca19c46b27852d904f5e0fc8e25",
         "type": "github"
       },
       "original": {
