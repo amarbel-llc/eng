@@ -6,7 +6,6 @@ default: \
     update-login-shell \
     deploy-flake-lock \
     build-rcm \
-    install-purse-first \
     install-zmx \
     install-dodder \
     install-moxy \
