@@ -155,7 +155,13 @@
     let
       # Read identity from /etc/nix-darwin/identity.json (requires --impure).
       # Create the file with: { "username": "...", "homeDirectory": "/Users/...", "hostname": "..." }
-      darwinIdentity = builtins.fromJSON (builtins.readFile /etc/nix-darwin/identity.json);
+      # Guarded by pathExists so `nix flake check` succeeds in pure mode on
+      # Linux (where the file is absent). On macOS, use --impure to read it.
+      hasDarwinIdentity = builtins.pathExists /etc/nix-darwin/identity.json;
+      darwinIdentity =
+        if hasDarwinIdentity
+        then builtins.fromJSON (builtins.readFile /etc/nix-darwin/identity.json)
+        else null;
 
       # Builder for home-manager (extra)specialArgs, shared by the Linux
       # and darwin branches below. See ./home/special-args.nix for the
@@ -196,43 +202,50 @@
           ++ optionalNssModule;
         };
 
-      darwinConfigurations.${darwinIdentity.hostname} =
-        let
-          # darwinSpecialArgs is reused in two places below:
-          #   1. nix-darwin's top-level `specialArgs`
-          #   2. the nested `home-manager.extraSpecialArgs`
-          # Both sets are intentionally identical. If you ever need them
-          # to diverge, split this binding rather than duplicating the
-          # mkHomeSpecialArgs call.
-          darwinSpecialArgs = (mkHomeSpecialArgs "aarch64-darwin") // {
-            identity = darwinIdentity;
-          };
-        in
-        nix-darwin.lib.darwinSystem {
-          specialArgs = darwinSpecialArgs;
-
-          modules = [
-            ./rcm/tag-darwin/config/nix-darwin/modules/system.nix
-            ./rcm/tag-darwin/config/nix-darwin/modules/apps.nix
-            nix-plist-manager.darwinModules.default
-
-            home-manager.darwinModules.home-manager
-            {
-              users.users.${darwinIdentity.username} = {
-                name = darwinIdentity.username;
-                home = darwinIdentity.homeDirectory;
-              };
-
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "hm-backup";
-              home-manager.extraSpecialArgs = darwinSpecialArgs;
-              home-manager.users.${darwinIdentity.username} =
-                import ./rcm/tag-darwin/config/nix-darwin/modules/home-manager.nix;
-            }
-          ];
-        };
     }
+    // (
+      if hasDarwinIdentity then
+        {
+          darwinConfigurations.${darwinIdentity.hostname} =
+            let
+              # darwinSpecialArgs is reused in two places below:
+              #   1. nix-darwin's top-level `specialArgs`
+              #   2. the nested `home-manager.extraSpecialArgs`
+              # Both sets are intentionally identical. If you ever need them
+              # to diverge, split this binding rather than duplicating the
+              # mkHomeSpecialArgs call.
+              darwinSpecialArgs = (mkHomeSpecialArgs "aarch64-darwin") // {
+                identity = darwinIdentity;
+              };
+            in
+            nix-darwin.lib.darwinSystem {
+              specialArgs = darwinSpecialArgs;
+
+              modules = [
+                ./rcm/tag-darwin/config/nix-darwin/modules/system.nix
+                ./rcm/tag-darwin/config/nix-darwin/modules/apps.nix
+                nix-plist-manager.darwinModules.default
+
+                home-manager.darwinModules.home-manager
+                {
+                  users.users.${darwinIdentity.username} = {
+                    name = darwinIdentity.username;
+                    home = darwinIdentity.homeDirectory;
+                  };
+
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.backupFileExtension = "hm-backup";
+                  home-manager.extraSpecialArgs = darwinSpecialArgs;
+                  home-manager.users.${darwinIdentity.username} =
+                    import ./rcm/tag-darwin/config/nix-darwin/modules/home-manager.nix;
+                }
+              ];
+            };
+        }
+      else
+        { }
+    )
     // (utils.lib.eachDefaultSystem (
       system:
       let

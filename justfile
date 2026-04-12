@@ -376,5 +376,6 @@ load-agents:
   @true
 
 validate: build-nix
+  nix flake check --impure
 
 build: build-nix build-rcm build-home load-agents
