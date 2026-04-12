@@ -375,4 +375,7 @@ load-agents:
 load-agents:
   @true
 
+validate: build-nix validate-purse-first validate-bob
+  nix flake check
+
 build: build-nix build-rcm build-home load-agents
