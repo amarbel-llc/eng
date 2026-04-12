@@ -33,6 +33,12 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
+    clown = {
+      url = "github:amarbel-llc/clown";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
     crap = {
       url = "github:amarbel-llc/crap";
       inputs.nixpkgs.follows = "nixpkgs";
