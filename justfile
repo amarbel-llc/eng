@@ -6,6 +6,7 @@ default: \
     update-login-shell \
     deploy-flake-lock \
     build-rcm \
+    install-bob \
     install-zmx \
     install-dodder \
     install-moxy \
