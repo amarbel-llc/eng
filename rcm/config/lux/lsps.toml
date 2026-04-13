@@ -4,12 +4,12 @@ socket = ""
   name = "gopls"
   flake = "nixpkgs#gopls"
 
-  [lsp.settings]
+[lsp.settings]
     gofumpt = true
     experimentalPostfixCompletions = true
     staticcheck = true
 
-    [lsp.settings.analyses]
+[lsp.settings.analyses]
       unusedparams = true
       shadow = true
       ST1000 = false
@@ -23,16 +23,18 @@ socket = ""
   name = "rust-analyzer"
   flake = "nixpkgs#rust-analyzer"
 
-  [lsp.settings]
-    [lsp.settings.diagnostics]
+[lsp.settings]
+
+[lsp.settings.diagnostics]
       enable = false
 
 [[lsp]]
   name = "nil"
   flake = "nixpkgs#nil"
 
-  [lsp.settings]
-    [lsp.settings.formatting]
+[lsp.settings]
+
+[lsp.settings.formatting]
       command = ["nixpkgs-fmt"]
 
 [[lsp]]
@@ -44,13 +46,13 @@ socket = ""
   flake = "nixpkgs#nodePackages.intelephense"
   args = ["--stdio"]
 
-  [lsp.settings]
+[lsp.settings]
     stubs = ["Core", "Reflection", "SPL", "composer", "date", "json", "pcre", "standard"]
 
-    [lsp.settings.files]
+[lsp.settings.files]
       associations = ["*.php", "*.phtml"]
 
-    [lsp.settings.environment]
+[lsp.settings.environment]
       includePaths = ["vendor"]
       phpVersion = "8.2"
 
@@ -58,27 +60,27 @@ socket = ""
   name = "pylsp"
   flake = "nixpkgs#python313Packages.python-lsp-server"
 
-  [lsp.settings.plugins.ruff]
+[lsp.settings.plugins.ruff]
     formatEnabled = true
     enabled = true
     format = ["I"]
     lineLength = 88
 
-    [lsp.settings.plugins.ruff.pylsp_mypy]
+[lsp.settings.plugins.ruff.pylsp_mypy]
       enabled = true
       live_mode = false
       overrides = ["--explicit-package-bases", "--ignore-missing-imports"]
 
-  [lsp.settings.plugins.pycodestyle]
+[lsp.settings.plugins.pycodestyle]
     enabled = false
 
-  [lsp.settings.plugins.mccabe]
+[lsp.settings.plugins.mccabe]
     enabled = false
 
-  [lsp.settings.plugins.pyflakes]
+[lsp.settings.plugins.pyflakes]
     enabled = false
 
-  [lsp.settings.plugins.flake8]
+[lsp.settings.plugins.flake8]
     enabled = false
 
 [[lsp]]
@@ -89,6 +91,10 @@ socket = ""
 [[lsp]]
   name = "terraform-ls"
   flake = "nixpkgs#terraform-ls"
+
+[[lsp]]
+  name = "lua-language-server"
+  flake = "nixpkgs#lua-language-server"
 
 [[lsp]]
   name = "jdtls"
