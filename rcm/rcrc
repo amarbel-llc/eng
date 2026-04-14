@@ -10,7 +10,7 @@ EXCLUDES="
   config/git/aliases/result
   config/karabiner/automatic_backups
   config/ssh/rcm/known_hosts
-  config/ssh/rcm/config-local
+  config/ssh/config-local
   dev-flake-templates
   fish_history
   local/share/fish/generated_completions
