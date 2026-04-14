@@ -5,11 +5,8 @@ default: \
     update-login-shell \
     deploy-flake-lock \
     build-rcm \
-    install-bob \
-    install-zmx \
-    install-dodder \
-    install-moxy \
-    install-nebulous
+    install-mcps \
+    install-zmx
 
 # TODO implement a check that enforces no active claude sessions, worktrees, or
 # sweatshops open. This is because upgrading the entire environment can break
@@ -51,13 +48,15 @@ install-purse-first:
   purse-first validate "$store_path/.claude-plugin/marketplace.json"
   purse-first install "$store_path"
 
-# build, validate, and install bob marketplace (MCP servers + workflow skills)
-install-bob:
+install-mcp mcp:
   #!/usr/bin/env bash
   set -euo pipefail
-  store_path="$(nix build .#bob-marketplace --no-link --print-out-paths)"
+  store_path="$(nix build .#{{mcp}} --no-link --print-out-paths)"
   purse-first validate "$store_path/.claude-plugin/marketplace.json"
   purse-first install "$store_path"
+
+# build, validate, and install bob marketplace (MCP servers + workflow skills)
+install-bob: (install-mcp "bob-marketplace")
 
 # build and validate purse-first marketplace without installing
 validate-purse-first:
@@ -66,21 +65,11 @@ validate-purse-first:
   store_path="$(nix build .#purse-first-marketplace --no-link --print-out-paths)"
   purse-first validate "$store_path/.claude-plugin/marketplace.json"
 
-# build and validate bob marketplace without installing
-validate-bob:
-  #!/usr/bin/env bash
-  set -euo pipefail
-  store_path="$(nix build .#bob-marketplace --no-link --print-out-paths)"
-  purse-first validate "$store_path/.claude-plugin/marketplace.json"
-
-install-dodder:
+install-mcps: install-bob
   dodder install-mcp
-
-install-moxy:
   moxy install-mcp
-
-install-nebulous:
   nebulous install-mcp
+  chrest install-mcp
 
 # build zmx outside the flake and link to ~/.local/bin
 install-zmx:
