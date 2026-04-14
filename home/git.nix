@@ -40,6 +40,8 @@ let
     }) aliasFiles
   );
 
+  signingKeyBare = lib.removePrefix "key::" identity.gitSigningKey;
+
   # Shared git settings included by both the home-manager config and
   # hand-written identity configs (e.g. config-etsy).
   commonConfigText = ''
@@ -130,5 +132,6 @@ in
   xdg.configFile = aliasXdgFiles // {
     "git/config-common".text = commonConfigText;
     "git/config-aliases".text = aliasConfigText;
+    "ssh/keys-allowed_signers-user".text = "${identity.gitUserEmail} ${signingKeyBare}\n";
   };
 }
