@@ -58,10 +58,11 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
-    just-us = {
-      url = "github:amarbel-llc/just-us";
+    madder = {
+      url = "github:amarbel-llc/madder";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.tommy.follows = "tommy";
       inputs.utils.follows = "utils";
     };
     maneater = {
