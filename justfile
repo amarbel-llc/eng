@@ -1,6 +1,5 @@
 default: \
     update-git \
-    update-nix-flake \
     build-nix \
     build-home \
     update-login-shell \
