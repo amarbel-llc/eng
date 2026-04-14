@@ -24,13 +24,25 @@ let
     "tacky"
   ];
 
+  # Inputs whose default package is wrapped in lib.lowPrio so they lose
+  # file collisions (e.g. shared man pages) to normal-priority inputs.
+  lowPrioInputs = [
+    "madder"
+  ];
+
   hasDefaultPackage =
     _: input:
     (input ? packages) && (input.packages ? ${system}) && (input.packages.${system} ? default);
 
   repoInputs = lib.filterAttrs hasDefaultPackage (builtins.removeAttrs inputs nonRepoInputs);
 
-  repoPackages = builtins.mapAttrs (_: input: input.packages.${system}.default) repoInputs;
+  repoPackages = builtins.mapAttrs (
+    name: input:
+    let
+      pkg = input.packages.${system}.default;
+    in
+    if builtins.elem name lowPrioInputs then lib.lowPrio pkg else pkg
+  ) repoInputs;
 in
 {
   home.packages =
