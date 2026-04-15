@@ -65,9 +65,8 @@ validate-purse-first:
   store_path="$(nix build .#purse-first-marketplace --no-link --print-out-paths)"
   purse-first validate "$store_path/.claude-plugin/marketplace.json"
 
-install-mcps: install-bob
+install-mcps:
   dodder install-mcp
-  moxy install-mcp
   nebulous install-mcp
   # chrest install-mcp  # https://github.com/amarbel-llc/chrest/issues/15
 
