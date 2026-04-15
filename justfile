@@ -5,7 +5,6 @@ default: \
     update-login-shell \
     deploy-flake-lock \
     build-rcm \
-    install-mcps \
     install-zmx
 
 # TODO implement a check that enforces no active claude sessions, worktrees, or
@@ -64,11 +63,6 @@ validate-purse-first:
   set -euo pipefail
   store_path="$(nix build .#purse-first-marketplace --no-link --print-out-paths)"
   purse-first validate "$store_path/.claude-plugin/marketplace.json"
-
-install-mcps:
-  dodder install-mcp
-  nebulous install-mcp
-  # chrest install-mcp  # https://github.com/amarbel-llc/chrest/issues/15
 
 # build zmx outside the flake and link to ~/.local/bin
 install-zmx:

@@ -7,3 +7,12 @@ command = "lux mcp stdio"
 [[servers]]
 name = "dodder"
 command = "dodder mcp"
+
+[[servers]]
+name = "nebulous"
+command = "nebulous"
+
+# chrest — blocked on https://github.com/amarbel-llc/chrest/issues/15
+# [[servers]]
+# name = "chrest"
+# command = "chrest mcp"
