@@ -39,12 +39,14 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
-    crap = {
-      url = "github:amarbel-llc/crap";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
+    # chrest — disabled until it exposes packages.<system>.default
+    # https://github.com/amarbel-llc/chrest/issues/15
+    # chrest = {
+    #   url = "github:amarbel-llc/chrest";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.nixpkgs-master.follows = "nixpkgs-master";
+    #   inputs.utils.follows = "utils";
+    # };
     dodder = {
       url = "github:amarbel-llc/dodder";
       inputs.nixpkgs.follows = "nixpkgs";

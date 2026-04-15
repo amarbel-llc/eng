@@ -69,7 +69,7 @@ install-mcps: install-bob
   dodder install-mcp
   moxy install-mcp
   nebulous install-mcp
-  chrest install-mcp
+  # chrest install-mcp  # https://github.com/amarbel-llc/chrest/issues/15
 
 # build zmx outside the flake and link to ~/.local/bin
 install-zmx:
