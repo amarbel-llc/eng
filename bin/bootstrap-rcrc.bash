@@ -9,10 +9,15 @@
 
 set -uo pipefail
 
+dry_run=false
+if [[ ${1:-} == "--dry-run" ]]; then
+  dry_run=true
+fi
+
 eng_dir="$(cd "$(dirname "$0")/.." && pwd)"
 rcrc_src="$eng_dir/rcm/rcrc"
 
-if [[ ! -f "$rcrc_src" ]]; then
+if [[ ! -f $rcrc_src ]]; then
   gum log --level error "rcrc template not found: $rcrc_src"
   exit 1
 fi
@@ -26,10 +31,10 @@ platform_tags=("$os" "${os}_${arch}")
 declare -A seen_tags
 available_tags=()
 for tag_dir in "$HOME"/*/rcm/tag-*; do
-  [[ -d "$tag_dir" ]] || continue
+  [[ -d $tag_dir ]] || continue
   tag="${tag_dir##*/tag-}"
-  [[ "$tag" == *obsolete* ]] && continue
-  if [[ -z "${seen_tags[$tag]:-}" ]]; then
+  [[ $tag == *obsolete* ]] && continue
+  if [[ -z ${seen_tags[$tag]:-} ]]; then
     seen_tags[$tag]=1
     available_tags+=("$tag")
   fi
@@ -48,18 +53,18 @@ if [[ -f "$HOME/.rcrc" ]]; then
   # Parse existing TAGS from ~/.rcrc
   in_tags=false
   while IFS= read -r line; do
-    if [[ "$line" =~ ^TAGS=\" ]]; then
+    if [[ $line =~ ^TAGS=\" ]]; then
       in_tags=true
       continue
     fi
     if $in_tags; then
-      if [[ "$line" =~ ^\" ]]; then
+      if [[ $line =~ ^\" ]]; then
         break
       fi
       tag="$(echo "$line" | xargs)"
-      [[ -n "$tag" ]] && preselected+=("$tag")
+      [[ -n $tag ]] && preselected+=("$tag")
     fi
-  done < "$HOME/.rcrc"
+  done <"$HOME/.rcrc"
 else
   preselected=("${platform_tags[@]}")
 fi
@@ -73,7 +78,7 @@ done
 
 selected="$(printf '%s\n' "${available_tags[@]}" | gum choose "${gum_args[@]}")" || true
 
-if [[ -z "$selected" ]]; then
+if [[ -z $selected ]]; then
   gum log --level warn "no tags selected, using base tags only"
 fi
 
@@ -81,41 +86,41 @@ fi
 base_tags=()
 in_tags=false
 while IFS= read -r line; do
-  if [[ "$line" =~ ^TAGS=\" ]]; then
+  if [[ $line =~ ^TAGS=\" ]]; then
     in_tags=true
     continue
   fi
   if $in_tags; then
-    if [[ "$line" =~ ^\" ]]; then
+    if [[ $line =~ ^\" ]]; then
       break
     fi
     tag="$(echo "$line" | xargs)"
-    [[ -n "$tag" ]] && base_tags+=("$tag")
+    [[ -n $tag ]] && base_tags+=("$tag")
   fi
-done < "$rcrc_src"
+done <"$rcrc_src"
 
 # --- Merge selected + base tags (deduplicated) ---
 declare -A all_tags
 final_tags=()
 
 for tag in "${base_tags[@]}"; do
-  if [[ -z "${all_tags[$tag]:-}" ]]; then
+  if [[ -z ${all_tags[$tag]:-} ]]; then
     all_tags[$tag]=1
     final_tags+=("$tag")
   fi
 done
 
-if [[ -n "$selected" ]]; then
+if [[ -n $selected ]]; then
   while IFS= read -r tag; do
-    if [[ -n "$tag" && -z "${all_tags[$tag]:-}" ]]; then
+    if [[ -n $tag && -z ${all_tags[$tag]:-} ]]; then
       all_tags[$tag]=1
       final_tags+=("$tag")
     fi
-  done <<< "$selected"
+  done <<<"$selected"
 fi
 
 # --- Generate ~/.rcrc ---
-{
+generate_rcrc() {
   # Copy everything except TAGS and DOTFILES_DIRS blocks
   sed '/^TAGS="/,/^"/d; /^DOTFILES_DIRS=/d' "$rcrc_src"
 
@@ -126,6 +131,12 @@ fi
   printf '"\n\n'
 
   printf 'DOTFILES_DIRS="%s/rcm"\n' "$eng_dir"
-} > "$HOME/.rcrc"
+}
 
-gum log --level info "wrote ~/.rcrc with tags: ${final_tags[*]}"
+if $dry_run; then
+  gum log --level info "dry run — would write ~/.rcrc with tags: ${final_tags[*]}"
+  generate_rcrc
+else
+  generate_rcrc >"$HOME/.rcrc"
+  gum log --level info "wrote ~/.rcrc with tags: ${final_tags[*]}"
+fi

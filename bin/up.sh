@@ -15,7 +15,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
 else
   identity_file="$HOME/.config/identity.nix"
 fi
-if [[ ! -f "$identity_file" ]]; then
+if [[ ! -f $identity_file ]]; then
   gum log --level info "identity file not found, running bootstrap..."
   "$eng_dir/bin/bootstrap-identity.bash"
 fi

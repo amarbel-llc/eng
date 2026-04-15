@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+dry_run=false
+if [[ ${1:-} == "--dry-run" ]]; then
+  dry_run=true
+fi
+
 if [[ "$(uname)" == "Darwin" ]]; then
   identity_file="/etc/nix-darwin/identity.json"
 else
   identity_file="$HOME/.config/identity.nix"
 fi
 
-if [[ -f "$identity_file" ]]; then
+if [[ -f $identity_file ]] && ! $dry_run; then
   if ! gum confirm "Overwrite existing $identity_file?"; then
     gum log --level info "aborted"
     exit 0
@@ -27,21 +32,32 @@ else
   gum log --level warn "no keys found on pivy-agent, skipping signing key"
 fi
 
-if [[ "$(uname)" == "Darwin" ]]; then
-  hostname="$(scutil --get LocalHostName)"
-  sudo mkdir -p "$(dirname "$identity_file")"
-  printf '{"username":"%s","homeDirectory":"%s","hostname":"%s","gitUserName":"%s","gitUserEmail":"%s","gitSigningKey":"%s"}\n' \
-    "$USER" "$HOME" "$hostname" "$git_name" "$git_email" "$signing_key" \
-    | sudo tee "$identity_file" > /dev/null
-else
-  mkdir -p "$(dirname "$identity_file")"
-  cat > "$identity_file" <<NIX
+generate_identity() {
+  if [[ "$(uname)" == "Darwin" ]]; then
+    hostname="$(scutil --get LocalHostName)"
+    printf '{"username":"%s","homeDirectory":"%s","hostname":"%s","gitUserName":"%s","gitUserEmail":"%s","gitSigningKey":"%s"}\n' \
+      "$USER" "$HOME" "$hostname" "$git_name" "$git_email" "$signing_key"
+  else
+    cat <<NIX
 {
   gitUserName = "$git_name";
   gitUserEmail = "$git_email";
   gitSigningKey = "$signing_key";
 }
 NIX
-fi
+  fi
+}
 
-gum log --level info "wrote $identity_file"
+if $dry_run; then
+  gum log --level info "dry run — would write $identity_file"
+  generate_identity
+else
+  if [[ "$(uname)" == "Darwin" ]]; then
+    sudo mkdir -p "$(dirname "$identity_file")"
+    generate_identity | sudo tee "$identity_file" >/dev/null
+  else
+    mkdir -p "$(dirname "$identity_file")"
+    generate_identity >"$identity_file"
+  fi
+  gum log --level info "wrote $identity_file"
+fi
