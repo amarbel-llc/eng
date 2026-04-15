@@ -4,4 +4,4 @@ Include ~/.config/ssh/rcm/config-client
 Include ~/.config/ssh/rcm/config-recurse
 Include ~/.config/ssh/rcm/config-user
 
-Include ~/.config/ssh/rcm/config-local
+Include ~/.config/ssh/config-local
