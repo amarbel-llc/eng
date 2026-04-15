@@ -21,12 +21,7 @@ if [[ ! -f "$identity_file" ]]; then
 fi
 
 # Step 3: rcm setup
-cp "$eng_dir/rcm/rcrc" ~/.rcrc
-printf '\nDOTFILES_DIRS="%s/rcm"\n' "$eng_dir" >> ~/.rcrc
-
-os="$(uname -s | tr '[:upper:]' '[:lower:]')"
-sed -i "s/^TAGS=\"/TAGS=\"\n  $os/" ~/.rcrc
-
+"$eng_dir/bin/bootstrap-rcrc.bash"
 rcup -f
 
 # Step 4: home-manager
