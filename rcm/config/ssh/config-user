@@ -1,8 +1,0 @@
-# vim: ft=sshconfig
-
-Include ~/.config/ssh/config-user-secret
-
-Host github-user
-  Hostname github.com
-  User git
-  IdentityFile ~/.config/ssh/key-user

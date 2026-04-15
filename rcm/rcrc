@@ -9,8 +9,8 @@ EXCLUDES="
   config/git/aliases/flake.lock
   config/git/aliases/result
   config/karabiner/automatic_backups
-  config/ssh/known_hosts
-  config/ssh/config-local
+  config/ssh/rcm/known_hosts
+  config/ssh/rcm/config-local
   dev-flake-templates
   fish_history
   local/share/fish/generated_completions

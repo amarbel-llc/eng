@@ -1,7 +1,0 @@
-# vim: ft=sshconfig
-
-Include ~/.config/ssh/config-client
-Include ~/.config/ssh/config-recurse
-Include ~/.config/ssh/config-user
-
-Include ~/.config/ssh/config-local

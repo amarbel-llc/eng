@@ -4,10 +4,10 @@
 *.bak
 
 rcm/config/git/config-user
-rcm/config/ssh/config-user-secret
-rcm/config/ssh/key-user
-rcm/config/ssh/known_hosts
-rcm/config/ssh/known_hosts-user
+rcm/config/ssh/rcm/config-user-secret
+rcm/config/ssh/rcm/key-user
+rcm/config/ssh/rcm/known_hosts
+rcm/config/ssh/rcm/known_hosts-user
 rcm/host-*/
 rcm/tag-darwin/config/karabiner/automatic_backups/
 rcm/tag-nix/secrets-nix.env

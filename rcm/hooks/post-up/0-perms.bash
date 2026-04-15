@@ -5,9 +5,9 @@
 
 gum log -l info "updating directory permissions"
 
-chmod 700 "$HOME"/.config/ssh
+chmod 700 "$HOME"/.config/ssh/rcm
 
-chmod 600 "$HOME"/.config/ssh/*
+chmod 600 "$HOME"/.config/ssh/rcm/*
 
 # disabled for now because `*.pub` is used in sshconfig `IdentityFile` fields,
 # and OpenSSH treats that as a private key

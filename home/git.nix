@@ -133,5 +133,6 @@ in
     "git/config-common".text = commonConfigText;
     "git/config-aliases".text = aliasConfigText;
     "ssh/keys-allowed_signers-user".text = "${identity.gitUserEmail} ${signingKeyBare}\n";
+    "ssh/config".text = "Include ~/.config/ssh/rcm/config\n";
   };
 }
