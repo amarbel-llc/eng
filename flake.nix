@@ -70,12 +70,6 @@
       inputs.tommy.follows = "tommy";
       inputs.bob.follows = "bob";
     };
-    moxy = {
-      url = "github:amarbel-llc/moxy";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
     nebulous = {
       url = "github:amarbel-llc/nebulous";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -354,6 +348,7 @@
               purse-first.packages.${system}.purse-first
               bob.packages.${system}.default
               bob.packages.${system}.tap-dancer-bash
+              inputs.clown.packages.${system}.moxy
             ]
             ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
               inputs.tacky.packages.${system}.default
