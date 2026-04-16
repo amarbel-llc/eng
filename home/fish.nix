@@ -32,6 +32,7 @@ in
     shellInit = ''
       # Nix setup
       set -e NIX_PATH
+      set -e GIT_SSH_COMMAND
       if test -f $HOME/.nix-profile/etc/profile.d/nix.fish
         source $HOME/.nix-profile/etc/profile.d/nix.fish
       end
