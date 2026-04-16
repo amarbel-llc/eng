@@ -225,8 +225,6 @@ bump-nixpkgs:
   # diff is captured into $version_diff so it can go into the commit
   # body.
   gum log --level info "computing version diff"
-  # claude-code is intentionally absent: it is pinned via a dedicated input
-  # (see flake.nix → nixpkgs-claude-code-pinned) and no longer tracks master.
   versions_expr='p: { fish = p.fish.version or "?"; git = p.git.version or "?"; gopls = p.gopls.version or "?"; }'
   version_diff=""
   if old_versions="$(nix eval --json --apply "$versions_expr" "github:NixOS/nixpkgs/${old_sha}#legacyPackages.x86_64-linux" 2>/dev/null)" \

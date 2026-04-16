@@ -6,9 +6,6 @@
       age
       asdf
       asdf-vm
-      # claude-code is intentionally omitted: it is pinned to 2.1.88 via
-      # `nixpkgs-claude-code-pinned` and exposed solely through the wrapper
-      # in home/wrappers.nix. See CLAUDE.md → "Wrapper-Pinned Packages".
       coreutils
       curl
       curlftpfs

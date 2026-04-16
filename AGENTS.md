@@ -1,7 +1,7 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+This file provides guidance to AI coding agents when working with code in this
+repository.
 
 ## Overview
 
@@ -91,7 +91,7 @@ Pattern:
 
 1. Add a new input in `flake.nix` with a SHA literal pointing at the
    last known-good nixpkgs revision, e.g.
-   `nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/<sha>"`.
+   `nixpkgs-<name>-pinned.url = "github:NixOS/nixpkgs/<sha>"`.
    Do not `follows` anything — it must stay frozen.
 2. Add the import to `home/special-args.nix` as `pkgs-<name>-pinned`.
    This is the ONLY place the pinned tree needs to be wired into
@@ -118,11 +118,7 @@ Rolling back the pin: delete the input, revert `home/wrappers.nix` to
 use `pkgs-master.<package>`, re-add the package to `systems/common`,
 and restore any removed sentinel entries. One commit.
 
-Current wrapper pins:
-
-- `claude-code` → 2.1.83 (nixpkgs `5b471d29a8`) — Spinclass sessions call
-  `exec.Command("claude", ...)` from PATH, so the wrapper is what
-  spinclass actually runs.
+Current wrapper pins: none.
 
 ### Home-Manager & Nix-Darwin
 
@@ -326,7 +322,7 @@ hundreds of lines of test output.
 **Assertion quality guard:** When modifying test assertions, new assertions must
 validate at least as much structure as the originals. Never mechanically rewrite
 assertions to match new output without evaluating whether they still test
-meaningful behavior. If a change reduces assertion specificity (e.g. structured
+meaningful behavior. If a change reduces assertion specificity (e.g. structured
 YAML blocks to bare prefix matching), that's a red flag.
 
 ## Feature Lifecycle
@@ -351,5 +347,5 @@ front matter defining when it advances to the next stage.
   their agent rather than skipping signatures
 - Use `gum` for log output in scripts
 - Use `fh` (FlakeHub CLI) for flake input management
-- Subprojects have their own CLAUDE.md files --- check for them when working in
+- Subprojects have their own AGENTS.md files --- check for them when working in
   repos/

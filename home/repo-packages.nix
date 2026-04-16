@@ -11,9 +11,8 @@ let
   # even though they MAY expose a `packages.<system>.default`.
   # Mirrors `nonRepoInputs` in ../flake.nix — keep in sync.
   # Inputs without a default package at all (nixpkgs forks, flake-utils,
-  # nixpkgs-claude-code-pinned wrapper-pin trees) are filtered by shape
-  # below and do NOT need to be listed here. See CLAUDE.md →
-  # "Wrapper-Pinned Packages".
+  # wrapper-pin trees) are filtered by shape below and do NOT need to be
+  # listed here. See AGENTS.md → "Wrapper-Pinned Packages".
   nonRepoInputs = [
     "self"
     "home-manager"

@@ -1,7 +1,7 @@
 # Home-Manager Modules
 
 Home-manager modules for declarative user environment management. See
-CLAUDE.md's "Home-Manager & Nix-Darwin" section for the full architecture.
+AGENTS.md's "Home-Manager & Nix-Darwin" section for the full architecture.
 
 ## NSS on Non-NixOS Linux
 

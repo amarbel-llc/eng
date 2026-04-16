@@ -1424,11 +1424,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776197945,
-        "narHash": "sha256-9zbHuBQwDKdCpWoeCzy7ck4vnZF0ltmi9sAyps2j1Ho=",
+        "lastModified": 1776344147,
+        "narHash": "sha256-3oOyMBmNWDAaSJ/o1YtC5EZvC2ApncmOqK97fuXtI/k=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "d8212648111d7feeae773106f3b1037171f57390",
+        "rev": "1d3ee3bffb7eae9dc17057e0fc4b11b85972768e",
         "type": "github"
       },
       "original": {
@@ -4710,11 +4710,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776341534,
-        "narHash": "sha256-aU6TWbCr1qLc9obqjhRSq1IMHNsC27w0OLLuMy2CnX8=",
+        "lastModified": 1776344068,
+        "narHash": "sha256-3ffai/PfffG7QZteNjz2I7fyEFizgxSfinNsLKnkJlQ=",
         "owner": "amarbel-llc",
         "repo": "madder",
-        "rev": "c2c5197ae2369d4dd81d353c70faba5024645998",
+        "rev": "38f28b28af52ba29e4f9e61aef509028d2e5f307",
         "type": "github"
       },
       "original": {
@@ -4966,22 +4966,6 @@
       "original": {
         "type": "tarball",
         "url": "https://flakehub.com/f/NixOS/nixpkgs/0"
-      }
-    },
-    "nixpkgs-claude-code-pinned": {
-      "locked": {
-        "lastModified": 1774422958,
-        "narHash": "sha256-80xnabNnvMgvlechYmDgNnXeCcYDzueUtMhvpU8Egug=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "5b471d29a84be70e8f5577258721b89865660493",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "5b471d29a84be70e8f5577258721b89865660493",
-        "type": "github"
       }
     },
     "nixpkgs-lib": {
@@ -6419,7 +6403,6 @@
         "nix-darwin": "nix-darwin",
         "nix-plist-manager": "nix-plist-manager",
         "nixpkgs": "nixpkgs_31",
-        "nixpkgs-claude-code-pinned": "nixpkgs-claude-code-pinned",
         "nixpkgs-master": "nixpkgs-master_10",
         "piggy": "piggy",
         "pivy": "pivy",

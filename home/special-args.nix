@@ -7,7 +7,7 @@
 #      sets are identical in practice)
 #
 # This file exists specifically so that adding a new pinned-tree input
-# (see CLAUDE.md → "Wrapper-Pinned Packages") is a SINGLE-LINE change here,
+# (see AGENTS.md → "Wrapper-Pinned Packages") is a SINGLE-LINE change here,
 # not a three-site edit across flake.nix. If you are about to wire a new
 # `nixpkgs-*-pinned` input into home-manager, this is the only file you
 # need to touch in the flake plumbing layer — after adding the flake input
@@ -26,10 +26,6 @@
 system: {
   inherit inputs;
   pkgs-master = import inputs.nixpkgs-master {
-    inherit system;
-    config.allowUnfree = true;
-  };
-  pkgs-claude-code-pinned = import inputs.nixpkgs-claude-code-pinned {
     inherit system;
     config.allowUnfree = true;
   };

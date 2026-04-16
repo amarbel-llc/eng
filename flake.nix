@@ -4,11 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/ae921939fcbd44874664477bd1d22543c10a8306";
-    # Frozen tree used only by the claude wrapper in home/wrappers.nix to pin
-    # claude-code to 2.1.83. Not followed by anything — bump-nixpkgs leaves it
-    # alone because its sed is anchored to `nixpkgs-master.url`. Unpin by
-    # removing this input and reverting home/wrappers.nix + systems/common.
-    nixpkgs-claude-code-pinned.url = "github:NixOS/nixpkgs/5b471d29a84be70e8f5577258721b89865660493";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     home-manager = {
@@ -169,7 +164,7 @@
       # Builder for home-manager (extra)specialArgs, shared by the Linux
       # and darwin branches below. See ./home/special-args.nix for the
       # full rationale — short version: adding a new pinned-tree input
-      # (CLAUDE.md → "Wrapper-Pinned Packages") should be a one-line
+      # (AGENTS.md → "Wrapper-Pinned Packages") should be a one-line
       # change in that file, not a three-site edit here.
       mkHomeSpecialArgs = import ./home/special-args.nix { inherit inputs; };
     in
@@ -189,7 +184,7 @@
           # isolated symlink directory pointing to the system's NSS libraries
           # and sets LD_LIBRARY_PATH to it. Deployed via rcm on hosts that
           # need it; absent on NixOS and macOS.
-          # See CLAUDE.md "NSS on Non-NixOS Linux".
+          # See AGENTS.md "NSS on Non-NixOS Linux".
           nssSessionPath = builtins.toPath (homeDir + "/.config/nix/nss-session.nix");
           optionalNssModule = if builtins.pathExists nssSessionPath then [ nssSessionPath ] else [ ];
         in
@@ -276,7 +271,7 @@
         #   darwin branch of the symlinkJoin.
         #
         # Adding a new nixpkgs-style frozen input for wrapper-pinning
-        # (see CLAUDE.md → "Wrapper-Pinned Packages") requires zero
+        # (see AGENTS.md → "Wrapper-Pinned Packages") requires zero
         # bookkeeping at this list — the shape filter handles it.
         nonRepoInputs = [
           "self"
@@ -335,7 +330,7 @@
         # forks, flake-utils, home-manager, etc.) is silently skipped
         # rather than raising `attribute 'packages' missing`. This makes
         # the flake tolerant of new nixpkgs-style inputs — e.g. frozen
-        # trees added for the wrapper-pinning strategy in CLAUDE.md.
+        # trees added for the wrapper-pinning strategy in AGENTS.md.
         repoPackages =
           let
             candidates = builtins.removeAttrs inputs nonRepoInputs;

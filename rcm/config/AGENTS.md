@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents when working with code in this repository.
 
 ## Overview
 
@@ -10,7 +10,7 @@ Files here are deployed via `rcup` (run from the top-level `just build-rcm`). Af
 
 ## Structure
 
-- `git/` — Modular git config: `config-user` includes `config-common` and `config-aliases`. Aliases are standalone bash scripts in `git/aliases/` (see `git/aliases/CLAUDE.md` for alias-specific guidance). `config-aliases.rcm-script` auto-generates the `[alias]` section from symlinked scripts at deploy time.
+- `git/` — Modular git config: `config-user` includes `config-common` and `config-aliases`. Aliases are standalone bash scripts in `git/aliases/` (see `git/aliases/AGENTS.md` for alias-specific guidance). `config-aliases.rcm-script` auto-generates the `[alias]` section from symlinked scripts at deploy time.
 - `fish/` — Fish shell config. `config.fish` auto-sources all `*-config.fish` files. Functions live in `functions/`, completions in `completions/`.
 - `nvim/` — Neovim config using lazy.nvim. LSP configs in `lsp/`, plugins in `lua/plugins/`. `after/plugin/init.lua` auto-enables all LSPs found in the `lsp/` directory.
 - `just/justfile` — User-level just recipes (timg preview, git-add-and-commit).
