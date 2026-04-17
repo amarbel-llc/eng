@@ -1,4 +1,4 @@
 # vim: ft=toml
 
 [hooks]
-pre-merge = "just validate"
+pre-merge = "just"
