@@ -12,7 +12,6 @@ command = "dodder mcp"
 name = "nebulous"
 command = "nebulous"
 
-# chrest — blocked on https://github.com/amarbel-llc/chrest/issues/15
-# [[servers]]
-# name = "chrest"
-# command = "chrest mcp"
+[[servers]]
+name = "chrest"
+command = "chrest mcp"
