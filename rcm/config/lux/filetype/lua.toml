@@ -1,4 +1,4 @@
 extensions = ["lua"]
 language_ids = ["lua"]
-lsp = "lua-language-server"
+# lsp = "lua-language-server"  # disabled: LSS indexes full /home/sasha/eng when spawned there; see amarbel-llc/bob#101
 formatters = ["stylua"]
