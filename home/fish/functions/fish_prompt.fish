@@ -14,10 +14,34 @@ function fish_prompt --description 'Write out the prompt'
   set -g __fish_git_prompt_showuntrackedfiles true
   set -g __fish_git_prompt_showcolorhints true
   set -g __fish_git_prompt_showdirtystate true
-  printf '%s ' (fish_git_prompt)
+  printf '%s' (fish_git_prompt)
   set -l parens
 
   if git rev-parse --is-inside-work-tree >/dev/null 2>&1
+    set -l conflict_count (git diff --name-only --diff-filter=U 2>/dev/null | count)
+
+    if test $conflict_count -gt 0
+      printf ' %s⚠%s' (set_color red) (set_color normal)
+    end
+
+    set -l latest_tag (git tag --sort=-creatordate 2>/dev/null | head -n1)
+
+    if test -n "$latest_tag"
+      set -l ahead (git rev-list --count $latest_tag..HEAD 2>/dev/null)
+      set -l behind (git rev-list --count HEAD..$latest_tag 2>/dev/null)
+      set -l tag_segment "tag: $latest_tag"
+
+      if test -n "$ahead" -a "$ahead" != 0
+        set tag_segment "$tag_segment "(set_color green)"+$ahead"(set_color normal)
+      end
+
+      if test -n "$behind" -a "$behind" != 0
+        set tag_segment "$tag_segment "(set_color red)"-$behind"(set_color normal)
+      end
+
+      set -a parens $tag_segment
+    end
+
     set -l stash_count (git stash list | count)
 
     if test $stash_count -gt 0
@@ -30,6 +54,8 @@ function fish_prompt --description 'Write out the prompt'
       set -a parens "worktrees: $worktree_count"
     end
   end
+
+  printf ' '
 
   set -l job_count (jobs | wc -l)
 
