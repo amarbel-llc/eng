@@ -7,21 +7,7 @@
 let
   system = pkgs.stdenv.hostPlatform.system;
 
-  # Inputs intentionally excluded from the auto-imported repo set,
-  # even though they MAY expose a `packages.<system>.default`.
-  # Mirrors `nonRepoInputs` in ../flake.nix — keep in sync.
-  # Inputs without a default package at all (nixpkgs forks, flake-utils,
-  # wrapper-pin trees) are filtered by shape below and do NOT need to be
-  # listed here. See AGENTS.md → "Wrapper-Pinned Packages".
-  nonRepoInputs = [
-    "self"
-    "home-manager"
-    "nix-darwin"
-    "nix-plist-manager"
-    "bob"
-    "purse-first"
-    "tacky"
-  ];
+  nonRepoInputs = import ./non-repo-inputs.nix;
 
   # Inputs whose default package is wrapped in lib.lowPrio so they lose
   # file collisions (e.g. shared man pages) to normal-priority inputs.

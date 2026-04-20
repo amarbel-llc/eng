@@ -1,5 +1,2 @@
-#! /bin/bash -xe
-
-# dir="$(git rev-parse --show-toplevel)"                                                                                                                                         
-# pushd "$dir" || exit 1
-# git secret reveal -f
+#! /bin/bash -e
+# git-secret reveal is no longer used; this hook is a no-op.

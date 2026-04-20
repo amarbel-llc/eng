@@ -11,37 +11,27 @@ if [[ ! -d $DIR_KEYD_CONFIG_HOME ]]; then
   exit 0
 fi
 
-FILE_KEYD_CONFIG_UP="/usr/local/bin/keyd-config-up"
+HELPER="$HOME/.local/bin/keyd-config-up"
 
-if [[ ! -e $FILE_KEYD_CONFIG_UP ]]; then
-  cat - >&2 <<-EOM
-  keyd-config-up script not installed
-  copy the following to $FILE_KEYD_CONFIG_UP:
+mkdir -p "$(dirname "$HELPER")"
+cat >"$HELPER" <<'EOM'
+#! /usr/bin/env -S bash -e
 
-EOM
+DIR_KEYD_CONFIG_HOME="${1}"
 
-  cat - <<-EOM
-  #! /usr/bin/env -S bash -e
-
-  DIR_KEYD_CONFIG_HOME="${1}"
-
-  if [[ -z "$DIR_KEYD_CONFIG_HOME" ]]; then
-    echo "No keyd config home supplied, aborting" >&2
-    exit 1
-  fi
-
-  sudo rsync -a --chmod=D755,F644 --chown=root:root "$DIR_KEYD_CONFIG_HOME" /etc/keyd/
-  sudo systemctl restart keyd
-  sudo systemctl status keyd
-EOM
+if [[ -z $DIR_KEYD_CONFIG_HOME ]]; then
+  echo "No keyd config home supplied, aborting" >&2
+  exit 1
 fi
 
-gum log -l warn "TODO update $(basename "$0") to install $FILE_KEYD_CONFIG_UP automatically"
+sudo rsync -a --chmod=D755,F644 --chown=root:root "$DIR_KEYD_CONFIG_HOME" /etc/keyd/
+sudo systemctl restart keyd
+sudo systemctl status keyd
+EOM
+chmod +x "$HELPER"
 
 if ! gum confirm "Update keyd config?" --default=false; then
   exit 0
 fi
 
-# assuming we're on linux because keyd exists
-
-pkexec bash "$FILE_KEYD_CONFIG_UP" "$DIR_KEYD_CONFIG_HOME"
+pkexec bash "$HELPER" "$DIR_KEYD_CONFIG_HOME"

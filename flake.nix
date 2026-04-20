@@ -175,7 +175,7 @@
             config.allowUnfree = true;
           };
           homeDir = builtins.getEnv "HOME";
-          linuxIdentity = import (builtins.toPath (homeDir + "/.config/identity.nix"));
+          linuxIdentity = import (/${homeDir}/.config/identity.nix);
           # On non-NixOS Linux, nix-built binaries use nix's glibc which
           # can't find system NSS modules (step_ssh, sss, systemd) for
           # user/group resolution. The nss-session.nix module creates an
@@ -183,7 +183,7 @@
           # and sets LD_LIBRARY_PATH to it. Deployed via rcm on hosts that
           # need it; absent on NixOS and macOS.
           # See AGENTS.md "NSS on Non-NixOS Linux".
-          nssSessionPath = builtins.toPath (homeDir + "/.config/nix/nss-session.nix");
+          nssSessionPath = /${homeDir}/.config/nix/nss-session.nix;
           optionalNssModule = if builtins.pathExists nssSessionPath then [ nssSessionPath ] else [ ];
         in
         home-manager.lib.homeManagerConfiguration {
@@ -247,46 +247,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        # Inputs intentionally excluded from the auto-imported repo set,
-        # even though they MAY expose a `packages.<system>.default`
-        # attribute on some systems. The shape filter in `repoPackages`
-        # catches inputs with no default package at all (nixpkgs forks,
-        # flake-utils, etc.) automatically — only list things here when
-        # they have a real default package that we want to keep out of
-        # the symlinkJoin:
-        #
-        # - `self` is the top-level flake itself; auto-importing would
-        #   recurse.
-        # - `home-manager` exposes a CLI as `packages.<system>.default`.
-        #   It is consumed as `.lib` / `.darwinModules` instead.
-        # - `nix-darwin` exposes `darwin-rebuild` as `packages.<darwin>.default`.
-        # - `nix-plist-manager` likewise exposes a darwin-side package
-        #   used only as a darwin module.
-        # - `bob` and `purse-first` produce marketplace outputs whose
-        #   `.claude-plugin/marketplace.json` would collide in symlinkJoin.
-        #   Their non-marketplace packages are spliced in manually below.
-        # - `clown` is consumed via `mkCircus` which produces a
-        #   plugin-equipped wrapper; the bare default would lack plugins.
-        # - `tacky` is darwin-only; it is added manually under the
-        #   darwin branch of the symlinkJoin.
-        #
-        # Adding a new nixpkgs-style frozen input for wrapper-pinning
-        # (see AGENTS.md → "Wrapper-Pinned Packages") requires zero
-        # bookkeeping at this list — the shape filter handles it.
-        nonRepoInputs = [
-          "self"
-          "home-manager"
-          "nix-darwin"
-          "nix-plist-manager"
-          "bob"
-          "clown"
-          "moxy"
-          "purse-first"
-          "tacky"
-        ];
-
-        # Repos whose default package isn't named "default"
-        repoPackageOverrides = { };
+        nonRepoInputs = import ./home/non-repo-inputs.nix;
 
         # Import system packages directly from default.nix
         buildSystems =
@@ -337,14 +298,11 @@
           let
             candidates = builtins.removeAttrs inputs nonRepoInputs;
             hasDefaultPackage =
-              name: input:
-              let
-                key = repoPackageOverrides.${name} or "default";
-              in
-              (input ? packages) && (input.packages ? ${system}) && (input.packages.${system} ? ${key});
+              _name: input:
+              (input ? packages) && (input.packages ? ${system}) && (input.packages.${system} ? default);
           in
           builtins.mapAttrs (
-            name: input: input.packages.${system}.${repoPackageOverrides.${name} or "default"}
+            _name: input: input.packages.${system}.default
           ) (pkgs.lib.filterAttrs hasDefaultPackage candidates);
 
         circus = inputs.clown.lib.${system}.mkCircus {
