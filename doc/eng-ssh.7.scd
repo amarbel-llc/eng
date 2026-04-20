@@ -7,7 +7,7 @@ eng-ssh - SSH agent architecture and configuration
 # DESCRIPTION
 
 The *eng* environment uses a three-layer SSH agent stack that combines
-hardware-backed PIV keys with software certificates (e.g. Step CA). An
+hardware-backed PIV keys with software certificates. An
 agent multiplexer presents a single socket to SSH clients.
 
 # AGENT STACK
@@ -18,13 +18,13 @@ Three agent sockets live under _~/.local/state/ssh/_:
 	PIV hardware key agent. Exposes YubiKey slots 9A and 9D. Launchd service *net.cooperi.pivy-agent* (see _home/pivy-agent.nix_).
 
 *launchd-agent.sock*
-	Symlink to macOS built-in ssh-agent. Holds software-added keys (Step SSH certificates). Created by fish interactiveShellInit (see _home/fish.nix_).
+	Symlink to macOS built-in ssh-agent. Holds software-added keys (e.g. short-lived SSH certificates). Created by fish interactiveShellInit (see _home/fish.nix_).
 
 *mux-agent.sock*
 	ssh-agent-mux multiplexer combining both upstream agents. Config at _~/.config/ssh-agent-mux/ssh-agent-mux.toml_ (see _home/ssh-agent-mux.nix_).
 
 The multiplexer config routes *add_identity* requests to the launchd
-agent (via *add-new-keys-to = "launchd"*), so Step certificates and
+agent (via *add-new-keys-to = "launchd"*), so software certificates and
 other software keys land there, not in pivy-agent.
 
 # AUTHENTICATION FLOW
@@ -36,7 +36,7 @@ When SSH connects to a host:
 . SSH tries each identity until the server accepts one.
 . The agent routes the signing request to whichever upstream agent owns the accepted key.
 
-For hosts using *mux-agent.sock*, both PIV keys and Step certificates
+For hosts using *mux-agent.sock*, both PIV keys and software certificates
 are available. For hosts that explicitly set *IdentityAgent* to a
 specific socket (e.g. _launchd-agent.sock_ or _1password-agent.sock_),
 only that agent's keys are tried.
@@ -52,14 +52,14 @@ extended by rcm-deployed includes:
 . _~/.config/ssh/config-local_ — per-machine overrides (includes child repo configs).
 . _~/.config/ssh/rcm/config-user-secret_ — private host definitions.
 
-Child repositories add their own SSH config fragments. See
-*eng-etsy-step*(7) for the Etsy Step CA integration.
+Child repositories add their own SSH config fragments via
+_config-local_ includes.
 
 # AGENT FORWARDING
 
 The *config-client* sets *ForwardAgent* to the mux-agent socket path.
 This means remote hosts receive an agent that can sign with both PIV
-keys and Step certificates. Individual host blocks can override this
+keys and software certificates. Individual host blocks can override this
 with *ForwardAgent yes* (forward) or *ForwardAgent no* (block).
 
 # KNOWN HOSTS
@@ -102,5 +102,4 @@ _~/.config/ssh/config_
 
 # SEE ALSO
 
-*eng*(7), *eng-etsy-step*(7), *pivy-agent*(1), *ssh-agent-mux*(1),
-*ssh_config*(5)
+*eng*(7), *pivy-agent*(1), *ssh-agent-mux*(1), *ssh_config*(5)
