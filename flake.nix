@@ -33,6 +33,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
+      inputs.moxy.follows = "moxy";
+      inputs.bob.follows = "bob";
     };
     chrest = {
       url = "github:amarbel-llc/chrest";
@@ -66,6 +68,12 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
       inputs.tommy.follows = "tommy";
+      inputs.bob.follows = "bob";
+    };
+    moxy = {
+      url = "github:amarbel-llc/moxy/a90e0dfbc830700efe28d2238bd2acb5bf8095dc";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.bob.follows = "bob";
     };
     nebulous = {
@@ -271,6 +279,7 @@
           "nix-darwin"
           "nix-plist-manager"
           "bob"
+          "moxy"
           "purse-first"
           "tacky"
         ];
