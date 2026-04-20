@@ -23,6 +23,13 @@ task. If I give you a GitHub issue to fix, use the `/fix-issue` skill.
   devshell needs to change (new packages, updated flake inputs), ask the user to
   restart the session with a `direnv reload` in between. Do not attempt to run
   `direnv reload` or `direnv allow` from within the session.
+- `nix build` against a dirty git tree only includes **git-tracked files**.
+  Untracked files (new `.go` files, new directories, new flake inputs) are
+  invisible to the build even though the working tree sees them. Symptom: `go
+  build ./...` passes but `nix build` fails with "cannot find module providing
+  package" or similar, and the unpacked source archive path is identical across
+  runs despite your edits. Fix: `git add` the new path before re-running
+  `nix build`. No commit needed — staging is enough.
 
 # Debugging
 
