@@ -33,8 +33,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
-      inputs.moxy.follows = "moxy";
-      inputs.bob.follows = "bob";
     };
     chrest = {
       url = "github:amarbel-llc/chrest";
@@ -267,6 +265,8 @@
         # - `bob` and `purse-first` produce marketplace outputs whose
         #   `.claude-plugin/marketplace.json` would collide in symlinkJoin.
         #   Their non-marketplace packages are spliced in manually below.
+        # - `clown` is consumed via `mkCircus` which produces a
+        #   plugin-equipped wrapper; the bare default would lack plugins.
         # - `tacky` is darwin-only; it is added manually under the
         #   darwin branch of the symlinkJoin.
         #
@@ -279,6 +279,7 @@
           "nix-darwin"
           "nix-plist-manager"
           "bob"
+          "clown"
           "moxy"
           "purse-first"
           "tacky"
@@ -346,6 +347,28 @@
             name: input: input.packages.${system}.${repoPackageOverrides.${name} or "default"}
           ) (pkgs.lib.filterAttrs hasDefaultPackage candidates);
 
+        circus = inputs.clown.lib.${system}.mkCircus {
+          plugins = [
+            { flake = inputs.moxy; dirs = [ "share/purse-first/moxy" ]; }
+            { flake = bob;         dirs = [ "share/purse-first/*" ]; }
+          ];
+        };
+
+        doc = pkgs.stdenvNoCC.mkDerivation {
+          pname = "eng-doc";
+          version = "0.1.0";
+          src = ./doc;
+          nativeBuildInputs = [ pkgs.scdoc ];
+          dontUnpack = true;
+          dontBuild = true;
+          installPhase = ''
+            mkdir -p $out/share/man/man7
+            for f in $src/*.7.scd; do
+              scdoc < "$f" > "$out/share/man/man7/$(basename "$f" .scd)"
+            done
+          '';
+        };
+
         packages = pkgs.symlinkJoin {
           name = "eng";
           paths =
@@ -355,7 +378,9 @@
               purse-first.packages.${system}.purse-first
               bob.packages.${system}.default
               bob.packages.${system}.tap-dancer-bash
-              inputs.clown.packages.${system}.moxy
+              circus.packages.default
+              inputs.moxy.packages.${system}.default
+              doc
             ]
             ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
               inputs.tacky.packages.${system}.default
