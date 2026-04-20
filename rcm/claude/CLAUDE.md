@@ -10,6 +10,15 @@
 - when debugging or exploring, DO NOT use ad hoc bash scripts or python scripts,
   instead use ad-hoc justfile recipes. mark them with debug or explore groups
 
+# Worktrees and spinclass
+
+- **Do NOT call `EnterWorktree`.** Sessions already run inside a
+  spinclass-managed worktree at `.worktrees/<name>`. Why: spinclass worktrees
+  are workers, not subject-scoped branches — multiple series of commits and
+  merges through the same worktree is expected. After a
+  `spinclass merge-this-session`, start the next piece of work from the same
+  worktree (new branch via `git checkout -b` if needed), not a new one.
+
 # Mid-Task Idea Capture
 
 If I instruct you to create a todo, use the `/file-issue` skill. Also use
