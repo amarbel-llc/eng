@@ -75,4 +75,4 @@ config, and SSH signing key selection.
 
 # SEE ALSO
 
-*eng-ssh*(7), *eng-direnv*(7), *eng-rcm*(7), *eng-etsy*(7)
+*eng-ssh*(7), *eng-direnv*(7), *eng-rcm*(7), *eng-manpages*(7), *eng-versioning*(7), *eng-etsy*(7)

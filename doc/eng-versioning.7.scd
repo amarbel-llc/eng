@@ -349,4 +349,4 @@ For each repository that needs to adopt the gold standard:
 
 # SEE ALSO
 
-*eng*(7), *moxy*(1), *moxin*(7)
+*eng*(7), *eng-manpages*(7), *moxy*(1), *moxin*(7)
