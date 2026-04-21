@@ -32,6 +32,14 @@ else
   gum log --level warn "no keys found on pivy-agent, skipping signing key"
 fi
 
+# SSH hosts use agent forwarding instead of pivy-agent/ssh-agent-mux
+is_ssh_host=false
+ssh_confirm_flag=""
+[[ -n ${SSH_CLIENT:-} ]] && ssh_confirm_flag="--default"
+if gum confirm $ssh_confirm_flag "Configure as SSH host? (skips pivy-agent and ssh-agent-mux)"; then
+  is_ssh_host=true
+fi
+
 generate_identity() {
   if [[ "$(uname)" == "Darwin" ]]; then
     hostname="$(scutil --get LocalHostName)"
@@ -43,6 +51,7 @@ generate_identity() {
   gitUserName = "$git_name";
   gitUserEmail = "$git_email";
   gitSigningKey = "$signing_key";
+  isSshHost = $is_ssh_host;
 }
 NIX
   fi
