@@ -69,7 +69,7 @@
       inputs.bob.follows = "bob";
     };
     moxy = {
-      url = "github:amarbel-llc/moxy/a90e0dfbc830700efe28d2238bd2acb5bf8095dc";
+      url = "github:amarbel-llc/moxy";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.bob.follows = "bob";
