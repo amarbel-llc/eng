@@ -1571,11 +1571,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776689774,
-        "narHash": "sha256-F6felbUKGr0U5NnElvgrAJVdIQE8F7DuNeVGwnVvcZw=",
+        "lastModified": 1776777797,
+        "narHash": "sha256-duFcQRTk/SUcqvlcHGptG9zbIdNHm8n1+RycroyMqMI=",
         "owner": "amarbel-llc",
         "repo": "dodder",
-        "rev": "68c0c8c536f01027c1d1831aa2bdd9715f2e9994",
+        "rev": "3d397fa3699152d5e5f65d8ad6bf2cbdbc0e0d98",
         "type": "github"
       },
       "original": {
@@ -4874,6 +4874,22 @@
         "type": "github"
       }
     },
+    "jcardsim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1589327878,
+        "narHash": "sha256-0akp8BAp6QxGuBrDFEg0ED/F98bCkO2WQSocYqWszyI=",
+        "owner": "arekinath",
+        "repo": "jcardsim",
+        "rev": "4c766cfb48c43507f9a30a1443e7214d2073a430",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arekinath",
+        "repo": "jcardsim",
+        "type": "github"
+      }
+    },
     "madder": {
       "inputs": {
         "bob": [
@@ -4934,11 +4950,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776696245,
-        "narHash": "sha256-vUQepAzP1hfxHXAx0YkYxgADMmFgpYVcaoZGGIkgI8s=",
+        "lastModified": 1776775635,
+        "narHash": "sha256-esqs9HEpawCMyA9oMA8lobTysdsw9F0+Ugk5Kv/yFsk=",
         "owner": "amarbel-llc",
         "repo": "madder",
-        "rev": "2864d8d1211c8a555bebae4cb46c786220b9b77e",
+        "rev": "8bf6cd0619a0b59c4a4fefea581b8999e38a37e4",
         "type": "github"
       },
       "original": {
@@ -5096,11 +5112,11 @@
         "utils": "utils_8"
       },
       "locked": {
-        "lastModified": 1776722264,
-        "narHash": "sha256-R2U1nTZd0r80zgpiXeIceIPox1MDYf1oUREJx4hTrlw=",
+        "lastModified": 1776780413,
+        "narHash": "sha256-9op/U68apE+tECiyBctH+DPzcgOJfHhW32nsAJTys64=",
         "owner": "amarbel-llc",
         "repo": "moxy",
-        "rev": "aa8a7b627c5be0941aa08d33deeeb3b4f7bdefde",
+        "rev": "2817f019dc6f0a329f2032239ca66f75771930e9",
         "type": "github"
       },
       "original": {
@@ -5127,11 +5143,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776774428,
-        "narHash": "sha256-E8LTg9Rtz4R6LpTd+4CUz0/uxwE1s2v/JQk+j0KPxG8=",
+        "lastModified": 1776776937,
+        "narHash": "sha256-b7uDtqCbWQ1Ivtk0WQr6v/fVrGHJ6Wm6szM5fJvzjbg=",
         "owner": "amarbel-llc",
         "repo": "nebulous",
-        "rev": "d3ded6a6db391d2455e316068888d09b66869ad7",
+        "rev": "f746f203b2bbb2910920b19d0eb219e7e6940d0d",
         "type": "github"
       },
       "original": {
@@ -6343,15 +6359,34 @@
         "type": "github"
       }
     },
+    "oracle-javacard-sdks": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1763401029,
+        "narHash": "sha256-f54ckaxd8Jaz2Hsw1Cj2zK1OVI5MYC/nYnz4llPp6tM=",
+        "owner": "martinpaljak",
+        "repo": "oracle_javacard_sdks",
+        "rev": "3751d774dd4e6b60e813c6be61ab017e77f36570",
+        "type": "github"
+      },
+      "original": {
+        "owner": "martinpaljak",
+        "repo": "oracle_javacard_sdks",
+        "type": "github"
+      }
+    },
     "piggy": {
       "inputs": {
         "bob": "bob_14",
+        "jcardsim": "jcardsim",
         "nixpkgs": [
           "nixpkgs"
         ],
         "nixpkgs-master": [
           "nixpkgs-master"
         ],
+        "oracle-javacard-sdks": "oracle-javacard-sdks",
+        "pivapplet": "pivapplet",
         "pivy": [
           "pivy"
         ],
@@ -6360,16 +6395,32 @@
         ]
       },
       "locked": {
-        "lastModified": 1776714834,
-        "narHash": "sha256-DCMD3febm7lu3w+EmyeskCNa+VJ/wGbkDlYmzmdWaXI=",
+        "lastModified": 1776780619,
+        "narHash": "sha256-6dc8cS9QvRdWtEHP1ldA35xkgDwhRoWbv2hXgHk0syo=",
         "owner": "amarbel-llc",
         "repo": "piggy",
-        "rev": "64b769c9856522e531c847936d45ebd1bba8efef",
+        "rev": "6262d76949b63fa598210ab56725c5ab40ffb347",
         "type": "github"
       },
       "original": {
         "owner": "amarbel-llc",
         "repo": "piggy",
+        "type": "github"
+      }
+    },
+    "pivapplet": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1661144882,
+        "narHash": "sha256-FuO9iocgB1ZjQCKW9EfPUuCIx066LIz0mhb73SmGMAw=",
+        "owner": "arekinath",
+        "repo": "PivApplet",
+        "rev": "5cb14a9e8d16e92fbad73dcad86a219a9210554f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arekinath",
+        "repo": "PivApplet",
         "type": "github"
       }
     },
