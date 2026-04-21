@@ -5,6 +5,11 @@
 }:
 let
   signingKeyBare = lib.removePrefix "key::" identity.gitSigningKey;
+  isSshHost = identity.isSshHost or false;
+  knownHostsFiles =
+    if isSshHost
+    then "~/.config/ssh/known_hosts"
+    else "~/.config/ssh/rcm/known_hosts ~/.config/ssh/rcm/known_hosts-user";
 in
 {
   xdg.configFile = {
@@ -18,7 +23,7 @@ in
       Include ~/.config/ssh/config-local
 
       Host *
-        UserKnownHostsFile ~/.config/ssh/rcm/known_hosts ~/.config/ssh/rcm/known_hosts-user
+        UserKnownHostsFile ${knownHostsFiles}
     '';
 
     "ssh/keys-allowed_signers-user".text = "${identity.gitUserEmail} ${signingKeyBare}\n";
