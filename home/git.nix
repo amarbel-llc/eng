@@ -73,6 +73,8 @@ let
     	path = editor
     [merge "ours"]
     	driver = true
+    [fetch]
+    	tags = true
     [pull]
     	rebase = true
     [advice]
