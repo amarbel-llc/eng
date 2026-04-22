@@ -44,7 +44,6 @@
       url = "github:amarbel-llc/dodder";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.tommy.follows = "tommy";
       inputs.utils.follows = "utils";
     };
     ess-ess-hatch = {
@@ -57,7 +56,6 @@
       url = "github:amarbel-llc/madder";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.tommy.follows = "tommy";
       inputs.utils.follows = "utils";
     };
     maneater = {
@@ -65,7 +63,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
-      inputs.tommy.follows = "tommy";
       inputs.bob.follows = "bob";
     };
     moxy = {
@@ -118,11 +115,6 @@
     };
     tacky = {
       url = "github:amarbel-llc/tacky";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "utils";
-    };
-    tommy = {
-      url = "github:amarbel-llc/tommy";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "utils";
     };
