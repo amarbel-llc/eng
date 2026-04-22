@@ -178,6 +178,9 @@ in
 
         _hm_append_path PATH "$hm_profile/bin"
         _hm_append_path XDG_DATA_DIRS "$hm_profile/share"
+        # Seed MANPATH with the empty-entry convention (:) if unset, so man(1)
+        # still searches system defaults after we append explicit paths.
+        [[ -z "''${MANPATH:-}" ]] && export MANPATH=":"
         _hm_append_path MANPATH "$hm_profile/share/man"
       }
 
