@@ -67,6 +67,11 @@ in
     '';
 
     interactiveShellInit = ''
+      # Git prompt configuration (set once, not per-prompt)
+      set -g __fish_git_prompt_showuntrackedfiles true
+      set -g __fish_git_prompt_showcolorhints true
+      set -g __fish_git_prompt_showdirtystate true
+
       # Cow bell on process exit
       function __cow_bell_on_process_exit --on-event fish_postexec
         set -l postexec_status $pipestatus

@@ -8,5 +8,6 @@
     NODE_REPL_HISTORY = "${config.xdg.stateHome}/node/repl_history";
     PARALLEL_HOME = "${config.xdg.configHome}/parallel";
     PYTHON_HISTORY = "${config.xdg.stateHome}/python/history";
+    XDG_LOG_HOME = "$HOME/.local/log";
   };
 }
