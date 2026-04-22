@@ -158,18 +158,44 @@ in
       whitelist.prefix = [ "$HOME/eng" ];
     };
     stdlib = ''
-      layout_flake_with_hook() {
-        use_flake "$@"
-
-        local result_share
-        result_share="$(realpath ./result/share 2>/dev/null)" || true
-
-        if [[ -n "$result_share" && -d "$result_share" ]]; then
-          if [[ ":''${XDG_DATA_DIRS:-}:" != *":''${result_share}:"* ]]; then
-            export XDG_DATA_DIRS="''${result_share}''${XDG_DATA_DIRS:+:''${XDG_DATA_DIRS}}"
-          fi
+      # Append a path to a colon-separated variable if not already present.
+      # Appending (not prepending) means devshell entries win on conflicts;
+      # home-manager fills gaps the devshell doesn't cover.
+      _hm_append_path() {
+        local var="$1" new="$2"
+        local current="''${!var:-}"
+        if [[ ":$current:" != *":$new:"* ]]; then
+          export "$var"="''${current:+$current:}$new"
         fi
       }
+
+      # Keep home-manager's binaries, data, and man pages reachable inside
+      # nix-direnv devshells, which otherwise replace PATH/XDG_DATA_DIRS with
+      # only the devshell's own closure.
+      _hm_augment_env() {
+        local hm_profile="${config.home.profileDirectory}"
+        [[ -d "$hm_profile" ]] || return 0
+
+        _hm_append_path PATH "$hm_profile/bin"
+        _hm_append_path XDG_DATA_DIRS "$hm_profile/share"
+        _hm_append_path MANPATH "$hm_profile/share/man"
+      }
+
+      if declare -f use_flake > /dev/null; then
+        eval "_hm_orig_use_flake() $(declare -f use_flake | tail -n +2)"
+        use_flake() {
+          _hm_orig_use_flake "$@"
+          _hm_augment_env
+        }
+      fi
+
+      if declare -f use_nix > /dev/null; then
+        eval "_hm_orig_use_nix() $(declare -f use_nix | tail -n +2)"
+        use_nix() {
+          _hm_orig_use_nix "$@"
+          _hm_augment_env
+        }
+      fi
 
       on_direnv_loaded() {
         echo "correct"

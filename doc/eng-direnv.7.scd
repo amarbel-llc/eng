@@ -55,13 +55,15 @@ PATH_add "$PWD/bin"
 The *source_up* directive walks parent directories until it finds
 another _.envrc_ file.
 
-# LAYOUT FLAKE WITH HOOK
+# HOME-MANAGER PROFILE AUGMENTATION
 
-The direnv stdlib (defined in _home/common.nix_) includes a custom
-*layout_flake_with_hook* function that extends *use_flake* by adding
-_./result/share_ to *XDG_DATA_DIRS*. This makes man pages, shell
-completions, and other data from the Nix build result available in the
-shell without explicit configuration.
+The direnv stdlib (defined in _home/common.nix_) wraps nix-direnv's
+*use_flake* and *use_nix* so that entering a Nix devshell does not hide
+home-manager's profile. After the devshell env is loaded, the profile's
+_bin_, _share_, and _share/man_ directories are appended (not prepended)
+to *PATH*, *XDG_DATA_DIRS*, and *MANPATH* respectively. Devshell entries
+therefore win on conflicts, while globally-installed tools, data files,
+and man pages remain reachable as a fallback.
 
 # ENV FILE CONVENTIONS
 
@@ -81,7 +83,9 @@ Home-manager configures direnv in _home/common.nix_:
 - *nix-direnv* integration is enabled for cached Nix shells
 - Whitelist prefix is set to *\$HOME/eng* so all subdirectories are
   trusted
-- The stdlib defines *layout_flake_with_hook* and hook functions
+- The stdlib wraps *use_flake* and *use_nix* to preserve the
+  home-manager profile inside devshells (see *HOME-MANAGER PROFILE
+  AUGMENTATION*)
 
 # TROUBLESHOOTING
 
