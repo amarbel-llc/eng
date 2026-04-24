@@ -158,7 +158,13 @@
       # change in that file, not a three-site edit here.
       mkHomeSpecialArgs = import ./home/special-args.nix { inherit inputs; };
     in
-    {
+    (nixpkgs.lib.optionalAttrs (builtins.getEnv "HOME" != "") {
+      # Gated on non-empty HOME so pure-mode evaluators (e.g. the
+      # flakehub-push `nix flake show --all-systems` job, `nix flake
+      # check` without --impure) don't trip on the absolute-path
+      # `import /${homeDir}/.config/identity.nix` below. Local flows
+      # that need this attribute (home-manager switch) already run with
+      # --impure, where HOME is set.
       homeConfigurations.linux =
         let
           system = "x86_64-linux";
@@ -190,7 +196,7 @@
           ++ optionalNssModule;
         };
 
-    }
+    })
     // (
       if hasDarwinIdentity then
         {
