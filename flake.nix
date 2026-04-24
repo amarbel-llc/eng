@@ -37,7 +37,7 @@
     };
     chrest = {
       url = "github:amarbel-llc/chrest";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
