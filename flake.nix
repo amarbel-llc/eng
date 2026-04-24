@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/ae921939fcbd44874664477bd1d22543c10a8306";
+    nixpkgs-amarbel.url = "github:amarbel-llc/nixpkgs";
     utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
 
     home-manager = {
@@ -54,13 +55,13 @@
     };
     madder = {
       url = "github:amarbel-llc/madder";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
     maneater = {
       url = "github:amarbel-llc/maneater";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs-amarbel"; # disabled: pkgs.fetchGgufModel missing in nixpkgs-amarbel@master — see https://github.com/amarbel-llc/eng/issues/39
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
       inputs.bob.follows = "bob";
