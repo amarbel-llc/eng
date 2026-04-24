@@ -90,6 +90,31 @@ install-niri-session:
 test-integration:
   nix develop ./envs/integration-test --command just -f envs/integration-test/justfile test
 
+# Sanity check for eng#41: verifies the darwin nix-daemon accepts
+# __impure derivations (impure-derivations experimental feature) AND that
+# /usr/bin/sandbox-exec is whitelisted in allowed-impure-host-deps. Builds
+# a throwaway __impure derivation that execs /usr/bin/sandbox-exec; a
+# successful build proves both daemon settings are live.
+# Remove once FDR-0001 tracer has its own coverage.
+[group('debug')]
+[macos]
+debug-impure-derivations-smoke:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  # Use the flake registry's `nixpkgs` rather than eng's full flake to
+  # keep eval cheap — this smoke test only needs runCommand, not the
+  # full eng dep graph.
+  nix build --impure --no-link --print-out-paths \
+    --expr '(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}.runCommand "eng-41-impure-smoke" {
+      __impure = true;
+      __impureHostDeps = [ "/usr/bin/sandbox-exec" ];
+    } "/usr/bin/sandbox-exec -n no-internet /usr/bin/true && touch $out"'
+
+[group('debug')]
+[linux]
+debug-impure-derivations-smoke:
+  @echo "darwin-only sanity check (eng#41)"
+
 clean-nix:
   nix-store --gc
 

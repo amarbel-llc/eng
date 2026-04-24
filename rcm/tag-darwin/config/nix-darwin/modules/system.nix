@@ -33,7 +33,22 @@
   };
 
   # Necessary for using flakes on this system.
-  nix.settings.experimental-features = "nix-command flakes";
+  # impure-derivations enables __impure builds (see eng#41 / clown FDR-0001).
+  # ca-derivations is a hard prerequisite of impure-derivations.
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+    "fetch-tree"
+    "ca-derivations"
+    "impure-derivations"
+  ];
+
+  # sandcastle invokes /usr/bin/sandbox-exec from inside derivations; daemon
+  # defaults on darwin only whitelist /System/Library, /usr/lib, /dev, /bin/sh
+  # (see NixOS/nix src/libstore/globals.cc `allowedImpureHostPrefixes`).
+  nix.settings.extra-allowed-impure-host-deps = [
+    "/usr/bin/sandbox-exec"
+  ];
 
   # Enable alternative shell support in nix-darwin.
   programs.fish.enable = true;
