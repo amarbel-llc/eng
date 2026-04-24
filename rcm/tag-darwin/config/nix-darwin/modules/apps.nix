@@ -5,9 +5,7 @@
   ...
 }:
 {
-  imports = [
-    # ./apps-local.nix
-  ];
+  imports = lib.optionals (builtins.pathExists ./apps-local.nix) [ ./apps-local.nix ];
 
   homebrew = {
     enable = true;
