@@ -861,11 +861,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776963052,
-        "narHash": "sha256-DEdvgGGXJKXlAS4iCiYGAKCbhT39xnc0kjJ5wc5fa3k=",
+        "lastModified": 1777056268,
+        "narHash": "sha256-V559IihHpXOLxyMmu4NkVZNF8ZE521iaoyW4gO17I74=",
         "owner": "amarbel-llc",
         "repo": "chrest",
-        "rev": "dc69682be9c174d69e4e823a81ad4167a59f4144",
+        "rev": "f0a77c9b756514f92a739341aad17dbe63f96b0e",
         "type": "github"
       },
       "original": {
