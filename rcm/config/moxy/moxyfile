@@ -1,5 +1,11 @@
 # vim: set ft=toml
 
+disable-moxins = [
+  "get-hubbed.watch-run",
+  "get-hubbed.watch-list",
+  "get-hubbed.watch-remove",
+]
+
 # [[servers]]
 # name = "lsp"
 # command = "lux mcp stdio"
