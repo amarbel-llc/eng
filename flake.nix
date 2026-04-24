@@ -61,7 +61,7 @@
     };
     maneater = {
       url = "github:amarbel-llc/maneater";
-      # inputs.nixpkgs.follows = "nixpkgs-amarbel"; # disabled: pkgs.fetchGgufModel missing in nixpkgs-amarbel@master — see https://github.com/amarbel-llc/eng/issues/39
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
       inputs.bob.follows = "bob";
