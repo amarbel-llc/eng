@@ -21,6 +21,14 @@
       url = "github:sushydev/nix-plist-manager";
     };
 
+    # Third-party package collection (AI coding agents and dev tools).
+    # Not following our nixpkgs: upstream targets nixpkgs-unstable and
+    # their binary cache (cache.numtide.com) is keyed off that pin —
+    # overriding to nixos-25.11 would risk breakage and lose the cache.
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+    };
+
     # keep sorted
     bob = {
       url = "github:amarbel-llc/bob";
