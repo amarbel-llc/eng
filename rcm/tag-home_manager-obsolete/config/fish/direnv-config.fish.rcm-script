@@ -1,9 +1,0 @@
-#! /usr/bin/env -S bash -e
-
-"$HOME/eng/result/bin/direnv" hook fish
-
-{
-  gum log -l info 'direnv config generated.'
-  gum log -l warn 'If fish shows an error like `fish: Command not found: /nix/store/*/bin/direnv`:'
-  gum log -l warn 'run `exec fish` to reload the config.'
-} >&2

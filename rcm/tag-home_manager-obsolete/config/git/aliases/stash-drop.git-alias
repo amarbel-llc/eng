@@ -1,6 +1,0 @@
-#! /usr/bin/env -S bash -e
-# @file stash-drop
-# @brief drops the given stash (or the most recent, if not provided)
-
-stash="${1:-0}"
-git stash drop "stash@{$stash}"

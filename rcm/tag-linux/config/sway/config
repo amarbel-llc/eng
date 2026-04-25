@@ -4,8 +4,7 @@
 set $term kitty
 
 # preferred application launcher
-# TODO fix sway path to prefer rofi from ~/eng
-set $menu $HOME/eng/result/bin/rofi -show drun
+set $menu rofi -show drun
 
 include /etc/sway/config-vars.d/*
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-resolved="$(readlink -f "$HOME/eng/result/bin/niri-session")"
+resolved="$(readlink -f "$(command -v niri-session)")"
 
 cat <<EOF
 [Desktop Entry]
