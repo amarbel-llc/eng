@@ -82,7 +82,7 @@
     };
     nebulous = {
       url = "github:amarbel-llc/nebulous";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
