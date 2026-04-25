@@ -9,6 +9,30 @@ Nix-based monorepo aggregating system packages, dotfiles (rcm), and 30+ project
 repos. Published to FlakeHub as `amarbel-llc/eng` on every push to master. CI
 builds on x86_64-linux and aarch64-darwin.
 
+## Running Devloop Commands
+
+Use the `just-us-agents` MCP tool to execute justfile recipes, not raw `just`
+invocations via Bash. The MCP tool gives structured recipe discovery
+(`list-recipes`, `show-recipe`) and reaches child justfiles in subdirectories.
+
+**Before running commands like `go test`, `go vet`, `cargo test`, `cargo
+clippy`, `nix build`, or any other build/test/lint command, check for an
+existing recipe.** This repo and its sub-repos almost always have a recipe
+already wired up for the devloop you want — running the underlying tool
+directly bypasses the recipe's environment setup, flags, and conventions.
+
+Workflow:
+
+1. `just-us-agents list-recipes` to discover what's available (includes
+   recipes from child justfiles, shown with `dir/recipe` prefix).
+2. `just-us-agents show-recipe <name>` if you want to see what it does
+   before running.
+3. `just-us-agents run-recipe <name>` to execute it.
+
+Only fall back to running the underlying tool directly when no recipe exists,
+and consider whether one should be added (mark new debug/exploration recipes
+with the `debug` or `explore` groups per `~/.claude/CLAUDE.md`).
+
 ## Build & Update Commands
 
 ``` sh
