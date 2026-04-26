@@ -1,0 +1,49 @@
+# Personal nebulous.toml.
+#
+# Starting point was `docs/templates/nebulous.toml`; extended the default
+# policy to the full set of Firefox-compatible captures.
+#
+# Skipped formats:
+# - a11y             — chrest marks this Chrome-only (not supported on Firefox/BiDi)
+# - mhtml            — Chrome-only, and Chrome is broken on kernel 6.17+ (chrest#14)
+# - markdown-selector — needs a per-target CSS selector; no sensible default
+#
+# Schema reference: docs/rfcs/0001-web-capture-archive-protocol.md § Policy Format.
+
+[[policy]]
+id        = "default"
+url       = "{{.Story.Permalink}}"
+isolation = "fresh"
+
+[[policy.capture]]
+name    = "text"
+format  = "text"
+browser = "firefox"
+
+[[policy.capture]]
+name    = "pdf"
+format  = "pdf"
+browser = "firefox"
+options = { background = true }
+
+[[policy.capture]]
+name    = "screenshot"
+format  = "screenshot"
+browser = "firefox"
+options = { format = "png", "full-page" = true }
+
+[[policy.capture]]
+name    = "html-monolith"
+format  = "html-monolith"
+browser = "firefox"
+
+[[policy.capture]]
+name    = "markdown-full"
+format  = "markdown-full"
+browser = "firefox"
+
+[[policy.capture]]
+name    = "markdown-reader"
+format  = "markdown-reader"
+browser = "firefox"
+options = { reader_engine = "readability" }
