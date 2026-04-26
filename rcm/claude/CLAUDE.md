@@ -26,6 +26,16 @@ If I instruct you to create a todo, use the `/file-issue` skill. Also use
 during work --- file it and continue rather than trying to fix it in the current
 task. If I give you a GitHub issue to fix, use the `/fix-issue` skill.
 
+# Closing GitHub issues
+
+- When a commit or PR resolves a tracked issue, put `Closes #N` (or
+  `Fixes #N` / `Resolves #N`) in the message so GitHub auto-closes on merge.
+  Don't close issues manually and don't comment-then-close --- let the merge
+  do the work.
+- Don't mention or summarize this convention back to me. Using the
+  auto-close facility is a given; flagging it ("note: I used `Closes #N`")
+  wastes a turn.
+
 # Environment
 
 - `direnv reload` within Claude sessions NEVER works as expected. If the
