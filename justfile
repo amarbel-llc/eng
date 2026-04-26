@@ -318,6 +318,20 @@ _update-repo-full dir:
 update-nix-repos:
   tap-dancer exec-parallel -j 1 "just _update-repo-full {}" ::: repos/*/
 
+# Update apt package index, upgrade installed packages, prune orphans.
+# Single pkexec call so the three apt-get invocations share one auth prompt.
+update-apt:
+  pkexec sh -c 'apt-get update && apt-get upgrade -y && apt-get autoremove -y'
+
+# Update installed Flatpak apps and runtimes. Note: system-scope installs
+# raise their own polkit prompt via flatpak-system-helper, separate from
+# update-apt's pkexec auth.
+update-flatpak:
+  flatpak update -y
+
+# Run all non-Nix system package updates (Ubuntu/Linux).
+update-system: update-apt update-flatpak
+
 build-home: build-nix
   #!/usr/bin/env bash
   set -euo pipefail
