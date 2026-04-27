@@ -19,6 +19,12 @@
   `spinclass merge-this-session`, start the next piece of work from the same
   worktree (new branch via `git checkout -b` if needed), not a new one.
 
+- DO NOT create new git branches for work unless explicitly instructed to by the
+  user. You are almost always running in a spinclass session, and those
+  worktrees and branches are meant as generic, multi-sequence workers -- do not
+  offer to create PR's, treat merge-this-session as the create-PR-and-merge
+  flow.
+
 - if merge-this-session succeeds, but the tool output overflows, DO NOT
   investigate -- the successful merge is indication / confrimation enough of
   success.
