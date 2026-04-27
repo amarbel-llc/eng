@@ -19,6 +19,10 @@
   `spinclass merge-this-session`, start the next piece of work from the same
   worktree (new branch via `git checkout -b` if needed), not a new one.
 
+- if merge-this-session succeeds, but the tool output overflows, DO NOT
+  investigate -- the successful merge is indication / confrimation enough of
+  success.
+
 # Mid-Task Idea Capture
 
 If I instruct you to create a todo, use the `/file-issue` skill. Also use
