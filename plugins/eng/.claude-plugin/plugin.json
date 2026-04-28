@@ -1,0 +1,15 @@
+{
+  "name": "eng",
+  "description": "Development workflow skills for the eng repo: ADR/RFC/FDR authoring, systematic debugging, TDD, code review, parallel agent dispatch, and cross-repo TODO triage.",
+  "author": {
+    "name": "Sasha Friedenberg"
+  },
+  "homepage": "https://github.com/amarbel-llc/clown",
+  "keywords": [
+    "skills",
+    "workflow",
+    "development",
+    "debugging",
+    "code-review"
+  ]
+}

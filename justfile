@@ -453,3 +453,56 @@ debug-disk-io:
 [group('debug')]
 [linux]
 debug-system-snapshot: debug-top-procs debug-system-load debug-disk-io
+
+# Refresh plugins/eng/skills/ from the bob flake input. Pulls the bob
+# marketplace store path, copies its bundled skills tree into place,
+# then chmods the files writable so they can be edited or removed (nix
+# store paths are read-only). Skips skills listed in `eng_skipped_skills`
+# below (e.g. using-superpowers). Idempotent. After refresh, the
+# cross-reference rewrites (bob:/superpowers: -> eng:) need to be re-run
+# manually.
+[group('explore')]
+explore-refresh-eng-skills:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  dest="plugins/eng/skills"
+  # Skills present in bob upstream but intentionally excluded from eng.
+  eng_skipped_skills=(using-superpowers)
+  store_path="$(nix build .#bob-marketplace --no-link --print-out-paths)"
+  src="$store_path/share/purse-first/bob/skills"
+  if [[ ! -d "$src" ]]; then
+    echo "expected skills dir not found at $src" >&2
+    exit 1
+  fi
+  is_skipped() {
+    local needle="$1"
+    for s in "${eng_skipped_skills[@]}"; do
+      [[ "$s" == "$needle" ]] && return 0
+    done
+    return 1
+  }
+  bob_skills=()
+  for entry in "$src"/*; do
+    name="$(basename "$entry")"
+    is_skipped "$name" && continue
+    bob_skills+=("$name")
+  done
+  if [[ -d "$dest" ]]; then
+    for skill in "${bob_skills[@]}"; do
+      target="$dest/$skill"
+      if [[ -e "$target" ]]; then
+        chmod -R u+w "$target"
+        rm -rf "$target"
+      fi
+    done
+  else
+    mkdir -p "$dest"
+  fi
+  # -L dereferences symlinks so we land real files (the marketplace
+  # output is a tree of symlinks back into other store paths).
+  for skill in "${bob_skills[@]}"; do
+    cp -RL "$src/$skill" "$dest/$skill"
+  done
+  chmod -R u+w "$dest"
+  echo "refreshed bob-sourced skills in $dest from $src"
+  echo "remember to re-apply eng: cross-reference rewrites if you re-run this"
