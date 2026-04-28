@@ -54,7 +54,7 @@
     };
     dodder = {
       url = "github:amarbel-llc/dodder";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
@@ -115,7 +115,7 @@
     };
     spinclass = {
       url = "github:amarbel-llc/spinclass";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
       inputs.bob.follows = "bob";
