@@ -34,9 +34,11 @@ in
     builtins.attrValues repoPackages
     ++ [
       inputs.purse-first.packages.${system}.purse-first
-      # bob-all bundles gh man pages that collide with the standalone gh package,
-      # so give it lower priority.
-      (lib.lowPrio inputs.bob.packages.${system}.default)
+      # bob.tap-dancer-bash provides a bash library used by git aliases (cob,
+      # cobu, merge-and-cleanup) via home/common.nix's TAP_DANCER_LIB. The
+      # rest of bob (CLI bundle, marketplace) is intentionally not installed
+      # here — eng consumes only the caldav plugin via the flake-level
+      # symlinkJoin, and tap-dancer-bash for shell aliases.
       inputs.bob.packages.${system}.tap-dancer-bash
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin [

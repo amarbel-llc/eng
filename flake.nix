@@ -33,7 +33,10 @@
     bob = {
       url = "github:amarbel-llc/bob";
       inputs.purse-first.follows = "purse-first";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # Bob expects the amarbel-llc nixpkgs fork (overlays.default adds
+      # gomod2nix and bun2nix helpers used by its package builds). Pre-
+      # 2026-04 it accepted any nixpkgs; HEAD does not.
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
@@ -311,11 +314,38 @@
             _name: input: input.packages.${system}.default
           ) (pkgs.lib.filterAttrs hasDefaultPackage candidates);
 
+        # In-tree Claude Code plugin: development-workflow skills (vendored
+        # from bob, with cross-references rewritten to the eng: namespace)
+        # plus a code-reviewer agent. Lives at plugins/eng/. Wrapped in a
+        # derivation, then in a tiny flake-shaped attrset, so mkCircus
+        # consumes it the same way it consumes real flake inputs (it
+        # only reads .packages.${system}.default, plus optional .rev).
+        engPlugin = pkgs.runCommand "eng-plugin" { } ''
+          mkdir -p $out/share/purse-first
+          cp -r ${./plugins/eng} $out/share/purse-first/eng
+        '';
+
+        engPluginFlake = {
+          packages.${system}.default = engPlugin;
+          rev = self.rev or self.dirtyRev or "dirty";
+        };
+
+        # Bob ships several plugin trees inside `bob.packages.default`
+        # (caldav, lux, tap-dancer, etc.). We only consume caldav, but
+        # mkCircus reads `flake.packages.${system}.default`, which would
+        # pull in the others as a side-effect. Wrap caldav alone into a
+        # flake-shaped attrset so mkCircus sees just it.
+        caldavPluginFlake = {
+          packages.${system}.default = bob.packages.${system}.caldav;
+          rev = bob.rev or bob.dirtyRev or "dirty";
+        };
+
         circus = inputs.clown.lib.${system}.mkCircus {
           plugins = [
             { flake = inputs.moxy;      dirs = [ "share/purse-first/moxy" ]; }
-            # { flake = bob;              dirs = [ "share/purse-first/*" ]; }
             { flake = inputs.spinclass; dirs = [ "share/purse-first/spinclass" ]; }
+            { flake = caldavPluginFlake; dirs = [ "share/purse-first/caldav" ]; }
+            { flake = engPluginFlake;   dirs = [ "share/purse-first/eng" ]; }
           ];
         };
 
@@ -341,9 +371,10 @@
             ++ builtins.attrValues repoPackages
             ++ [
               purse-first.packages.${system}.purse-first
-              bob.packages.${system}.default
+              bob.packages.${system}.caldav
               bob.packages.${system}.tap-dancer-bash
               circus.packages.default
+              engPlugin
               inputs.moxy.packages.${system}.default
               doc
             ]
