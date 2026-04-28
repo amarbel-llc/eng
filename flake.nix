@@ -313,8 +313,9 @@
 
         circus = inputs.clown.lib.${system}.mkCircus {
           plugins = [
-            { flake = inputs.moxy; dirs = [ "share/purse-first/moxy" ]; }
-            { flake = bob;         dirs = [ "share/purse-first/*" ]; }
+            { flake = inputs.moxy;      dirs = [ "share/purse-first/moxy" ]; }
+            # { flake = bob;              dirs = [ "share/purse-first/*" ]; }
+            { flake = inputs.spinclass; dirs = [ "share/purse-first/spinclass" ]; }
           ];
         };
 

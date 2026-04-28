@@ -54,9 +54,6 @@ install-mcp mcp:
   purse-first validate "$store_path/.claude-plugin/marketplace.json"
   purse-first install "$store_path"
 
-# build, validate, and install bob marketplace (MCP servers + workflow skills)
-install-bob: (install-mcp "bob-marketplace")
-
 # build and validate purse-first marketplace without installing
 validate-purse-first:
   #!/usr/bin/env bash
@@ -398,3 +395,61 @@ validate: build-nix
   nix flake check --impure
 
 build: build-nix build-rcm build-home load-agents
+
+# Top 20 processes by CPU and by memory.
+[group('debug')]
+[linux]
+debug-top-procs:
+  #!/usr/bin/env bash
+  set -uo pipefail
+  echo "=== top 20 by CPU ==="
+  ps -eo pid,ppid,user,pcpu,pmem,rss,stat,start,time,comm,args --sort=-pcpu | head -21
+  echo
+  echo "=== top 20 by RSS ==="
+  ps -eo pid,ppid,user,pcpu,pmem,rss,stat,start,time,comm,args --sort=-rss | head -21
+
+# Load average, memory pressure, swap activity, run-queue + blocked counts.
+[group('debug')]
+[linux]
+debug-system-load:
+  #!/usr/bin/env bash
+  set -uo pipefail
+  echo "=== uptime / load ==="
+  uptime
+  echo
+  echo "=== free -h ==="
+  free -h
+  echo
+  echo "=== vmstat 1 5 (run-queue 'r', blocked 'b', swap si/so, cpu wa%) ==="
+  vmstat 1 5
+  echo
+  echo "=== PSI: /proc/pressure ==="
+  for f in /proc/pressure/cpu /proc/pressure/memory /proc/pressure/io; do
+    [ -r "$f" ] && { echo "--- $f"; cat "$f"; }
+  done
+
+# Per-device disk I/O. Falls back to /proc/diskstats deltas if iostat is missing.
+[group('debug')]
+[linux]
+debug-disk-io:
+  #!/usr/bin/env bash
+  set -uo pipefail
+  if command -v iostat >/dev/null 2>&1; then
+    echo "=== iostat -xz 1 3 ==="
+    iostat -xz 1 3
+  else
+    echo "iostat not installed (sysstat); falling back to /proc/diskstats deltas"
+    cat /proc/diskstats > /tmp/diskstats.a
+    sleep 2
+    cat /proc/diskstats > /tmp/diskstats.b
+    diff /tmp/diskstats.a /tmp/diskstats.b || true
+  fi
+  echo
+  echo "=== top 10 processes by I/O wait (D state or high iotime) ==="
+  ps -eo pid,user,stat,wchan,comm,args | awk 'NR==1 || $3 ~ /D/'
+
+# Snapshot everything: top procs, load, and disk I/O. Use first when triaging
+# unresponsiveness so CPU, memory, and I/O are correlated at the same instant.
+[group('debug')]
+[linux]
+debug-system-snapshot: debug-top-procs debug-system-load debug-disk-io
