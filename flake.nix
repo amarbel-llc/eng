@@ -354,7 +354,7 @@
           plugins = [
             { flake = inputs.moxy;      dirs = [ "share/purse-first/moxy" ]; }
             { flake = inputs.spinclass; dirs = [ "share/purse-first/spinclass" ]; }
-            { flake = caldavPluginFlake; dirs = [ "share/purse-first/caldav" ]; }
+            # { flake = caldavPluginFlake; dirs = [ "share/purse-first/caldav" ]; }
             { flake = engPluginFlake;   dirs = [ "share/purse-first/eng" ]; }
           ];
         };
