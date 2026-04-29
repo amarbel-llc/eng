@@ -173,11 +173,38 @@ changes. `SSH_ASKPASS`/`SSH_ASKPASS_REQUIRE` propagation from #60
 works as designed in single-instance mode; no extra
 `home.sessionVariables` block needed.
 
-A cleaner long-term shape would be a `setSshAuthSock = false` opt-out
-option on the piggy module, but that's a v1.1 follow-up — the
-`lib.mkForce` override is the right level of escape hatch for a v1.0
-rollout against a module that bakes in the assumption that its
-agent's socket is the user's primary `SSH_AUTH_SOCK`.
+The cleaner long-term shape inverts the module's default: piggy
+SHOULD NOT claim `home.sessionVariables.SSH_AUTH_SOCK` automatically.
+The mux-in-front pattern (ssh-agent-mux multiplexing pivy-agent +
+software-keys agent + 1Password agent + …) is common enough that
+"the agent's socket is the user's primary `SSH_AUTH_SOCK`" is the
+wrong default — it composes badly with every multi-agent setup.
+Proposed shape:
+
+```nix
+services.piggy-agent.setSshAuthSock = mkOption {
+  type = types.bool;
+  default = false;  # mux-in-front friendly
+  description = ''
+    Set `home.sessionVariables.SSH_AUTH_SOCK` to this agent's
+    socket. Default false because in mux-in-front setups the mux
+    owns the user-facing SSH_AUTH_SOCK and clobbering it from
+    here breaks the chain. Set to true if piggy IS the user's
+    primary agent (no mux).
+  '';
+};
+```
+
+Users without a mux flip it to `true` and get the same
+auto-management the module does today. Users with a mux (or any
+multi-agent setup) get the right behavior for free, no
+`lib.mkForce` needed.
+
+Tracked as a follow-up piggy issue (sister to #60/#61, same
+parity-of-defaults concern, possibly a v1.0 blocker depending on
+how aggressive we want to be about shipping the inverted default
+before broader adoption). Until that issue lands, the
+`lib.mkForce` override above is the right escape hatch.
 
 **Phase 1 step 5 askpass-regression checklist** (added to the existing
 verification list — see Phases below):
