@@ -330,40 +330,14 @@
             _name: input: input.packages.${system}.default
           ) (pkgs.lib.filterAttrs hasDefaultPackage candidates);
 
-        # In-tree Claude Code plugin: development-workflow skills (vendored
-        # from bob, with cross-references rewritten to the eng: namespace)
-        # plus a code-reviewer agent. Lives at plugins/eng/. Wrapped in a
-        # derivation, then in a tiny flake-shaped attrset, so mkCircus
-        # consumes it the same way it consumes real flake inputs (it
-        # only reads .packages.${system}.default, plus optional .rev).
-        engPlugin = pkgs.runCommand "eng-plugin" { } ''
-          mkdir -p $out/share/purse-first
-          cp -r ${./plugins/eng} $out/share/purse-first/eng
-        '';
-
-        engPluginFlake = {
-          packages.${system}.default = engPlugin;
-          rev = self.rev or self.dirtyRev or "dirty";
+        # Circus assembly (mkCircus call, eng plugin derivation, caldav
+        # plugin shape) lives in ./lib/circus.nix so ~/eng-* overlays
+        # can import the same helper and pass extraPlugins.
+        engCircusBundle = import ./lib/circus.nix {
+          inherit pkgs inputs system;
+          engSelf = self;
         };
-
-        # Bob ships several plugin trees inside `bob.packages.default`
-        # (caldav, lux, tap-dancer, etc.). We only consume caldav, but
-        # mkCircus reads `flake.packages.${system}.default`, which would
-        # pull in the others as a side-effect. Wrap caldav alone into a
-        # flake-shaped attrset so mkCircus sees just it.
-        caldavPluginFlake = {
-          packages.${system}.default = bob.packages.${system}.caldav;
-          rev = bob.rev or bob.dirtyRev or "dirty";
-        };
-
-        circus = inputs.clown.lib.${system}.mkCircus {
-          plugins = [
-            { flake = inputs.moxy;      dirs = [ "share/purse-first/moxy" ]; }
-            { flake = inputs.spinclass; dirs = [ "share/purse-first/spinclass" ]; }
-            { flake = caldavPluginFlake; dirs = [ "share/purse-first/caldav" ]; }
-            { flake = engPluginFlake;   dirs = [ "share/purse-first/eng" ]; }
-          ];
-        };
+        inherit (engCircusBundle) circus engPlugin;
 
         doc = pkgs.stdenvNoCC.mkDerivation {
           pname = "eng-doc";
