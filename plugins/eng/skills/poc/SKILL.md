@@ -1,4 +1,6 @@
 ---
+name: poc
+version: 0.1.0
 description: "[WIP] Scope and run a proof-of-concept experiment. Use when the user says \"let's POC X\", \"prove out X\", \"let's try the X experiment\", \"scratch/spike/throwaway\". Do NOT use for tracer bullets or \"build the real X\" requests."
 user-invocable: true
 ---

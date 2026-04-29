@@ -1,4 +1,6 @@
 ---
+name: file-issue
+version: 0.1.0
 arguments:
 - description: Issue title (concise)
   name: title

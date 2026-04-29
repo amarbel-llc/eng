@@ -34,8 +34,8 @@
 
 # Mid-Task Idea Capture
 
-If I instruct you to create a todo, use the `/file-issue` skill. Also use
-`/file-issue` when you encounter a blocking issue in one of my repositories
+If I instruct you to create a todo, use the `/eng:file-issue` skill. Also use
+`/eng:file-issue` when you encounter a blocking issue in one of my repositories
 during work --- file it and continue rather than trying to fix it in the current
 task. If I give you a GitHub issue to fix, use the `/fix-issue` skill.
 
