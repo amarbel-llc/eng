@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs-master,
   lib,
   identity,
   inputs,
@@ -17,14 +18,13 @@
     finder.AppleShowAllExtensions = true;
   };
 
-  # List packages installed in system profile. To search by name, run:
-  # $ nix-env -qaP | grep wget
-  # TODO update package with ~/eng
-  # environment.systemPackages = with pkgs; [
-  #   git
-  #   neovim
-  #   vim
-  # ];
+  # System packages — these get the .app bundle linked into
+  # /Applications/Nix Apps/ via nix-darwin's modules/system/applications.nix.
+  # Home-manager packages do NOT, which is why kitty is here in addition to
+  # being configured via programs.kitty in home/common.nix.
+  environment.systemPackages = [
+    pkgs-master.kitty
+  ];
 
   # Enable TouchID and YubiKey PIV smart card for sudo
   security.pam.services.sudo_local = {

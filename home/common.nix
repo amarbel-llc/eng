@@ -106,6 +106,7 @@ in
   # Kitty terminal
   programs.kitty = {
     enable = true;
+    package = pkgs-master.kitty;
     font = {
       name = "Input Mono";
       size = 18.0;

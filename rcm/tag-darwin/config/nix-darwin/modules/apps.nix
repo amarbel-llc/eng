@@ -52,7 +52,6 @@
       "hammerspoon"
       "iterm2"
       "karabiner-elements"
-      "kitty"
       "rectangle"
       "spotify"
       "tailscale-app"

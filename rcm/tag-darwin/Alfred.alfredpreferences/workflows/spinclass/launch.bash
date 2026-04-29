@@ -6,9 +6,9 @@ value="${arg#*:}"
 
 case "$action" in
 new)
-  /Applications/kitty.app/Contents/MacOS/kitty --directory "$value" sc new
+  "/Applications/Nix Apps/kitty.app/Contents/MacOS/kitty" --directory "$value" sc new
   ;;
 attach)
-  /Applications/kitty.app/Contents/MacOS/kitty sc new "$value"
+  "/Applications/Nix Apps/kitty.app/Contents/MacOS/kitty" sc new "$value"
   ;;
 esac
