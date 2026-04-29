@@ -1,7 +1,8 @@
 # Switch from pivy-agent to piggy on the eng dev boxes
 
-**Status:** BLOCKED on amarbel-llc/piggy#60 and #61 (v1.0 parity gaps).
-Implementation cannot begin until both close.
+**Status:** READY for Phase 0 (2026-04-29). Both v1.0 parity blockers
+landed on amarbel-llc/piggy master earlier today; rollout proceeds
+when the operator picks it up.
 **Captured:** 2026-04-29
 **Trigger:** piggy-agent's home-manager module landed
 (amarbel-llc/piggy#52), and `piggy agent` itself wraps C `pivy-agent`
@@ -15,19 +16,24 @@ parity. The eng integration is v1.0's integration test for the
 home-manager module; if the integration target needs per-user
 workarounds, v1.0 isn't done.
 
-## v1.0 parity blockers
+## v1.0 parity blockers (resolved)
 
-These are the hard preconditions. The eng rollout cannot start until
-both close.
+These were the hard preconditions. Both closed on 2026-04-29:
 
-- **#60** — `services.piggy-agent` does not propagate `SSH_ASKPASS` /
-  `SSH_ASKPASS_REQUIRE` to `home.sessionVariables`. Site 1 of the
+- **#60** — `services.piggy-agent` propagates `SSH_ASKPASS` /
+  `SSH_ASKPASS_REQUIRE` to `home.sessionVariables` (single-instance
+  mode only). Closed by piggy commit `d2374da`. Site 1 of the
   SSH_ASKPASS contract.
-- **#61** — `services.piggy-agent` agent-process env does not export
-  `SSH_CONFIRM` / `SSH_NOTIFY_SEND`. Site 2 of the SSH_ASKPASS
-  contract.
+- **#61** — `services.piggy-agent` exports `SSH_CONFIRM` /
+  `SSH_NOTIFY_SEND` to the agent process via two new first-class
+  options (`confirm`, `notifySend`). Closed by piggy commit
+  `b3f2b7a`. Site 2 of the SSH_ASKPASS contract.
 
-Both on milestone v1.0.0 (#4). Sister-issue cross-link in each.
+`b3f2b7a` also refactored the agent-process static env vars
+(SSH_ASKPASS, SSH_ASKPASS_REQUIRE, SSH_CONFIRM, SSH_NOTIFY_SEND) off
+the launcher script and onto the systemd `Service.Environment` /
+launchd `EnvironmentVariables` surface, so they're now inspectable
+from a unit query without touching `/proc` or the launchd plist.
 
 ## Current state
 
@@ -55,9 +61,11 @@ populate the `gitSigningKey` field; SSH commit-signing routes through
 SSH-agent (`key::ssh-…` format), so the same hardware that authenticates
 SSH also signs git.
 
-`flake.nix` already declares `inputs.piggy` (locked at `79658e1`,
-which has the wrap-C-pivy posture). `repos/piggy/flake.nix` exports
-`homeManagerModules.piggy-agent` and `nixosModules.piggy-agent`.
+`flake.nix` already declares `inputs.piggy`; the lock currently
+points at `79658e1` (pre-#60/#61). Phase 0 runs `nix flake update
+piggy` to pick up `b3f2b7a` (post-fix). `repos/piggy/flake.nix`
+exports `homeManagerModules.piggy-agent` and
+`nixosModules.piggy-agent`.
 
 `home/linux.nix` imports `pivy-agent.nix` only when `!isSshHost`;
 `home/darwin.nix` always imports it. Whatever this plan proposes
@@ -103,10 +111,12 @@ These reach every interactive shell and any process the shell
 launches. Piggy's module sets only `home.sessionVariables.SSH_AUTH_SOCK`
 (in single-instance mode) — nothing askpass-related.
 
-**Resolution:** filed as upstream piggy issue **#60** (v1.0 parity
-blocker). Once closed, setting `services.piggy-agent.askpass = …`
-will mirror to `home.sessionVariables` automatically; `home/piggy-
-agent.nix` does not carry a workaround.
+**Resolution:** **closed** in piggy commit `d2374da` (#60). Setting
+`services.piggy-agent.askpass = …` now mirrors to `home.session
+Variables.SSH_ASKPASS` and `SSH_ASKPASS_REQUIRE` in single-instance
+mode; multi-instance mode skips the propagation parallel to
+`SSH_AUTH_SOCK` (the module can't pick a winner). `home/piggy-
+agent.nix` does NOT carry a workaround.
 
 **Site 2: Agent-process env (systemd `Service.Environment` / launchd
 `EnvironmentVariables`).** Today the agent itself sees four askpass-
@@ -122,12 +132,14 @@ Piggy's launcher script exports `SSH_ASKPASS` and `SSH_ASKPASS_REQUIRE`
 last two are pivy-agent-specific and are NOT modeled by the piggy
 module's option set today.
 
-**Resolution:** filed as upstream piggy issue **#61** (v1.0 parity
-blocker). The recommended fix is two new first-class module options
-(`confirm`, `notifySend`) modeling these as proper pivy-agent surface
-area; the launcher script then exports them. `home/piggy-agent.nix`
-sets the options; no per-user `Service.Environment` / launchd
-`EnvironmentVariables` override.
+**Resolution:** **closed** in piggy commit `b3f2b7a` (#61). Two new
+first-class module options shipped: `confirm` (=`SSH_CONFIRM`) and
+`notifySend` (=`SSH_NOTIFY_SEND`), both top-level and per-instance.
+Same commit refactored the static agent-process env vars off the
+launcher script onto `systemd.user.services.<unit>.Service.Environment`
+(Linux) and `launchd.agents.<unit>.config.EnvironmentVariables`
+(Darwin). `home/piggy-agent.nix` sets the options; no per-user
+overrides.
 
 **Site 3: SSH_AUTH_SOCK ordering.** Piggy's module sets
 `home.sessionVariables.SSH_AUTH_SOCK = piggy-agent.sock` when
@@ -153,6 +165,23 @@ entirely (`lib.mkIf (!hasInstances)` short-circuits). `rcm/env` keeps
 sole control over the user-facing `SSH_AUTH_SOCK`. This is a
 documented module behavior, not a parity gap; not filed against
 piggy.
+
+**Knock-on effect.** The piggy module's `home.sessionVariables`
+emission is a single attribute set wrapped in `lib.mkIf
+(!hasInstances)`. Choosing multi-instance mode skips ALL of it —
+both the unwanted `SSH_AUTH_SOCK` clobber AND the wanted
+`SSH_ASKPASS`/`SSH_ASKPASS_REQUIRE` propagation that #60 added.
+Eng's `home/piggy-agent.nix` therefore needs a small
+`home.sessionVariables = { SSH_ASKPASS = …; SSH_ASKPASS_REQUIRE =
+"force"; };` block of its own when using multi-instance mode.
+
+This is the only per-user override the rollout carries. It's the
+right level of override (a two-line attrset that's local to the
+eng dev box's choice of multi-instance shape), not a workaround for
+a module bug. If we ever decide we want the module to emit
+askpass session vars in multi-instance mode too — e.g. via a
+`defaultAskpass` top-level option that selects the winner —
+that's a follow-up issue, not a v1.0 blocker.
 
 **Phase 1 step 5 askpass-regression checklist** (added to the existing
 verification list — see Phases below):
@@ -246,12 +275,17 @@ hatch.**
 
 Read-only / no-mutation work to derisk the actual swap.
 
-- [ ] **#60 closed** (services.piggy-agent emits SSH_ASKPASS /
-  SSH_ASKPASS_REQUIRE in home.sessionVariables when askpass is set).
-- [ ] **#61 closed** (services.piggy-agent emits SSH_CONFIRM /
-  SSH_NOTIFY_SEND in agent-process env via first-class options).
-- [ ] `nix flake update piggy` in `~/eng` to pick up the post-fix
-  piggy SHA. Verify `nix flake metadata` shows the expected SHA.
+- [x] **#60 closed** in piggy `d2374da` — services.piggy-agent
+  emits SSH_ASKPASS / SSH_ASKPASS_REQUIRE in home.sessionVariables
+  when askpass is set (single-instance only).
+- [x] **#61 closed** in piggy `b3f2b7a` — services.piggy-agent
+  emits SSH_CONFIRM / SSH_NOTIFY_SEND on the agent unit's env via
+  first-class `confirm` and `notifySend` options. Same commit
+  hoisted SSH_ASKPASS* off the launcher onto the unit env.
+- [ ] `nix flake update piggy` in `~/eng` to advance from `79658e1`
+  → `b3f2b7a` (or whatever master is by the time you do this). Verify
+  `nix flake metadata` shows the expected SHA and that the lock file
+  diff is just the piggy input.
 - [ ] Confirm the piggy flake exports the package attribute we'll
   pin to. Likely `inputs.piggy.packages.${system}.piggy`. Verify
   with `nix eval .#inputs.piggy.packages.${currentSystem} --apply
@@ -291,15 +325,27 @@ Smallest blast radius. If it breaks, everything's local and revertible.
 2. **Write `home/piggy-agent.nix`** with `services.piggy-agent`
    configured per Option X (multi-instance, same socket path as
    pivy-agent.sock). Set `enable = false` initially. Use the module's
-   first-class options (post-#60 and post-#61) to set:
-   - `askpass = "${pkgs.pivy}/libexec/pivy/pivy-askpass"` —
-     propagates to `home.sessionVariables` per #60.
+   first-class options (post-#60 and post-#61) to set, on
+   `services.piggy-agent.instances.default`:
+   - `askpass = "${pkgs.pivy}/libexec/pivy/pivy-askpass"` — reaches
+     the agent process via the unit env (per #61's refactor).
    - `confirm = "${pkgs.pivy}/libexec/pivy/pivy-askpass"` and
      `notifySend = "${pkgs.pivy}/libexec/pivy/pivy-notify"` per
      #61.
-   No per-user `home.sessionVariables` overrides, no
-   `systemd.user.services.…Service.Environment` overrides — the
-   module owns the SSH_* contract end-to-end.
+
+   Plus, alongside the `services.piggy-agent` block, set the user
+   shell's askpass env explicitly because multi-instance mode skips
+   the module's `home.sessionVariables` emission (see "Knock-on
+   effect" under SSH_ASKPASS contract Site 3):
+   ```nix
+   home.sessionVariables = {
+     SSH_ASKPASS = "${pkgs.pivy}/libexec/pivy/pivy-askpass";
+     SSH_ASKPASS_REQUIRE = "force";
+   };
+   ```
+   This is the only per-user override the rollout carries. The
+   agent-process env contract is owned end-to-end by the piggy
+   module; only the user-shell askpass mirror is local.
 3. **Build and switch with both modules present, piggy disabled.**
    `just build-home && home-manager switch`. This proves the new
    module evaluates; nothing changes at runtime. Confirm
@@ -404,8 +450,9 @@ re-unlock per machine), which is the only user-visible cost.
 ## Risks and known unknowns
 
 - **Askpass wiring drift.** Documented in detail under "SSH_ASKPASS
-  contract" above. The four-var contract MUST be preserved; #60 and
-  #61 close the upstream gaps so the module owns the contract.
+  contract" above. The four-var contract is now owned end-to-end by
+  the piggy module after #60 (`d2374da`) and #61 (`b3f2b7a`); no
+  per-user overrides in this rollout.
 - **`SSH_AUTH_SOCK` ordering.** Documented above. Resolution: use
   the piggy module's multi-instance mode so it does not touch
   the var; `rcm/env` keeps sole control. Verified in Phase 0.
@@ -460,8 +507,12 @@ The migration is "done" when:
   work without touching shell init or `home-manager switch` again.
 - The four-var SSH askpass contract from "SSH_ASKPASS contract"
   above holds at runtime in both the user shell and the agent
-  process — sourced from the piggy module's first-class options,
-  not from per-user overrides.
+  process. Agent process: from the piggy module's first-class
+  options. User shell: `SSH_ASKPASS`/`SSH_ASKPASS_REQUIRE` from a
+  small `home.sessionVariables` block in `home/piggy-agent.nix`
+  (necessary because multi-instance mode skips the module's own
+  shell-env propagation; see SSH_ASKPASS contract Site 3
+  knock-on effect).
 
 ## References
 
@@ -477,10 +528,11 @@ The migration is "done" when:
 - amarbel-llc/piggy#35 — the askpass-escape incident this rollout
   must NOT reproduce.
 - **amarbel-llc/piggy#60** — v1.0 parity gap: `SSH_ASKPASS` /
-  `SSH_ASKPASS_REQUIRE` in user-shell `home.sessionVariables`. Eng
-  rollout blocked.
+  `SSH_ASKPASS_REQUIRE` in user-shell `home.sessionVariables`.
+  Closed by `d2374da`.
 - **amarbel-llc/piggy#61** — v1.0 parity gap: `SSH_CONFIRM` /
-  `SSH_NOTIFY_SEND` in agent-process env. Eng rollout blocked.
+  `SSH_NOTIFY_SEND` in agent-process env. Closed by `b3f2b7a` (also
+  refactored static agent env vars onto the unit definition).
 - `doc/eng-ssh.7.scd` — current architecture description; needs an
   update at Phase 3 (or a small note now that "pivy-agent" in the
   doc refers to the listener-by-name, which may be `piggy
