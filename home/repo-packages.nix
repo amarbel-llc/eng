@@ -34,12 +34,12 @@ in
     builtins.attrValues repoPackages
     ++ [
       inputs.purse-first.packages.${system}.purse-first
-      # bob.tap-dancer-bash provides a bash library used by git aliases (cob,
-      # cobu, merge-and-cleanup) via home/common.nix's TAP_DANCER_LIB. The
-      # rest of bob (CLI bundle, marketplace) is intentionally not installed
-      # here — eng consumes only the caldav plugin via the flake-level
-      # symlinkJoin, and tap-dancer-bash for shell aliases.
-      inputs.bob.packages.${system}.tap-dancer-bash
+      # tap-dancer-bash provides a bash library used by git aliases (cob,
+      # cobu, merge-and-cleanup) via home/common.nix's TAP_DANCER_LIB.
+      # eng consumes only caldav from bob (via the flake-level symlinkJoin)
+      # and tap-dancer-bash from amarbel-llc/tap (split out of bob in
+      # bob 2e88c78).
+      inputs.tap.packages.${system}.tap-dancer-bash
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin [
       inputs.tacky.packages.${system}.default
