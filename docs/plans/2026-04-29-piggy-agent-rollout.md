@@ -1,8 +1,11 @@
 # Switch from pivy-agent to piggy on the eng dev boxes
 
-**Status:** READY for Phase 0 (2026-04-29). Both v1.0 parity blockers
-landed on amarbel-llc/piggy master earlier today; rollout proceeds
-when the operator picks it up.
+**Status:** BLOCKED on amarbel-llc/piggy#62 (third v1.0 parity gap
+filed 2026-04-29 after #60 and #61 landed; default-of-defaults
+question on `SSH_AUTH_SOCK` claim). Implementation cannot begin
+until #62 closes — once it does, the eng rollout drops the
+`lib.mkForce` override below and proceeds with zero per-user
+overrides.
 **Captured:** 2026-04-29
 **Trigger:** piggy-agent's home-manager module landed
 (amarbel-llc/piggy#52), and `piggy agent` itself wraps C `pivy-agent`
@@ -16,24 +19,30 @@ parity. The eng integration is v1.0's integration test for the
 home-manager module; if the integration target needs per-user
 workarounds, v1.0 isn't done.
 
-## v1.0 parity blockers (resolved)
+## v1.0 parity blockers
 
-These were the hard preconditions. Both closed on 2026-04-29:
+Three filed against amarbel-llc/piggy on milestone v1.0.0 (#4). Two
+closed earlier today; the third was filed after switching the plan
+from multi-instance to single-instance shape revealed a default-of-
+defaults question:
 
-- **#60** — `services.piggy-agent` propagates `SSH_ASKPASS` /
-  `SSH_ASKPASS_REQUIRE` to `home.sessionVariables` (single-instance
-  mode only). Closed by piggy commit `d2374da`. Site 1 of the
-  SSH_ASKPASS contract.
-- **#61** — `services.piggy-agent` exports `SSH_CONFIRM` /
-  `SSH_NOTIFY_SEND` to the agent process via two new first-class
-  options (`confirm`, `notifySend`). Closed by piggy commit
-  `b3f2b7a`. Site 2 of the SSH_ASKPASS contract.
+- **#60** (closed `d2374da`) — `services.piggy-agent` propagates
+  `SSH_ASKPASS` / `SSH_ASKPASS_REQUIRE` to `home.sessionVariables`
+  (single-instance mode only). Site 1 of the SSH_ASKPASS contract.
+- **#61** (closed `b3f2b7a`) — `services.piggy-agent` exports
+  `SSH_CONFIRM` / `SSH_NOTIFY_SEND` to the agent process via two new
+  first-class options. Site 2. Same commit refactored the static
+  agent-process env vars off the launcher script onto
+  `systemd.user.services.<unit>.Service.Environment` (Linux) and
+  `launchd.agents.<unit>.config.EnvironmentVariables` (Darwin).
+- **#62** (open) — `services.piggy-agent` should NOT claim
+  `home.sessionVariables.SSH_AUTH_SOCK` by default. Inverted from
+  the original "opt-out" framing: mux-in-front is the common
+  pattern, so the safer default is "don't touch SSH_AUTH_SOCK"
+  with a `setSshAuthSock = true` opt-in for users without a mux.
+  Site 3.
 
-`b3f2b7a` also refactored the agent-process static env vars
-(SSH_ASKPASS, SSH_ASKPASS_REQUIRE, SSH_CONFIRM, SSH_NOTIFY_SEND) off
-the launcher script and onto the systemd `Service.Environment` /
-launchd `EnvironmentVariables` surface, so they're now inspectable
-from a unit query without touching `/proc` or the launchd plist.
+The eng rollout cannot start until #62 closes.
 
 ## Current state
 
@@ -200,11 +209,12 @@ auto-management the module does today. Users with a mux (or any
 multi-agent setup) get the right behavior for free, no
 `lib.mkForce` needed.
 
-Tracked as a follow-up piggy issue (sister to #60/#61, same
-parity-of-defaults concern, possibly a v1.0 blocker depending on
-how aggressive we want to be about shipping the inverted default
-before broader adoption). Until that issue lands, the
-`lib.mkForce` override above is the right escape hatch.
+Filed as **piggy#62** (v1.0 blocker, sister to #60/#61). Until
+#62 closes, the `lib.mkForce` override above is what eng's
+`home/piggy-agent.nix` carries. Once #62 lands, the override comes
+out and `home/piggy-agent.nix` has zero per-user overrides — every
+SSH_* var is sourced from the piggy module's first-class options
+or its (correctly-defaulted) opt-out.
 
 **Phase 1 step 5 askpass-regression checklist** (added to the existing
 verification list — see Phases below):
@@ -309,6 +319,10 @@ Read-only / no-mutation work to derisk the actual swap.
   emits SSH_CONFIRM / SSH_NOTIFY_SEND on the agent unit's env via
   first-class `confirm` and `notifySend` options. Same commit
   hoisted SSH_ASKPASS* off the launcher onto the unit env.
+- [ ] **#62 closed** — services.piggy-agent stops claiming
+  `home.sessionVariables.SSH_AUTH_SOCK` by default; opt-in via
+  `setSshAuthSock = true`. Once closed, `home/piggy-agent.nix`
+  drops the `lib.mkForce` override entirely.
 - [ ] `nix flake update piggy` in `~/eng` to advance from `79658e1`
   → `b3f2b7a` (or whatever master is by the time you do this). Verify
   `nix flake metadata` shows the expected SHA and that the lock file
@@ -558,6 +572,10 @@ The migration is "done" when:
 - **amarbel-llc/piggy#61** — v1.0 parity gap: `SSH_CONFIRM` /
   `SSH_NOTIFY_SEND` in agent-process env. Closed by `b3f2b7a` (also
   refactored static agent env vars onto the unit definition).
+- **amarbel-llc/piggy#62** — v1.0 default-of-defaults: services.piggy-
+  agent should NOT claim `home.sessionVariables.SSH_AUTH_SOCK` by
+  default; opt-in via `setSshAuthSock = true`. **Open** — eng
+  rollout blocked.
 - `doc/eng-ssh.7.scd` — current architecture description; needs an
   update at Phase 3 (or a small note now that "pivy-agent" in the
   doc refers to the listener-by-name, which may be `piggy
