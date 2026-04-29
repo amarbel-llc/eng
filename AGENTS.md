@@ -257,7 +257,7 @@ Each layer may only depend on layers below it.
 
 ## Code Style
 
-- **Nix**: Format with `nixfmt-rfc-style` (via `treefmt` / `just fmt-all`)
+- **Nix**: Format with `nixfmt` (via `treefmt` / `just fmt-all`)
 - **Shell**: `set -euo pipefail`, 2-space indent, `[[ ]]` conditionals, quote
   all vars. Format with `shfmt -s -i=2`
 - **Go**: `goimports` + `gofumpt`. Follow NATO module hierarchy. Never

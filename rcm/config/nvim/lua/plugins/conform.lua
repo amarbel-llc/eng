@@ -48,7 +48,7 @@ return {
 				-- go = { "ftplugin", },
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				lua = { "stylua" },
-				nix = { "nixfmt-rfc-style", "nixpkgs_fmt", "nixfmt", "alejandra" },
+				nix = { "nixfmt", "nixpkgs_fmt", "alejandra" },
 				pandoc = { "pandoc" },
 				php = { "php_cs_fixer" },
 				python = { "isort", "black" },

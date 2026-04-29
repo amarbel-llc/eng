@@ -77,10 +77,8 @@
   # Lua.
   programs.stylua.enable = true;
 
-  # Nix. Pin to nixfmt-rfc-style; treefmt-nix's default `programs.nixfmt`
-  # uses `pkgs.nixfmt`, which in some nixpkgs revisions is still classic.
+  # Nix.
   programs.nixfmt.enable = true;
-  programs.nixfmt.package = pkgs.nixfmt-rfc-style;
 
   # Rust.
   programs.rustfmt.enable = true;
