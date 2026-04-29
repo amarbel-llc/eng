@@ -1,11 +1,9 @@
 # Switch from pivy-agent to piggy on the eng dev boxes
 
-**Status:** BLOCKED on amarbel-llc/piggy#62 (third v1.0 parity gap
-filed 2026-04-29 after #60 and #61 landed; default-of-defaults
-question on `SSH_AUTH_SOCK` claim). Implementation cannot begin
-until #62 closes — once it does, the eng rollout drops the
-`lib.mkForce` override below and proceeds with zero per-user
-overrides.
+**Status:** READY for Phase 0 (2026-04-29). All three v1.0 parity
+blockers landed earlier today; rollout proceeds when the operator
+picks it up. Zero per-user overrides — the piggy module owns the
+SSH_* contract end-to-end.
 **Captured:** 2026-04-29
 **Trigger:** piggy-agent's home-manager module landed
 (amarbel-llc/piggy#52), and `piggy agent` itself wraps C `pivy-agent`
@@ -19,12 +17,10 @@ parity. The eng integration is v1.0's integration test for the
 home-manager module; if the integration target needs per-user
 workarounds, v1.0 isn't done.
 
-## v1.0 parity blockers
+## v1.0 parity blockers (resolved)
 
-Three filed against amarbel-llc/piggy on milestone v1.0.0 (#4). Two
-closed earlier today; the third was filed after switching the plan
-from multi-instance to single-instance shape revealed a default-of-
-defaults question:
+Three filed against amarbel-llc/piggy on milestone v1.0.0 (#4). All
+three closed on 2026-04-29:
 
 - **#60** (closed `d2374da`) — `services.piggy-agent` propagates
   `SSH_ASKPASS` / `SSH_ASKPASS_REQUIRE` to `home.sessionVariables`
@@ -35,14 +31,12 @@ defaults question:
   agent-process env vars off the launcher script onto
   `systemd.user.services.<unit>.Service.Environment` (Linux) and
   `launchd.agents.<unit>.config.EnvironmentVariables` (Darwin).
-- **#62** (open) — `services.piggy-agent` should NOT claim
-  `home.sessionVariables.SSH_AUTH_SOCK` by default. Inverted from
-  the original "opt-out" framing: mux-in-front is the common
-  pattern, so the safer default is "don't touch SSH_AUTH_SOCK"
-  with a `setSshAuthSock = true` opt-in for users without a mux.
-  Site 3.
+- **#62** (closed `48337da`) — `services.piggy-agent` no longer
+  claims `home.sessionVariables.SSH_AUTH_SOCK` by default. Default
+  flipped to `setSshAuthSock = false` (mux-in-front friendly);
+  users without a mux opt in via `setSshAuthSock = true`. Site 3.
 
-The eng rollout cannot start until #62 closes.
+The eng rollout proceeds without per-user overrides.
 
 ## Current state
 
@@ -71,10 +65,10 @@ SSH-agent (`key::ssh-…` format), so the same hardware that authenticates
 SSH also signs git.
 
 `flake.nix` already declares `inputs.piggy`; the lock currently
-points at `79658e1` (pre-#60/#61). Phase 0 runs `nix flake update
-piggy` to pick up `b3f2b7a` (post-fix). `repos/piggy/flake.nix`
-exports `homeManagerModules.piggy-agent` and
-`nixosModules.piggy-agent`.
+points at `79658e1` (pre-#60/#61/#62). Phase 0 runs `nix flake
+update piggy` to pick up `48337da` (post-fix, all three v1.0
+parity blockers closed). `repos/piggy/flake.nix` exports
+`homeManagerModules.piggy-agent` and `nixosModules.piggy-agent`.
 
 `home/linux.nix` imports `pivy-agent.nix` only when `!isSshHost`;
 `home/darwin.nix` always imports it. Whatever this plan proposes
@@ -150,71 +144,13 @@ launcher script onto `systemd.user.services.<unit>.Service.Environment`
 (Darwin). `home/piggy-agent.nix` sets the options; no per-user
 overrides.
 
-**Site 3: SSH_AUTH_SOCK ordering.** Piggy's module sets
-`home.sessionVariables.SSH_AUTH_SOCK = piggy-agent.sock` in
-single-instance mode (when `instances = {}`). `rcm/env` sets
-`SSH_AUTH_SOCK = mux-agent.sock`. The user wants the mux value, not
-the upstream-agent value.
-
-We're running ONE pivy-agent (this isn't a multi-instance setup) so
-we use single-instance shape and override the module's emission with
-`lib.mkForce` to point at the mux socket:
-
-```nix
-services.piggy-agent = {
-  enable = true;
-  guid = …;  # see Phase 0
-  socketPath = "$HOME/.local/state/ssh/pivy-agent.sock";
-  askpass = "${pkgs.pivy}/libexec/pivy/pivy-askpass";
-  confirm = "${pkgs.pivy}/libexec/pivy/pivy-askpass";    # post-#61
-  notifySend = "${pkgs.pivy}/libexec/pivy/pivy-notify";  # post-#61
-};
-
-# Reclaim SSH_AUTH_SOCK from the module, which would otherwise
-# point shells at the upstream pivy-agent socket directly. We want
-# shells to talk to the mux above pivy-agent.
-home.sessionVariables.SSH_AUTH_SOCK = lib.mkForce
-  "$HOME/.local/state/ssh/mux-agent.sock";
-```
-
-The override is explicit and survives any shell-init source-order
-changes. `SSH_ASKPASS`/`SSH_ASKPASS_REQUIRE` propagation from #60
-works as designed in single-instance mode; no extra
-`home.sessionVariables` block needed.
-
-The cleaner long-term shape inverts the module's default: piggy
-SHOULD NOT claim `home.sessionVariables.SSH_AUTH_SOCK` automatically.
-The mux-in-front pattern (ssh-agent-mux multiplexing pivy-agent +
-software-keys agent + 1Password agent + …) is common enough that
-"the agent's socket is the user's primary `SSH_AUTH_SOCK`" is the
-wrong default — it composes badly with every multi-agent setup.
-Proposed shape:
-
-```nix
-services.piggy-agent.setSshAuthSock = mkOption {
-  type = types.bool;
-  default = false;  # mux-in-front friendly
-  description = ''
-    Set `home.sessionVariables.SSH_AUTH_SOCK` to this agent's
-    socket. Default false because in mux-in-front setups the mux
-    owns the user-facing SSH_AUTH_SOCK and clobbering it from
-    here breaks the chain. Set to true if piggy IS the user's
-    primary agent (no mux).
-  '';
-};
-```
-
-Users without a mux flip it to `true` and get the same
-auto-management the module does today. Users with a mux (or any
-multi-agent setup) get the right behavior for free, no
-`lib.mkForce` needed.
-
-Filed as **piggy#62** (v1.0 blocker, sister to #60/#61). Until
-#62 closes, the `lib.mkForce` override above is what eng's
-`home/piggy-agent.nix` carries. Once #62 lands, the override comes
-out and `home/piggy-agent.nix` has zero per-user overrides — every
-SSH_* var is sourced from the piggy module's first-class options
-or its (correctly-defaulted) opt-out.
+**Site 3: SSH_AUTH_SOCK ordering.** Resolved by piggy#62 (closed
+`48337da`). The piggy module no longer claims
+`home.sessionVariables.SSH_AUTH_SOCK` by default; users without a
+mux opt in via `setSshAuthSock = true`. Eng has a mux above
+pivy-agent (`rcm/env` sets `SSH_AUTH_SOCK = mux-agent.sock`), so
+we leave `setSshAuthSock` at its default false and the mux value
+stays unchallenged. Zero per-user overrides for this site.
 
 **Phase 1 step 5 askpass-regression checklist** (added to the existing
 verification list — see Phases below):
@@ -244,7 +180,9 @@ Three options:
 
 ### Option X — keep `pivy-agent.sock`, just change who listens (recommended)
 
-Configure the new module in single-instance shape:
+Configure the new module in single-instance shape. Default
+`setSshAuthSock = false` (post-#62) means we leave `SSH_AUTH_SOCK`
+alone for the mux to manage:
 
 ```nix
 services.piggy-agent = {
@@ -252,19 +190,17 @@ services.piggy-agent = {
   guid = …;  # see Phase 0 — pick from current pivy-agent state
   socketPath = "$HOME/.local/state/ssh/pivy-agent.sock";
   askpass = "${pkgs.pivy}/libexec/pivy/pivy-askpass";
-  confirm = "${pkgs.pivy}/libexec/pivy/pivy-askpass";    # post-#61
-  notifySend = "${pkgs.pivy}/libexec/pivy/pivy-notify";  # post-#61
+  confirm = "${pkgs.pivy}/libexec/pivy/pivy-askpass";
+  notifySend = "${pkgs.pivy}/libexec/pivy/pivy-notify";
+  # setSshAuthSock left at default false — mux owns the user-shell
+  # SSH_AUTH_SOCK; no clobber.
 };
-
-home.sessionVariables.SSH_AUTH_SOCK = lib.mkForce
-  "$HOME/.local/state/ssh/mux-agent.sock";
 ```
 
-The `lib.mkForce` override reclaims `SSH_AUTH_SOCK` from the module's
-single-instance default (per "SSH_AUTH_SOCK ordering" above). Mux
-config unchanged. `PIVY_AUTH_SOCK` env unchanged.
+Mux config unchanged. `PIVY_AUTH_SOCK` env unchanged.
 `bootstrap-identity.bash` unchanged. SSH config unchanged. Cutover
-is one home-manager switch; rollback is one revert + switch.
+is one home-manager switch; rollback is one revert + switch. No
+per-user overrides anywhere.
 
 The semantic mismatch (the file is called `pivy-agent.sock` but
 piggy is the listener) lives in one place — the home-manager module
@@ -319,14 +255,15 @@ Read-only / no-mutation work to derisk the actual swap.
   emits SSH_CONFIRM / SSH_NOTIFY_SEND on the agent unit's env via
   first-class `confirm` and `notifySend` options. Same commit
   hoisted SSH_ASKPASS* off the launcher onto the unit env.
-- [ ] **#62 closed** — services.piggy-agent stops claiming
-  `home.sessionVariables.SSH_AUTH_SOCK` by default; opt-in via
-  `setSshAuthSock = true`. Once closed, `home/piggy-agent.nix`
-  drops the `lib.mkForce` override entirely.
+- [x] **#62 closed** in piggy `48337da` — services.piggy-agent
+  no longer claims `home.sessionVariables.SSH_AUTH_SOCK` by
+  default. Default `setSshAuthSock = false` is mux-in-front
+  friendly; opt in via `setSshAuthSock = true` for setups without
+  a mux. Eng leaves it at the default.
 - [ ] `nix flake update piggy` in `~/eng` to advance from `79658e1`
-  → `b3f2b7a` (or whatever master is by the time you do this). Verify
-  `nix flake metadata` shows the expected SHA and that the lock file
-  diff is just the piggy input.
+  → `48337da` (or whatever master is by the time you do this).
+  Verify `nix flake metadata` shows the expected SHA and that the
+  lock file diff is just the piggy input.
 - [ ] Confirm the piggy flake exports the package attribute we'll
   pin to. Likely `inputs.piggy.packages.${system}.piggy`. Verify
   with `nix eval .#inputs.piggy.packages.${currentSystem} --apply
@@ -347,14 +284,14 @@ Read-only / no-mutation work to derisk the actual swap.
   env MUST contain the same four `SSH_ASKPASS*`/`SSH_CONFIRM`/
   `SSH_NOTIFY_SEND` strings (point-by-point) once the new module
   options from #60/#61 are wired.
-- [ ] **Verify single-instance + lib.mkForce override evaluates as
-  expected.** Build the home-manager generation off-system (or just
-  do step 3 of Phase 1 below — the enable=false dry run), and
-  confirm the rendered `~/.config/zsh/.zshenv` (or fish equivalent)
-  has `SSH_AUTH_SOCK = $HOME/.local/state/ssh/mux-agent.sock`, NOT
-  `pivy-agent.sock`. If the override didn't take, home-manager would
-  flag a definition conflict — `lib.mkForce` is the priority knob
-  that makes our value win.
+- [ ] **Verify single-instance evaluates as expected.** Build the
+  home-manager generation off-system (or just do step 3 of Phase 1
+  below — the enable=false dry run), and confirm the rendered
+  `~/.config/zsh/.zshenv` (or fish equivalent) does NOT contain
+  `SSH_AUTH_SOCK = pivy-agent.sock` from the piggy module
+  (because `setSshAuthSock` defaults to `false` post-#62). The
+  user-shell `SSH_AUTH_SOCK` continues to come solely from
+  `rcm/env`.
 
 ### Phase 1 — Linux dev box (this machine)
 
@@ -365,25 +302,21 @@ Smallest blast radius. If it breaks, everything's local and revertible.
    (!isSshHost)` to match the existing gate.
 2. **Write `home/piggy-agent.nix`** with `services.piggy-agent`
    configured per Option X (single-instance, same socket path as
-   pivy-agent.sock). Set `enable = false` initially. Use the module's
-   top-level options (post-#60 and post-#61):
+   pivy-agent.sock). Set `enable = false` initially. Use the
+   module's top-level options:
    - `askpass = "${pkgs.pivy}/libexec/pivy/pivy-askpass"` — reaches
-     the agent process via the unit env (per #61's refactor) AND
-     the user shell via `home.sessionVariables` (per #60).
+     the agent process via the unit env (per #61) AND the user
+     shell via `home.sessionVariables` (per #60).
    - `confirm = "${pkgs.pivy}/libexec/pivy/pivy-askpass"` and
-     `notifySend = "${pkgs.pivy}/libexec/pivy/pivy-notify"` per
-     #61.
+     `notifySend = "${pkgs.pivy}/libexec/pivy/pivy-notify"` (per
+     #61).
+   - `setSshAuthSock` left at default `false` (per #62) so the
+     module does not touch `home.sessionVariables.SSH_AUTH_SOCK`;
+     `rcm/env`'s `mux-agent.sock` value reaches the user shell
+     unchallenged.
 
-   Plus the `lib.mkForce` override that reclaims `SSH_AUTH_SOCK`
-   from the module:
-   ```nix
-   home.sessionVariables.SSH_AUTH_SOCK = lib.mkForce
-     "$HOME/.local/state/ssh/mux-agent.sock";
-   ```
-   This is the only per-user override the rollout carries. The
-   askpass propagation in single-instance mode comes from the
-   module itself (#60); we only override the one knob the module
-   gets wrong for users-with-mux.
+   Zero per-user overrides. The piggy module owns the SSH_*
+   contract end-to-end.
 3. **Build and switch with both modules present, piggy disabled.**
    `just build-home && home-manager switch`. This proves the new
    module evaluates; nothing changes at runtime. Confirm
@@ -488,15 +421,14 @@ re-unlock per machine), which is the only user-visible cost.
 ## Risks and known unknowns
 
 - **Askpass wiring drift.** Documented in detail under "SSH_ASKPASS
-  contract" above. The four-var contract is now owned end-to-end by
-  the piggy module after #60 (`d2374da`) and #61 (`b3f2b7a`); no
-  per-user overrides in this rollout.
-- **`SSH_AUTH_SOCK` ordering.** Documented above. Resolution:
-  single-instance shape + `lib.mkForce` override on
-  `home.sessionVariables.SSH_AUTH_SOCK` to point at the mux socket.
-  Verified at evaluation time (definition conflict surfaces at
-  `home-manager switch` if the override is missing) and at runtime
-  in Phase 1 step 5.
+  contract" above. The four-var contract is owned end-to-end by
+  the piggy module after #60 (`d2374da`), #61 (`b3f2b7a`), and
+  #62 (`48337da`); no per-user overrides in this rollout.
+- **`SSH_AUTH_SOCK` ordering.** Resolved by piggy#62 (closed
+  `48337da`). Module no longer claims `home.sessionVariables.SSH_
+  AUTH_SOCK` by default; eng leaves `setSshAuthSock = false` and
+  `rcm/env` keeps sole control. Verified at evaluation time via
+  Phase 0's smoke; verified at runtime in Phase 1 step 5.
 - **PCSC contention.** Switching the agent doesn't change which
   process holds a PC/SC transaction at any given moment, but the
   brief overlap when one agent is stopping and the other starting
@@ -549,9 +481,10 @@ The migration is "done" when:
 - The four-var SSH askpass contract from "SSH_ASKPASS contract"
   above holds at runtime in both the user shell and the agent
   process — both halves sourced from the piggy module's first-class
-  options (post-#60 and post-#61). The only per-user override is
-  the `lib.mkForce` reclaim of `home.sessionVariables.SSH_AUTH_SOCK`
-  to point at `mux-agent.sock`.
+  options (post-#60 and post-#61). The user-shell `SSH_AUTH_SOCK`
+  continues to be set by `rcm/env` to `mux-agent.sock` because
+  `setSshAuthSock` defaults to `false` post-#62. Zero per-user
+  overrides in `home/piggy-agent.nix`.
 
 ## References
 
@@ -574,8 +507,7 @@ The migration is "done" when:
   refactored static agent env vars onto the unit definition).
 - **amarbel-llc/piggy#62** — v1.0 default-of-defaults: services.piggy-
   agent should NOT claim `home.sessionVariables.SSH_AUTH_SOCK` by
-  default; opt-in via `setSshAuthSock = true`. **Open** — eng
-  rollout blocked.
+  default; opt-in via `setSshAuthSock = true`. Closed by `48337da`.
 - `doc/eng-ssh.7.scd` — current architecture description; needs an
   update at Phase 3 (or a small note now that "pivy-agent" in the
   doc refers to the listener-by-name, which may be `piggy
