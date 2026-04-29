@@ -130,6 +130,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "utils";
     };
+    tap = {
+      url = "github:amarbel-llc/tap";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
     tommy = {
       url = "github:amarbel-llc/tommy";
       inputs.nixpkgs.follows = "nixpkgs-amarbel";
@@ -400,7 +406,7 @@
             ++ [
               purse-first.packages.${system}.purse-first
               bob.packages.${system}.caldav
-              bob.packages.${system}.tap-dancer-bash
+              inputs.tap.packages.${system}.tap-dancer-bash
               circus.packages.default
               engPlugin
               inputs.moxy.packages.${system}.default
