@@ -130,6 +130,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "utils";
     };
+    tommy = {
+      url = "github:amarbel-llc/tommy";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     xdg = {
       url = "github:amarbel-llc/xdg";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -364,6 +374,24 @@
           '';
         };
 
+        # The eng-baked wrapper carries the global default config from
+        # ./treefmt.nix; the cwd-aware shell wrapper below prefers a per-project
+        # treefmt.toml when one exists at the git root, so individual repos can
+        # override eng's defaults.
+        treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs {
+          imports = [ ./treefmt.nix ];
+          _module.args.tommy = inputs.tommy.packages.${system}.default;
+        };
+        treefmtBaked = treefmtEval.config.build.wrapper;
+        treefmtCwd = pkgs.writeShellScriptBin "treefmt" ''
+          set -euo pipefail
+          root=$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null || pwd)
+          if [ -f "$root/treefmt.toml" ]; then
+            exec ${pkgs.treefmt}/bin/treefmt "$@"
+          fi
+          exec ${treefmtBaked}/bin/treefmt "$@"
+        '';
+
         packages = pkgs.symlinkJoin {
           name = "eng";
           paths =
@@ -377,6 +405,7 @@
               engPlugin
               inputs.moxy.packages.${system}.default
               doc
+              treefmtCwd
             ]
             ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
               inputs.tacky.packages.${system}.default
@@ -391,6 +420,12 @@
           bob-marketplace = bob.packages.${system}.marketplace;
         };
 
+        # `nix fmt` runs the cwd-aware treefmt wrapper.
+        formatter = treefmtCwd;
+
+        # `nix flake check` validates that the tree is formatted.
+        checks.formatting = treefmtEval.config.build.check self;
+
         devShells =
           let
             allPackages = platformPackages // repoPackages;
@@ -398,7 +433,7 @@
           builtins.mapAttrs (name: pkg: pkgs.mkShell { packages = [ pkg ]; }) allPackages
           // {
             default = pkgs.mkShell {
-              packages = builtins.attrValues allPackages;
+              packages = builtins.attrValues allPackages ++ [ treefmtCwd ];
             };
           };
       }

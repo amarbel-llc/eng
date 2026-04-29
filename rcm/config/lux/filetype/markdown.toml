@@ -1,4 +1,0 @@
-extensions = ["md", "markdown"]
-# formatters = ["pandoc"]
-# formatter_mode = "chain"
-lsp_format = "never"

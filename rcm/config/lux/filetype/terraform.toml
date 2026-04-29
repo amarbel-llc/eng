@@ -1,3 +1,0 @@
-extensions = ["tf", "tfvars"]
-language_ids = ["terraform"]
-lsp = "terraform-ls"

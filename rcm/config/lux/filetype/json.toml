@@ -1,4 +1,0 @@
-extensions = ["json"]
-formatters = ["jq"]
-formatter_mode = "chain"
-lsp_format = "never"

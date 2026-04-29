@@ -1,6 +1,0 @@
-extensions = ["go"]
-language_ids = ["go"]
-lsp = "gopls"
-formatters = ["goimports", "gofumpt"]
-formatter_mode = "chain"
-lsp_format = "never"

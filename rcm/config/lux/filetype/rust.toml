@@ -1,5 +1,0 @@
-extensions = ["rs"]
-language_ids = ["rust"]
-lsp = "rust-analyzer"
-formatters = ["rustfmt"]
-lsp_format = "fallback"

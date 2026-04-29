@@ -1,4 +1,0 @@
-extensions = ["html", "htm"]
-language_ids = ["html"]
-formatters = ["prettier"]
-lsp_format = "never"

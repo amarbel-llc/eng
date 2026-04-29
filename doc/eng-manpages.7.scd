@@ -235,9 +235,9 @@ amarbel-llc repository as of April 2026.
 	compiles with scdoc. Gold standard for hand-written pages.
 
 *bob* — SCDOC
-	~14 pages across sub-packages (batman, polkadots, lux,
-	sandcastle). Source in _packages/\*/doc/\*.scd_. Per-package Nix
-	derivations compile with scdoc.
+	~12 pages across sub-packages (batman, polkadots, sandcastle).
+	Source in _packages/\*/doc/\*.scd_. Per-package Nix derivations
+	compile with scdoc.
 
 *pa6e* — SCDOC
 	1 page (section 1). Source in _doc/pa6e.1.scd_. Nix derivation

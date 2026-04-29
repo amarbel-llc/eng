@@ -7,6 +7,12 @@ default: \
     build-rcm \
     install-zmx
 
+# Format every recognized file in the current tree using treefmt. Honors a
+# project-local treefmt.toml at the git root if present; otherwise uses eng's
+# baked treefmt-nix config (see ./treefmt.nix).
+fmt-all *args:
+  treefmt {{args}}
+
 # TODO implement a check that enforces no active claude sessions, worktrees, or
 # sweatshops open. This is because upgrading the entire environment can break
 # existing sessions

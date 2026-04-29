@@ -74,11 +74,4 @@ allow = [
   "mcp__plugin_grit_grit__log",
   "mcp__plugin_grit_grit__show",
   "mcp__plugin_grit_grit__status",
-  "mcp__plugin_lux_lux__completion",
-  "mcp__plugin_lux_lux__definition",
-  "mcp__plugin_lux_lux__diagnostics",
-  "mcp__plugin_lux_lux__document_symbols",
-  "mcp__plugin_lux_lux__hover",
-  "mcp__plugin_lux_lux__references",
-  "mcp__plugin_lux_lux__workspace_symbols",
 ]

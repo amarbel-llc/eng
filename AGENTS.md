@@ -58,7 +58,9 @@ just update-nix-repos   # Cascade master SHA to repos/* flakes (no commit)
 just clean              # nix-store --gc
 ```
 
-Format nix files: `lux fmt path/to/flake.nix`
+Format the whole tree: `treefmt` (or `just fmt-all`). Configured by
+`./treefmt.nix` via treefmt-nix; per-project `treefmt.toml` at a repo's git
+root takes precedence.
 
 ## Nix Flake Architecture
 
@@ -207,7 +209,7 @@ Two marketplaces are built and installed separately to avoid
 `.claude-plugin/marketplace.json` collision in `symlinkJoin`:
 
 - **purse-first** --- framework library + CLI + 8 framework skills
-- **bob** --- MCP servers (grit, get-hubbed, lux, chix, mgp) + 26 workflow
+- **bob** --- MCP servers (grit, get-hubbed, chix, mgp) + 26 workflow
   skills
 
 Both are in `infraInputs` so their marketplace outputs are excluded from
@@ -234,8 +236,8 @@ Restart Claude Code sessions after install to pick up new plugin config.
   `home/`                                Home-manager modules (fish, git,
                                          direnv, kitty, packages)
 
-  `repos/`                               30+ separate git repos (dodder, lux,
-                                         grit, nix-mcp-server, etc.)
+  `repos/`                               30+ separate git repos (dodder, grit,
+                                         nix-mcp-server, etc.)
 
   `rcm/`                                 Dotfiles managed by rcup with
                                          tag-based platform targeting
@@ -255,7 +257,7 @@ Each layer may only depend on layers below it.
 
 ## Code Style
 
-- **Nix**: Format with `nixfmt-rfc-style` (via `lux fmt`)
+- **Nix**: Format with `nixfmt-rfc-style` (via `treefmt` / `just fmt-all`)
 - **Shell**: `set -euo pipefail`, 2-space indent, `[[ ]]` conditionals, quote
   all vars. Format with `shfmt -s -i=2`
 - **Go**: `goimports` + `gofumpt`. Follow NATO module hierarchy. Never
@@ -318,7 +320,6 @@ uninstall+reinstall) 3. Note what was verified in the commit message
 
 - **dodder** --- Distributed zettelkasten-like blob store (Go). NATO-phonetic
   module hierarchy (`alfa`→`bravo`→...→`india`)
-- **lux** --- LSP multiplexer with MCP support (Go). Configured via `lsps.toml`
 - **grit** --- Git MCP server (Go)
 - **nix-mcp-server** --- Nix CLI operations MCP (Rust). JSON-RPC 2.0 over
   stdin/stdout

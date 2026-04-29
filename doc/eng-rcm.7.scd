@@ -22,7 +22,6 @@ rcm/
 ├── config/                 # shared configs (all platforms)
 │   ├── ssh/rcm/            # SSH config fragments
 │   ├── spinclass/          # spinclass sweatfile
-│   ├── lux/                # lux LSP configs
 │   └── nvim/               # neovim LSP configs
 ├── local/bin/              # user scripts deployed to ~/.local/bin
 ├── hooks/post-up/          # scripts run after rcup
