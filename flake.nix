@@ -42,7 +42,10 @@
     };
     clown = {
       url = "github:amarbel-llc/clown";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # Clown's flake reads `nixpkgs.overlays.default`, which is only
+      # defined on the amarbel fork. Following upstream nixpkgs fails
+      # with "attribute 'overlays' missing" at eval time.
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
@@ -110,7 +113,6 @@
     spinclass = {
       url = "github:amarbel-llc/spinclass";
       inputs.nixpkgs.follows = "nixpkgs-amarbel";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
       inputs.bob.follows = "bob";
     };
