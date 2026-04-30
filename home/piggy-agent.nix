@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  identity,
   inputs,
   ...
 }:
@@ -16,10 +17,11 @@ in
   services.piggy-agent = {
     enable = true;
     package = piggy;
-    guid = "55C3439DDF5E324B1A4DD9F9B75B6106";
+    guid = identity.piggyGuid;
     socketPath = "$HOME/.local/state/ssh/pivy-agent.sock";
     askpass = "${pivy}/libexec/pivy/pivy-askpass";
     confirm = "${pivy}/libexec/pivy/pivy-askpass";
     notifySend = "${pivy}/libexec/pivy/pivy-notify";
+    logFile = lib.mkIf pkgs.stdenv.isDarwin "${config.home.homeDirectory}/Library/Logs/piggy-agent.log";
   };
 }

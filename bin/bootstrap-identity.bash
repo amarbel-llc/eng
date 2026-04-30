@@ -40,18 +40,41 @@ if gum confirm $ssh_confirm_flag "Configure as SSH host? (skips pivy-agent and s
   is_ssh_host=true
 fi
 
+# Capture the inserted PIV card's GUID for services.piggy-agent.guid.
+# Skipped on SSH hosts (no local card).
+piggy_guid=""
+if ! $is_ssh_host; then
+  guids="$(piggy tool list 2>/dev/null | awk '/^[[:space:]]*guid:/ {print $2}')"
+  guid_count="$(printf '%s\n' "$guids" | grep -c . || true)"
+  if [[ $guid_count -eq 0 ]]; then
+    gum log --level warn "no PIV card detected via 'piggy tool list', leaving piggyGuid empty"
+  elif [[ $guid_count -eq 1 ]]; then
+    piggy_guid="$guids"
+    gum log --level info "captured PIV GUID: $piggy_guid"
+  else
+    piggy_guid="$(printf '%s\n' "$guids" | gum choose --header 'Select PIV card GUID:')"
+  fi
+fi
+
 generate_identity() {
   if [[ "$(uname)" == "Darwin" ]]; then
     hostname="$(scutil --get LocalHostName)"
-    printf '{"username":"%s","homeDirectory":"%s","hostname":"%s","gitUserName":"%s","gitUserEmail":"%s","gitSigningKey":"%s"}\n' \
-      "$USER" "$HOME" "$hostname" "$git_name" "$git_email" "$signing_key"
+    printf '{"username":"%s","homeDirectory":"%s","hostname":"%s","gitUserName":"%s","gitUserEmail":"%s","gitSigningKey":"%s","piggyGuid":"%s"}\n' \
+      "$USER" "$HOME" "$hostname" "$git_name" "$git_email" "$signing_key" "$piggy_guid"
   else
+    # piggyGuid: emit a Nix string when set, null when unset (SSH host or no card).
+    if [[ -n $piggy_guid ]]; then
+      piggy_guid_nix="\"$piggy_guid\""
+    else
+      piggy_guid_nix="null"
+    fi
     cat <<NIX
 {
   gitUserName = "$git_name";
   gitUserEmail = "$git_email";
   gitSigningKey = "$signing_key";
   isSshHost = $is_ssh_host;
+  piggyGuid = $piggy_guid_nix;
 }
 NIX
   fi

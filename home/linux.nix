@@ -16,8 +16,10 @@ in
   ]
   ++ lib.optionals (!isSshHost) [
     ./pivy-agent.nix
-    ./piggy-agent.nix
     ./ssh-agent-mux.nix
+  ]
+  ++ lib.optionals (!isSshHost && identity.piggyGuid or null != null) [
+    ./piggy-agent.nix
   ];
 
   home.stateVersion = "24.11";

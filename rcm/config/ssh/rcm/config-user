@@ -5,4 +5,3 @@ Include ~/.config/ssh/rcm/config-user-secret
 Host github-user
   Hostname github.com
   User git
-  IdentityFile ~/.config/ssh/rcm/key-user
