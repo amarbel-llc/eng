@@ -6,7 +6,6 @@
 rcm/config/git/config-user
 rcm/config/ssh/rcm/config-user
 rcm/config/ssh/rcm/config-user-secret
-rcm/config/ssh/rcm/key-user
 rcm/config/ssh/rcm/known_hosts
 rcm/config/ssh/rcm/known_hosts-user
 rcm/host-*/
