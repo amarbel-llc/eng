@@ -22,6 +22,5 @@ in
     askpass = "${pivy}/libexec/pivy/pivy-askpass";
     confirm = "${pivy}/libexec/pivy/pivy-askpass";
     notifySend = "${pivy}/libexec/pivy/pivy-notify";
-    logFile = lib.mkIf pkgs.stdenv.isDarwin "${config.home.homeDirectory}/Library/Logs/piggy-agent.log";
   };
 }

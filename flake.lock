@@ -7415,11 +7415,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1777546712,
-        "narHash": "sha256-gBN4NsG0nj7dIuNe8R6QSIH4dYzQdpKaLWs1SCWShtg=",
+        "lastModified": 1777571029,
+        "narHash": "sha256-MMR7r6PGWuKBVgrRUGnTCgJj84/ZR/ML8SGshHhYcWg=",
         "owner": "amarbel-llc",
         "repo": "piggy",
-        "rev": "1a306ec24b7fced4eb5b759ab83efef0d82d62f9",
+        "rev": "18dce2270e60e2d3459b56f2573b7cae0e3a1dac",
         "type": "github"
       },
       "original": {
