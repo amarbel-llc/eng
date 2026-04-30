@@ -1,0 +1,241 @@
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+# Phase 0 derisking probes for docs/plans/2026-04-29-piggy-agent-rollout.md.
+# Each recipe captures pre-swap state for post-swap diffing.
+
+pivy_sock := "$HOME/.local/state/ssh/pivy-agent.sock"
+mux_sock := "$HOME/.local/state/ssh/mux-agent.sock"
+env_snapshot := "/tmp/pivy-agent-env-before"
+smoke_repo := "$HOME/.tmp/piggy-rollout-smoke"
+test_askpass := "/home/sasha/eng/repos/piggy/zz-tests_bats/helpers/piggy-test-askpass.sh"
+
+# Phase 0.3 — pivy-agent's PIV card GUID. Pin services.piggy-agent.guid to this.
+[group('debug-piggy')]
+[linux]
+pivy-guid:
+  pivy-tool list
+
+# Phase 0.4 — keys visible via the mux and via pivy-agent directly. Should be
+# identical (mux fans out to pivy upstream). Capture for post-swap comparison.
+[group('debug-piggy')]
+[linux]
+mux-snapshot:
+  #!/usr/bin/env bash
+  set -uo pipefail
+  echo "=== ssh-add -l via mux ({{mux_sock}}) ==="
+  SSH_AUTH_SOCK={{mux_sock}} ssh-add -l || echo "(no keys / agent unreachable)"
+  echo
+  echo "=== ssh-add -l via pivy-agent ({{pivy_sock}}) ==="
+  SSH_AUTH_SOCK={{pivy_sock}} ssh-add -l || echo "(no keys / agent unreachable)"
+
+# Phase 0.5 — recent pivy-agent journal. Looking for clean operation; abort
+# rollout if the unit is in a confused state.
+[group('debug-piggy')]
+[linux]
+pivy-journal:
+  journalctl --user -u pivy-agent -n 20 --no-pager
+
+# Last N piggy-agent journal lines. Use after a swap to see why the unit is
+# failing (or to confirm clean operation).
+[group('debug-piggy')]
+[linux]
+piggy-journal:
+  journalctl --user -u piggy-agent -n 40 --no-pager
+
+# Phase 0.6 — pivy-agent's runtime SSH_* env vars. The new piggy-agent's env
+# MUST match this set point-by-point (SSH_ASKPASS, SSH_ASKPASS_REQUIRE,
+# SSH_CONFIRM, SSH_NOTIFY_SEND).
+[group('debug-piggy')]
+[linux]
+pivy-env-capture:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  pid="$(pgrep -f pivy-agent | head -1)"
+  if [[ -z "$pid" ]]; then
+    echo "no pivy-agent process found" >&2
+    exit 1
+  fi
+  echo "pivy-agent pid: $pid"
+  cat "/proc/$pid/environ" | tr '\0' '\n' | grep '^SSH_' | sort | tee {{env_snapshot}}
+  echo
+  echo "saved to {{env_snapshot}}"
+
+# Phase 0.3-0.6 — run all four probes in sequence. Output is meant to be
+# eyeballed by the operator, not diffed mechanically.
+[group('debug-piggy')]
+[linux]
+snapshot: pivy-guid mux-snapshot pivy-journal pivy-env-capture
+
+# Phase 0.7 — eval-build the home-manager activation package WITHOUT switching.
+# Proves home/piggy-agent.nix evaluates cleanly alongside pivy-agent.nix. The
+# build is no-op at runtime: services.piggy-agent.enable = false gates the
+# entire config block.
+[group('debug-piggy')]
+[linux]
+build-home-dry:
+  cd {{justfile_directory()}}/../.. && nix build --impure --no-link --print-out-paths .#homeConfigurations.linux.activationPackage
+
+# Phase 1 step 4c — activate the most recent dry-run home-manager generation
+# directly. Bypasses `nix run home-manager` (which can be slow when uncached)
+# by building the activation package and invoking its `activate` script. The
+# script handles unit cycling: stops pivy-agent, starts piggy-agent.
+[group('debug-piggy')]
+[linux]
+home-activate:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  cd {{justfile_directory()}}/../..
+  gen="$(nix build --impure --no-link --print-out-paths .#homeConfigurations.linux.activationPackage)"
+  echo "activating $gen"
+  "$gen/activate"
+
+# Phase 1 step 5 — verify the piggy-agent unit + socket + agent surface +
+# agent-process env match the pre-swap pivy-agent snapshots. Stops short of
+# the failed-unlock smoke (separate recipe, intentionally invasive) and the
+# signed-commit smoke (smoke-signed-commit, separate to keep PIN prompts
+# scoped).
+[group('debug-piggy')]
+[linux]
+verify-swap:
+  #!/usr/bin/env bash
+  set -uo pipefail
+  echo "=== systemctl --user status piggy-agent (head) ==="
+  systemctl --user status piggy-agent --no-pager -n 5 || true
+  echo
+  echo "=== systemctl --user status pivy-agent (should be inactive/missing) ==="
+  systemctl --user status pivy-agent --no-pager -n 5 2>&1 | head -10 || true
+  echo
+  echo "=== ls -l {{pivy_sock}} (socket lifetime check) ==="
+  ls -l {{pivy_sock}} 2>&1 || echo "socket missing"
+  echo
+  echo "=== ssh-add -L via {{pivy_sock}} ==="
+  SSH_AUTH_SOCK={{pivy_sock}} ssh-add -L 2>&1 || true
+  echo
+  echo "=== ssh-add -L via mux ({{mux_sock}}) ==="
+  SSH_AUTH_SOCK={{mux_sock}} ssh-add -L 2>&1 || true
+  echo
+  echo "=== piggy-agent SSH_* env (MainPID from systemctl) ==="
+  pid="$(systemctl --user show piggy-agent --property=MainPID --value)"
+  if [[ -n "$pid" && "$pid" != "0" ]]; then
+    echo "pid: $pid"
+    cat "/proc/$pid/environ" | tr '\0' '\n' | grep '^SSH_' | sort | tee /tmp/piggy-agent-env-after
+    echo
+    echo "=== diff vs {{env_snapshot}} ==="
+    diff -u {{env_snapshot}} /tmp/piggy-agent-env-after || true
+  else
+    echo "piggy-agent MainPID is 0 (unit not running)" >&2
+  fi
+
+# Phase 1 step 5 — signed-commit smoke against a throwaway repo. Recreates
+# {{smoke_repo}} fresh each run (so a stale .git can't mask a regression),
+# pulls user.name/email from global git config, derives the SSH signing key
+# from the live agent surface (mux → pivy or piggy), and exercises the full
+# sign + verify round-trip. Triggers a PIN prompt via SSH_ASKPASS on the
+# commit step; that's the expected user-facing surface.
+[group('debug-piggy')]
+[linux]
+smoke-signed-commit:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  repo="{{smoke_repo}}"
+  rm -rf "$repo"
+  mkdir -p "$repo"
+  cd "$repo"
+  git init -q -b smoke
+
+  echo "=== ssh-add -L (current SSH_AUTH_SOCK = ${SSH_AUTH_SOCK:-unset}) ==="
+  ssh-add -L
+
+  user_email="$(git config --get user.email)"
+  user_name="$(git config --get user.name)"
+  signing_pubkey="$(ssh-add -L | head -1 | awk '{print $1, $2}')"
+  if [[ -z "$signing_pubkey" ]]; then
+    echo "no SSH key visible to ssh-add -L; cannot smoke" >&2
+    exit 1
+  fi
+
+  pubkey_file="$repo/.git/smoke-signing.pub"
+  printf '%s\n' "$signing_pubkey" > "$pubkey_file"
+
+  allowed="$repo/.git/allowed_signers"
+  printf '%s %s\n' "$user_email" "$signing_pubkey" > "$allowed"
+
+  git config user.email "$user_email"
+  git config user.name "$user_name"
+  git config gpg.format ssh
+  git config user.signingkey "$pubkey_file"
+  git config gpg.ssh.allowedSignersFile "$allowed"
+
+  echo
+  echo "=== git commit -S --allow-empty -m smoke ==="
+  git commit -S --allow-empty -m smoke
+
+  echo
+  echo "=== git verify-commit HEAD ==="
+  git verify-commit HEAD
+
+  echo
+  echo "OK: signed-commit round-trip succeeded in $repo"
+
+# Phase 1 step 5 — real-host ssh smoke. Connects to git@github.com (auth-only,
+# server immediately disconnects with "Hi <user>!"), greps `-v` output for the
+# IdentityAgent line, asserts it points at mux-agent.sock. Confirms the full
+# user-shell → mux → piggy → PIV path against a real upstream.
+[group('debug-piggy')]
+[linux]
+smoke-real-host-ssh:
+  #!/usr/bin/env bash
+  set -uo pipefail
+  echo "=== ssh -vT git@github.com (auth-only) ==="
+  out="$(ssh -vT -o BatchMode=no -o ConnectTimeout=10 git@github.com 2>&1 || true)"
+  printf '%s\n' "$out" | grep -E 'IdentityAgent|debug1: Connecting to|debug1: Server accepts key|Hi |successfully authenticated' || true
+  echo
+  if printf '%s\n' "$out" | grep -qE 'IdentityAgent.*mux-agent\.sock'; then
+    echo "PASS: IdentityAgent resolves to mux-agent.sock"
+  else
+    echo "WARN: did not find IdentityAgent=mux-agent.sock in -v output (may not be set in ssh_config)"
+  fi
+  if printf '%s\n' "$out" | grep -qE '^Hi '; then
+    echo "PASS: github.com greeted us by name (auth succeeded)"
+  else
+    echo "FAIL: no 'Hi <user>!' line; auth likely failed"
+    exit 1
+  fi
+
+# Phase 1 step 5 — failed-unlock smoke. Restarts piggy-agent to clear PIN
+# cache, then attempts a signed commit with SSH_ASKPASS pointing at piggy's
+# test-askpass helper (which has no PIGGY_TEST_FIB_PIN, so it refuses and
+# emits a banner). Asserts: commit FAILS, stderr contains
+# `[piggy-test-askpass]`, no GUI dialog renders. Restoring normal use after
+# this requires re-entering the PIN on the next signing operation.
+[group('debug-piggy')]
+[linux]
+smoke-failed-unlock:
+  #!/usr/bin/env bash
+  set -uo pipefail
+  echo "=== restart piggy-agent (clears cached PIN) ==="
+  systemctl --user restart piggy-agent
+  for i in 1 2 3 4 5; do
+    [ -S "$HOME/.local/state/ssh/pivy-agent.sock" ] && break
+    sleep 1
+  done
+  echo "agent socket: $(ls -l "$HOME/.local/state/ssh/pivy-agent.sock")"
+  echo
+  echo "=== git commit -S with SSH_ASKPASS={{test_askpass}} (no PIGGY_TEST_FIB_PIN) ==="
+  cd "{{smoke_repo}}"
+  out="$(env SSH_ASKPASS="{{test_askpass}}" SSH_ASKPASS_REQUIRE=force DISPLAY="" \
+    git commit -S --allow-empty -m failed-unlock-smoke 2>&1; echo "EXIT=$?")"
+  printf '%s\n' "$out"
+  echo
+  if printf '%s\n' "$out" | grep -q '\[piggy-test-askpass\]'; then
+    echo "PASS: [piggy-test-askpass] banner observed on stderr (no GUI escape)"
+  else
+    echo "FAIL: no [piggy-test-askpass] banner — possible GUI dialog leak; check now"
+    exit 1
+  fi
+  if printf '%s\n' "$out" | grep -qE '^EXIT=[1-9]'; then
+    echo "PASS: signing failed as expected"
+  else
+    echo "FAIL: signing succeeded somehow (askpass returned 0?) — investigate"
+    exit 1
+  fi

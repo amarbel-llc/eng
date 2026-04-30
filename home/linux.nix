@@ -16,6 +16,7 @@ in
   ]
   ++ lib.optionals (!isSshHost) [
     ./pivy-agent.nix
+    ./piggy-agent.nix
     ./ssh-agent-mux.nix
   ];
 

@@ -9,7 +9,7 @@ let
   system = pkgs.stdenv.hostPlatform.system;
   pivy = inputs.pivy.packages.${system}.default;
 in
-{
+lib.mkIf false {
   home.sessionVariables = {
     SSH_ASKPASS = "${pivy}/libexec/pivy/pivy-askpass";
     SSH_ASKPASS_REQUIRE = "force";

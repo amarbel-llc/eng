@@ -158,16 +158,49 @@ verification list — see Phases below):
 - `env | rg ^SSH_` in a fresh shell shows the same four
   `SSH_ASKPASS*`/`SSH_CONFIRM`/`SSH_NOTIFY_SEND` values as before
   the swap, plus the same `SSH_AUTH_SOCK = mux-agent.sock`.
-- `cat /proc/$(pgrep -f piggy-agent)/environ | tr '\0' '\n' | rg ^SSH_`
-  on Linux (or the launchd equivalent on Darwin: `launchctl print
-  gui/$(id -u)/<label> | rg SSH_`) shows the same four agent-side
-  vars as the previous pivy-agent process did.
-- A deliberate **failed** unlock attempt (e.g. wrong PIN via the
-  test harness askpass set as `SSH_ASKPASS=…/piggy-test-askpass.sh`
-  briefly) renders a `[piggy-test-askpass]`-prefixed banner on
-  stderr — NOT a GUI dialog. This is the escape-detection path
-  from amarbel-llc/piggy#35. If a GUI dialog appears, `SSH_ASKPASS_
-  REQUIRE=force` is not propagating; STOP and roll back.
+- `cat /proc/$(systemctl --user show piggy-agent --property=MainPID --value)/environ
+  | tr '\0' '\n' | rg ^SSH_` on Linux (or the launchd equivalent on
+  Darwin: `launchctl print gui/$(id -u)/<label> | rg SSH_`) shows the
+  same four agent-side vars as the previous pivy-agent process did.
+  **Use `systemctl … MainPID`, not `pgrep -f piggy-agent`** — `pgrep`
+  matches stray processes whose cmdline contains the substring (e.g.
+  unrelated pivy-agents or the test harness itself), giving false-
+  negative diffs. Surfaced 2026-04-30 during this rollout: a `pgrep`-
+  based capture flagged a non-matching env that turned out to be a
+  different process entirely; the actual MainPID's env was identical
+  to the snapshot.
+- **Configured-askpass smoke.** Restart the agent (`systemctl --user
+  restart piggy-agent`) to clear the in-process PIN cache, then trigger
+  a signing operation (e.g. `git -C ~/.tmp/piggy-rollout-smoke commit
+  -S --allow-empty -m smoke`). Confirm the prompt that renders is the
+  configured pivy-askpass GUI — i.e. the binary at `${pivy}/libexec/
+  pivy/pivy-askpass`, NOT a fallback like zenity/kdialog. Visual
+  inspection (familiar dialog chrome) is sufficient on a single-user
+  dev box; `ls -l /proc/<askpass-pid>/exe` while the dialog is open
+  confirms it programmatically.
+
+  **What this test does NOT cover** (intentionally): rerouting the
+  agent's askpass via the *client* shell's `SSH_ASKPASS` env. Earlier
+  drafts of this plan called for setting `SSH_ASKPASS=…/piggy-test-
+  askpass.sh` in the calling subshell and asserting a `[piggy-test-
+  askpass]` stderr banner. That design was wrong: when piggy-agent
+  itself decides to prompt for unlock, it consults its OWN env (set by
+  `Service.Environment` at unit start, sourced from `services.piggy-
+  agent.askpass`), not the client's. The client-shell override never
+  reaches the prompt path. Surfaced 2026-04-30 during this rollout: a
+  recipe that overrode the client's `SSH_ASKPASS` produced no banner
+  AND no fallback dialog — the configured pivy-askpass ran instead.
+  That's the contract working as intended, but it's invisible to the
+  client-side override. amarbel-llc/piggy#35-style rogue-askpass
+  detection requires overriding the agent's *unit Environment* and
+  re-activating, which is out of scope for the operator-visible
+  rollout smoke.
+
+  Card-level PIN cache (PIV slot 9A pin-policy=Once on YubiKey)
+  further means a process restart may not always trigger a fresh
+  prompt; if no prompt renders, that's the cache, not a regression.
+  Power-cycle the card (unplug + replug) to force a card-level reset
+  before retrying.
 
 ## Design choice: socket path
 
@@ -337,18 +370,37 @@ Smallest blast radius. If it breaks, everything's local and revertible.
      `SSH_AUTH_SOCK = mux-agent.sock`, `SSH_ASKPASS`,
      `SSH_ASKPASS_REQUIRE`, `SSH_CONFIRM`, `SSH_NOTIFY_SEND` as
      captured in Phase 0.
-   - **`cat /proc/$(pgrep -f piggy-agent)/environ | tr '\0' '\n'
-     | rg ^SSH_`** matches the `SSH_*` snapshot from Phase 0.
-   - `git commit -S --allow-empty -m smoke` succeeds — gpg-signing
-     via SSH agent still works.
-   - `ssh <a-real-host>` succeeds with `-v` showing the right
-     IdentityAgent (mux-agent.sock).
-   - **Failed-unlock smoke test.** Briefly export `SSH_ASKPASS=
-     …/piggy-test-askpass.sh` (no `PIGGY_TEST_FIB_PIN`) in a
-     subshell and trigger an unlock; confirm a `[piggy-test-
-     askpass]`-prefixed stderr banner appears, NOT a GUI dialog.
-     If a dialog appears, STOP — `SSH_ASKPASS_REQUIRE=force` is
-     not propagating; revert immediately.
+   - **`just zz-explore/piggy-transition/verify-swap`** uses
+     `systemctl --user show piggy-agent --property=MainPID --value`
+     to capture the agent's `SSH_*` env and diffs it against
+     `/tmp/pivy-agent-env-before` from Phase 0. Empty diff = pass.
+     **Do NOT use `pgrep -f piggy-agent`** — it matches stray
+     processes (other pivy-agents, the test harness itself) and
+     reports false negatives. Surfaced 2026-04-30 during this rollout.
+   - `just zz-explore/piggy-transition/smoke-signed-commit` succeeds —
+     recreates `~/.tmp/piggy-rollout-smoke`, runs `ssh-add -L`,
+     `git commit -S --allow-empty -m smoke`, and `git verify-commit
+     HEAD` against the live agent surface. The recipe should also
+     have been run under pivy-agent (pre-swap) so a post-swap pass
+     proves the swap is the only variable.
+   - `just zz-explore/piggy-transition/smoke-real-host-ssh` (or `ssh
+     -vT git@github.com`) prints `Hi <user>!` confirming the full
+     user-shell → mux → piggy → PIV chain authenticates.
+   - **Configured-askpass smoke** (replaces the broken "failed-unlock"
+     design from earlier drafts of this plan — see "SSH_ASKPASS
+     contract" above for why client-shell `SSH_ASKPASS` overrides
+     don't reach the agent's prompt path). Restart the agent
+     (`systemctl --user restart piggy-agent`) to clear the in-process
+     PIN cache, then trigger a sign (e.g. `git -C ~/.tmp/piggy-rollout-
+     smoke commit -S --allow-empty -m smoke`). Confirm the prompt
+     that renders is the configured pivy-askpass dialog (familiar
+     chrome; or `ls -l /proc/<askpass-pid>/exe` while open shows
+     `${pivy}/libexec/pivy/pivy-askpass`). A fallback dialog (zenity,
+     kdialog) means `SSH_ASKPASS_REQUIRE=force` is not propagating to
+     the agent — escalate. Note: PIV slot-9A `pin-policy=Once` may
+     prevent any prompt from rendering if the card-level cache is
+     warm; power-cycle the YubiKey to force a card-level reset
+     before retrying.
 6. **24h soak.** Use the box normally. Watch for: PIN-prompt
    loops, askpass dialogs landing in unexpected places, mux
    complaining about missing upstream, slow agent responses.
