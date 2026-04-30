@@ -58,12 +58,6 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
-    ess-ess-hatch = {
-      url = "github:amarbel-llc/ess-ess-hatch";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-master.follows = "nixpkgs-master";
-      inputs.utils.follows = "utils";
-    };
     madder = {
       url = "github:amarbel-llc/madder";
       inputs.nixpkgs.follows = "nixpkgs-amarbel";
