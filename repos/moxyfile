@@ -1,3 +1,5 @@
+# vim: set ft=toml
+
 disable-moxins = [
   "calendar",
   "car",
@@ -5,5 +7,5 @@ disable-moxins = [
   "gws",
   "piers",
   "prison",
-  "sisyphus",
+  # "sisyphus",
 ]
