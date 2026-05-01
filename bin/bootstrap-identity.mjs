@@ -24,42 +24,22 @@ if (existsSync(identityFile)) {
 const gitName = (await gum`gum input --prompt 'Git user name: '`).stdout.trim();
 const gitEmail = (await gum`gum input --prompt 'Git email: '`).stdout.trim();
 
+// Capture both the PIV card's GUID and the signing-key pubkey directly
+// from the card via `piggy tool`. Reading the pubkey from the card (not
+// from the SSH agent) breaks the bootstrap → home-manager switch →
+// agent-running → bootstrap-again circular dependency: the only
+// precondition is that the card is inserted, same as for piggyGuid.
 let signingKey = "";
+let piggyGuid = "";
 
-const sshSocket = process.env.SSH_AUTH_SOCK || "";
-if (sshSocket) {
-  try {
-    const keys = execSync("ssh-add -L", {
-      encoding: "utf-8",
-    }).trim();
-
-    const keyLines = keys.split("\n").filter((l) => l.length > 0);
-
-    if (keyLines.length === 0) {
-      await $({ stdio: "inherit" })`gum log --level warn "no keys found on SSH agent, skipping signing key"`;
-    } else {
-      let chosen;
-      if (keyLines.length === 1) {
-        chosen = keyLines[0];
-      } else {
-        chosen = (
-          await gum`echo ${keyLines.join("\n")} | gum choose --header 'Select signing key from SSH agent:'`
-        ).stdout.trim();
-      }
-      const parts = chosen.split(" ");
-      signingKey = `key::${parts[0]} ${parts[1]}`;
-    }
-  } catch {
-    await $({ stdio: "inherit" })`gum log --level warn "no keys found on SSH agent, skipping signing key"`;
-  }
-} else {
-  await $({ stdio: "inherit" })`gum log --level warn "SSH_AUTH_SOCK not set, skipping signing key"`;
+let listOut = "";
+try {
+  listOut = execSync("piggy tool list", { encoding: "utf-8" });
+} catch {
+  await $({ stdio: "inherit" })`gum log --level warn "'piggy tool list' failed; leaving piggyGuid and gitSigningKey empty (e.g. SSH host with no card)"`;
 }
 
-// Capture the inserted PIV card's GUID for services.piggy-agent.guid.
-let piggyGuid = "";
-try {
-  const listOut = execSync("piggy tool list", { encoding: "utf-8" });
+if (listOut) {
   const guids = listOut
     .split("\n")
     .map((l) => l.match(/^\s*guid:\s*(\S+)/))
@@ -73,10 +53,42 @@ try {
       await gum`echo ${guids.join("\n")} | gum choose --header 'Select PIV card GUID:'`
     ).stdout.trim();
   } else {
-    await $({ stdio: "inherit" })`gum log --level warn "no PIV card detected via 'piggy tool list', leaving piggyGuid empty"`;
+    await $({ stdio: "inherit" })`gum log --level error "'piggy tool list' returned output but no GUID could be parsed; aborting"`;
+    process.exit(1);
   }
-} catch {
-  await $({ stdio: "inherit" })`gum log --level warn "'piggy tool list' failed, leaving piggyGuid empty"`;
+
+  const slotIds = listOut
+    .split("\n")
+    .map((l) => l.match(/^\s+([0-9a-f]{2})\s+\S+\s+\S+\s+\S+/))
+    .filter(Boolean)
+    .map((m) => m[1]);
+
+  if (slotIds.length === 0) {
+    await $({ stdio: "inherit" })`gum log --level error "card present but 'piggy tool list' shows no populated slots; cannot capture signing key. Aborting."`;
+    process.exit(1);
+  }
+
+  let chosenSlot;
+  if (slotIds.length === 1) {
+    chosenSlot = slotIds[0];
+  } else {
+    chosenSlot = (
+      await gum`echo ${slotIds.join("\n")} | gum choose --header 'Select signing key slot:'`
+    ).stdout.trim();
+  }
+
+  let pubkey;
+  try {
+    pubkey = execSync(`piggy tool pubkey ${chosenSlot}`, {
+      encoding: "utf-8",
+    }).trim();
+  } catch (e) {
+    await $({ stdio: "inherit" })`gum log --level error ${`'piggy tool pubkey ${chosenSlot}' failed: ${e.message}; aborting to avoid writing empty gitSigningKey`}`;
+    process.exit(1);
+  }
+  const parts = pubkey.split(/\s+/);
+  signingKey = `key::${parts[0]} ${parts[1]}`;
+  await $({ stdio: "inherit" })`gum log --level info ${`captured signing key from slot ${chosenSlot}`}`;
 }
 
 if (isDarwin) {

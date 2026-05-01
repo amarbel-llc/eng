@@ -17,7 +17,7 @@ else
 fi
 if [[ ! -f $identity_file ]]; then
   gum log --level info "identity file not found, running bootstrap..."
-  "$eng_dir/bin/bootstrap-identity.bash"
+  "$eng_dir/bin/bootstrap-identity.mjs"
 fi
 
 # Step 3: rcm setup

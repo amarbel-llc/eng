@@ -345,7 +345,7 @@ build-home: build-nix
   fi
   if [[ ! -f "$identity_file" ]]; then
     gum log --level error "$identity_file not found"
-    gum log --level info "run 'bin/bootstrap-identity.bash' to create it"
+    gum log --level info "run 'bin/bootstrap-identity.mjs' to create it"
     exit 1
   fi
   if [[ "$(uname)" == "Darwin" ]]; then

@@ -250,8 +250,10 @@ Use the module's default socket
 - `rcm/env` — rename `PIVY_AUTH_SOCK` → `PIGGY_AUTH_SOCK`, or add
   the new var alongside and keep the old as an alias for a
   transition window.
-- `bin/bootstrap-identity.bash` — read from the new var.
-- `bin/bootstrap-identity.mjs` — same.
+- `bin/bootstrap-identity.mjs` — read from the new var (no longer
+  applicable post-2026-05-01 patch: bootstrap reads the pubkey from
+  the card directly via `piggy tool pubkey`, not from any agent
+  socket).
 - `doc/eng-ssh.7.scd` — describe the new socket layout.
 - Any remote dev box that talks back into the mux config (rcm
   deploys this file) needs the rename too.
@@ -441,8 +443,11 @@ week each), rename to `piggy-agent.sock`:
 
 1. Add `PIGGY_AUTH_SOCK` to `rcm/env` alongside the existing
    `PIVY_AUTH_SOCK` (both point at the new path during transition).
-2. Update `bin/bootstrap-identity.{bash,mjs}` to prefer
-   `PIGGY_AUTH_SOCK`.
+2. ~~Update `bin/bootstrap-identity.{bash,mjs}` to prefer
+   `PIGGY_AUTH_SOCK`.~~ Obsoleted 2026-05-01: `.bash` was deleted;
+   `.mjs` no longer reads any agent socket — it pulls the signing
+   pubkey directly from the card via `piggy tool pubkey <slot>`.
+   This step is a no-op.
 3. Edit `home/piggy-agent.nix` to drop the explicit `socketPath`
    override (let the module use its default
    `$XDG_STATE_HOME/piggy/piggy-agent.sock`).
