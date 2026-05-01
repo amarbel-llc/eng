@@ -1,0 +1,9 @@
+disable-moxins = [
+  "calendar",
+  "car",
+  "gmail",
+  "gws",
+  "piers",
+  "prison",
+  "sisyphus",
+]
