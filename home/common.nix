@@ -111,6 +111,7 @@ in
       silver-searcher
       skate
       socat
+      sshfs
       sshpass
       termdown
       timg
@@ -128,11 +129,6 @@ in
     ])
     ++ (with pkgs; [
       csvkit
-    ])
-    # sshfs on darwin would shadow the macos-fuse-t/sshfs fork that the
-    # fuse-t userspace shim is actually tested against. Linux-only.
-    ++ lib.optionals pkgs.stdenv.isLinux (with pkgs-master; [
-      sshfs
     ]);
 
   home.sessionVariables = {
