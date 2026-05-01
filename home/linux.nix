@@ -15,7 +15,6 @@ in
     ./repo-packages.nix
   ]
   ++ lib.optionals (!isSshHost) [
-    ./pivy-agent.nix
     ./ssh-agent-mux.nix
   ]
   ++ lib.optionals (!isSshHost && identity.piggyGuid or null != null) [
