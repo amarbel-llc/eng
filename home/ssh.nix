@@ -1,4 +1,5 @@
 {
+  config,
   identity,
   lib,
   ...
@@ -28,4 +29,11 @@ in
 
     "ssh/keys-allowed_signers-user".text = "${identity.gitUserEmail} ${signingKeyBare}\n";
   };
+
+  # Stock OpenSSH only consults ~/.ssh/config; only the Debian/Ubuntu build
+  # falls back to ~/.config/ssh/config. Symlink so any nix-built ssh in any
+  # closure (e.g. pkgs.sshfs's wrapped openssh) resolves the same Host
+  # aliases as /usr/bin/ssh, without needing the wrapped openssh from
+  # ess-ess-hatch on PATH.
+  home.file.".ssh/config".source = config.xdg.configFile."ssh/config".source;
 }
