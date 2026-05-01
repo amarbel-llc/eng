@@ -25,6 +25,40 @@ in
     generateCaches = true;
   };
 
+  # Pinned to the home-manager default (true), made explicit so the
+  # comment below has a line to attach to.
+  #
+  # Building this man page evaluates nixpkgs'
+  # `nixos/lib/make-options-doc/default.nix:optionsJSON`, whose
+  # `options = builtins.unsafeDiscardStringContext (builtins.toJSON
+  # optionsNix)` env var produces the eval-time warning:
+  #
+  #   warning: Using 'builtins.derivation' to create a derivation named
+  #   'options.json' that references the store path '<nixpkgs source>'
+  #   without a proper context.
+  #
+  # The warning is Determinate Nix-specific (added in
+  # DeterminateSystems/nix-src#56); upstream Nix does not emit it.
+  #
+  # Why we accept it today: the `unsafeDiscardStringContext` is
+  # deliberate upstream — `optionsNix.<...>.declarations` carries paths
+  # into nixpkgs module files, and propagating that context would pull
+  # the entire module tree into the manual's closure for what is
+  # semantically just text. `disallowedReferences = [ filteredModules
+  # libPath pkgsLibPath ]` is the actual correctness guard; the warning
+  # is cosmetic.
+  #
+  # When this becomes unacceptable (e.g. Det Nix promotes the warning
+  # to an error, or it spams CI logs we care about): cheap exit is to
+  # set this to `false`, which loses `man home-configuration.nix` but
+  # eliminates the trigger end-to-end. Upstream tracking issues:
+  #   - NixOS/nixpkgs#485682  (open, reopened 2026-02-03 after the
+  #     attempted fix in nixpkgs#485913 only shifted the warning from
+  #     `builtins.toFile` to `builtins.derivation`)
+  #   - nix-community/home-manager#7935
+  #   - NixOS/nix#14011  (proposes `builtin:write-file` as proper fix)
+  manual.manpages.enable = true;
+
   news.display = "silent";
 
   home.packages =
