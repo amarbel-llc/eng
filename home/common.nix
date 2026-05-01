@@ -111,7 +111,6 @@ in
       silver-searcher
       skate
       socat
-      sshfs
       sshpass
       termdown
       timg
