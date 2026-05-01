@@ -11,6 +11,17 @@ if [[ ! -d $DIR_KEYD_CONFIG_HOME ]]; then
   exit 0
 fi
 
+# Skip the prompt if /etc/keyd/ is already in sync with the source. Mirror
+# the production rsync (no --delete), so files present only in /etc/keyd/
+# are NOT a diff the apply step would resolve — ignore them. If /etc/keyd/
+# is missing entirely (first install), fall through to the prompt.
+if [[ -d /etc/keyd ]]; then
+  DIFF_OUTPUT="$(diff -rq "$DIR_KEYD_CONFIG_HOME" /etc/keyd/ 2>/dev/null | grep -v '^Only in /etc/keyd' || true)"
+  if [[ -z $DIFF_OUTPUT ]]; then
+    exit 0
+  fi
+fi
+
 HELPER="$HOME/.local/bin/keyd-config-up"
 
 mkdir -p "$(dirname "$HELPER")"
