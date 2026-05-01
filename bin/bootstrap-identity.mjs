@@ -124,3 +124,4 @@ if (isDarwin) {
 }
 
 await $({ stdio: "inherit" })`gum log --level info ${`wrote ${identityFile}`}`;
+await $({ stdio: "inherit" })`gum log --level warn "you must run 'just build-home' for these changes to take effect"`;
