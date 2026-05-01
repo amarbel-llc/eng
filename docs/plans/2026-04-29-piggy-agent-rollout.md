@@ -303,9 +303,21 @@ Read-only / no-mutation work to derisk the actual swap.
   pin to. Likely `inputs.piggy.packages.${system}.piggy`. Verify
   with `nix eval .#inputs.piggy.packages.${currentSystem} --apply
   builtins.attrNames`.
-- [ ] Capture the current pivy-agent's GUID (use `pivy-tool list`
-  and read the active card's GUID). The new
-  `services.piggy-agent.guid` pins to this exact hex.
+- [ ] Run `bin/bootstrap-identity.mjs` to populate
+  `~/.config/identity.nix`'s `piggyGuid` field (and
+  `gitSigningKey`) from the inserted card. `services.piggy-agent.guid`
+  reads from `identity.piggyGuid`; the piggy module is gated on
+  `identity.piggyGuid or null != null` in `home/linux.nix:21`. A
+  missing/null field silently skips the entire piggy module —
+  combined with `pivy-agent.nix` at `lib.mkIf false`, the box ends
+  up with no SSH agent at all and no obvious pointer to the cause.
+  Surfaced 2026-05-01 during this rollout: the bootstrap had been
+  re-run earlier while the agent was missing, and silently wrote
+  `gitSigningKey = ""`; later home-manager generations propagated
+  the empty string into git, breaking signed commits. The .mjs
+  script no longer reads any agent socket (post-2026-05-01) — it
+  pulls both fields directly from the card, breaking the
+  bootstrap → switch → agent → bootstrap circular dep.
 - [ ] Snapshot the current mux state: `ssh-add -l` against
   `mux-agent.sock` and `pivy-agent.sock` separately. The post-swap
   output of each should be identical.
@@ -359,8 +371,27 @@ Smallest blast radius. If it breaks, everything's local and revertible.
 4. **Disable pivy-agent + enable piggy-agent in one switch.** Edit
    `home/pivy-agent.nix` to `lib.mkIf false …` (or import-gate from
    `home/linux.nix`); flip `services.piggy-agent.enable = true`.
-   `home-manager switch`.
+   Capture the running pivy-agent unit's MainPID
+   (`systemctl --user show pivy-agent --property=MainPID --value`)
+   *before* the switch. `home-manager switch`. The disable removes
+   the systemd *unit* but does NOT stop the *running process* —
+   verify with `kill -0 <captured-pid>` and explicitly `kill <pid>`
+   if it survived. Use the captured PID, NOT `pkill -f pivy-agent`
+   (matches stray processes; same trap as the env-diff pgrep issue
+   above). Surfaced 2026-05-01: an orphan `.pivy-agent-unwrapped`
+   (PID 3703) ran for 4 days post-disable because `systemctl stop`
+   was never issued; it held the YubiKey PCSC slot the whole time.
 5. **Verify** in this order, BEFORE doing anything else:
+   - **Pre-check: confirm the piggy module is actually imported.**
+     Every check below assumes piggy-agent's systemd unit exists.
+     If the home-manager evaluation skipped the piggy module
+     (because `~/.config/identity.nix` is missing `piggyGuid` —
+     see Phase 0), the unit won't exist and every check below will
+     return "Unit not found" with no obvious pointer to the root
+     cause. Verify with `grep piggyGuid ~/.config/identity.nix`. If
+     `piggyGuid = null;` or the field is missing, re-run
+     `bin/bootstrap-identity.mjs` and `home-manager switch` before
+     continuing. Surfaced 2026-05-01.
    - `systemctl --user status piggy-agent` is active.
    - `ls -l ~/.local/state/ssh/pivy-agent.sock` exists and is
      owned by piggy-agent.
@@ -509,13 +540,9 @@ re-unlock per machine), which is the only user-visible cost.
 
 ## Open questions
 
-1. **Pin the package attribute or trust `pkgs.piggy`.** If the
-   piggy flake is imported as an `inputs.piggy` overlay-style flake
-   that adds `pkgs.piggy`, the module's default
-   (`mkPackageOption pkgs "piggy"`) does the right thing without
-   an explicit `package = …`. If not, we need
-   `package = inputs.piggy.packages.${system}.piggy`. Verify in
-   Phase 0.
+1. ~~**Pin the package attribute or trust `pkgs.piggy`.**~~
+   Resolved 2026-04-29: `home/piggy-agent.nix:19` pins
+   `package = inputs.piggy.packages.${system}.piggy` explicitly.
 2. **`isSshHost` Darwin gate.** If both platforms gain the gate
    uniformly, that's a separate small cleanup that could land
    alongside Phase 2.
