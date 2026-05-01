@@ -1953,6 +1953,32 @@
         "type": "github"
       }
     },
+    "ess-ess-hatch": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-master": [
+          "nixpkgs-master"
+        ],
+        "utils": [
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1774370908,
+        "narHash": "sha256-70QGbk2NcybbK/uObovzLnxQzqTYVclfKAWl9WhZD18=",
+        "owner": "amarbel-llc",
+        "repo": "ess-ess-hatch",
+        "rev": "b3ea7c2f62c122e2a7bc6f2713fb07c158d2b097",
+        "type": "github"
+      },
+      "original": {
+        "owner": "amarbel-llc",
+        "repo": "ess-ess-hatch",
+        "type": "github"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -8186,6 +8212,7 @@
         "chrest": "chrest",
         "clown": "clown",
         "dodder": "dodder",
+        "ess-ess-hatch": "ess-ess-hatch",
         "home-manager": "home-manager",
         "llm-agents": "llm-agents",
         "madder": "madder_2",
