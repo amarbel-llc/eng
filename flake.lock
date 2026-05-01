@@ -5696,11 +5696,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1777661044,
-        "narHash": "sha256-Gq4tohExJIEMDiiVQsDtpOmct3f2zcbGqf8CGufDdsk=",
+        "lastModified": 1777663072,
+        "narHash": "sha256-ZrdWYUJ9Zbb1gU/mY/1XskfHFNN19d7heM5o7KOYGMI=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "971a4c36ad35d32d14356f403103941dae83cd5e",
+        "rev": "e96d6e61c388296920f6ee94bb6a67f31e59510e",
         "type": "github"
       },
       "original": {
@@ -5921,11 +5921,11 @@
         "utils": "utils_13"
       },
       "locked": {
-        "lastModified": 1777661079,
-        "narHash": "sha256-DtuKNxv+eqp67ca4TKY2++4z9J6W5nyoMJtXCjY/yuU=",
+        "lastModified": 1777666011,
+        "narHash": "sha256-hBHgqc1WIsF3gyao9uo9J+Rf9oXzVM/3jcQXWEnJUXY=",
         "owner": "amarbel-llc",
         "repo": "moxy",
-        "rev": "e32272545da4f4077f6d93b7a3c4bc211141ee99",
+        "rev": "bb0faed78e7e8162f927f21ec6a3a340cf86a588",
         "type": "github"
       },
       "original": {
@@ -9959,11 +9959,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1777659321,
-        "narHash": "sha256-3ErPTNZoJUgRlzTAuIWJwfzBKhaO6ysYc3GwIbzeen4=",
+        "lastModified": 1777667081,
+        "narHash": "sha256-FccVurhFZOslvIo3TWrDqQVLplg4g9/f7dxlPJDql+A=",
         "owner": "amarbel-llc",
         "repo": "spinclass",
-        "rev": "cdf5f54d0680873f8c1f83769de92866a42df897",
+        "rev": "b98a301b697eb3fe6c66d5250a7ef45c294c9b08",
         "type": "github"
       },
       "original": {
