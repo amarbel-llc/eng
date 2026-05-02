@@ -460,6 +460,23 @@ debug-disk-io:
 [linux]
 debug-system-snapshot: debug-top-procs debug-system-load debug-disk-io
 
+# Top duplicate packages in eng's runtime closure, sorted by wasted bytes.
+# Thin wrapper over doppelgang(1) (amarbel-llc/doppelgang). Forwards extra
+# args to `doppelgang dupes`. Pass `build` for build-time scope or
+# `--by-owner` to attribute each copy to top-level flake inputs.
+[group('debug')]
+debug-nix-duplicates *args: build-nix
+  ./result/bin/doppelgang dupes --installable {{justfile_directory()}}/result {{args}}
+
+# Trace every closure path matching <pattern> back through the build graph
+# via `nix why-depends --derivation`. Defaults to build-time scope so setup
+# hooks (install-shell-files, goBuildHook, etc.) are visible.
+#
+# Usage: just debug-nix-why-depends-name 'install-shell-files$'
+[group('debug')]
+debug-nix-why-depends-name pattern: build-nix
+  ./result/bin/doppelgang why --installable {{justfile_directory()}}/result {{pattern}}
+
 # Refresh plugins/eng/skills/ from the bob flake input. Pulls the bob
 # marketplace store path, copies its bundled skills tree into place,
 # then chmods the files writable so they can be edited or removed (nix

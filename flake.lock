@@ -1953,6 +1953,32 @@
         "type": "github"
       }
     },
+    "doppelgang": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-amarbel"
+        ],
+        "nixpkgs-master": [
+          "nixpkgs-master"
+        ],
+        "utils": [
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1777721469,
+        "narHash": "sha256-lZ9L03F3EABKsBLA1fTg5PQb9kA3jmcxqDBs1l7tSWI=",
+        "owner": "amarbel-llc",
+        "repo": "doppelgang",
+        "rev": "302253b027b783ce4c37bf673b3fd25cc8f945be",
+        "type": "github"
+      },
+      "original": {
+        "owner": "amarbel-llc",
+        "repo": "doppelgang",
+        "type": "github"
+      }
+    },
     "ess-ess-hatch": {
       "inputs": {
         "nixpkgs": [
@@ -8212,6 +8238,7 @@
         "chrest": "chrest",
         "clown": "clown",
         "dodder": "dodder",
+        "doppelgang": "doppelgang",
         "ess-ess-hatch": "ess-ess-hatch",
         "home-manager": "home-manager",
         "llm-agents": "llm-agents",

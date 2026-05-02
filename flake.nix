@@ -61,6 +61,12 @@
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.utils.follows = "utils";
     };
+    doppelgang = {
+      url = "github:amarbel-llc/doppelgang";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
+      inputs.nixpkgs-master.follows = "nixpkgs-master";
+      inputs.utils.follows = "utils";
+    };
     ess-ess-hatch = {
       url = "github:amarbel-llc/ess-ess-hatch";
       inputs.nixpkgs.follows = "nixpkgs";
