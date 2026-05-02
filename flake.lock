@@ -1966,11 +1966,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1777725702,
-        "narHash": "sha256-kUzYSnNzXw4Zn03etPztCtFQfjxgJcRHvQENw5RSpU8=",
+        "lastModified": 1777727730,
+        "narHash": "sha256-8rSMr/725pTSjelCtadnPVE8pzqafksuyB/G/OUIXVM=",
         "owner": "amarbel-llc",
         "repo": "doppelgang",
-        "rev": "3623a1e52be8d44edc33ec937bca403a0d26b4eb",
+        "rev": "c409e5bdbe6d0c7279f43a25eebf5aa52ce9b7f6",
         "type": "github"
       },
       "original": {
