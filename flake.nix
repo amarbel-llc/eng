@@ -312,7 +312,10 @@
           // (
             if pkgs.stdenv.isLinux then
               {
-                linux = import ./systems/linux { pkgs = pkgs-unfree; };
+                linux = import ./systems/linux {
+                  pkgs = pkgs-unfree;
+                  pkgs-master = pkgs-master-unfree;
+                };
               }
             else
               { }

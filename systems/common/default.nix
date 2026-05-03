@@ -1,91 +1,9 @@
 # systems/common/default.nix
+#
+# Thin wrapper around home/packages/common.nix so the eng symlinkJoin
+# (via flake.nix:platformPackages) and home-manager (via home/common.nix)
+# share one platform-neutral package list.
 { pkgs, pkgs-master }:
 {
-  packages = {
-    inherit (pkgs-master)
-      age
-      asdf
-      asdf-vm
-      coreutils
-      curl
-      curlftpfs
-      dash
-      ddrescue
-      direnv
-      eternal-terminal
-      expect
-      ffmpeg
-      figlet
-      fish
-      fontconfig
-      fswatch
-      freeze
-      gawk
-      gh
-      git
-      git-secret
-      glibcLocales
-      glow
-      gnumake
-      gnuplot
-      gopls
-      gpgme
-      graphviz
-      gum
-      helix
-      hostess
-      httpie
-      hub
-      imagemagick
-      isolyzer
-      j2cli
-      jinja2-cli
-      jq
-      just
-      lftp
-      libcdio
-      markscribe
-      melt
-      mods
-      neovim
-      nix-direnv
-      nixpkgs-fmt
-      ocrmypdf
-      pandoc
-      paperkey
-      parallel
-      pay-respects
-      plantuml
-      pop
-      rcm
-      rsync
-      shellcheck
-      shfmt
-      silver-searcher
-      skate
-      socat
-      sshpass
-      termdown
-      timidity
-      timg
-      tldr
-      tmux
-      tree
-      uv
-      vhs
-      watchexec
-      websocat
-      wget
-      yubico-piv-tool
-      yt-dlp
-      zstd
-      zx
-      ;
-
-    inherit (pkgs)
-      csvkit
-      fh
-      gftp
-      ;
-  };
+  packages = import ../../home/packages/common.nix { inherit pkgs pkgs-master; };
 }

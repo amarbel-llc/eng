@@ -61,74 +61,9 @@ in
 
   news.display = "silent";
 
-  home.packages =
-    (with pkgs-master; [
-      age
-      asdf
-      asdf-vm
-      coreutils
-      curl
-      dash
-      eternal-terminal
-      expect
-      ffmpeg
-      figlet
-      fontconfig
-      fswatch
-      fh
-      freeze
-      gawk
-      gh
-      git-secret
-      gnumake
-      gnuplot
-      gopls
-      gpgme
-      graphviz
-      gum
-      helix
-      httpie
-      hub
-      imagemagick
-      j2cli
-      jinja2-cli
-      jq
-      lftp
-      markscribe
-      melt
-      mods
-      neovim
-      nixpkgs-fmt
-      pandoc
-      paperkey
-      parallel
-      plantuml
-      pop
-      rcm
-      rsync
-      shellcheck
-      shfmt
-      silver-searcher
-      skate
-      socat
-      sshpass
-      termdown
-      timg
-      tealdeer
-      tmux
-      tree
-      uv
-      vhs
-      watchexec
-      websocat
-      wget
-      yubico-piv-tool
-      yt-dlp
-      zstd
-    ])
-    ++ (with pkgs; [
-      csvkit
-    ]);
+  home.packages = builtins.attrValues (
+    import ./packages/common.nix { inherit pkgs pkgs-master; }
+  );
 
   home.sessionVariables = {
     EDITOR = "nvim";
