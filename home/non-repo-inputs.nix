@@ -15,5 +15,10 @@
   "nix-plist-manager"
   "purse-first"
   "self"
+  # spinclass is composed manually via lib.mkSpinclass with madder +
+  # direnv pinned (see home/repo-packages.nix and flake.nix). Auto-
+  # importing packages.default would give us a vanilla build with
+  # all integrations dormant — see issue #63.
+  "spinclass"
   "tacky"
 ]

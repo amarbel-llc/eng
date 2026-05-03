@@ -28,11 +28,22 @@ let
     in
     if builtins.elem name lowPrioInputs then lib.lowPrio pkg else pkg
   ) repoInputs;
+
+  # Spinclass with build-time pins for madder (per-worktree blob store
+  # init) and direnv (worktree shell resolution). See issue #63 / FDR
+  # 0003 (spinclass repo). Without these pins, `sc start` does not
+  # initialise .madder/, does not symlink madder into <git-common-dir>/
+  # spinclass/bin/, and does not wire Bash(madder:*) into claude-allow.
+  spinclassPinned = inputs.spinclass.lib.${system}.mkSpinclass {
+    madder = inputs.madder.packages.${system}.default;
+    direnv = pkgs.direnv;
+  };
 in
 {
   home.packages =
     builtins.attrValues repoPackages
     ++ [
+      spinclassPinned
       inputs.purse-first.packages.${system}.purse-first
       # tap-dancer-bash provides a bash library used by git aliases (cob,
       # cobu, merge-and-cleanup) via home/common.nix's TAP_DANCER_LIB.

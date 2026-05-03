@@ -182,9 +182,10 @@
       # Linux (where the file is absent). On macOS, use --impure to read it.
       hasDarwinIdentity = builtins.pathExists /etc/nix-darwin/identity.json;
       darwinIdentity =
-        if hasDarwinIdentity
-        then builtins.fromJSON (builtins.readFile /etc/nix-darwin/identity.json)
-        else null;
+        if hasDarwinIdentity then
+          builtins.fromJSON (builtins.readFile /etc/nix-darwin/identity.json)
+        else
+          null;
 
       # Builder for home-manager (extra)specialArgs, shared by the Linux
       # and darwin branches below. See ./home/special-args.nix for the
@@ -334,9 +335,9 @@
               _name: input:
               (input ? packages) && (input.packages ? ${system}) && (input.packages.${system} ? default);
           in
-          builtins.mapAttrs (
-            _name: input: input.packages.${system}.default
-          ) (pkgs.lib.filterAttrs hasDefaultPackage candidates);
+          builtins.mapAttrs (_name: input: input.packages.${system}.default) (
+            pkgs.lib.filterAttrs hasDefaultPackage candidates
+          );
 
         # Circus assembly (mkCircus call, eng plugin derivation, caldav
         # plugin shape) lives in ./lib/circus.nix so ~/eng-* overlays
@@ -380,12 +381,25 @@
           exec ${treefmtBaked}/bin/treefmt "$@"
         '';
 
+        # Spinclass with build-time pins for madder (per-worktree blob
+        # store init) and direnv (worktree shell resolution). See issue
+        # #63 / FDR 0003 (spinclass repo). The bare
+        # inputs.spinclass.packages.${system}.default is mkSpinclass {}
+        # with all integrations dormant; spinclass is excluded from the
+        # auto-import in home/non-repo-inputs.nix so this pinned build
+        # is the one consumers see.
+        spinclassPinned = inputs.spinclass.lib.${system}.mkSpinclass {
+          madder = inputs.madder.packages.${system}.default;
+          direnv = pkgs.direnv;
+        };
+
         packages = pkgs.symlinkJoin {
           name = "eng";
           paths =
             builtins.attrValues platformPackages
             ++ builtins.attrValues repoPackages
             ++ [
+              spinclassPinned
               purse-first.packages.${system}.purse-first
               bob.packages.${system}.caldav
               inputs.tap.packages.${system}.tap-dancer-bash
@@ -416,7 +430,7 @@
 
         devShells =
           let
-            allPackages = platformPackages // repoPackages;
+            allPackages = platformPackages // repoPackages // { spinclass = spinclassPinned; };
           in
           builtins.mapAttrs (name: pkg: pkgs.mkShell { packages = [ pkg ]; }) allPackages
           // {
