@@ -292,6 +292,28 @@ verifiable and independently revertable.
 Exception: if the new idea reveals that the current approach is fundamentally
 wrong, stop and re-plan rather than bolting on fixes.
 
+## Library Convergence vs. Extraction
+
+When two projects in `repos/` (e.g. madder + dodder) end up with near-identical
+forks of a package, default to **converging in one of them first** rather than
+pre-emptively extracting to a standalone repo or shared library.
+
+- Pick a canonical owner — usually the more upstream of the two (e.g. madder
+  owns hyphence/markl/blob_stores; dodder consumes them).
+- Port any features the other side has into the canonical owner.
+- The non-canonical side drops its fork and consumes the canonical package via
+  its public surface (`pkgs/<name>` re-exports).
+- Only extract to a standalone repo (or move into `dewey`) **when a third
+  consumer concretely appears**, not in anticipation of one.
+
+Avoids "pre-birthing" library infrastructure that may never be exercised by a
+third party. Standalone repos have ongoing maintenance, release-cadence, and
+version-policy costs that aren't worth paying without real demand. The
+convergent owner can later be extracted with the same mechanical work — no path
+is foreclosed by deferring.
+
+When in doubt, ask which option to take and explain the trade-off.
+
 ## Fix Ownership
 
 When a bug involves interaction between multiple components or repos, identify
