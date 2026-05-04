@@ -529,3 +529,41 @@ explore-refresh-eng-skills:
   chmod -R u+w "$dest"
   echo "refreshed bob-sourced skills in $dest from $src"
   echo "remember to re-apply eng: cross-reference rewrites if you re-run this"
+
+# Smoke-test the per-host engCircus wiring added in commits 2e9d0b4,
+# 7d56894, 6e4c543. Evaluates the linux home-manager package set; a
+# successful run with a non-zero count proves engCircus reached the
+# consumer without an "infinite recursion" or "missing argument" eval
+# error. Throwaway — delete once mkcircus-conditional-caldav lands and
+# the wiring is confirmed stable across day-to-day rebuilds.
+[group('debug')]
+[linux]
+debug-circus-eval-smoke:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  count=$(nix eval .#homeConfigurations.linux.config.home.packages \
+    --impure --apply 'pkgs: builtins.length pkgs')
+  echo "home.packages count: $count"
+  [[ $count -gt 0 ]] || { echo "expected non-zero count" >&2; exit 1; }
+
+# Verify caldav is still pulled into the home-manager closure on the
+# default-flag path (no identity.enableCaldav set on this host).
+# Throwaway — delete once mkcircus-conditional-caldav lands and the
+# semantics are confirmed.
+[group('debug')]
+[linux]
+debug-circus-caldav-in-closure:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  # nix eval --raw returns the future store path of home.path but does
+  # not build it. nix build realizes the derivation so its closure is
+  # inspectable. --no-link avoids creating a result/ symlink.
+  home_path="$(nix build .#homeConfigurations.linux.config.home.path \
+    --impure --no-link --print-out-paths)"
+  echo "home.path: $home_path"
+  if nix path-info -r "$home_path" | grep -- '-caldav-'; then
+    echo "OK: caldav is in the closure (default-on path)"
+  else
+    echo "FAIL: caldav missing from default-flag closure" >&2
+    exit 1
+  fi
