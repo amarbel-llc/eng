@@ -1,4 +1,6 @@
 ---
+name: fix-issue
+version: 0.1.0
 arguments:
 - description: Issue number or URL
   name: issue
