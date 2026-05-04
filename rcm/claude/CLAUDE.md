@@ -71,6 +71,6 @@ task. If I give you a GitHub issue to fix, use the `/eng:fix-issue` skill.
   references) that may not be covered by the obvious code path. Do not conclude
   an issue is resolved until the specific reproduction case passes.
 - **Front-load constraints:** before proposing an approach, state what is
-  unavailable in the environment (e.g. no glibc-static, no GNOME on Sway) and
+  unavailable in the environment (e.g. no glibc-static, no GNOME on Sway) and
   what has already been tried. This avoids wasting cycles on dead-end
   approaches.
