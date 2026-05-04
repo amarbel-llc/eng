@@ -88,7 +88,7 @@
     };
     moxy = {
       url = "github:amarbel-llc/moxy";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-amarbel";
       inputs.nixpkgs-master.follows = "nixpkgs-master";
       inputs.bob.follows = "bob";
     };
