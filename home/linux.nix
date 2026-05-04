@@ -8,11 +8,15 @@
 }:
 let
   isSshHost = identity.isSshHost or false;
+  loginShellIsBash = identity.loginShellIsBash or false;
 in
 {
   imports = [
     ./common.nix
     ./repo-packages.nix
+  ]
+  ++ lib.optionals loginShellIsBash [
+    ./bash.nix
   ]
   ++ lib.optionals (!isSshHost) [
     ./ssh-agent-mux.nix
