@@ -304,7 +304,10 @@
           // (
             if pkgs.stdenv.isDarwin then
               {
-                darwin = import ./systems/darwin { pkgs = pkgs-unfree; };
+                darwin = import ./systems/darwin {
+                  pkgs = pkgs-unfree;
+                  pkgs-master = pkgs-master-unfree;
+                };
               }
             else
               { }

@@ -18,8 +18,7 @@
 
   home.stateVersion = "24.11";
 
-  home.packages = with pkgs; [
-    pinentry_mac
-    reattach-to-user-namespace
-  ];
+  home.packages = builtins.attrValues (
+    import ./packages/darwin.nix { inherit pkgs pkgs-master; }
+  );
 }
