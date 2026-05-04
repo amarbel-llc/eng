@@ -130,7 +130,7 @@ Pattern:
 3. In `home/wrappers.nix`, define a `writeShellScriptBin` wrapper that
    `exec`s the binary from the pinned tree. This wrapper becomes the
    sole authoritative `$PATH` entry for that command.
-4. Remove the package from `systems/common/default.nix` (and anywhere
+4. Remove the package from `home/packages/common.nix` (and anywhere
    else in the flake that would otherwise place an unpinned copy into
    a user-visible profile). Two sources of the same command on PATH is
    a footgun.
@@ -141,8 +141,9 @@ Pattern:
    misleading).
 
 Rolling back the pin: delete the input, revert `home/wrappers.nix` to
-use `pkgs-master.<package>`, re-add the package to `systems/common`,
-and restore any removed sentinel entries. One commit.
+use `pkgs-master.<package>`, re-add the package to
+`home/packages/common.nix`, and restore any removed sentinel entries.
+One commit.
 
 Current wrapper pins: none.
 
