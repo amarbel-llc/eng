@@ -10,6 +10,7 @@
   imports = [
     ./common.nix
     ./repo-packages.nix
+    ./circus.nix
     ./ssh-agent-mux.nix
   ]
   ++ lib.optionals (identity.piggyGuid or null != null) [

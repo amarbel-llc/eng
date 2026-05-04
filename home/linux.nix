@@ -14,6 +14,7 @@ in
   imports = [
     ./common.nix
     ./repo-packages.nix
+    ./circus.nix
   ]
   ++ lib.optionals loginShellIsBash [
     ./bash.nix
