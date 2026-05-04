@@ -424,6 +424,10 @@
       {
         packages = {
           default = packages;
+          # circus is exposed so home-manager (home/repo-packages.nix)
+          # can consume the eng-composed clown wrapper + plugin bundle
+          # without re-importing lib/circus.nix and re-passing engSelf.
+          circus = circus.packages.default;
           purse-first-marketplace = purse-first.packages.${system}.default;
           bob-marketplace = bob.packages.${system}.marketplace;
         };
