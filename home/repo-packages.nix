@@ -59,6 +59,9 @@ in
       # exposed as self.packages.${system}.circus by flake.nix.
       inputs.moxy.packages.${system}.default
       inputs.self.packages.${system}.circus
+      # treefmt-cwd: the cwd-aware treefmt wrapper defined in flake.nix.
+      # Same binary that `nix fmt` runs via `formatter`.
+      inputs.self.packages.${system}.treefmt-cwd
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin [
       inputs.tacky.packages.${system}.default

@@ -428,6 +428,10 @@
           # can consume the eng-composed clown wrapper + plugin bundle
           # without re-importing lib/circus.nix and re-passing engSelf.
           circus = circus.packages.default;
+          # treefmt-cwd is the cwd-aware treefmt wrapper (see line ~375);
+          # exposed so home-manager picks up the same binary that
+          # `nix fmt` invokes via `formatter`.
+          treefmt-cwd = treefmtCwd;
           purse-first-marketplace = purse-first.packages.${system}.default;
           bob-marketplace = bob.packages.${system}.marketplace;
         };
