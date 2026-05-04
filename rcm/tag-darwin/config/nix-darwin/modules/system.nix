@@ -8,9 +8,8 @@
 }:
 {
   nix.nixPath = [
-    "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixpkgs"
+    "nixpkgs=${inputs.nixpkgs}"
     "darwin-config=$HOME/.config/nix-darwin/configuration.nix"
-    "/nix/var/nix/profiles/per-user/root/channels"
   ];
 
   system.defaults = {
