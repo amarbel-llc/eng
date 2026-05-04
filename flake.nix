@@ -283,8 +283,12 @@
 
         nonRepoInputs = import ./home/non-repo-inputs.nix;
 
-        # Import system packages directly from default.nix
-        buildSystems =
+        # Platform package sets shared with home-manager via
+        # home/packages/<x>.nix. The eng symlinkJoin (packages.default
+        # below) carries the same set of binaries that home-manager's
+        # home.packages produces, modulo packages provided via dedicated
+        # programs.* / services.* modules.
+        platformPackages =
           let
             pkgs-unfree = import nixpkgs {
               inherit system;
@@ -294,39 +298,20 @@
               inherit system;
               config.allowUnfree = true;
             };
-          in
-          {
-            common = import ./systems/common {
+            args = {
               pkgs = pkgs-unfree;
               pkgs-master = pkgs-master-unfree;
             };
-          }
-          // (
-            if pkgs.stdenv.isDarwin then
-              {
-                darwin = import ./systems/darwin {
-                  pkgs = pkgs-unfree;
-                  pkgs-master = pkgs-master-unfree;
-                };
-              }
-            else
-              { }
-          )
-          // (
-            if pkgs.stdenv.isLinux then
-              {
-                linux = import ./systems/linux {
-                  pkgs = pkgs-unfree;
-                  pkgs-master = pkgs-master-unfree;
-                };
-              }
-            else
-              { }
-          );
-
-        platformPackages = builtins.foldl' (acc: sys: acc // sys.packages) { } (
-          builtins.attrValues buildSystems
-        );
+            common = import ./home/packages/common.nix args;
+            platform =
+              if pkgs.stdenv.isDarwin then
+                import ./home/packages/darwin.nix args
+              else if pkgs.stdenv.isLinux then
+                import ./home/packages/linux.nix args
+              else
+                { };
+          in
+          common // platform;
 
         # Shape-filter survivors of the nonRepoInputs exclusion so that
         # any input lacking `packages.<system>.<key>` (typically nixpkgs
