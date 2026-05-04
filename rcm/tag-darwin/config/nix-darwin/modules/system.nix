@@ -18,6 +18,12 @@
     finder.AppleShowAllExtensions = true;
   };
 
+  # Force fish to rebuild locally. See ../../../../../lib/fish-codesign-overlay.nix
+  # for context. Required so home-manager's `programs.fish` (the user's
+  # interactive shell) gets a locally-signed binary instead of the broken
+  # cached one — without this, terminals SIGKILL on launch.
+  nixpkgs.overlays = [ (import ../../../../../lib/fish-codesign-overlay.nix) ];
+
   # System packages — these get the .app bundle linked into
   # /Applications/Nix Apps/ via nix-darwin's modules/system/applications.nix.
   # Home-manager packages do NOT, which is why kitty is here in addition to

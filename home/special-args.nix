@@ -28,5 +28,7 @@ system: {
   pkgs-master = import inputs.nixpkgs-master {
     inherit system;
     config.allowUnfree = true;
+    # See ../lib/fish-codesign-overlay.nix for context.
+    overlays = [ (import ../lib/fish-codesign-overlay.nix) ];
   };
 }

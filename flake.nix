@@ -279,7 +279,17 @@
     // (utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        # See ./lib/fish-codesign-overlay.nix for the bug this works around.
+        # Threaded into every `import nixpkgs*` site below so direnv's
+        # nativeCheckInputs (which is what fails the build via
+        # `make test-fish`) and any other fish consumer in the closure
+        # all use the locally-rebuilt fish.
+        fishCodesignOverlay = import ./lib/fish-codesign-overlay.nix;
+
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ fishCodesignOverlay ];
+        };
 
         nonRepoInputs = import ./home/non-repo-inputs.nix;
 
@@ -293,10 +303,12 @@
             pkgs-unfree = import nixpkgs {
               inherit system;
               config.allowUnfree = true;
+              overlays = [ fishCodesignOverlay ];
             };
             pkgs-master-unfree = import nixpkgs-master {
               inherit system;
               config.allowUnfree = true;
+              overlays = [ fishCodesignOverlay ];
             };
             args = {
               pkgs = pkgs-unfree;
