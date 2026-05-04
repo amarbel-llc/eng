@@ -14,50 +14,28 @@
 
 ---
 
-## A note on TDD in a Nix-config repo
+## A note on verification in a Nix-config repo
 
 There are no unit tests for `lib/circus.nix` or the home-manager modules. The
-analogue of TDD here is **derivation-hash regression testing**: capture the
-baseline circus store path before any changes, then after each task confirm
-that on a default-flag host the resulting circus derivation hashes identically.
-That is the test that proves the default-on path is preserved.
+semantic check we actually care about — "is the caldav plugin wired in?" — is
+directly observable from a built circus derivation: `nix path-info -r
+<circus-path> | grep -- '-caldav-'` returns a hit if and only if `bob`'s
+caldav package is part of the closure.
 
-For the new flag-on-false path, the test is operational — flip the flag on a
-real host, rebuild, observe the timeout is gone.
+That gives us three direct semantic checks:
 
----
+| Condition                              | Closure contains `-caldav-` |
+|----------------------------------------|----------------------------|
+| Default-flag host (no `enableCaldav`)  | yes                        |
+| `enableCaldav = false`                 | no                         |
+| `enableCaldav = true`                  | yes                        |
 
-## Task 0: Capture baseline
+Plus the standard build-doesn't-break checks (`nix flake check`, the actual
+home-manager rebuild).
 
-**Promotion criteria:** N/A.
-
-**Files:** none modified.
-
-**Step 1: Confirm clean working tree**
-
-Run: `git status`
-Expected: working tree clean (or only contains the design doc, which is fine).
-
-**Step 2: Record baseline circus derivation path**
-
-Run: `nix build .#circus --impure --no-link --print-out-paths`
-Expected: a `/nix/store/...-clown-...` path on stdout.
-
-Save this path. It is the **default-flag baseline**. After Tasks 1–3 land, on a
-host without `identity.enableCaldav` set, the same command must produce the
-same path.
-
-**Step 3: Record baseline home-manager-installed circus path** (Linux only — skip on Darwin)
-
-Run: `readlink -f ~/.nix-profile/bin/clown`
-Expected: a `/nix/store/...-clown-...-wrapped/bin/clown` path on stdout.
-
-Save this. After Task 3, on a default-flag host, this must remain the same
-underlying clown derivation.
-
-**Step 4: No commit**
-
-Task 0 produces no code changes.
+The flag-off case is verified operationally on a real target host (Task 3) —
+flip the flag, rebuild, observe the closure no longer contains caldav and
+clown's plugin-startup timeout is gone.
 
 ---
 
@@ -145,17 +123,19 @@ Run: `nix flake check --no-build`
 Expected: no errors. Pure-eval paths must still work; we did not introduce any
 new top-level identity reads.
 
-**Step 3: Verify default-flag circus hashes identically to baseline**
+**Step 3: Verify default-flag circus still includes caldav**
 
-Run: `nix build .#circus --impure --no-link --print-out-paths`
-Expected: the **same** path captured in Task 0, Step 2.
+Run:
+```bash
+circus_path="$(nix build .#circus --impure --no-link --print-out-paths)"
+nix path-info -r "$circus_path" | grep -- '-caldav-'
+```
+Expected: at least one matching line — `bob`'s caldav derivation is in the
+closure, confirming the default-on path still wires it through.
 
-If the paths differ:
-- Confirm `flake.lock` has not changed (`git diff flake.lock` should be empty).
-- Confirm no other working-tree changes (`git status`).
-- If both clean, the refactor changed semantics — re-inspect `basePlugins`
-  ordering and the `lib.optional` clause. The plugin entries must be in the
-  same order and shape as before (moxy, spinclass, caldav, eng).
+If `grep` exits non-zero (no match): the refactor accidentally dropped caldav
+from the default path. Re-inspect `basePlugins` and the `lib.optional` clause
+in `lib/circus.nix` — the default `enableCaldav ? true` should keep caldav in.
 
 **Step 4: Stage and commit**
 
@@ -364,36 +344,31 @@ Expected: prints an integer (the package count). No errors.
 
 On Darwin: replace with the corresponding `darwinConfigurations` path.
 
-**Step 5: Verify default-flag home-manager closure equals baseline**
+**Step 5: Verify default-flag home-manager-installed clown still includes caldav**
 
-The home-manager-installed circus must, on a default-flag host, hash
-identically to the Task 0 baseline.
+On a default-flag host (no `enableCaldav` field in identity), the
+home-manager-installed clown wrapper's closure must still include caldav.
 
-Run:
+On Linux:
 ```bash
-nix eval .#homeConfigurations.linux.config.home.path --impure --raw
+home_path="$(nix eval .#homeConfigurations.linux.config.home.path --impure --raw)"
+nix path-info -r "$home_path" | grep -- '-caldav-'
 ```
-(or the darwin equivalent: `darwinConfigurations.<hostname>.config.home-manager.users.<username>.home.path`)
 
-Then check that the resulting profile contains the same clown derivation as
-Task 0, Step 3. Inspect with:
-```bash
-nix-store --query --references "$(nix eval .#homeConfigurations.linux.config.home.path --impure --raw)" | grep clown
-```
-Expected: the same clown derivation hash as Task 0, Step 3.
+On Darwin: replace with the darwin equivalent (`darwinConfigurations.<hostname>.config.home-manager.users.<username>.home.path`).
 
-If different on a default-flag host (no `enableCaldav` field in identity):
-the wiring changed semantics. Re-inspect:
-- `home/circus.nix` defaults `enableCaldav = identity.enableCaldav or true` —
-  confirm the `or true` is present.
-- `lib/circus.nix` defaults `enableCaldav ? true` — confirm.
-- `home/repo-packages.nix` consumes `engCircus`, not anything else.
+Expected: at least one matching line.
+
+If empty: the wiring is dropping caldav even with the default flag. Re-inspect:
+- `home/circus.nix` reads `identity.enableCaldav or true` (the `or true` is
+  present).
+- `lib/circus.nix` defaults `enableCaldav ? true`.
+- `home/repo-packages.nix` consumes `engCircus`.
 
 **Step 6: Run a real home-manager build**
 
 Run: `just build-home`
-Expected: build completes successfully. On a default-flag host, the activation
-script reports no changes to clown-related packages (they hash the same).
+Expected: build completes successfully.
 
 **Step 7: Stage and commit**
 
@@ -434,34 +409,33 @@ On Darwin: edit `/etc/nix-darwin/identity.json` (requires `sudo`) and add
 **Step 3: Rebuild home-manager**
 
 Run: `just build-home`
-Expected: build succeeds. The clown derivation hash differs from the baseline
-(it now lacks the caldav plugin slot).
+Expected: build succeeds.
 
-**Step 4: Verify the caldav plugin is gone**
+**Step 4: Verify the caldav plugin is gone from the closure**
+
+Run:
+```bash
+nix path-info -r "$(readlink -f $(which clown))" | grep -- '-caldav-'
+```
+Expected: `grep` exits non-zero (no match). The home-manager-installed clown
+wrapper no longer pulls caldav into its closure.
+
+**Step 5: Verify the operational symptom is gone**
 
 Run: `clown --help` (or whatever the user's habitual clown invocation is —
 the original symptom was the startup hang).
-Expected: starts without the caldav plugin-startup timeout that motivated
-this work.
+Expected: starts without the multi-second caldav plugin-startup timeout.
 
-To explicitly confirm the plugin is absent, check the plugin directory of
-the clown wrapper:
-```bash
-ls "$(readlink -f $(which clown))/../../share/purse-first/" 2>/dev/null \
-  || ls "$(dirname $(readlink -f $(which clown)))/../share/purse-first/" 2>/dev/null
-```
-Expected: directories `moxy`, `spinclass`, `eng` — no `caldav`.
-
-**Step 5: Reverse-rollback test**
+**Step 6: Reverse-rollback test**
 
 Confirm the rollback path works: remove the `enableCaldav = false;` line,
-run `just build-home`, confirm the caldav plugin returns and the clown
-derivation hash matches the Task 0 baseline.
+run `just build-home`, then re-run the closure check from Step 4 — this time
+expecting at least one `-caldav-` match.
 
-After confirming, restore the `enableCaldav = false;` line if this is
-the desired steady state for that host.
+After confirming, restore the `enableCaldav = false;` line if this is the
+desired steady state for that host.
 
-**Step 6: No commit**
+**Step 7: No commit**
 
 Identity file edits are per-host config, not tracked in this repo.
 
@@ -501,11 +475,13 @@ git commit -m "docs: document identity.enableCaldav
 
 Before considering the work complete:
 
-- [ ] Task 0 baseline path captured.
-- [ ] After Task 1: `nix build .#circus` produces baseline path.
-- [ ] After Task 3: home-manager-installed clown matches Task 0 baseline on a
-  default-flag host (no `enableCaldav` set in identity).
-- [ ] `nix flake check --no-build` passes (pure eval works).
+- [ ] After Task 1: `nix build .#circus` succeeds and the closure contains
+  `-caldav-` (default-on path preserved).
+- [ ] After Task 3: home-manager-installed clown's closure contains
+  `-caldav-` on a default-flag host.
+- [ ] `nix flake check --no-build` passes (pure eval still works).
 - [ ] On a target caldav-off host: `enableCaldav = false;` plus `just
-  build-home` removes the caldav plugin and eliminates the startup timeout.
-- [ ] Reverse rollback (remove the line, rebuild) restores caldav.
+  build-home` removes `-caldav-` from the closure and eliminates the
+  clown plugin-startup timeout.
+- [ ] Reverse rollback (remove the line, rebuild) restores `-caldav-` to
+  the closure.
