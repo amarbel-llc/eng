@@ -56,8 +56,13 @@
     "/usr/bin/sandbox-exec"
   ];
 
-  # Enable alternative shell support in nix-darwin.
+  # Enable alternative shell support in nix-darwin. Pin the package to
+  # pkgs-master.fish so the system-level fish (added to environment.systemPackages
+  # by the nix-darwin module) matches home-manager's interactive fish — otherwise
+  # the codesign overlay forces TWO local fish rebuilds: pkgs.fish (4.2.1 from
+  # nixos-25.11) for the system, and pkgs-master.fish (4.6.0) for the user.
   programs.fish.enable = true;
+  programs.fish.package = pkgs-master.fish;
 
   # Set Git commit hash for darwin-version.
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
