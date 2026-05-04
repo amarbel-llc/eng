@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   lib,
+  engCircus,
   ...
 }:
 let
@@ -54,11 +55,12 @@ in
       inputs.bob.packages.${system}.caldav
       # moxy and clown are excluded from the auto-imported repoPackages
       # (see home/non-repo-inputs.nix). moxy is consumed directly here;
-      # clown comes in via circus, which is the eng-composed mkCircus
-      # bundle (clown wrapper + moxy/spinclass/caldav/eng plugins),
-      # exposed as self.packages.${system}.circus by flake.nix.
+      # clown comes in via engCircus, the per-host eng-composed mkCircus
+      # bundle (clown wrapper + moxy/spinclass/eng plugins, plus caldav
+      # when identity.enableCaldav is true). engCircus is supplied by
+      # home/circus.nix as a module arg.
       inputs.moxy.packages.${system}.default
-      inputs.self.packages.${system}.circus
+      engCircus
       # treefmt-cwd: the cwd-aware treefmt wrapper defined in flake.nix.
       # Same binary that `nix fmt` runs via `formatter`.
       inputs.self.packages.${system}.treefmt-cwd
