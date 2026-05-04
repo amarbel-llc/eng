@@ -62,28 +62,7 @@ in
     };
   };
 
-  home.packages =
-    (with pkgs-master; [
-      curlftpfs
-      ddrescue
-      glibcLocales
-      hostess
-      isolyzer
-      libcdio
-      ocrmypdf
-      timidity
-    ])
-    ++ (with pkgs; [
-      gftp
-    ])
-    ++ (with pkgs; [
-      espanso-wayland
-      fuzzel
-      keyd
-      niri
-      pcsclite
-      pinentry-gnome3
-      rofi
-      wlogout
-    ]);
+  home.packages = builtins.attrValues (
+    import ./packages/linux.nix { inherit pkgs pkgs-master; }
+  );
 }

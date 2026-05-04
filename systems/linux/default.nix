@@ -1,31 +1,9 @@
 # systems/linux/default.nix
+#
+# Thin wrapper around home/packages/linux.nix so the eng symlinkJoin
+# (via flake.nix:platformPackages) and home-manager (via home/linux.nix)
+# share one linux-only package list.
 { pkgs, pkgs-master }:
 {
-  packages = {
-    # Linux-only entries that need glibc-only paths or otherwise don't
-    # build on darwin. Mirrored on the home-manager side by home/linux.nix.
-    inherit (pkgs-master)
-      curlftpfs
-      ddrescue
-      glibcLocales
-      hostess
-      isolyzer
-      libcdio
-      ocrmypdf
-      timidity
-      ;
-
-    inherit (pkgs)
-      espanso-wayland
-      fuzzel
-      gftp
-      keyd
-      mako
-      niri
-      pcsclite
-      pinentry-gnome3
-      rofi
-      wlogout
-      ;
-  };
+  packages = import ../../home/packages/linux.nix { inherit pkgs pkgs-master; };
 }
