@@ -546,6 +546,26 @@ debug-circus-eval-smoke:
   echo "home.packages count: $count"
   [[ $count -gt 0 ]] || { echo "expected non-zero count" >&2; exit 1; }
 
+# Compile the eng manpages to verify scdoc syntax. The doc derivation
+# is bound in flake.nix's let-block but only exposed via packages.default
+# (the eng symlinkJoin). Pull it out via --expr so we can build just
+# the doc subset without realizing the full join.
+# Throwaway — delete once mkcircus-conditional-caldav lands.
+[group('debug')]
+debug-doc-build:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  out="$(nix build --impure --no-link --print-out-paths \
+    --expr 'let f = builtins.getFlake (toString ./.); pkgs = f.inputs.nixpkgs.legacyPackages.${builtins.currentSystem}; in pkgs.stdenvNoCC.mkDerivation {
+      pname = "eng-doc-check"; version = "0";
+      src = ./doc;
+      nativeBuildInputs = [ pkgs.scdoc ];
+      dontUnpack = true; dontBuild = true;
+      installPhase = "mkdir -p $out/share/man/man7; for f in $src/*.7.scd; do scdoc < \"$f\" > \"$out/share/man/man7/$(basename \"$f\" .scd)\"; done";
+    }')"
+  echo "OK: doc compiled to $out"
+  ls "$out/share/man/man7/"
+
 # Verify caldav is still pulled into the home-manager closure on the
 # default-flag path (no identity.enableCaldav set on this host).
 # Throwaway — delete once mkcircus-conditional-caldav lands and the

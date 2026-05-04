@@ -63,15 +63,47 @@ darwin-rebuild switch --flake ~/eng
 
 # IDENTITY
 
-nix-darwin reads identity from _/etc/nix-darwin/identity.json_:
+Per-host identity lives in a platform-specific file, bootstrapped on
+first run of *just build-home* by _bin/bootstrap-identity.mjs_:
 
-```
-{ "username": "...", "homeDirectory": "/Users/...", "hostname": "..." }
-```
+- *macOS*: _/etc/nix-darwin/identity.json_ (JSON object)
+- *Linux*: _~/.config/identity.nix_ (Nix attribute set)
 
-On Linux, identity comes from _~/.config/identity.nix_. The identity
-drives home-manager's *home.username*, *home.homeDirectory*, git user
-config, and SSH signing key selection.
+It drives home-manager's *home.username*, *home.homeDirectory*, git
+user config, SSH signing key selection, and the optional flags below.
+
+*Required fields:*
+
+*username*, *homeDirectory*, *hostname*
+	macOS only. (Linux reads $USER and $HOME from the environment.)
+	*hostname* comes from *scutil --get LocalHostName*.
+
+*gitUserName*, *gitUserEmail*, *gitSigningKey*
+	Git committer identity and signing key. *gitSigningKey* is a
+	*key::ssh-ed25519 ...* string read by *home/git.nix* and
+	*home/ssh.nix*.
+
+*piggyGuid*
+	PIV card GUID for piggy-agent (or *null* on hosts without a
+	card). When non-null and *isSshHost* is false,
+	*home/piggy-agent.nix* is loaded.
+
+*Optional flags* (not written by bootstrap-identity.mjs --- add by hand):
+
+*isSshHost* (default *false*)
+	Marks a host as an SSH-only target (no piggy/pivy agents,
+	different known_hosts handling). See *home/ssh.nix* and
+	*home/linux.nix*.
+
+*loginShellIsBash* (default *false*)
+	Linux only. Set *true* on hosts whose login shell is bash;
+	*home/bash.nix* then hops into fish for interactive sessions.
+
+*enableCaldav* (default *true*)
+	Set *false* on hosts without caldav secrets to drop the caldav
+	plugin from the per-host eng circus, eliminating clown's
+	plugin-startup timeout. The standalone *caldav* binary stays
+	installed regardless. See *home/circus.nix*.
 
 # SEE ALSO
 
